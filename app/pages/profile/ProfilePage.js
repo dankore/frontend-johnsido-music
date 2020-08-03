@@ -1,7 +1,8 @@
 import React from 'react';
 
 function ProfilePage() {
-  const background = 'https://source.unsplash.com/MP0IUfwrn0A';
+  const background =
+    'https://res.cloudinary.com/my-nigerian-projects/image/upload/v1594992703/projects/rtysccgzrf3hsmgecdhd.jpg';
   return (
     <>
       <div className="max-w-4xl flex items-center h-auto lg:h-screen flex-wrap mx-auto my-32 lg:my-0">
@@ -137,7 +138,7 @@ function ProfilePage() {
         <div className="w-full lg:w-2/5">
           {/* <!-- Big profile image for side bar (desktop) --> */}
           <img
-            src="https://source.unsplash.com/MP0IUfwrn0A"
+            src="https://res.cloudinary.com/my-nigerian-projects/image/upload/v1594992703/projects/rtysccgzrf3hsmgecdhd.jpg"
             className="rounded-none lg:rounded-lg shadow-2xl hidden lg:block"
           />
           {/* <!-- Image from: http://unsplash.com/photos/MP0IUfwrn0A --> */}
