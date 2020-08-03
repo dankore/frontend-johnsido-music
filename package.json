@@ -4,7 +4,7 @@
   "description": "",
   "main": "app/main.js",
   "scripts": {
-    "dev": "npm-run-all -s watch:css generate webpackDev",
+    "dev": "npm-run-all -s lint:fix watch:css generate webpackDev",
     "webpackDev": "webpack-dev-server",
     "build": "npm-run-all -s generate build:css webpackBuild",
     "webpackBuild": "webpack",
