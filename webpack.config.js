@@ -8,14 +8,11 @@ const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const fse = require('fs-extra');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-var CleanCSS = require('clean-css');
-var styleString = require('css-to-string-loader!css-loader!./app/assets/css/main.css');
 
 class RunAfterCompile {
   apply(compiler) {
     compiler.hooks.done.tap('Copy files', function () {
-      const minified = new CleanCSS().minify(styleString);
-      fse.copySync(minified, './dist/assets/css/main.css');
+      fse.copySync('./app/assets/css/main.css', './dist/assets/css/main.css');
     });
   }
 }
@@ -54,7 +51,6 @@ config = {
       },
       // CSS LOADER
       { test: /\.css$/, use: 'css-loader' },
-      { test: /\.css$/, loader: 'css-to-string-loader!css-loader' },
       // IMAGE LOADER
       {
         test: /\.(png|jpe?g|gif)$/i,
