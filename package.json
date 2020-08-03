@@ -4,17 +4,14 @@
   "description": "",
   "main": "app/main.js",
   "scripts": {
-    "dev": "npm-run-all -s lint:fix watch:css generate webpackDev",
+    "dev": "npm-run-all -s lint:fix build:css generate webpackDev",
     "webpackDev": "webpack-dev-server",
     "build": "npm-run-all -s generate build:css webpackBuild",
     "webpackBuild": "webpack",
     "generate": "babel-node --presets=@babel/preset-react,@babel/preset-env generateHtml.js",
-    "previewDist": "node previewDist",
     "build:css": "postcss app/assets/css/tailwind.css -o app/assets/css/main.css",
-    "watch:css": "postcss app/assets/css/tailwind.css -o app/assets/css/main.css",
-    "lint": "eslint app",
-    "lint:fix": "eslint --fix .",
-    "test_server": "node _tests_/test_server"
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
   },
   "repository": {
     "type": "git",
@@ -22,7 +19,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/dankore/frontend-john-sido-music/issues"
   },
