@@ -2,21 +2,28 @@ import React from 'react';
 
 function Homepage() {
   async function handleGetUserAudio(e) {
-    const data = new FormData();
-    data.append('file', e.target.files[0]);
-    console.log(e.target.files[0]);
+    try {
+      const data = new FormData();
+      data.append('file', e.target.files[0]);
 
-    data.append('upload_preset', 'audio-uploads');
-    data.append('resource_type', 'video');
+      data.append('upload_preset', 'audio-uploads');
+      data.append('resource_type', 'video');
 
-    const res = await fetch(`https://api.cloudinary.com/v1_1/my-nigerian-projects/video/upload`, {
-      method: 'POST',
-      body: data,
-    });
+      const res = await fetch(`https://api.cloudinary.com/v1_1/my-nigerian-projects/upload`, {
+        method: 'POST',
+        body: data,
+      });
 
-    const file = await res.json();
+      const file = await res.json();
 
-    console.log(file.secure_url);
+      if (!file.error) {
+        console.log(file.secure_url);
+      } else {
+        console.log(file.error.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
   return (
     <div className="py-5 max-w-6xl mx-auto text-center bg-white">
