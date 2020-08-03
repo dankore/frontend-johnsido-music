@@ -7,6 +7,7 @@ import StateContext from './contextsProviders/StateContext';
 import DispatchContext from './contextsProviders/DispatchContext';
 //COMPONENTS
 import Homepage from './pages/Homepage';
+import ProfilePage from './pages/profile/ProfilePage';
 
 function Main() {
   return (
@@ -16,6 +17,9 @@ function Main() {
           <Switch>
             <Route exact path="/">
               <Homepage />
+            </Route>
+            <Route path="/profile">
+              <ProfilePage />
             </Route>
           </Switch>
         </BrowserRouter>
