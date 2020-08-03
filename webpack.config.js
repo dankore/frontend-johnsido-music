@@ -8,11 +8,13 @@ const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const fse = require('fs-extra');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+var CleanCSS = require('clean-css');
 
 class RunAfterCompile {
   apply(compiler) {
     compiler.hooks.done.tap('Copy files', function () {
-      fse.copySync('./app/assets/css/main.css', './dist/assets/css/main.css');
+      const minified = new CleanCSS().minify('./dist/assets/css/main.css');
+      fse.copySync('./app/assets/css/main.css', minified);
     });
   }
 }
