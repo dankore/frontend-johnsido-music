@@ -13,7 +13,7 @@ var CleanCSS = require('clean-css');
 class RunAfterCompile {
   apply(compiler) {
     compiler.hooks.done.tap('Copy files', function () {
-      const minified = new CleanCSS().minify('./app/assets/css/main.css');
+      const minified = new CleanCSS().minify('./main.css');
       fse.copySync(minified, './dist/assets/css/main.css');
     });
   }
