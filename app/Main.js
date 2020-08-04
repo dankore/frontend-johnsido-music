@@ -16,8 +16,8 @@ function Main() {
   return (
     <StateContext.Provider>
       <DispatchContext.Provider>
-        <Header />
         <BrowserRouter>
+          <Header />
           <Switch>
             <Route exact path="/">
               <Homepage />

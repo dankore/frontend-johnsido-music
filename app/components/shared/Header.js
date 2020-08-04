@@ -1,10 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Header() {
   return (
-    <nav className="flex bg-blue-600 items-center justify-between flex-wrap bg-grey-darkest p-6 top-0 fixed z-10 w-full">
-      <div className="flex items-center flex-no-shrink text-white mr-6">
-        <a className="text-white no-underline hover:text-white hover:no-underline" href="/">
+    <nav className="custom-shadow flex items-center justify-between flex-wrap bg-grey-darkest p-6 top-0 fixed z-10 w-full">
+      <div className="flex items-center flex-no-shrink mr-6">
+        <a className="no-underline hover:no-underline" href="/">
           <span className="text-2xl pl-2">John Sido</span>
         </a>
       </div>
@@ -12,7 +13,7 @@ function Header() {
       <div className="block lg:hidden">
         <button
           id="nav-toggle"
-          className="flex items-center px-3 py-2 border rounded text-grey border-grey-dark hover:text-white hover:border-white"
+          className="flex items-center px-3 py-2 border rounded text-grey border-grey-dark hover:border-white"
         >
           <svg
             className="fill-current h-3 w-3"
@@ -31,25 +32,12 @@ function Header() {
       >
         <ul className="list-reset lg:flex justify-end flex-1 items-center">
           <li className="mr-3">
-            <a className="inline-block py-2 px-4 text-white no-underline" href="#">
-              Active
-            </a>
-          </li>
-          <li className="mr-3">
-            <a
+            <Link
               className="inline-block text-grey-dark no-underline hover:text-grey-lighter hover:text-underline py-2 px-4"
-              href="#"
-            >
-              link
-            </a>
-          </li>
-          <li className="mr-3">
-            <a
-              className="inline-block text-grey-dark no-underline hover:text-grey-lighter hover:text-underline py-2 px-4"
-              href="/register"
+              to="/register"
             >
               Register
-            </a>
+            </Link>
           </li>
           <li className="mr-3">
             <a
