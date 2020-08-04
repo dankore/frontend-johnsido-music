@@ -26,7 +26,7 @@ function Homepage() {
     }
   }
   return (
-    <div className="py-5 max-w-6xl mx-auto text-center bg-white">
+    <div className="mt-32 max-w-6xl mx-auto text-center bg-white">
       <form>
         <input onChange={handleGetUserAudio} type="file" accept="audio/*" />
       </form>

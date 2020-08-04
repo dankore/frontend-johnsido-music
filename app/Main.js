@@ -8,11 +8,15 @@ import DispatchContext from './contextsProviders/DispatchContext';
 //COMPONENTS
 import Homepage from './pages/Homepage';
 import ProfilePage from './pages/profile/ProfilePage';
+import Register from './pages/auth/Register';
+import Login from './pages/auth/Login';
+import Header from './components/shared/Header';
 
 function Main() {
   return (
     <StateContext.Provider>
       <DispatchContext.Provider>
+        <Header />
         <BrowserRouter>
           <Switch>
             <Route exact path="/">
@@ -20,6 +24,12 @@ function Main() {
             </Route>
             <Route path="/profile">
               <ProfilePage />
+            </Route>
+            <Route path="/register">
+              <Register />
+            </Route>
+            <Route path="/login">
+              <Login />
             </Route>
           </Switch>
         </BrowserRouter>
