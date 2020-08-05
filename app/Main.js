@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
@@ -11,13 +11,29 @@ import ProfilePage from './pages/profile/ProfilePage';
 import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
 import Header from './components/shared/Header';
+import { useImmerReducer } from 'use-immer';
 
 function Main() {
+  const initialState = {
+    url: '',
+  };
+  function appReducer(draft, action) {
+    switch (action.type) {
+      case 'updateUrl':
+        draft.url = action.value;
+        return;
+    }
+  }
+
+  const [state, dispatch] = useImmerReducer(appReducer, initialState);
+
   return (
-    <StateContext.Provider>
-      <DispatchContext.Provider>
+    <StateContext.Provider value={state}>
+      <DispatchContext.Provider value={dispatch}>
         <BrowserRouter>
-          <Header />
+          <Route exact path="(|'/login'|'/register')">
+            <Header />
+          </Route>
           <Switch>
             <Route exact path="/">
               <Homepage />

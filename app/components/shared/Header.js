@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 
 function Header() {
   return (
-    <nav className="custom-shadow flex items-center justify-between flex-wrap bg-grey-darkest p-6 top-0 fixed z-10 w-full">
+    <nav className="bg-white custom-shadow flex items-center justify-between flex-wrap bg-grey-darkest p-6 top-0 fixed z-10 w-full">
       <div className="flex items-center flex-no-shrink mr-6">
-        <a className="no-underline hover:no-underline" href="/">
+        <Link className="no-underline hover:no-underline" to="/">
           <span className="text-2xl pl-2">John Sido</span>
-        </a>
+        </Link>
       </div>
 
       <div className="block lg:hidden">
@@ -40,12 +40,12 @@ function Header() {
             </Link>
           </li>
           <li className="mr-3">
-            <a
+            <Link
               className="inline-block text-grey-dark no-underline hover:text-grey-lighter hover:text-underline py-2 px-4"
-              href="/login"
+              to="/login"
             >
               Login
-            </a>
+            </Link>
           </li>
         </ul>
       </div>
