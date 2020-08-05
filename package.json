@@ -10,7 +10,7 @@
     "webpackBuild": "webpack",
     "generate": "babel-node --presets=@babel/preset-react,@babel/preset-env generateHtml.js",
     "build:css": "postcss app/assets/css/tailwind.css -o app/assets/css/main.css",
-    "lint": "eslint ",
+    "lint": "eslint app",
     "lint:fix": "eslint --fix ."
   },
   "repository": {
