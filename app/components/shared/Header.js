@@ -47,6 +47,14 @@ function Header() {
               Login
             </Link>
           </li>
+          <li className="mr-3">
+            <Link
+              className="inline-block text-grey-dark no-underline hover:text-grey-lighter hover:text-underline py-2 px-4"
+              to="/profile"
+            >
+              Profile
+            </Link>
+          </li>
         </ul>
       </div>
     </nav>

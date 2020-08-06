@@ -31,7 +31,8 @@ function Main() {
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
         <BrowserRouter>
-          <Route exact path="(|'/login'|'/register')">
+          {/* SHOW HEADER TO CERTAIN PAGES https://codelikethis.com/lessons/react/routing-in-react-going-further*/}
+          <Route path="(/|/profile)">
             <Header />
           </Route>
           <Switch>
