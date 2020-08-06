@@ -30,46 +30,55 @@ function LandingPage() {
             <div className="flex items-center justify-between">
               <div>
                 <img
-                  className="h-6 lg:h-8 xl:h-9"
-                  src="/img/tailwindui-logo-on-dark.svg"
-                  alt="Tailwind UI"
+                  className="h-24 lg:h-32 xl:h-40"
+                  src="https://res.cloudinary.com/my-nigerian-projects/image/upload/v1596697135/Others/logo_transparent_xsyfuv.png"
+                  alt="John Sido Musical"
                 />
               </div>
               <div>
-                <a
-                  href="/login"
-                  className="text-sm font-semibold text-white focus:outline-none focus:underline"
-                >
-                  Login →
-                </a>
+                <div>
+                  <a
+                    href="/login"
+                    className="text-sm font-semibold text-white focus:outline-none focus:underline"
+                  >
+                    Login →
+                  </a>
+                </div>
+                <div>
+                  <a
+                    href="/register"
+                    className="text-sm font-semibold text-white focus:outline-none focus:underline"
+                  >
+                    Register
+                  </a>
+                </div>
               </div>
             </div>
           </div>
           <div className="px-6 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-none">
             <p className="text-sm font-semibold text-gray-300 uppercase tracking-wider">
-              Now in early access
+              Accepting entries
             </p>
             <h1 className="mt-3 text-3xl leading-9 font-semibold font-display text-white sm:mt-6 sm:text-4xl sm:leading-10 xl:text-5xl xl:leading-none">
-              Beautiful UI components, crafted
+              Be bold, be musical
               <br className="hidden sm:inline" />
-              <span className="text-teal-400">by the creators of Tailwind CSS.</span>
+              <span className="text-teal-400">John Sido.</span>
             </h1>
             <p className="mt-2 text-lg leading-7 text-gray-300 sm:mt-3 sm:text-xl sm:max-w-xl xl:mt-4 xl:text-2xl xl:max-w-2xl">
-              Fully responsive HTML components, designed and developed by Adam Wathan and Steve
-              Schoger.
+              I&apos;m on a muscal journey to help myself and other upcoming musicians.
             </p>
             <div className="mt-6 sm:flex sm:mt-8 xl:mt-12">
               <a
                 href="/components"
                 className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border border-transparent text-base leading-6 font-semibold rounded-md text-gray-900 bg-white shadow-sm hover:text-gray-600 focus:outline-none focus:text-gray-600 transition ease-in-out duration-150 xl:text-lg xl:py-4"
               >
-                Explore the preview
+                Listen to my music
               </a>
               <a
                 href="/pricing"
                 className="mt-4 sm:ml-4 sm:mt-0 w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border border-transparent text-base leading-6 font-semibold rounded-md text-white bg-gray-800 shadow-sm hover:bg-gray-700 focus:outline-none focus:bg-gray-700 transition ease-in-out duration-150 xl:text-lg xl:py-4"
               >
-                Get early access →
+                Explore music from others →
               </a>
             </div>
           </div>
@@ -90,37 +99,19 @@ function LandingPage() {
             ></div>
           </div>
           <div className="px-6 py-8 sm:pt-12 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-full lg:py-0 lg:pt-24">
-            <p className="text-sm font-semibold text-gray-300 uppercase tracking-wider">
-              Designed and developed by
-            </p>
+            <p className="text-sm font-semibold text-gray-300 uppercase tracking-wider">Artist</p>
             <div className="mt-4 sm:flex">
               <a href="https://twitter.com/adamwathan" className="flex items-center no-underline">
                 <div className="flex-shrink-0">
                   <img
                     className="h-12 w-12 rounded-full border-2 border-white"
-                    src="/img/adam.jpg"
-                    alt=""
+                    src="https://res.cloudinary.com/my-nigerian-projects/image/upload/w_400,h_400,c_crop,g_face,r_max/w_200/v1596698079/Others/john_r5z4ij.jpg"
+                    alt="John Side Photo"
                   />
                 </div>
                 <div className="ml-3">
-                  <p className="font-semibold text-white leading-tight">Adam Wathan</p>
-                  <p className="text-sm text-gray-500 leading-tight">Creator of Tailwind CSS</p>
-                </div>
-              </a>
-              <a
-                href="https://twitter.com/steveschoger"
-                className="mt-6 sm:mt-0 sm:ml-12 flex items-center no-underline"
-              >
-                <div className="flex-shrink-0">
-                  <img
-                    className="h-12 w-12 rounded-full border-2 border-white"
-                    src="/img/steve.jpg"
-                    alt=""
-                  />
-                </div>
-                <div className="ml-3">
-                  <p className="font-semibold text-white leading-tight">Steve Schoger</p>
-                  <p className="text-sm text-gray-500 leading-tight">Author of Refactoring UI</p>
+                  <p className="font-semibold text-white leading-tight">Adamu D. Muhammad</p>
+                  <p className="text-sm text-gray-500 leading-tight">Abuja, Nigeria</p>
                 </div>
               </a>
             </div>
