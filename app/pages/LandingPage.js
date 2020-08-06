@@ -29,40 +29,52 @@ function LandingPage() {
           backgroundposition: -5 + 'px' - 5 + 'px',
         }}
       >
-        <div className="">
+        <div>
           <div className="px-6 pt-8 pb-12 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-none lg:pt-0 lg:pb-16">
             <div className="flex items-center justify-between">
               <div>
                 <img
-                  className="h-20"
+                  className="-ml-2 w-64"
                   src="https://res.cloudinary.com/my-nigerian-projects/image/upload/v1596701942/Others/logo_transparent.png"
                   alt="John Sido Musical"
                 />
               </div>
-              <div className="hidden lg:block">
-                <div>
-                  <Link
-                    to="/login"
-                    className="text-sm font-semibold text-white focus:outline-none focus:underline"
-                  >
-                    Login →
-                  </Link>
+              <div>
+                <div className="block lg:hidden">
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="white">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
                 </div>
-                <div>
-                  <Link
-                    to="/register"
-                    className="text-sm font-semibold text-white focus:outline-none focus:underline"
-                  >
-                    Register
-                  </Link>
-                </div>
-                <div>
-                  <Link
-                    to="/about"
-                    className="text-sm font-semibold text-white focus:outline-none focus:underline"
-                  >
-                    About
-                  </Link>
+                <div className="hidden lg:block">
+                  <div>
+                    <Link
+                      to="/login"
+                      className="text-sm font-semibold text-white focus:outline-none focus:underline"
+                    >
+                      Login →
+                    </Link>
+                  </div>
+                  <div>
+                    <Link
+                      to="/register"
+                      className="text-sm font-semibold text-white focus:outline-none focus:underline"
+                    >
+                      Register
+                    </Link>
+                  </div>
+                  <div>
+                    <Link
+                      to="/about"
+                      className="text-sm font-semibold text-white focus:outline-none focus:underline"
+                    >
+                      About
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -70,7 +82,7 @@ function LandingPage() {
           <div className="px-6 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-none">
             <h1 className="mt-3 text-3xl leading-9 font-semibold font-display text-white sm:mt-6 sm:text-4xl sm:leading-10 xl:text-5xl xl:leading-none">
               Be bold, be musical
-              <br className="hidden sm:inline" />
+              <br />
               <span className="text-teal-400">John Sido.</span>
             </h1>
             <p className="mt-2 text-lg leading-7 text-gray-300 sm:mt-3 sm:text-xl sm:max-w-xl xl:mt-4 xl:text-2xl xl:max-w-2xl">
