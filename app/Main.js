@@ -12,6 +12,7 @@ import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
 import Header from './components/shared/Header';
 import { useImmerReducer } from 'use-immer';
+import LandingPage from './pages/LandingPage';
 
 function Main() {
   const initialState = {
@@ -31,12 +32,16 @@ function Main() {
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
         <BrowserRouter>
-          <Route exact path="(|'/login'|'/register')">
+          {/* SHOW HEADER TO CERTAIN PAGES https://codelikethis.com/lessons/react/routing-in-react-going-further*/}
+          <Route path="(/profile)">
             <Header />
           </Route>
           <Switch>
-            <Route exact path="/">
+            <Route path="/home">
               <Homepage />
+            </Route>
+            <Route exact path="/">
+              <LandingPage />
             </Route>
             <Route path="/profile">
               <ProfilePage />
@@ -46,6 +51,9 @@ function Main() {
             </Route>
             <Route path="/login">
               <Login />
+            </Route>
+            <Route>
+              <div>Not found</div>
             </Route>
           </Switch>
         </BrowserRouter>

@@ -6,7 +6,7 @@ function Register() {
     <Page>
       <div className="w-full flex flex-wrap">
         {/* <!-- Register Section --> */}
-        <div className="w-full md:w-1/2 flex flex-col">
+        <div className="w-full md:w-1/3 flex flex-col">
           <div className="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-12">
             <a href="/" className="bg-black text-white font-bold text-xl p-4">
               Logo
@@ -82,11 +82,8 @@ function Register() {
         </div>
 
         {/* <!-- Image Section --> */}
-        <div className="w-1/2 shadow-2xl">
-          <img
-            className="object-cover w-full h-screen hidden md:block"
-            src="https://source.unsplash.com/IXUM4cJynP0"
-          />
+        <div className="w-2/3 shadow-2xl">
+          <div className="custom-gradient object-cover w-full h-screen hidden md:block"></div>
         </div>
       </div>
     </Page>
