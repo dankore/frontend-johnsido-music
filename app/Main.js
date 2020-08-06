@@ -6,12 +6,13 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import StateContext from './contextsProviders/StateContext';
 import DispatchContext from './contextsProviders/DispatchContext';
 //COMPONENTS
-import Homepage from './pages/Homepage';
+// import Homepage from './pages/Homepage';
 import ProfilePage from './pages/profile/ProfilePage';
 import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
 import Header from './components/shared/Header';
 import { useImmerReducer } from 'use-immer';
+import LandingPage from './pages/LandingPage';
 
 function Main() {
   const initialState = {
@@ -32,12 +33,15 @@ function Main() {
       <DispatchContext.Provider value={dispatch}>
         <BrowserRouter>
           {/* SHOW HEADER TO CERTAIN PAGES https://codelikethis.com/lessons/react/routing-in-react-going-further*/}
-          <Route path="(/|/profile)">
+          <Route path="(/profile)">
             <Header />
           </Route>
           <Switch>
-            <Route exact path="/">
+            {/* <Route exact path="/">
               <Homepage />
+            </Route> */}
+            <Route path="/">
+              <LandingPage />
             </Route>
             <Route path="/profile">
               <ProfilePage />
