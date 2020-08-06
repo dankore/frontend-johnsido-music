@@ -82,8 +82,8 @@ function Register() {
         </div>
 
         {/* <!-- Image Section --> */}
-        <div className="w-2/3 shadow-2xl">
-          <div className="custom-gradient object-cover w-full h-screen hidden md:block"></div>
+        <div className="w-2/3 custom-layout-bg shadow-2xl">
+          <div className="object-cover w-full h-screen hidden md:block"></div>
         </div>
       </div>
     </Page>
