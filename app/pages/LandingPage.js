@@ -75,6 +75,14 @@ function LandingPage() {
                       About
                     </Link>
                   </div>
+                  <div>
+                    <Link
+                      to="/profile"
+                      className="text-sm font-semibold text-white focus:outline-none focus:underline"
+                    >
+                      Profile
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>

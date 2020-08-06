@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import StateContext from './contextsProviders/StateContext';
 import DispatchContext from './contextsProviders/DispatchContext';
 //COMPONENTS
-// import Homepage from './pages/Homepage';
+import Homepage from './pages/Homepage';
 import ProfilePage from './pages/profile/ProfilePage';
 import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
@@ -37,10 +37,10 @@ function Main() {
             <Header />
           </Route>
           <Switch>
-            {/* <Route exact path="/">
+            <Route path="/home">
               <Homepage />
-            </Route> */}
-            <Route path="/">
+            </Route>
+            <Route exact path="/">
               <LandingPage />
             </Route>
             <Route path="/profile">
@@ -51,6 +51,9 @@ function Main() {
             </Route>
             <Route path="/login">
               <Login />
+            </Route>
+            <Route>
+              <div>Not found</div>
             </Route>
           </Switch>
         </BrowserRouter>
