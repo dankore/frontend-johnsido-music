@@ -18020,7 +18020,7 @@ video {
   height: auto;
   order: 1;
   background-image: url(https://res.cloudinary.com/my-nigerian-projects/image/upload/v1596725538/Others/layout-pattern.png),
-  linear-gradient(226deg, rgb(15, 114, 68) 48%, rgb(17, 97, 73) 100%);
+  linear-gradient(225deg, rgba(19, 84, 122, 1) 0%, rgba(128, 208, 199, 1) 100%);
 }
 
 @-webkit-keyframes scrollSmall {

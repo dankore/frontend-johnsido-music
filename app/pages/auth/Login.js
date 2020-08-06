@@ -1,21 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Page from '../../components/layouts/Page';
+import StateContext from '../../contextsProviders/StateContext';
 
 function Login() {
+  const appState = useContext(StateContext);
   return (
     <Page>
       <div className="w-full flex flex-wrap">
         {/* <!-- Login Section --> */}
         <div className="w-full lg:w-1/3 flex flex-col">
-          <div className="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-24">
+          <div className="flex justify-center lg:justify-start pt-12 lg:pl-12 lg:-mb-24">
             <a href="/" className="bg-black text-white font-bold text-xl p-4">
-              Logo
+              <img className="w-64" src={appState.logo.url} alt={appState.logo.alt} />
             </a>
           </div>
 
-          <div className="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
+          <div className="flex flex-col justify-center lg:justify-start my-auto pt-8 lg:pt-0 px-8 lg:px-24 lg:px-32">
             <p className="text-center text-3xl">Welcome.</p>
-            <form className="flex flex-col pt-3 md:pt-8">
+            <form className="flex flex-col pt-3 lg:pt-8">
               <div className="flex flex-col pt-4">
                 <label htmlFor="email" className="text-lg">
                   Email
