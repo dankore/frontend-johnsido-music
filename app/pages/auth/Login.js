@@ -9,14 +9,14 @@ function Login() {
       <div className="w-full flex flex-wrap">
         {/* <!-- Login Section --> */}
         <div className="w-full lg:w-1/3 flex flex-col">
-          <div className="flex justify-center lg:justify-start pt-12 lg:pl-12 lg:-mb-24">
-            <a href="/" className="bg-black text-white font-bold text-xl p-4">
+          <div className="flex bg-gray-900 justify-center pt-12">
+            <a href="/" className="text-white font-bold text-xl p-4">
               <img className="w-64" src={appState.logo.url} alt={appState.logo.alt} />
             </a>
           </div>
 
-          <div className="flex flex-col justify-center lg:justify-start my-auto pt-8 lg:pt-0 px-8 lg:px-24 lg:px-32">
-            <p className="text-center text-3xl">Welcome.</p>
+          <div className="flex flex-col justify-center lg:justify-start my-auto pt-8 px-3 md:px-32 lg:px-3">
+            <p className="text-center text-3xl">Login</p>
             <form className="flex flex-col pt-3 lg:pt-8">
               <div className="flex flex-col pt-4">
                 <label htmlFor="email" className="text-lg">
