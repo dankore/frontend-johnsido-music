@@ -12,10 +12,7 @@ function LandingPage() {
           top: -25 + '%',
           left: -100 + '%',
           backgroundSize: 800 + 'px',
-          backgroundImage:
-            'url(' +
-            'https://res.cloudinary.com/my-nigerian-projects/image/upload/q_auto,f_auto,w_800/v1596776335/Others/john/john-collage.jpg' +
-            ')',
+          backgroundImage: `url(https://res.cloudinary.com/my-nigerian-projects/image/upload/q_auto,f_auto,w_800/v1596776335/Others/john/john-collage.jpg)`,
         }}
       ></div>
       <div

@@ -9,7 +9,7 @@ function Register() {
     <Page>
       <div className="w-full flex flex-wrap">
         {/* <!-- Register Section --> */}
-         <div className="w-full lg:w-1/3 flex flex-col">
+        <div className="w-full lg:w-1/3 flex flex-col">
           <div className="flex bg-gray-900 justify-center pt-12">
             <a href="/" className="text-white font-bold text-xl p-4">
               <img className="w-64" src={appState.logo.url} alt={appState.logo.alt} />
