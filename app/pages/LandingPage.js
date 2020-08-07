@@ -47,39 +47,32 @@ function LandingPage() {
                     />
                   </svg>
                 </div>
-                <div className="hidden lg:block">
-                  <div>
-                    <Link
-                      to="/login"
-                      className="text-sm font-semibold text-white focus:outline-none focus:underline"
-                    >
-                      Login →
-                    </Link>
-                  </div>
-                  <div>
-                    <Link
-                      to="/register"
-                      className="text-sm font-semibold text-white focus:outline-none focus:underline"
-                    >
-                      Register
-                    </Link>
-                  </div>
-                  <div>
-                    <Link
-                      to="/about"
-                      className="text-sm font-semibold text-white focus:outline-none focus:underline"
-                    >
-                      About
-                    </Link>
-                  </div>
-                  <div>
-                    <Link
-                      to="/profile"
-                      className="text-sm font-semibold text-white focus:outline-none focus:underline"
-                    >
-                      Profile
-                    </Link>
-                  </div>
+                <div className="hidden lg:block text-right">
+                  <Link
+                    to="/login"
+                    className="text-sm block font-semibold text-white focus:outline-none focus:underline"
+                  >
+                    Login
+                  </Link>
+
+                  <Link
+                    to="/about"
+                    className="text-sm block mr-1 font-semibold text-white focus:outline-none focus:underline"
+                  >
+                    About
+                  </Link>
+                  <Link
+                    to="/profile"
+                    className="text-sm block mr-2 font-semibold text-white focus:outline-none focus:underline"
+                  >
+                    Profile
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="text-sm mr-3 text-rightblock font-semibold text-white focus:outline-none focus:underline"
+                  >
+                    Register
+                  </Link>
                 </div>
               </div>
             </div>
