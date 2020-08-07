@@ -14,7 +14,7 @@ function LandingPage() {
           backgroundSize: 800 + 'px',
           backgroundImage:
             'url(' +
-            'https://res.cloudinary.com/my-nigerian-projects/image/upload/v1594184079/samples/cloudinary-icon.png' +
+            'https://res.cloudinary.com/my-nigerian-projects/image/upload/q_auto,f_auto,w_800/v1596776335/Others/john/john-collage.jpg' +
             ')',
         }}
       ></div>
@@ -123,7 +123,7 @@ function LandingPage() {
                 backgroundSize: 400 + 'px',
                 backgroundImage:
                   'url(' +
-                  'https://res.cloudinary.com/my-nigerian-projects/image/upload/v1594184079/samples/cloudinary-icon.png' +
+                  'https://res.cloudinary.com/my-nigerian-projects/image/upload/q_auto,f_auto,w_1000/v1596776335/Others/john/john-collage.jpg' +
                   ')',
               }}
             ></div>
