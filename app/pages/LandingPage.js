@@ -50,7 +50,7 @@ function LandingPage() {
                 <div className="hidden lg:block text-right">
                   <Link
                     to="/login"
-                    className="text-sm block font-semibold text-white focus:outline-none focus:underline"
+                    className="text-sm block -mr-1 font-semibold text-white focus:outline-none focus:underline"
                   >
                     Login
                   </Link>
