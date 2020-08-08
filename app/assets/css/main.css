@@ -18016,6 +18016,13 @@ video {
 /* NON-TAILWIND CSS
    ========================================================================== */
 
+.custom-layout-bg {
+  height: auto;
+  order: 1;
+  background-image: url(https://res.cloudinary.com/my-nigerian-projects/image/upload/v1596725538/Others/layout-pattern.png),
+  linear-gradient(225deg, rgba(19, 84, 122, 1) 0%, rgba(128, 208, 199, 1) 100%);
+}
+
 @-webkit-keyframes scrollSmall {
   0% {
     transform:rotate(-13deg) translateY(0)

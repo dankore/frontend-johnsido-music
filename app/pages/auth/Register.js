@@ -1,21 +1,24 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Page from '../../components/layouts/Page';
+import StateContext from '../../contextsProviders/StateContext';
 
 function Register() {
+  const appState = useContext(StateContext);
+
   return (
     <Page>
       <div className="w-full flex flex-wrap">
         {/* <!-- Register Section --> */}
-        <div className="w-full md:w-1/3 flex flex-col">
-          <div className="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-12">
-            <a href="/" className="bg-black text-white font-bold text-xl p-4">
-              Logo
+        <div className="w-full lg:w-1/3 flex flex-col">
+          <div className="flex bg-gray-900 justify-center pt-12">
+            <a href="/" className="text-white font-bold text-xl p-4">
+              <img className="w-64" src={appState.logo.url} alt={appState.logo.alt} />
             </a>
           </div>
 
-          <div className="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
+          <div className="flex flex-col justify-center lg:justify-start my-auto pt-8 px-3 md:px-32 lg:px-3">
             <p className="text-center text-3xl">Join Us.</p>
-            <form className="flex flex-col pt-3 md:pt-8">
+            <form className="flex flex-col pt-3 lg:pt-8">
               <div className="flex flex-col pt-4">
                 <label htmlFor="name" className="text-lg">
                   Name
@@ -82,8 +85,8 @@ function Register() {
         </div>
 
         {/* <!-- Image Section --> */}
-        <div className="w-2/3 shadow-2xl">
-          <div className="custom-gradient object-cover w-full h-screen hidden md:block"></div>
+        <div className="w-2/3 custom-layout-bg shadow-2xl">
+          <div className="object-cover w-full h-screen hidden lg:block"></div>
         </div>
       </div>
     </Page>

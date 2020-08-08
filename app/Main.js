@@ -17,6 +17,11 @@ import LandingPage from './pages/LandingPage';
 function Main() {
   const initialState = {
     url: '',
+    logo: {
+      url:
+        'https://res.cloudinary.com/my-nigerian-projects/image/upload/v1596701942/Others/logo_transparent.png',
+      alt: 'John Sido Photo',
+    },
   };
   function appReducer(draft, action) {
     switch (action.type) {
