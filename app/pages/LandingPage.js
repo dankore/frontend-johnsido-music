@@ -21,7 +21,6 @@ function LandingPage() {
           backgroundImage: `url(https://res.cloudinary.com/my-nigerian-projects/image/upload/v1596699282/Others/angled-background.svg)`,
           backgroundSize: 100 + '%',
           backgroundposition: -5 + 'px' - 5 + 'px',
-          fill: 'green',
         }}
       >
         <div>
