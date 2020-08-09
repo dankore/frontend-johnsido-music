@@ -80,7 +80,7 @@ function LandingPage() {
             <h1 className="mt-3 text-3xl leading-9 font-semibold font-display text-white sm:mt-6 sm:text-4xl sm:leading-10 xl:text-5xl xl:leading-none">
               Be bold, be musical
               <br />
-              <span className="text-teal-400">John Sido.</span>
+              <span className="js-brown">John Sido.</span>
             </h1>
             <p className="mt-2 text-lg leading-7 text-gray-300 sm:mt-3 sm:text-xl sm:max-w-xl xl:mt-4 xl:text-2xl xl:max-w-2xl">
               I&apos;m on a gospel musician on a journey to help myself and other upcoming
