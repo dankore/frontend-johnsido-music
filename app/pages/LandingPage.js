@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import StateContext from '../contextsProviders/StateContext';
 
 function LandingPage() {
+  const appState = useContext(StateContext);
   return (
     <div className="relative min-h-screen overflow-hidden bg-gray-900 lg:bg-gray-300">
       <div
@@ -28,9 +30,9 @@ function LandingPage() {
             <div className="flex items-center justify-between">
               <div>
                 <img
-                  className="-ml-2 w-64"
-                  src="https://res.cloudinary.com/my-nigerian-projects/image/upload/v1596701942/Others/logo_transparent.png"
-                  alt="John Sido Musical"
+                  className="-ml-2 w-20 h-20 lg:w-32 lg:h-32"
+                  src={appState.logo.url}
+                  alt={appState.logo.alt}
                 />
               </div>
               <div>

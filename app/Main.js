@@ -19,7 +19,7 @@ function Main() {
     url: '',
     logo: {
       url:
-        'https://res.cloudinary.com/my-nigerian-projects/image/upload/v1596701942/Others/logo_transparent.png',
+        'https://res.cloudinary.com/my-nigerian-projects/image/upload/f_auto,q_auto/v1596961997/Others/john/logo.png',
       alt: 'John Sido Photo',
     },
   };
