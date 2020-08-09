@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import Page from '../../components/layouts/Page';
 import StateContext from '../../contextsProviders/StateContext';
+import { Link } from 'react-router-dom';
 
 function Register() {
   const appState = useContext(StateContext);
@@ -11,9 +12,9 @@ function Register() {
         {/* <!-- Register Section --> */}
         <div className="w-full lg:w-1/3 flex flex-col">
           <div className="flex bg-gray-900 justify-center pt-12">
-            <a href="/" className="text-white font-bold text-xl p-4">
-              <img className="w-64" src={appState.logo.url} alt={appState.logo.alt} />
-            </a>
+            <Link to="/" className="text-white font-bold text-xl p-4">
+              <img className="w-32 h-32" src={appState.logo.url} alt={appState.logo.alt} />
+            </Link>
           </div>
 
           <div className="flex flex-col justify-center lg:justify-start my-auto pt-8 px-3 md:px-32 lg:px-3">
