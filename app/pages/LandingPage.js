@@ -18,10 +18,7 @@ function LandingPage() {
       <div
         className="relative min-h-screen lg:min-w-3xl xl:min-w-4xl lg:flex lg:items-center lg:justify-center lg:w-3/5 lg:py-12 lg:pl-8 lg:pr-8 bg-no-repeat"
         style={{
-          backgroundImage:
-            'url(' +
-            'https://res.cloudinary.com/my-nigerian-projects/image/upload/v1596699282/Others/angled-background.svg' +
-            ')',
+          backgroundImage: `url(https://res.cloudinary.com/my-nigerian-projects/image/upload/v1596699282/Others/angled-background.svg)`,
           backgroundSize: 100 + '%',
           backgroundposition: -5 + 'px' - 5 + 'px',
         }}
