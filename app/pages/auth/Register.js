@@ -2,10 +2,65 @@ import React, { useContext } from 'react';
 import Page from '../../components/layouts/Page';
 import StateContext from '../../contextsProviders/StateContext';
 import { Link } from 'react-router-dom';
+import { useImmerReducer } from 'use-immer';
 
 function Register() {
   const appState = useContext(StateContext);
+  const initialState = {
+    firstName: {
+      value: '',
+      hasError: false,
+      message: '',
+    },
+    lastName: {
+      value: '',
+      hasError: false,
+      message: '',
+    },
+    email: {
+      value: '',
+      hasError: false,
+      message: '',
+    },
+    password: {
+      value: '',
+      hasError: false,
+      message: '',
+    },
+    confirmPassword: {
+      value: '',
+      hasError: false,
+      message: '',
+    },
+  };
 
+  function reducer(draft, action) {
+    switch (action.type) {
+      case 'updateFirstName':
+        draft.firstName.hasError = false;
+        draft.firstName.value = action.value;
+        return;
+      case 'updateLastName':
+        draft.lastName.hasError = false;
+        draft.lastName.value = action.value;
+        return;
+      case 'updateEmail':
+        draft.email.hasError = false;
+        draft.email.value = action.value;
+        return;
+      case 'updatePassword':
+        draft.password.hasError = false;
+        draft.password.value = action.value;
+        return;
+      case 'updateConfirmPassword':
+        draft.confirmPassword.hasError = false;
+        draft.confirmPassword.value = action.value;
+        return;
+    }
+  }
+
+  const [state, dispatch] = useImmerReducer(reducer, initialState);
+  console.log(state);
   return (
     <Page>
       <div className="w-full flex flex-wrap">
@@ -21,13 +76,29 @@ function Register() {
             <p className="text-center text-3xl">Join Us.</p>
             <form className="flex flex-col pt-3 lg:pt-8">
               <div className="flex flex-col pt-4">
-                <label htmlFor="name" className="text-lg">
-                  Name
+                <label htmlFor="firstName" className="text-lg">
+                  First Name
                 </label>
                 <input
+                  value={state.firstName.value}
+                  onChange={e => dispatch({ type: 'updateFirstName', value: e.target.value })}
                   type="text"
-                  id="name"
-                  placeholder="John Smith"
+                  id="FirstName"
+                  placeholder="John"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+                />
+              </div>
+              <div className="flex flex-col pt-4">
+                <label htmlFor="lastName" className="text-lg">
+                  Last Name
+                </label>
+                <input
+                  value={state.lastName.value}
+                  onChange={e => dispatch({ type: 'updateLastName', value: e.target.value })}
+                  type="text"
+                  id="lastName"
+                  placeholder="Sido"
+                  required
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
@@ -37,6 +108,8 @@ function Register() {
                   Email
                 </label>
                 <input
+                  value={state.email.value}
+                  onChange={e => dispatch({ type: 'updateEmail', value: e.target.value })}
                   type="email"
                   id="email"
                   placeholder="your@email.com"
@@ -49,6 +122,8 @@ function Register() {
                   Password
                 </label>
                 <input
+                  value={state.password.value}
+                  onChange={e => dispatch({ type: 'updatePassword', value: e.target.value })}
                   type="password"
                   id="password"
                   placeholder="Password"
@@ -61,6 +136,8 @@ function Register() {
                   Confirm Password
                 </label>
                 <input
+                  value={state.confirmPassword.value}
+                  onChange={e => dispatch({ type: 'updateConfirmPassword', value: e.target.value })}
                   type="password"
                   id="confirm-password"
                   placeholder="Password"
