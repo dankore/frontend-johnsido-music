@@ -169,6 +169,11 @@ function Register() {
       case 'confirmPasswordImmediately':
         draft.confirmPassword.hasError = false;
         draft.confirmPassword.value = action.value;
+
+        if (draft.confirmPassword.value == '') {
+          draft.confirmPassword.hasError = true;
+          draft.confirmPassword.message = 'Confirm password field cannot be empty.';
+        }
         return;
       case 'confirmPasswordAfterDelay':
         if (draft.password.value != draft.confirmPassword.value) {
