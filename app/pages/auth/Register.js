@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Page from '../../components/layouts/Page';
 import StateContext from '../../contextsProviders/StateContext';
 import { Link } from 'react-router-dom';
@@ -36,23 +36,64 @@ function Register() {
 
   function reducer(draft, action) {
     switch (action.type) {
-      case 'updateFirstName':
+      case 'firstNameImmediately':
         draft.firstName.hasError = false;
         draft.firstName.value = action.value;
+
+        if (draft.firstName.value == '') {
+          draft.firstName.hasError = true;
+          draft.firstName.message = 'First name cannot be empty.';
+        }
+        if (/[^a-zA-Z]/.test(draft.firstName.value.trim())) {
+          draft.firstName.hasError = true;
+          draft.firstName.message = 'First name can only be English alphabets.';
+        }
+
+        if (draft.firstName.value.length > 50) {
+          draft.firstName.hasError = true;
+          draft.firstName.message = 'First name cannot exceed 50 characters.';
+        }
+
         return;
-      case 'updateLastName':
+      case 'lastNameImmediately':
         draft.lastName.hasError = false;
         draft.lastName.value = action.value;
+
+        if (draft.lastName.value == '') {
+          draft.lastName.hasError = true;
+          draft.lastName.message = 'Last name cannot be empty.';
+        }
+        if (/[^a-zA-Z]/.test(draft.lastName.value.trim())) {
+          draft.lastName.hasError = true;
+          draft.lastName.message = 'Last name can only be English alphabets.';
+        }
+
+        if (draft.lastName.value.length > 50) {
+          draft.lastName.hasError = true;
+          draft.lastName.message = 'Last name cannot exceed 50 characters.';
+        }
         return;
-      case 'updateEmail':
+      case 'emailImmediately':
         draft.email.hasError = false;
         draft.email.value = action.value;
+
+        if (draft.email.value == '') {
+          draft.email.hasError = true;
+          draft.email.message = 'Email cannot be empty.';
+        }
+
         return;
-      case 'updatePassword':
+      case 'emailAfterDelay':
+        if (!/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(draft.email.value.trim())) {
+          draft.email.hasError = true;
+          draft.email.message = 'Please provide a valid email.';
+        }
+        return;
+      case 'passwordImmediately':
         draft.password.hasError = false;
         draft.password.value = action.value;
         return;
-      case 'updateConfirmPassword':
+      case 'confirmPasswordImmediately':
         draft.confirmPassword.hasError = false;
         draft.confirmPassword.value = action.value;
         return;
@@ -60,7 +101,16 @@ function Register() {
   }
 
   const [state, dispatch] = useImmerReducer(reducer, initialState);
-  console.log(state);
+
+  // EMAIL AFTER DELAY
+  useEffect(() => {
+    if (state.email.value) {
+      const delay = setTimeout(() => dispatch({ type: 'emailAfterDelay' }), 800);
+
+      return () => clearTimeout(delay);
+    }
+  }, [state.email.value]);
+
   return (
     <Page>
       <div className="w-full flex flex-wrap">
@@ -75,74 +125,89 @@ function Register() {
           <div className="flex flex-col justify-center lg:justify-start my-auto pt-8 px-3 md:px-32 lg:px-3">
             <p className="text-center text-3xl">Join Us.</p>
             <form className="flex flex-col pt-3 lg:pt-8">
-              <div className="flex flex-col pt-4">
+              <div className="relative flex flex-col pt-4">
                 <label htmlFor="firstName" className="text-lg">
                   First Name
                 </label>
                 <input
                   value={state.firstName.value}
-                  onChange={e => dispatch({ type: 'updateFirstName', value: e.target.value })}
+                  onChange={e => dispatch({ type: 'firstNameImmediately', value: e.target.value })}
                   type="text"
                   id="FirstName"
                   placeholder="John"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
                 />
+                {state.firstName.hasError && (
+                  <div className="text-red-600">{state.firstName.message}</div>
+                )}
               </div>
-              <div className="flex flex-col pt-4">
+              <div className="relative flex flex-col pt-4">
                 <label htmlFor="lastName" className="text-lg">
                   Last Name
                 </label>
                 <input
                   value={state.lastName.value}
-                  onChange={e => dispatch({ type: 'updateLastName', value: e.target.value })}
+                  onChange={e => dispatch({ type: 'lastNameImmediately', value: e.target.value })}
                   type="text"
                   id="lastName"
                   placeholder="Sido"
                   required
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
                 />
+                {state.lastName.hasError && (
+                  <div className="text-red-600">{state.lastName.message}</div>
+                )}
               </div>
 
-              <div className="flex flex-col pt-4">
+              <div className="relative flex flex-col pt-4">
                 <label htmlFor="email" className="text-lg">
                   Email
                 </label>
                 <input
                   value={state.email.value}
-                  onChange={e => dispatch({ type: 'updateEmail', value: e.target.value })}
+                  onChange={e => dispatch({ type: 'emailImmediately', value: e.target.value })}
                   type="email"
                   id="email"
                   placeholder="your@email.com"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
                 />
+                {state.email.hasError && <div className="text-red-600">{state.email.message}</div>}
               </div>
 
-              <div className="flex flex-col pt-4">
+              <div className="relative flex flex-col pt-4">
                 <label htmlFor="password" className="text-lg">
                   Password
                 </label>
                 <input
                   value={state.password.value}
-                  onChange={e => dispatch({ type: 'updatePassword', value: e.target.value })}
+                  onChange={e => dispatch({ type: 'passwordImmediately', value: e.target.value })}
                   type="password"
                   id="password"
                   placeholder="Password"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
                 />
+                {state.password.hasError && (
+                  <div className="text-red-600">{state.password.message}</div>
+                )}
               </div>
 
-              <div className="flex flex-col pt-4">
+              <div className="relative flex flex-col pt-4">
                 <label htmlFor="confirm-password" className="text-lg">
                   Confirm Password
                 </label>
                 <input
                   value={state.confirmPassword.value}
-                  onChange={e => dispatch({ type: 'updateConfirmPassword', value: e.target.value })}
+                  onChange={e =>
+                    dispatch({ type: 'confirmPasswordImmediately', value: e.target.value })
+                  }
                   type="password"
                   id="confirm-password"
                   placeholder="Password"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
                 />
+                {state.confirmPassword.hasError && (
+                  <div className="text-red-600">{state.confirmPassword.message}</div>
+                )}
               </div>
 
               <input
