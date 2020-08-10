@@ -42,6 +42,7 @@ function Register() {
       hasError: false,
       message: '',
     },
+    submitCount: 0,
   };
 
   function reducer(draft, action) {
@@ -144,7 +145,7 @@ function Register() {
           draft.email.isUnique = false;
           draft.email.message = 'Email is already being used.';
         } else {
-          draft.email.isUnique;
+          draft.email.isUnique = true;
         }
         return;
       case 'passwordImmediately':
@@ -152,7 +153,7 @@ function Register() {
         draft.password.value = action.value;
         if (draft.password.value == '') {
           draft.password.hasError = true;
-          draft.password.message = 'Password cannot be empty';
+          draft.password.message = 'Password cannot be empty.';
         }
         return;
       case 'passwordAfterDelay':
@@ -169,27 +170,32 @@ function Register() {
         draft.confirmPassword.hasError = false;
         draft.confirmPassword.value = action.value;
         return;
+      case 'confirmPasswordAfterDelay':
+        if (draft.password.value != draft.confirmPassword.value) {
+          draft.confirmPassword.hasError = true;
+          draft.confirmPassword.message = 'Passwords do not match.';
+        }
+        return;
       case 'submitForm':
         if (
-          draft.username.value != '' &&
           !draft.username.hasError &&
           draft.username.isUnique &&
-          draft.firstName.value != '' &&
           !draft.firstName.hasError &&
-          draft.lastName.value != '' &&
           !draft.lastName.hasError &&
-          draft.email.value != '' &&
+          draft.email.isUnique &&
           !draft.email.hasError &&
-          draft.password.value != '' &&
           !draft.password.hasError &&
-          draft.confirmPassword.value != '' &&
-          !draft.confirmPassword.hasError
-        )
-          return;
+          !draft.confirmPassword.hasError &&
+          draft.password.value == draft.confirmPassword.value
+        ) {
+          draft.submitCount++;
+        }
+        return;
     }
   }
 
   const [state, dispatch] = useImmerReducer(reducer, initialState);
+
   // USERNAME AFTER DELAY
   useEffect(() => {
     if (state.username.value) {
@@ -255,7 +261,16 @@ function Register() {
     }
   }, [state.password.value]);
 
-  // SUBMIT
+  // PASSWORD AFTER DELAY
+  useEffect(() => {
+    if (state.confirmPassword.value) {
+      const delay = setTimeout(() => dispatch({ type: 'confirmPasswordAfterDelay' }), 800);
+
+      return () => clearTimeout(delay);
+    }
+  }, [state.confirmPassword.value]);
+
+  // SUBMIT: DO SOME CHECKS BEFORE SUBMITTING FORM
   function handleFormSubmission(e) {
     e.preventDefault();
     dispatch({ type: 'usernameImmediately', value: state.username.value });
@@ -267,6 +282,34 @@ function Register() {
     dispatch({ type: 'confirmPasswordImmediately', value: state.confirmPassword.value });
     dispatch({ type: 'submitForm' });
   }
+
+  useEffect(() => {
+    if (state.submitCount) {
+      const request = Axios.CancelToken.source();
+      (async function submitForm() {
+        try {
+          const response = await Axios.post(
+            '/register',
+            {
+              username: state.username.value,
+              firstName: state.firstName.value,
+              lastName: state.lastName.value,
+              email: state.email.value,
+              password: state.password.value,
+              confirmPassword: state.confirmPassword.value,
+            },
+            {
+              cancelToken: request.token,
+            }
+          );
+          console.log({ response });
+        } catch (error) {
+          console.log(error.message);
+        }
+      })();
+      return () => request.cancel();
+    }
+  }, [state.submitCount]);
 
   return (
     <Page title="Register">
@@ -387,7 +430,7 @@ function Register() {
               <input
                 type="submit"
                 value="Register"
-                className="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8"
+                className="bg-black cursor-pointer text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8"
               />
             </form>
             <div className="text-center pt-12 pb-12">
