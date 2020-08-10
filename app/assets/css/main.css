@@ -18016,6 +18016,22 @@ video {
 /* NON-TAILWIND CSS
    ========================================================================== */
 
+.js-brown {
+  color: #987631;
+}
+
+.js-blue-1 {
+  color: #2c308a;
+}
+
+.js-blue-2 {
+  color: #191940;
+}
+
+.js-blue-3 {
+  color: #242561;
+}
+
 .custom-layout-bg {
   height: auto;
   order: 1;
