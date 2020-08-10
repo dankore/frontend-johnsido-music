@@ -140,7 +140,7 @@ function Register() {
           console.log(response.data);
           dispatch({ type: 'emailIsUnique', value: response.data });
         } catch (error) {
-          console.log(error);
+          console.log(error.message);
         }
       })();
 
