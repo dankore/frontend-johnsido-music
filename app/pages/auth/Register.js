@@ -12,6 +12,8 @@ function Register() {
       value: '',
       hasError: false,
       message: '',
+      sendCount: 0,
+      isUnique: false,
     },
     firstName: {
       value: '',
@@ -51,10 +53,7 @@ function Register() {
           draft.username.hasError = true;
           draft.username.message = 'Username cannot be empty.';
         }
-        if (draft.username.value.length > 0 && draft.username.value.length < 3) {
-          draft.username.hasError = true;
-          draft.username.message = 'Username must be at least 3 characters.';
-        }
+
         if (draft.username.value.length > 30) {
           draft.username.hasError = true;
           draft.username.message = 'Username cannot exceed 30 characters.';
@@ -64,6 +63,24 @@ function Register() {
           draft.username.message = 'Username can only contain English alphabets and numbers.';
         }
 
+        return;
+      case 'usernameAfterDelay':
+        if (draft.username.value.length < 3) {
+          draft.username.hasError = true;
+          draft.username.message = 'Username must be at least 3 characters.';
+        }
+        if (!draft.username.hasError && !action.dontSendReqToServer) {
+          draft.username.sendCount++;
+        }
+        return;
+      case 'usernameIsUnique':
+        if (action.value) {
+          draft.username.hasError = true;
+          draft.username.isUnique = false;
+          draft.username.message = 'Username is already being used.';
+        } else {
+          draft.username.isUnique = true;
+        }
         return;
       case 'firstNameImmediately':
         draft.firstName.hasError = false;
@@ -117,7 +134,7 @@ function Register() {
           draft.email.hasError = true;
           draft.email.message = 'Please provide a valid email.';
         }
-        if (!draft.email.hasError) {
+        if (!draft.email.hasError && !action.dontSendReqToServer) {
           draft.email.checkCount++;
         }
         return;
@@ -142,8 +159,33 @@ function Register() {
   }
 
   const [state, dispatch] = useImmerReducer(reducer, initialState);
+  // USERNAME AFTER DELAY
+  useEffect(() => {
+    if (state.username.value) {
+      const delay = setTimeout(() => dispatch({ type: 'usernameAfterDelay' }), 800);
+      return () => clearTimeout(delay);
+    }
+  }, [state.username.value]);
 
-  // EMAIL AFTER DELAY: VALID EMAILS ONLY
+  // USERNAME AFTER DELAY: CHECK DB
+  useEffect(() => {
+    if (state.username.sendCount) {
+      const request = Axios.CancelToken.source();
+      (async function isUsernameTaken() {
+        try {
+          const response = await Axios.post('/doesUsernameExists', {
+            username: state.username.value,
+          });
+          dispatch({ type: 'usernameIsUnique', value: response.data });
+        } catch (error) {
+          console.log(error.message);
+        }
+      })();
+      return () => request.cancel();
+    }
+  }, [state.username.sendCount]);
+
+  // EMAIL AFTER DELAY
   useEffect(() => {
     if (state.email.value) {
       const delay = setTimeout(() => dispatch({ type: 'emailAfterDelay' }), 800);
@@ -152,7 +194,7 @@ function Register() {
     }
   }, [state.email.value]);
 
-  // EMAIL AFTER DELAY: HAS EMAIL BEING USED BEFORE?
+  // EMAIL AFTER DELAY: CHECK DB
   useEffect(() => {
     if (state.email.checkCount) {
       const request = Axios.CancelToken.source();
@@ -163,7 +205,6 @@ function Register() {
             { email: state.email.value },
             { cancelToken: request.token }
           );
-          console.log(response.data);
           dispatch({ type: 'emailIsUnique', value: response.data });
         } catch (error) {
           console.log(error.message);
@@ -173,6 +214,18 @@ function Register() {
       return () => request.cancel();
     }
   }, [state.email.checkCount]);
+
+  function handleFormSubmission(e) {
+    e.preventDefault();
+    dispatch({ type: 'usernameImmediately', value: state.username.value });
+    dispatch({ type: 'usernameAfterDelay', value: state.email.value, dontSendReqToServer: true });
+    dispatch({ type: 'firstNameImmediately', value: state.firstName.value });
+    dispatch({ type: 'lastNameImmediately', value: state.lastName.value });
+    dispatch({ type: 'emailImmediately', value: state.email.value, dontSendReqToServer: true });
+    dispatch({ type: 'passwordImmediately', value: state.password.value });
+    dispatch({ type: 'confirmPasswordImmediately', value: state.confirmPassword.value });
+    console.log('submit form');
+  }
 
   return (
     <Page title="Register">
@@ -184,10 +237,9 @@ function Register() {
               <img className="w-32 h-32" src={appState.logo.url} alt={appState.logo.alt} />
             </Link>
           </div>
-
           <div className="flex flex-col justify-center lg:justify-start my-auto px-3 md:px-32 lg:px-3">
             <p className="text-center text-3xl pt-4">Register</p>
-            <form className="flex flex-col">
+            <form onSubmit={handleFormSubmission} className="flex flex-col">
               {/* USERNAME */}
               <div className="relative flex flex-col pt-4">
                 <label htmlFor="username" className="text-lg">
@@ -233,7 +285,6 @@ function Register() {
                   type="text"
                   id="lastName"
                   placeholder="Sido"
-                  required
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
                 />
                 {state.lastName.hasError && (
@@ -291,7 +342,7 @@ function Register() {
                   <div className="text-red-600">{state.confirmPassword.message}</div>
                 )}
               </div>
-
+              {/* SUBMIT */}
               <input
                 type="submit"
                 value="Register"
