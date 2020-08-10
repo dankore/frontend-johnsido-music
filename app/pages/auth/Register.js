@@ -3,6 +3,7 @@ import Page from '../../components/layouts/Page';
 import StateContext from '../../contextsProviders/StateContext';
 import { Link } from 'react-router-dom';
 import { useImmerReducer } from 'use-immer';
+import Axios from 'axios';
 
 function Register() {
   const appState = useContext(StateContext);
@@ -21,6 +22,8 @@ function Register() {
       value: '',
       hasError: false,
       message: '',
+      checkCount: 0,
+      isUnique: false,
     },
     password: {
       value: '',
@@ -84,9 +87,21 @@ function Register() {
 
         return;
       case 'emailAfterDelay':
-        if (!/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(draft.email.value.trim())) {
+        if (!/^\S+@\S+$/.test(draft.email.value.trim())) {
           draft.email.hasError = true;
           draft.email.message = 'Please provide a valid email.';
+        }
+        if (!draft.email.hasError) {
+          draft.email.checkCount++;
+        }
+        return;
+      case 'emailIsUnique':
+        if (action.value) {
+          draft.email.hasError = true;
+          draft.email.isUnique = false;
+          draft.email.message = 'Email is already being used.';
+        } else {
+          draft.email.isUnique;
         }
         return;
       case 'passwordImmediately':
@@ -102,7 +117,7 @@ function Register() {
 
   const [state, dispatch] = useImmerReducer(reducer, initialState);
 
-  // EMAIL AFTER DELAY
+  // EMAIL AFTER DELAY: VALID EMAILS ONLY
   useEffect(() => {
     if (state.email.value) {
       const delay = setTimeout(() => dispatch({ type: 'emailAfterDelay' }), 800);
@@ -111,20 +126,42 @@ function Register() {
     }
   }, [state.email.value]);
 
+  // EMAIL AFTER DELAY: HAS EMAIL BEING USED BEFORE?
+  useEffect(() => {
+    if (state.email.checkCount) {
+      const request = Axios.CancelToken.source();
+      (async function isEmailUnique() {
+        try {
+          const response = await Axios.post(
+            '/doesEmailExists',
+            { email: state.email.value },
+            { cancelToken: request.token }
+          );
+          console.log(response.data);
+          dispatch({ type: 'emailIsUnique', value: response.data });
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+
+      return () => request.cancel();
+    }
+  }, [state.email.checkCount]);
+
   return (
     <Page>
       <div className="w-full flex flex-wrap">
         {/* <!-- Register Section --> */}
         <div className="w-full lg:w-1/3 flex flex-col">
-          <div className="flex bg-gray-900 justify-center pt-12">
+          <div className="flex bg-gray-900 justify-center">
             <Link to="/" className="text-white font-bold text-xl p-4">
               <img className="w-32 h-32" src={appState.logo.url} alt={appState.logo.alt} />
             </Link>
           </div>
 
-          <div className="flex flex-col justify-center lg:justify-start my-auto pt-8 px-3 md:px-32 lg:px-3">
-            <p className="text-center text-3xl">Join Us.</p>
-            <form className="flex flex-col pt-3 lg:pt-8">
+          <div className="flex flex-col justify-center lg:justify-start my-auto px-3 md:px-32 lg:px-3">
+            <p className="text-center text-3xl">Register</p>
+            <form className="flex flex-col">
               <div className="relative flex flex-col pt-4">
                 <label htmlFor="firstName" className="text-lg">
                   First Name

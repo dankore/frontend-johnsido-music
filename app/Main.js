@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
+// AXIOS COMMENT URL
+console.log(process.env.BACKENDURL);
+Axios.defaults.baseURL = process.env.BACKENDURL;
 // STATE MANAGEMENT
 import StateContext from './contextsProviders/StateContext';
 import DispatchContext from './contextsProviders/DispatchContext';
@@ -13,6 +16,7 @@ import Login from './pages/auth/Login';
 import Header from './components/shared/Header';
 import { useImmerReducer } from 'use-immer';
 import LandingPage from './pages/LandingPage';
+import Axios from 'axios';
 
 function Main() {
   const initialState = {
