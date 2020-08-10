@@ -150,11 +150,42 @@ function Register() {
       case 'passwordImmediately':
         draft.password.hasError = false;
         draft.password.value = action.value;
+        if (draft.password.value == '') {
+          draft.password.hasError = true;
+          draft.password.message = 'Password cannot be empty';
+        }
+        return;
+      case 'passwordAfterDelay':
+        if (draft.password.value.length < 6) {
+          draft.password.hasError = true;
+          draft.password.message = 'Password must be at least 6 characters.';
+        }
+        if (draft.password.value.length > 50) {
+          draft.password.hasError = true;
+          draft.password.message = 'Password must not be more than 50 characters.';
+        }
         return;
       case 'confirmPasswordImmediately':
         draft.confirmPassword.hasError = false;
         draft.confirmPassword.value = action.value;
         return;
+      case 'submitForm':
+        if (
+          draft.username.value != '' &&
+          !draft.username.hasError &&
+          draft.username.isUnique &&
+          draft.firstName.value != '' &&
+          !draft.firstName.hasError &&
+          draft.lastName.value != '' &&
+          !draft.lastName.hasError &&
+          draft.email.value != '' &&
+          !draft.email.hasError &&
+          draft.password.value != '' &&
+          !draft.password.hasError &&
+          draft.confirmPassword.value != '' &&
+          !draft.confirmPassword.hasError
+        )
+          return;
     }
   }
 
@@ -215,6 +246,16 @@ function Register() {
     }
   }, [state.email.checkCount]);
 
+  // PASSWORD AFTER DELAY
+  useEffect(() => {
+    if (state.password.value) {
+      const delay = setTimeout(() => dispatch({ type: 'passwordAfterDelay' }), 800);
+
+      return () => clearTimeout(delay);
+    }
+  }, [state.password.value]);
+
+  // SUBMIT
   function handleFormSubmission(e) {
     e.preventDefault();
     dispatch({ type: 'usernameImmediately', value: state.username.value });
@@ -224,7 +265,7 @@ function Register() {
     dispatch({ type: 'emailImmediately', value: state.email.value, dontSendReqToServer: true });
     dispatch({ type: 'passwordImmediately', value: state.password.value });
     dispatch({ type: 'confirmPasswordImmediately', value: state.confirmPassword.value });
-    console.log('submit form');
+    dispatch({ type: 'submitForm' });
   }
 
   return (
