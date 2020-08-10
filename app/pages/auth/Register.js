@@ -8,6 +8,11 @@ import Axios from 'axios';
 function Register() {
   const appState = useContext(StateContext);
   const initialState = {
+    username: {
+      value: '',
+      hasError: false,
+      message: '',
+    },
     firstName: {
       value: '',
       hasError: false,
@@ -39,6 +44,27 @@ function Register() {
 
   function reducer(draft, action) {
     switch (action.type) {
+      case 'usernameImmediately':
+        draft.username.hasError = false;
+        draft.username.value = action.value;
+        if (draft.username.value == '') {
+          draft.username.hasError = true;
+          draft.username.message = 'Username cannot be empty.';
+        }
+        if (draft.username.value.length > 0 && draft.username.value.length < 3) {
+          draft.username.hasError = true;
+          draft.username.message = 'Username must be at least 3 characters.';
+        }
+        if (draft.username.value.length > 30) {
+          draft.username.hasError = true;
+          draft.username.message = 'Username cannot exceed 30 characters.';
+        }
+        if (draft.username.value && !/^([a-zA-Z0-9]+)$/.test(draft.username.value)) {
+          draft.username.hasError = true;
+          draft.username.message = 'Username can only contain English alphabets and numbers.';
+        }
+
+        return;
       case 'firstNameImmediately':
         draft.firstName.hasError = false;
         draft.firstName.value = action.value;
@@ -149,7 +175,7 @@ function Register() {
   }, [state.email.checkCount]);
 
   return (
-    <Page>
+    <Page title="Register">
       <div className="w-full flex flex-wrap">
         {/* <!-- Register Section --> */}
         <div className="w-full lg:w-1/3 flex flex-col">
@@ -160,8 +186,26 @@ function Register() {
           </div>
 
           <div className="flex flex-col justify-center lg:justify-start my-auto px-3 md:px-32 lg:px-3">
-            <p className="text-center text-3xl">Register</p>
+            <p className="text-center text-3xl pt-4">Register</p>
             <form className="flex flex-col">
+              {/* USERNAME */}
+              <div className="relative flex flex-col pt-4">
+                <label htmlFor="username" className="text-lg">
+                  Username
+                </label>
+                <input
+                  value={state.username.value}
+                  onChange={e => dispatch({ type: 'usernameImmediately', value: e.target.value })}
+                  type="text"
+                  id="username"
+                  placeholder="John"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+                />
+                {state.username.hasError && (
+                  <div className="text-red-600">{state.username.message}</div>
+                )}
+              </div>
+              {/* FIRST NAME */}
               <div className="relative flex flex-col pt-4">
                 <label htmlFor="firstName" className="text-lg">
                   First Name
@@ -178,6 +222,7 @@ function Register() {
                   <div className="text-red-600">{state.firstName.message}</div>
                 )}
               </div>
+              {/* LAST NAME*/}
               <div className="relative flex flex-col pt-4">
                 <label htmlFor="lastName" className="text-lg">
                   Last Name
@@ -195,7 +240,7 @@ function Register() {
                   <div className="text-red-600">{state.lastName.message}</div>
                 )}
               </div>
-
+              {/* EMAIL */}
               <div className="relative flex flex-col pt-4">
                 <label htmlFor="email" className="text-lg">
                   Email
@@ -210,7 +255,7 @@ function Register() {
                 />
                 {state.email.hasError && <div className="text-red-600">{state.email.message}</div>}
               </div>
-
+              {/* PASSWORD */}
               <div className="relative flex flex-col pt-4">
                 <label htmlFor="password" className="text-lg">
                   Password
@@ -227,7 +272,7 @@ function Register() {
                   <div className="text-red-600">{state.password.message}</div>
                 )}
               </div>
-
+              {/* CONFIRM PASSWORD */}
               <div className="relative flex flex-col pt-4">
                 <label htmlFor="confirm-password" className="text-lg">
                   Confirm Password
