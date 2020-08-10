@@ -339,7 +339,7 @@ function Register() {
                   onChange={e => dispatch({ type: 'usernameImmediately', value: e.target.value })}
                   type="text"
                   id="username"
-                  placeholder="John"
+                  placeholder="don"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
                 />
                 {state.username.hasError && (
