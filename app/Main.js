@@ -22,14 +22,14 @@ function Main() {
   const initialState = {
     loggedIn: Boolean(localStorage.getItem('johnsido-token')),
     user: {
-      _id: localStorage.removeItem('johnsido-id'),
-      token: localStorage.removeItem('johnsido-token'),
-      username: localStorage.removeItem('johnsido-username'),
-      firstName: localStorage.removeItem('johnsido-firstname'),
-      lastName: localStorage.removeItem('johnsido-lastname'),
-      avatar: localStorage.removeItem('johnsido-avatar'),
-      verified: localStorage.removeItem('johnsido-verified'),
-      userCreationDate: localStorage.removeItem('johnsido-userCreationDate'),
+      _id: localStorage.getItem('johnsido-id'),
+      token: localStorage.getItem('johnsido-token'),
+      username: localStorage.getItem('johnsido-username'),
+      firstName: localStorage.getItem('johnsido-firstname'),
+      lastName: localStorage.getItem('johnsido-lastname'),
+      avatar: localStorage.getItem('johnsido-avatar'),
+      verified: localStorage.getItem('johnsido-verified'),
+      userCreationDate: localStorage.getItem('johnsido-userCreationDate'),
     },
     url: '',
     logo: {
@@ -41,6 +41,7 @@ function Main() {
       value: [],
       isDisplay: false,
     },
+    isOpenProfileDropdown: false,
   };
   function appReducer(draft, action) {
     switch (action.type) {
@@ -50,6 +51,9 @@ function Main() {
         return;
       case 'updateUrl':
         draft.url = action.value;
+        return;
+      case 'isOpenProfileDropdown':
+        draft.isOpenProfileDropdown = !draft.isOpenProfileDropdown;
         return;
       case 'flashMsgError':
         draft.flashMsgErrors.value = action.value;
