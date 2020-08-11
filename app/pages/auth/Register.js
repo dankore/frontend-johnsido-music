@@ -1,14 +1,18 @@
 import React, { useContext, useEffect } from 'react';
 import Page from '../../components/layouts/Page';
 import StateContext from '../../contextsProviders/StateContext';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { useImmerReducer } from 'use-immer';
 import Axios from 'axios';
 import moment from 'moment-timezone';
 import FlashMsgError from '../../components/shared/FlashMsgError';
+import DispatchContext from '../../contextsProviders/DispatchContext';
+import PropTypes from 'prop-types';
 
-function Register() {
+function Register({ history }) {
   const appState = useContext(StateContext);
+  const appsDispatch = useContext(DispatchContext);
+
   const initialState = {
     username: {
       value: '',
@@ -316,8 +320,10 @@ function Register() {
           console.log({ response });
           if (response.data.token) {
             //
+            history.push('/profile');
           } else {
-            //
+            // DISPLAY ERROR
+            appsDispatch({ type: 'flashMsgError', value: response.data });
           }
         } catch (error) {
           console.log(error.message);
@@ -472,4 +478,8 @@ function Register() {
   );
 }
 
-export default Register;
+Register.propTypes = {
+  history: PropTypes.any,
+};
+
+export default withRouter(Register);
