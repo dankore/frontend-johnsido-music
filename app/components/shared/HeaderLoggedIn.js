@@ -96,7 +96,11 @@ function HeaderLoggedIn() {
                   aria-label="User menu"
                   aria-haspopup="true"
                 >
-                  <img className="h-8 w-8 rounded-full" src={appState.user.avatar} alt="" />
+                  <img
+                    className="h-8 w-8 rounded-full"
+                    src={appState.user.avatar}
+                    alt="Profile Pic"
+                  />
                 </button>
               </div>
               {/* <!--

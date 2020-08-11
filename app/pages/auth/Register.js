@@ -317,7 +317,6 @@ function Register({ history }) {
               cancelToken: request.token,
             }
           );
-          console.log({ response });
           if (response.data.token) {
             // LOGIN
             appsDispatch({ type: 'login', value: response.data });

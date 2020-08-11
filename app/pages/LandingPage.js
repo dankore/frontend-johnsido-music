@@ -1,9 +1,12 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import StateContext from '../contextsProviders/StateContext';
+import DispatchContext from '../contextsProviders/DispatchContext';
 
 function LandingPage() {
   const appState = useContext(StateContext);
+  const appDispatch = useContext(DispatchContext);
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-gray-900 lg:bg-gray-300">
       <div
@@ -46,32 +49,59 @@ function LandingPage() {
                     />
                   </svg>
                 </div>
-                <div className="hidden lg:block text-right">
-                  <Link
-                    to="/login"
-                    className="text-sm block -mr-1 font-semibold text-white focus:outline-none focus:underline"
-                  >
-                    Login
-                  </Link>
-
-                  <Link
-                    to="/about"
-                    className="text-sm block mr-1 font-semibold text-white focus:outline-none focus:underline"
-                  >
-                    About
-                  </Link>
-                  <Link
-                    to="/profile"
-                    className="text-sm block mr-2 font-semibold text-white focus:outline-none focus:underline"
-                  >
-                    Profile
-                  </Link>
-                  <Link
-                    to="/register"
-                    className="text-sm mr-3 text-rightblock font-semibold text-white focus:outline-none focus:underline"
-                  >
-                    Register
-                  </Link>
+                <div className="hidden lg:block">
+                  {appState.loggedIn ? (
+                    <>
+                      <Link to="/profile" className="">
+                        <img
+                          className="h-8 w-8 rounded-full"
+                          src={appState.user.avatar}
+                          alt="Profile Pic"
+                        />
+                      </Link>
+                      <Link
+                        to="/about"
+                        className="text-sm font-semibold text-white focus:outline-none focus:underline"
+                      >
+                        About
+                      </Link>
+                      <button
+                        onClick={() => appDispatch({ type: 'logout' })}
+                        className="text-sm block font-semibold text-white focus:outline-none focus:underline"
+                        role="logout"
+                      >
+                        Sign out
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      {' '}
+                      <Link
+                        to="/login"
+                        className="text-sm block -mr-1 font-semibold text-white focus:outline-none focus:underline"
+                      >
+                        Login
+                      </Link>
+                      <Link
+                        to="/about"
+                        className="text-sm block mr-1 font-semibold text-white focus:outline-none focus:underline"
+                      >
+                        About
+                      </Link>
+                      <Link
+                        to="/profile"
+                        className="text-sm block mr-2 font-semibold text-white focus:outline-none focus:underline"
+                      >
+                        Profile
+                      </Link>
+                      <Link
+                        to="/register"
+                        className="text-sm mr-3 text-rightblock font-semibold text-white focus:outline-none focus:underline"
+                      >
+                        Register
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

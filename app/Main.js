@@ -62,6 +62,10 @@ function Main() {
         draft.flashMsgErrors.value = action.value;
         draft.flashMsgErrors.isDisplay = true;
         return;
+      case 'turnOff':
+        draft.flashMsgErrors.isDisplay = false;
+        draft.isOpenProfileDropdown = false;
+        return;
     }
   }
 
