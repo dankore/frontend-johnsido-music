@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import StateContext from '../../contextsProviders/StateContext';
 import DispatchContext from '../../contextsProviders/DispatchContext';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function HeaderLoggedIn() {
   const appState = useContext(StateContext);
@@ -41,16 +41,18 @@ function HeaderLoggedIn() {
           </div>
           <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex-shrink-0">
-              <img
-                className="block lg:hidden h-8 w-auto"
-                src="https://tailwindui.com/img/logos/workflow-mark-on-dark.svg"
-                alt="Workflow logo"
-              />
-              <img
-                className="hidden lg:block h-8 w-auto"
-                src="https://tailwindui.com/img/logos/workflow-logo-on-dark.svg"
-                alt="Workflow logo"
-              />
+              <Link to="/">
+                <img
+                  className="block lg:hidden h-10 w-auto"
+                  src={appState.logo.url}
+                  alt={appState.logo.alt}
+                />
+                <img
+                  className="hidden lg:block h-10 w-auto"
+                  src={appState.logo.url}
+                  alt={appState.logo.alt}
+                />
+              </Link>
             </div>
             <div className="hidden sm:block sm:ml-6">
               <div className="flex">
@@ -108,7 +110,7 @@ function HeaderLoggedIn() {
               To: "transform opacity-0 scale-95"
           --> */}
               {appState.isOpenProfileDropdown && (
-                <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg z-3">
+                <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg z-10">
                   <div
                     className="py-1 rounded-md bg-white shadow-xs"
                     role="menu"
@@ -129,13 +131,13 @@ function HeaderLoggedIn() {
                     >
                       Settings
                     </a>
-                    <a
-                      href="#"
+                    <button
+                      onClick={() => appDispatch({ type: 'logout' })}
                       className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
                       role="menuitem"
                     >
                       Sign out
-                    </a>
+                    </button>
                   </div>
                 </div>
               )}

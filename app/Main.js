@@ -49,6 +49,9 @@ function Main() {
         draft.loggedIn = true;
         draft.user = action.value;
         return;
+      case 'logout':
+        draft.loggedIn = false;
+        return;
       case 'updateUrl':
         draft.url = action.value;
         return;
