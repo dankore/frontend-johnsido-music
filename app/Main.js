@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
@@ -20,6 +20,17 @@ import Axios from 'axios';
 
 function Main() {
   const initialState = {
+    loggedIn: Boolean(localStorage.getItem('johnsido-token')),
+    user: {
+      _id: localStorage.removeItem('johnsido-id'),
+      token: localStorage.removeItem('johnsido-token'),
+      username: localStorage.removeItem('johnsido-username'),
+      firstName: localStorage.removeItem('johnsido-firstname'),
+      lastName: localStorage.removeItem('johnsido-lastname'),
+      avatar: localStorage.removeItem('johnsido-avatar'),
+      verified: localStorage.removeItem('johnsido-verified'),
+      userCreationDate: localStorage.removeItem('johnsido-userCreationDate'),
+    },
     url: '',
     logo: {
       url:
@@ -33,6 +44,10 @@ function Main() {
   };
   function appReducer(draft, action) {
     switch (action.type) {
+      case 'login':
+        draft.loggedIn = true;
+        draft.user = action.value;
+        return;
       case 'updateUrl':
         draft.url = action.value;
         return;
@@ -44,6 +59,28 @@ function Main() {
   }
 
   const [state, dispatch] = useImmerReducer(appReducer, initialState);
+
+  useEffect(() => {
+    if (state.loggedIn) {
+      localStorage.setItem('johnsido-id', state.user._id);
+      localStorage.setItem('johnsido-token', state.user.token);
+      localStorage.setItem('johnsido-username', state.user.username);
+      localStorage.setItem('johnsido-firstname', state.user.firstName);
+      localStorage.setItem('johnsido-lastname', state.user.lastName);
+      localStorage.setItem('johnsido-avatar', state.user.avatar);
+      localStorage.setItem('johnsido-verified', state.user.verified);
+      localStorage.setItem('johnsido-userCreationDate', state.user.userCreationDate);
+    } else {
+      localStorage.removeItem('johnsido-id');
+      localStorage.removeItem('johnsido-token');
+      localStorage.removeItem('johnsido-username');
+      localStorage.removeItem('johnsido-firstname');
+      localStorage.removeItem('johnsido-lastname');
+      localStorage.removeItem('johnsido-avatar');
+      localStorage.removeItem('johnsido-verified');
+      localStorage.removeItem('johnsido-userCreationDate');
+    }
+  }, [state.loggedIn]);
 
   return (
     <StateContext.Provider value={state}>

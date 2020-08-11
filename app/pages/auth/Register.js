@@ -320,6 +320,7 @@ function Register({ history }) {
           console.log({ response });
           if (response.data.token) {
             //
+            appsDispatch({ type: 'login', value: response.data });
             history.push('/profile');
           } else {
             // DISPLAY ERROR
