@@ -28,7 +28,7 @@ function Main() {
     },
     flashMsgErrors: {
       value: [],
-      isDisplay: true,
+      isDisplay: false,
     },
   };
   function appReducer(draft, action) {
