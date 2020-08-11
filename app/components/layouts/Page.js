@@ -13,7 +13,7 @@ function Page(props) {
     <Container>
       <Helmet>
         {/* General tags */}
-        <title>{`${props.title} | Harnak Spices`}</title>
+        <title>{`${props.title} | Johnsido Music`}</title>
         <meta name="description" content={formatTitleAndDescription(props.description)} />
         <meta name="image" content={props.image} />
 

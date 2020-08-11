@@ -26,11 +26,19 @@ function Main() {
         'https://res.cloudinary.com/my-nigerian-projects/image/upload/f_auto,q_auto/v1596961997/Others/john/logo.png',
       alt: 'John Sido Photo',
     },
+    flashMsgErrors: {
+      value: [],
+      isDisplay: true,
+    },
   };
   function appReducer(draft, action) {
     switch (action.type) {
       case 'updateUrl':
         draft.url = action.value;
+        return;
+      case 'flashMsgError':
+        draft.flashMsgErrors.value = action.value;
+        draft.flashMsgErrors.isDisplay = true;
         return;
     }
   }

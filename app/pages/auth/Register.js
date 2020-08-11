@@ -4,6 +4,8 @@ import StateContext from '../../contextsProviders/StateContext';
 import { Link } from 'react-router-dom';
 import { useImmerReducer } from 'use-immer';
 import Axios from 'axios';
+import moment from 'moment-timezone';
+import FlashMsgError from '../../components/shared/FlashMsgError';
 
 function Register() {
   const appState = useContext(StateContext);
@@ -291,6 +293,9 @@ function Register() {
   useEffect(() => {
     if (state.submitCount) {
       const request = Axios.CancelToken.source();
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const currentTime = moment().tz(timezone).format();
+
       (async function submitForm() {
         try {
           const response = await Axios.post(
@@ -302,12 +307,18 @@ function Register() {
               email: state.email.value,
               password: state.password.value,
               confirmPassword: state.confirmPassword.value,
+              userCreationDate: currentTime,
             },
             {
               cancelToken: request.token,
             }
           );
           console.log({ response });
+          if (response.data.token) {
+            //
+          } else {
+            //
+          }
         } catch (error) {
           console.log(error.message);
         }
@@ -328,6 +339,9 @@ function Register() {
           </div>
           <div className="flex flex-col justify-center lg:justify-start my-auto px-3 md:px-32 lg:px-3">
             <p className="text-center text-3xl pt-4">Register</p>
+            {appState.flashMsgErrors.isDisplay && (
+              <FlashMsgError errors={appState.flashMsgErrors.value} />
+            )}
             <form onSubmit={handleFormSubmission} className="flex flex-col">
               {/* USERNAME */}
               <div className="relative flex flex-col pt-4">
