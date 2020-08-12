@@ -63,7 +63,7 @@ function LandingPage() {
                     >
                       {appState.loggedIn ? (
                         <>
-                          <Link to="/profile" className="block">
+                          <Link to={`/profile/${appState.user.username}`} className="block">
                             <img
                               className="h-8 w-8 rounded-full"
                               src={appState.user.avatar}
