@@ -8,7 +8,7 @@ function SettingsPage() {
     <Page>
       <main className="flex flex-wrap lg:flex-no-wrap">
         {/* <!--Sidebar--> */}
-        <div style={{ width: 500 + 'px' }} className="pt-16">
+        <div style={{ width: 500 + 'px' }} className="pt-0 border-r h-16 lg:min-h-screen lg:pt-16">
           <div className="mx-auto lg:float-right lg:px-6">
             <ul className="list-reset flex flex-row lg:flex-col text-center lg:text-left">
               <li className="mr-3 flex-1">
@@ -41,17 +41,6 @@ function SettingsPage() {
                   <i className="fas fa-link pr-0 lg:pr-3"></i>
                   <span className="pb-1 lg:pb-0 text-xs lg:text-base block lg:inline-block">
                     Change Password
-                  </span>
-                </NavLink>
-              </li>
-              <li className="mr-3 flex-1">
-                <NavLink
-                  to="/settings/delete-account"
-                  className="block py-1 lg:py-3 pl-1 align-middle  no-underline hover:text-pink-500 border-b-2 border-gray-800 lg:border-gray-900 hover:border-pink-500"
-                >
-                  <i className="fas fa-link pr-0 lg:pr-3"></i>
-                  <span className="pb-1 lg:pb-0 text-xs lg:text-base block lg:inline-block">
-                    Link
                   </span>
                 </NavLink>
               </li>
