@@ -18,8 +18,6 @@ function ProfilePage({ history }) {
 
   const [state, profileDispatch] = useImmerReducer(profileReducer, initialState);
 
-  console.log(state, profileDispatch);
-
   useEffect(() => {
     const request = Axios.CancelToken.source();
     (async function getProfileInfo() {
@@ -28,10 +26,8 @@ function ProfilePage({ history }) {
       });
 
       if (response.data) {
-        console.log({ YesUser: response.data });
         profileDispatch({ type: 'addProfileUserInfo', value: response.data });
       } else {
-        console.log({ NoUser: response.data });
         history.push('/404');
       }
     })();
