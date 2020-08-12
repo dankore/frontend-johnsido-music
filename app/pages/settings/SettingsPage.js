@@ -1,6 +1,7 @@
 import React from 'react';
 import Page from '../../components/layouts/Page';
 import { Route, Switch, NavLink, Link } from 'react-router-dom';
+import ProfileInfoSettings from '../../components/settings/ProfileInfo';
 
 function SettingsPage() {
   return (
@@ -45,17 +46,6 @@ function SettingsPage() {
               </li>
               <li className="mr-3 flex-1">
                 <NavLink
-                  to="/settings/#"
-                  className="block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-pink-600"
-                >
-                  <i className="fas fa-link pr-0 md:pr-3 text-pink-500"></i>
-                  <span className="pb-1 md:pb-0 text-xs md:text-base text-white md:font-bold block md:inline-block">
-                    Active Link
-                  </span>
-                </NavLink>
-              </li>
-              <li className="mr-3 flex-1">
-                <NavLink
                   to="/settings/delete-account"
                   className="block py-1 md:py-3 pl-1 align-middle text-gray-800 no-underline hover:text-pink-500 border-b-2 border-gray-800 md:border-gray-900 hover:border-pink-500"
                 >
@@ -72,7 +62,7 @@ function SettingsPage() {
         <div className="w-full bg-red-500">
           <Switch>
             <Route path="/settings/info">
-              <div>Info</div>
+              <ProfileInfoSettings />
             </Route>
             <Route path="/settings/change-password">
               <div>changePassword</div>
