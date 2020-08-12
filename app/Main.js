@@ -30,6 +30,7 @@ function Main() {
       lastName: localStorage.getItem('johnsido-lastname'),
       avatar: localStorage.getItem('johnsido-avatar'),
       verified: localStorage.getItem('johnsido-verified'),
+      about: JSON.parse(localStorage.getItem('johnsido-about')),
       userCreationDate: localStorage.getItem('johnsido-userCreationDate'),
     },
     url: '',
@@ -86,6 +87,7 @@ function Main() {
       localStorage.setItem('johnsido-lastname', state.user.lastName);
       localStorage.setItem('johnsido-avatar', state.user.avatar);
       localStorage.setItem('johnsido-verified', state.user.verified);
+      localStorage.setItem('johnsido-about', JSON.stringify(state.user.about));
       localStorage.setItem('johnsido-userCreationDate', state.user.userCreationDate);
     } else {
       localStorage.removeItem('johnsido-id');
@@ -95,6 +97,7 @@ function Main() {
       localStorage.removeItem('johnsido-lastname');
       localStorage.removeItem('johnsido-avatar');
       localStorage.removeItem('johnsido-verified');
+      localStorage.removeItem('johnsido-about');
       localStorage.removeItem('johnsido-userCreationDate');
     }
   }, [state.loggedIn]);
