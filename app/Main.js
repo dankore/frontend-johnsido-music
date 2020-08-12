@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Axios from 'axios';
+import { useImmerReducer } from 'use-immer';
 
 // AXIOS COMMENT URL
 console.log(process.env.BACKENDURL);
@@ -14,9 +16,8 @@ import ProfilePage from './pages/profile/ProfilePage';
 import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
 import Header from './components/shared/Header';
-import { useImmerReducer } from 'use-immer';
+import SettingsPage from './pages/settings/SettingsPage';
 import LandingPage from './pages/LandingPage';
-import Axios from 'axios';
 
 function Main() {
   const initialState = {
@@ -121,6 +122,9 @@ function Main() {
             </Route>
             <Route path="/login">
               <Login />
+            </Route>
+            <Route path="/settings">
+              <SettingsPage />
             </Route>
             <Route to="/404">
               <div>Not found</div>

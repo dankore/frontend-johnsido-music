@@ -128,13 +128,13 @@ function HeaderLoggedIn() {
                     >
                       Your Profile
                     </a>
-                    <a
-                      href="#"
+                    <Link
+                      to="/settings"
                       className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
                       role="menuitem"
                     >
                       Settings
-                    </a>
+                    </Link>
                     <button
                       onClick={() => appDispatch({ type: 'logout' })}
                       className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
