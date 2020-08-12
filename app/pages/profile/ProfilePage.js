@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, withRouter } from 'react-router-dom';
 import { useImmerReducer } from 'use-immer';
 import Axios from 'axios';
+import PropTypes from 'prop-types';
 
-function ProfilePage() {
+function ProfilePage({ history }) {
   const initialState = {
-    username: useParams(),
+    username: useParams().username,
   };
 
   function profileReducer(draft, action) {
@@ -22,8 +23,17 @@ function ProfilePage() {
   useEffect(() => {
     const request = Axios.CancelToken.source();
     (async function getProfileInfo() {
-      const response = Axios.post(`/profile/${state.username}`, { CancelToken: request.token });
-      console.log(response.data);
+      const response = await Axios.post(`/profile/${state.username}`, {
+        CancelToken: request.token,
+      });
+
+      if (response.data) {
+        console.log({ YesUser: response.data });
+        profileDispatch({ type: 'addProfileUserInfo', value: response.data });
+      } else {
+        console.log({ NoUser: response.data });
+        history.push('/404');
+      }
     })();
     return () => request.cancel();
   }, [state.username]);
@@ -155,4 +165,8 @@ function ProfilePage() {
   );
 }
 
-export default ProfilePage;
+ProfilePage.propTypes = {
+  history: PropTypes.object,
+};
+
+export default withRouter(ProfilePage);

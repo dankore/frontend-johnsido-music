@@ -122,6 +122,9 @@ function Main() {
             <Route path="/login">
               <Login />
             </Route>
+            <Route to="/404">
+              <div>Not found</div>
+            </Route>
             <Route>
               <div>Not found</div>
             </Route>
