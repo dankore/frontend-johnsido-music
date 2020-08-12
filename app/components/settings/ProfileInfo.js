@@ -1,6 +1,62 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
+import { useImmerReducer } from 'use-immer';
+import Axios from 'axios';
+import StateContext from '../../contextsProviders/StateContext';
 
 function ProfileInfoSettings() {
+  const appState = useContext(StateContext);
+  const initialState = {
+    user: {
+      profileUsername: '',
+      profileFirstName: '',
+      profileLastName: '',
+      profileAvatar: '',
+      profileEmail: '',
+    },
+  };
+
+  function profileInfoReducer(draft, action) {
+    switch (action.type) {
+      case 'updateUserInfo':
+        draft.user = action.value;
+        return;
+      case 'firstNameImmediately':
+        draft.user.profileFirstName = action.value;
+        return;
+      case 'lastNameImmediately':
+        draft.user.profileLastName = action.value;
+        return;
+      case 'usernameImmediately':
+        draft.user.profileUsername = action.value;
+        return;
+      case 'emailImmediately':
+        draft.user.profileEmail = action.value;
+        return;
+    }
+  }
+
+  const [state, profileInfoDispatch] = useImmerReducer(profileInfoReducer, initialState);
+
+  useEffect(() => {
+    const request = Axios.CancelToken.source();
+
+    (async function getUserInfo() {
+      const response = await Axios.post(`/profile/${appState.user.username}`, {
+        CancelToken: request.token,
+      });
+      console.log({ response: response.data }); // SUCCESS!
+
+      if (response.data) {
+        // SAVE DATA TO STATE
+        profileInfoDispatch({ type: 'updateUserInfo', value: response.data });
+      } else {
+        // INFORM USER
+      }
+    })();
+
+    return () => request.cancel();
+  }, [state.user.username]);
+
   return (
     <div className="bg-gray-200 font-mono">
       <div className="container mx-auto">
@@ -13,6 +69,13 @@ function ProfileInfoSettings() {
                   first name
                 </label>
                 <input
+                  value={state.user.profileFirstName}
+                  onChange={e =>
+                    profileInfoDispatch({
+                      type: 'firstNameImmediately',
+                      value: e.target.value,
+                    })
+                  }
                   className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                   type="text"
                   required
@@ -23,6 +86,13 @@ function ProfileInfoSettings() {
                   last name
                 </label>
                 <input
+                  value={state.user.profileLastName}
+                  onChange={e =>
+                    profileInfoDispatch({
+                      type: 'lastNameImmediately',
+                      value: e.target.value,
+                    })
+                  }
                   className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                   type="text"
                   required
@@ -35,6 +105,13 @@ function ProfileInfoSettings() {
                   user name
                 </label>
                 <input
+                  value={state.user.profileUsername}
+                  onChange={e =>
+                    profileInfoDispatch({
+                      type: 'usernameImmediately',
+                      value: e.target.value,
+                    })
+                  }
                   className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                   type="text"
                   required
@@ -48,6 +125,13 @@ function ProfileInfoSettings() {
                   email address
                 </label>
                 <input
+                  value={state.user.profileEmail}
+                  onChange={e =>
+                    profileInfoDispatch({
+                      type: 'emailImmediately',
+                      value: e.target.value,
+                    })
+                  }
                   className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                   id="grid-text-1"
                   type="text"
