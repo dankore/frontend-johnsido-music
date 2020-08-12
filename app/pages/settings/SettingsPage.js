@@ -6,18 +6,18 @@ import ProfileInfoSettings from '../../components/settings/ProfileInfo';
 function SettingsPage() {
   return (
     <Page>
-      <main className="flex">
+      <main className="flex flex-wrap lg:flex-no-wrap">
         {/* <!--Sidebar--> */}
-        <div className="w-full md:w-1/5 bg-gray-900 md:bg-gray-900 px-2 text-center fixed bottom-0 md:pt-8 md:top-0 md:left-0 h-16 md:h-screen md:border-r-4 md:border-gray-600">
-          <div className="md:relative mx-auto lg:float-right lg:px-6">
-            <ul className="list-reset flex flex-row md:flex-col text-center md:text-left">
+        <div style={{ width: 500 + 'px' }} className="pt-16">
+          <div className="mx-auto lg:float-right lg:px-6">
+            <ul className="list-reset flex flex-row lg:flex-col text-center lg:text-left">
               <li className="mr-3 flex-1">
                 <Link
                   to="/profile/dankore"
-                  className="block py-1 md:py-3 pl-1 align-middle text-gray-800 no-underline hover:text-pink-500 border-b-2 border-gray-800 md:border-gray-900 hover:border-pink-500"
+                  className="block py-1 lg:py-3 pl-1 align-middle no-underline hover:text-pink-500 border-b-2 border-gray-800 lg:border-gray-900 hover:border-pink-500"
                 >
-                  <i className="fas fa-user pr-0 md:pr-3"></i>
-                  <span className="pb-1 md:pb-0 text-xs md:text-base text-gray-600 md:text-gray-400 block md:inline-block">
+                  <i className="fas fa-user pr-0 lg:pr-3"></i>
+                  <span className="pb-1 lg:pb-0 text-xs lg:text-base block lg:inline-block">
                     Profile
                   </span>
                 </Link>
@@ -25,10 +25,10 @@ function SettingsPage() {
               <li className="mr-3 flex-1">
                 <NavLink
                   to="/settings/info"
-                  className="block py-1 md:py-3 pl-1 align-middle text-gray-800 no-underline hover:text-pink-500 border-b-2 border-gray-800 md:border-gray-900 hover:border-pink-500"
+                  className="block py-1 lg:py-3 pl-1 align-middle  no-underline hover:text-pink-500 border-b-2 border-gray-800 lg:border-gray-900 hover:border-pink-500"
                 >
-                  <i className="fas fa-link pr-0 md:pr-3"></i>
-                  <span className="pb-1 md:pb-0 text-xs md:text-base text-gray-600 md:text-gray-400 block md:inline-block">
+                  <i className="fas fa-link pr-0 lg:pr-3"></i>
+                  <span className="pb-1 lg:pb-0 text-xs lg:text-base block lg:inline-block">
                     Personal Information
                   </span>
                 </NavLink>
@@ -36,10 +36,10 @@ function SettingsPage() {
               <li className="mr-3 flex-1">
                 <NavLink
                   to="/settings/change-password"
-                  className="block py-1 md:py-3 pl-1 align-middle text-gray-800 no-underline hover:text-pink-500 border-b-2 border-gray-800 md:border-gray-900 hover:border-pink-500"
+                  className="block py-1 lg:py-3 pl-1 align-middle  no-underline hover:text-pink-500 border-b-2 border-gray-800 lg:border-gray-900 hover:border-pink-500"
                 >
-                  <i className="fas fa-link pr-0 md:pr-3"></i>
-                  <span className="pb-1 md:pb-0 text-xs md:text-base text-gray-600 md:text-gray-400 block md:inline-block">
+                  <i className="fas fa-link pr-0 lg:pr-3"></i>
+                  <span className="pb-1 lg:pb-0 text-xs lg:text-base block lg:inline-block">
                     Change Password
                   </span>
                 </NavLink>
@@ -47,10 +47,10 @@ function SettingsPage() {
               <li className="mr-3 flex-1">
                 <NavLink
                   to="/settings/delete-account"
-                  className="block py-1 md:py-3 pl-1 align-middle text-gray-800 no-underline hover:text-pink-500 border-b-2 border-gray-800 md:border-gray-900 hover:border-pink-500"
+                  className="block py-1 lg:py-3 pl-1 align-middle  no-underline hover:text-pink-500 border-b-2 border-gray-800 lg:border-gray-900 hover:border-pink-500"
                 >
-                  <i className="fas fa-link pr-0 md:pr-3"></i>
-                  <span className="pb-1 md:pb-0 text-xs md:text-base text-gray-600 md:text-gray-400 block md:inline-block">
+                  <i className="fas fa-link pr-0 lg:pr-3"></i>
+                  <span className="pb-1 lg:pb-0 text-xs lg:text-base block lg:inline-block">
                     Link
                   </span>
                 </NavLink>
@@ -86,7 +86,7 @@ export default SettingsPage;
             <h2 className="text-2xl text-gray-900">Account Setting</h2>
             <form className="mt-6 border-t border-gray-400 pt-4">
               <div className="flex flex-wrap -mx-3 mb-6">
-                <div className="w-full md:w-full px-3 mb-6">
+                <div className="w-full lg:w-full px-3 mb-6">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                     htmlFor="grid-text-1"
@@ -101,7 +101,7 @@ export default SettingsPage;
                     required
                   />
                 </div>
-                <div className="w-full md:w-full px-3 mb-6 ">
+                <div className="w-full lg:w-full px-3 mb-6 ">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                     password
                   </label>
@@ -109,7 +109,7 @@ export default SettingsPage;
                     change your password
                   </button>
                 </div>
-                <div className="w-full md:w-full px-3 mb-6">
+                <div className="w-full lg:w-full px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                     pick your country
                   </label>
@@ -132,7 +132,7 @@ export default SettingsPage;
                     </div>
                   </div>
                 </div>
-                <div className="w-full md:w-full px-3 mb-6">
+                <div className="w-full lg:w-full px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                     fav language
                   </label>
@@ -157,7 +157,7 @@ export default SettingsPage;
                 <div className="personal w-full border-t border-gray-400 pt-4">
                   <h2 className="text-2xl text-gray-900">Personal info:</h2>
                   <div className="flex items-center justify-between mt-4">
-                    <div className="w-full md:w-1/2 px-3 mb-6">
+                    <div className="w-full lg:w-1/2 px-3 mb-6">
                       <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                         first name
                       </label>
@@ -167,7 +167,7 @@ export default SettingsPage;
                         required
                       />
                     </div>
-                    <div className="w-full md:w-1/2 px-3 mb-6">
+                    <div className="w-full lg:w-1/2 px-3 mb-6">
                       <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                         last name
                       </label>
@@ -178,7 +178,7 @@ export default SettingsPage;
                       />
                     </div>
                   </div>
-                  <div className="w-full md:w-full px-3 mb-6">
+                  <div className="w-full lg:w-full px-3 mb-6">
                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                       user name
                     </label>
@@ -188,7 +188,7 @@ export default SettingsPage;
                       required
                     />
                   </div>
-                  <div className="w-full md:w-full px-3 mb-6">
+                  <div className="w-full lg:w-full px-3 mb-6">
                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                       Bio
                     </label>
