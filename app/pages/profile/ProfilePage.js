@@ -1,6 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useImmerReducer } from 'use-immer';
+import Axios from 'axios';
 
 function ProfilePage() {
+  const initialState = {
+    username: useParams(),
+  };
+
+  function profileReducer(draft, action) {
+    switch (action.type) {
+      case 'later':
+        return;
+    }
+  }
+
+  const [state, profileDispatch] = useImmerReducer(profileReducer, initialState);
+
+  console.log(state, profileDispatch);
+
+  useEffect(() => {
+    const request = Axios.CancelToken.source();
+    (async function getProfileInfo() {
+      const response = Axios.post(`/profile/${state.username}`, { CancelToken: request.token });
+      console.log(response.data);
+    })();
+    return () => request.cancel();
+  }, [state.username]);
+
   const background =
     'https://res.cloudinary.com/my-nigerian-projects/image/upload/v1594992703/projects/rtysccgzrf3hsmgecdhd.jpg';
   return (
