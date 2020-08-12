@@ -146,12 +146,8 @@ function ProfilePage({ history }) {
                     Angeles, California
                   </div>
                   <div className="mb-2 text-gray-700 mt-10">
-                    <i className="fas fa-briefcase mr-2 text-lg text-gray-500"></i>
-                    Solution Manager - Creative Tim Officer
-                  </div>
-                  <div className="mb-2 text-gray-700">
-                    <i className="fas fa-university mr-2 text-lg text-gray-500"></i>
-                    University of Computer Science
+                    <i className="fas fa-music mr-2 text-lg text-gray-500"></i>
+                    Ragge
                   </div>
                 </div>
                 <div className="mt-10 py-10 border-t border-gray-300 text-center">
