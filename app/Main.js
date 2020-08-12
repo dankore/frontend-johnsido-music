@@ -42,6 +42,7 @@ function Main() {
       isDisplay: false,
     },
     isOpenProfileDropdown: false,
+    toggleLandingPageMenu: false,
   };
   function appReducer(draft, action) {
     switch (action.type) {
@@ -58,6 +59,9 @@ function Main() {
       case 'isOpenProfileDropdown':
         draft.isOpenProfileDropdown = !draft.isOpenProfileDropdown;
         return;
+      case 'toggleLandingPageMenu':
+        draft.toggleLandingPageMenu = !draft.toggleLandingPageMenu;
+        return;
       case 'flashMsgError':
         draft.flashMsgErrors.value = action.value;
         draft.flashMsgErrors.isDisplay = true;
@@ -65,6 +69,7 @@ function Main() {
       case 'turnOff':
         draft.flashMsgErrors.isDisplay = false;
         draft.isOpenProfileDropdown = false;
+        draft.toggleLandingPageMenu = false;
         return;
     }
   }

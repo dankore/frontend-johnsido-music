@@ -38,8 +38,11 @@ function LandingPage() {
                   alt={appState.logo.alt}
                 />
               </div>
-              <div>
-                <div className="block lg:hidden">
+              <div className="relative">
+                <button
+                  onClick={() => appDispatch({ type: 'toggleLandingPageMenu' })}
+                  className="text-white flex text-center"
+                >
                   <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="white">
                     <path
                       strokeLinecap="round"
@@ -48,61 +51,71 @@ function LandingPage() {
                       d="M4 6h16M4 12h16M4 18h16"
                     />
                   </svg>
-                </div>
-                <div className="hidden lg:block">
-                  {appState.loggedIn ? (
-                    <>
-                      <Link to="/profile" className="">
-                        <img
-                          className="h-8 w-8 rounded-full"
-                          src={appState.user.avatar}
-                          alt="Profile Pic"
-                        />
-                      </Link>
-                      <Link
-                        to="/about"
-                        className="text-sm font-semibold text-white focus:outline-none focus:underline"
-                      >
-                        About
-                      </Link>
-                      <button
-                        onClick={() => appDispatch({ type: 'logout' })}
-                        className="text-sm block font-semibold text-white focus:outline-none focus:underline"
-                        role="logout"
-                      >
-                        Sign out
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      {' '}
-                      <Link
-                        to="/login"
-                        className="text-sm block -mr-1 font-semibold text-white focus:outline-none focus:underline"
-                      >
-                        Login
-                      </Link>
-                      <Link
-                        to="/about"
-                        className="text-sm block mr-1 font-semibold text-white focus:outline-none focus:underline"
-                      >
-                        About
-                      </Link>
-                      <Link
-                        to="/profile"
-                        className="text-sm block mr-2 font-semibold text-white focus:outline-none focus:underline"
-                      >
-                        Profile
-                      </Link>
-                      <Link
-                        to="/register"
-                        className="text-sm mr-3 text-rightblock font-semibold text-white focus:outline-none focus:underline"
-                      >
-                        Register
-                      </Link>
-                    </>
-                  )}
-                </div>
+                  <p>Menu</p>
+                </button>
+                {appState.toggleLandingPageMenu && (
+                  <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg  z-10">
+                    <div
+                      className="p-1 rounded-md bg-white shadow-xs"
+                      role="menu"
+                      aria-orientation="vertical"
+                      aria-labelledby="user-menu"
+                    >
+                      {appState.loggedIn ? (
+                        <>
+                          <Link to="/profile" className="block">
+                            <img
+                              className="h-8 w-8 rounded-full"
+                              src={appState.user.avatar}
+                              alt="Profile Pic"
+                            />
+                          </Link>
+                          <Link
+                            to="/about"
+                            className="text-sm block font-semibold focus:outline-none focus:underline"
+                          >
+                            About
+                          </Link>
+                          <button
+                            onClick={() => appDispatch({ type: 'logout' })}
+                            className="text-sm block font-semibold focus:outline-none focus:underline"
+                            role="logout"
+                          >
+                            Sign out
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          {' '}
+                          <Link
+                            to="/login"
+                            className="text-sm block -mr-1 font-semibold focus:outline-none focus:underline"
+                          >
+                            Login
+                          </Link>
+                          <Link
+                            to="/about"
+                            className="text-sm block mr-1 font-semibold focus:outline-none focus:underline"
+                          >
+                            About
+                          </Link>
+                          <Link
+                            to="/profile"
+                            className="text-sm block mr-2 font-semibold focus:outline-none focus:underline"
+                          >
+                            Profile
+                          </Link>
+                          <Link
+                            to="/register"
+                            className="text-sm mr-3 text-rightblock font-semibold focus:outline-none focus:underline"
+                          >
+                            Register
+                          </Link>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
