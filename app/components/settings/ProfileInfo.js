@@ -179,12 +179,12 @@ function ProfileInfoSettings({ history }) {
                   onChange={e =>
                     profileInfoDispatch({ type: 'bioImmediately', value: e.target.value })
                   }
-                  className="bg-gray-100 rounded-md leading-normal resize-none w-full h-20 py-2 px-3 shadow-inner border border-gray-400 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
+                  className="rounded-md leading-normal resize-none w-full h-20 py-2 px-3 shadow-inner border border-gray-400 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
                 ></textarea>
               </div>
               <div className="flex justify-end">
                 <button
-                  className="appearance-none bg-gray-200 text-gray-900 px-2 py-1 shadow-sm border border-gray-400 rounded-md mr-3"
+                  className="px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md bg-white hover:bg-gray-100 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
                   type="submit"
                 >
                   save changes
