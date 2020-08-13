@@ -3,8 +3,10 @@ import { useImmerReducer } from 'use-immer';
 import Axios from 'axios';
 import StateContext from '../../contextsProviders/StateContext';
 import Page from '../layouts/Page';
+import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-function ProfileInfoSettings() {
+function ProfileInfoSettings({ history }) {
   const appState = useContext(StateContext);
   const initialState = {
     user: {
@@ -55,13 +57,13 @@ function ProfileInfoSettings() {
       const response = await Axios.post(`/profile/${appState.user.username}`, {
         CancelToken: request.token,
       });
-      console.log({ response: response.data }); // SUCCESS!
 
       if (response.data) {
         // SAVE DATA TO STATE
         profileInfoDispatch({ type: 'updateUserInfo', value: response.data });
       } else {
-        // INFORM USER
+        // USER DOES NOT EXISTS
+        history.push('/404');
       }
     })();
 
@@ -69,7 +71,7 @@ function ProfileInfoSettings() {
   }, [state.user.username]);
 
   return (
-    <Page title="Settings -Profile Info">
+    <Page title="Settings - Profile Info">
       <div className="bg-gray-200 font-mono">
         <div className="container mx-auto">
           <div className="inputs w-full max-w-2xl p-6 mx-auto">
@@ -217,4 +219,8 @@ function ProfileInfoSettings() {
   );
 }
 
-export default ProfileInfoSettings;
+ProfileInfoSettings.propTypes = {
+  history: PropTypes.object,
+};
+
+export default withRouter(ProfileInfoSettings);
