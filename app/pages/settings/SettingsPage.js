@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import Page from '../../components/layouts/Page';
-import { Route, Switch, NavLink, Link } from 'react-router-dom';
+import { Route, Switch, NavLink, Link, Redirect } from 'react-router-dom';
 import ProfileInfoSettings from '../../components/settings/ProfileInfo';
 import StateContext from '../../contextsProviders/StateContext';
 
@@ -56,6 +56,9 @@ function SettingsPage() {
               </Route>
               <Route path="/settings/delete-account">
                 <div>delete account</div>
+              </Route>
+              <Route>
+                <Redirect to="/settings/info" />
               </Route>
             </Switch>
           </div>
