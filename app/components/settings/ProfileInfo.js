@@ -5,6 +5,7 @@ import StateContext from '../../contextsProviders/StateContext';
 import Page from '../layouts/Page';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 
 function ProfileInfoSettings({ history }) {
   const appState = useContext(StateContext);
@@ -17,6 +18,7 @@ function ProfileInfoSettings({ history }) {
       profileEmail: '',
       profileAbout: { bio: '', musicCategory: '', city: '' },
     },
+    isFetching: false,
   };
 
   function profileInfoReducer(draft, action) {
@@ -45,6 +47,12 @@ function ProfileInfoSettings({ history }) {
       case 'bioImmediately':
         draft.user.profileAbout.bio = action.value;
         return;
+      case 'isFetchingStarts':
+        draft.isFetching = true;
+        return;
+      case 'isFetchingEnds':
+        draft.isFetching = false;
+        return;
     }
   }
 
@@ -52,11 +60,14 @@ function ProfileInfoSettings({ history }) {
 
   useEffect(() => {
     const request = Axios.CancelToken.source();
+    profileInfoDispatch({ type: 'isFetchingStarts' });
 
     (async function getUserInfo() {
       const response = await Axios.post(`/profile/${appState.user.username}`, {
         CancelToken: request.token,
       });
+
+      profileInfoDispatch({ type: 'isFetchingEnds' });
 
       if (response.data) {
         // SAVE DATA TO STATE
@@ -69,6 +80,10 @@ function ProfileInfoSettings({ history }) {
 
     return () => request.cancel();
   }, [state.user.username]);
+
+  if (state.isFetching) {
+    return <LoadingDotsAnimation />;
+  }
 
   return (
     <Page title="Settings - Profile Info">

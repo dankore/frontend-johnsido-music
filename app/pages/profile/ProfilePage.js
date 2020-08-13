@@ -4,6 +4,7 @@ import { useImmerReducer } from 'use-immer';
 import Axios from 'axios';
 import PropTypes from 'prop-types';
 import Page from '../../components/layouts/Page';
+import LoadingDotsAnimation from '../../components/shared/LoadingDotsAnimation';
 
 function ProfilePage({ history }) {
   const initialState = {
@@ -45,6 +46,7 @@ function ProfilePage({ history }) {
       });
 
       profileDispatch({ type: 'isFetchingEnds' });
+
       if (response.data) {
         profileDispatch({ type: 'addProfileUserInfo', value: response.data });
       } else {
@@ -53,6 +55,10 @@ function ProfilePage({ history }) {
     })();
     return () => request.cancel();
   }, [state.username]);
+
+  if (state.isFetching) {
+    return <LoadingDotsAnimation />;
+  }
 
   const background =
     'https://res.cloudinary.com/my-nigerian-projects/image/upload/v1594992703/projects/rtysccgzrf3hsmgecdhd.jpg';
