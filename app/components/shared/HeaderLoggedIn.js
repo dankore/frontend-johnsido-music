@@ -103,16 +103,7 @@ function HeaderLoggedIn() {
                   />
                 </button>
               </div>
-              {/* <!--
-            Profile dropdown panel, show/hide based on dropdown state.
 
-            Entering: "transition ease-out duration-100"
-              From: "transform opacity-0 scale-95"
-              To: "transform opacity-100 scale-100"
-            Leaving: "transition ease-in duration-75"
-              From: "transform opacity-100 scale-100"
-              To: "transform opacity-0 scale-95"
-          --> */}
               {appState.isOpenProfileDropdown && (
                 <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg z-10">
                   <div
@@ -121,13 +112,13 @@ function HeaderLoggedIn() {
                     aria-orientation="vertical"
                     aria-labelledby="user-menu"
                   >
-                    <a
-                      href="#"
+                    <Link
+                      to={`/profile/${appState.user.username}`}
                       className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
                       role="menuitem"
                     >
                       Your Profile
-                    </a>
+                    </Link>
                     <Link
                       to="/settings"
                       className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
@@ -150,11 +141,6 @@ function HeaderLoggedIn() {
         </div>
       </div>
 
-      {/* <!--
-    Mobile menu, toggle classes based on menu state.
-
-    Menu open: "block", Menu closed: "hidden"
-  --> */}
       <div className="hidden sm:hidden">
         <div className="px-2 pt-2 pb-3">
           <a

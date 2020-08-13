@@ -27,7 +27,7 @@ function SettingsPage() {
                   >
                     <i className="fas fa-link pr-0 lg:pr-3"></i>
                     <span className="pb-1 lg:pb-0 text-xs lg:text-base block lg:inline-block">
-                      Personal Information
+                      Profile Information
                     </span>
                   </NavLink>
                 </li>
@@ -145,8 +145,8 @@ export default SettingsPage;
                     </div>
                   </div>
                 </div>
-                <div className="personal w-full border-t border-gray-400 pt-4">
-                  <h2 className="text-2xl text-gray-900">Personal info:</h2>
+                <div className="Profile w-full border-t border-gray-400 pt-4">
+                  <h2 className="text-2xl text-gray-900">Profile info:</h2>
                   <div className="flex items-center justify-between mt-4">
                     <div className="w-full lg:w-1/2 px-3 mb-6">
                       <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">

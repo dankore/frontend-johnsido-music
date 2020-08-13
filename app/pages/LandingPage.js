@@ -55,63 +55,84 @@ function LandingPage() {
                   <p>Menu</p>
                 </button>
                 {appState.toggleLandingPageMenu && (
-                  <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg  z-10">
+                  <div className="origin-top-right absolute right-0  w-48 rounded-md shadow-lg  z-10">
                     <div
-                      className="p-1 rounded-md bg-white shadow-xs"
+                      className="rounded-md bg-white shadow-xs"
                       role="menu"
                       aria-orientation="vertical"
                       aria-labelledby="user-menu"
                     >
                       {appState.loggedIn ? (
                         <>
-                          <Link to={`/profile/${appState.user.username}`} className="block">
-                            <img
-                              className="h-8 w-8 rounded-full"
-                              src={appState.user.avatar}
-                              alt="Profile Pic"
-                            />
-                          </Link>
-                          <Link
-                            to="/about"
-                            className="text-sm block font-semibold focus:outline-none focus:underline"
-                          >
-                            About
-                          </Link>
-                          <button
-                            onClick={() => appDispatch({ type: 'logout' })}
-                            className="text-sm block font-semibold focus:outline-none focus:underline"
-                            role="logout"
-                          >
-                            Sign out
-                          </button>
+                          <div className="origin-top-right absolute right-0 mt-1 w-48 rounded-md shadow-lg z-10">
+                            <div
+                              className="py-1 rounded-md bg-white shadow-xs"
+                              role="menu"
+                              aria-orientation="vertical"
+                              aria-labelledby="user-menu"
+                            >
+                              <Link
+                                to={`/profile/${appState.user.username}`}
+                                className="flex items-center px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                                role="menuitem"
+                              >
+                                <img
+                                  className="h-8 w-8 rounded-full mr-2"
+                                  src={appState.user.avatar}
+                                  alt="Profile Pic"
+                                />
+                                <p>Your Profile</p>
+                              </Link>
+                              <Link
+                                to="/settings"
+                                className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                                role="menuitem"
+                              >
+                                About
+                              </Link>
+                              <button
+                                onClick={() => appDispatch({ type: 'logout' })}
+                                className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                                role="menuitem"
+                              >
+                                Sign out
+                              </button>
+                            </div>
+                          </div>
                         </>
                       ) : (
                         <>
                           {' '}
-                          <Link
-                            to="/login"
-                            className="text-sm block -mr-1 font-semibold focus:outline-none focus:underline"
-                          >
-                            Login
-                          </Link>
-                          <Link
-                            to="/about"
-                            className="text-sm block mr-1 font-semibold focus:outline-none focus:underline"
-                          >
-                            About
-                          </Link>
-                          <Link
-                            to="/profile"
-                            className="text-sm block mr-2 font-semibold focus:outline-none focus:underline"
-                          >
-                            Profile
-                          </Link>
-                          <Link
-                            to="/register"
-                            className="text-sm mr-3 text-rightblock font-semibold focus:outline-none focus:underline"
-                          >
-                            Register
-                          </Link>
+                          <div className="origin-top-right absolute right-0 mt-1 w-48 rounded-md shadow-lg z-10">
+                            <div
+                              className="py-1 rounded-md bg-white shadow-xs"
+                              role="menu"
+                              aria-orientation="vertical"
+                              aria-labelledby="user-menu"
+                            >
+                              <Link
+                                to="/login"
+                                className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                                role="menuitem"
+                              >
+                                Login
+                              </Link>
+                              <Link
+                                to="/register"
+                                className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                                role="menuitem"
+                              >
+                                Register
+                              </Link>
+                              <Link
+                                to="/about"
+                                className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                                role="menuitem"
+                              >
+                                About
+                              </Link>
+                            </div>
+                          </div>
                         </>
                       )}
                     </div>
