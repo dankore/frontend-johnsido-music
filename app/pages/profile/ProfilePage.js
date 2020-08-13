@@ -16,12 +16,19 @@ function ProfilePage({ history }) {
       profileAbout: { bio: '', musicCategory: '', city: '' },
     },
     username: useParams().username,
+    isFetching: false,
   };
 
   function profileReducer(draft, action) {
     switch (action.type) {
       case 'addProfileUserInfo':
         draft.user = action.value;
+        return;
+      case 'isFetchingStarts':
+        draft.isFetching = true;
+        return;
+      case 'isFetchingEnds':
+        draft.isFetching = false;
         return;
     }
   }
@@ -30,11 +37,14 @@ function ProfilePage({ history }) {
 
   useEffect(() => {
     const request = Axios.CancelToken.source();
+    profileDispatch({ type: 'isFetchingStarts' });
+
     (async function getProfileInfo() {
       const response = await Axios.post(`/profile/${state.username}`, {
         CancelToken: request.token,
       });
 
+      profileDispatch({ type: 'isFetchingEnds' });
       if (response.data) {
         profileDispatch({ type: 'addProfileUserInfo', value: response.data });
       } else {
