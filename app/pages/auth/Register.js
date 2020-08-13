@@ -320,7 +320,7 @@ function Register({ history }) {
           if (response.data.token) {
             // LOGIN
             appsDispatch({ type: 'login', value: response.data });
-            history.push('/profile');
+            history.push(`/profile/${response.data.username}`);
           } else {
             // DISPLAY ERROR
             appsDispatch({ type: 'flashMsgError', value: response.data });

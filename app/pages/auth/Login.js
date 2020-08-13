@@ -158,7 +158,7 @@ function Login({ history }) {
             <div className="text-center pt-12 pb-12">
               <p>
                 Don&apos;t have an account?{' '}
-                <a href="/regiter" className="underline font-semibold">
+                <a href="/register" className="underline font-semibold">
                   Register here.
                 </a>
               </p>

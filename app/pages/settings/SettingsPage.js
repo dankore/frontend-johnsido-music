@@ -8,7 +8,7 @@ function SettingsPage() {
   const appState = useContext(StateContext);
 
   return (
-    <Page>
+    <Page title="Settings">
       <main>
         {/* <!--Sidebar--> */}
         <div className="flex flex-wrap lg:flex-no-wrap">
