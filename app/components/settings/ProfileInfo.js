@@ -60,16 +60,40 @@ function ProfileInfoSettings({ history }) {
         draft.musicCategory.value = action.value.profileAbout.musicCategory;
         return;
       case 'firstNameImmediately':
+        draft.firstName.hasError = false;
         draft.firstName.value = action.value;
+
+        if (draft.firstName.value == '') {
+          draft.firstName.hasError = true;
+          draft.firstName.message = 'First name field is empty.';
+        }
         return;
       case 'lastNameImmediately':
+        draft.lastName.hasError = false;
         draft.lastName.value = action.value;
+
+        if (draft.lastName.value == '') {
+          draft.lastName.hasError = true;
+          draft.lastName.message = 'Last name field is empty.';
+        }
         return;
       case 'usernameImmediately':
+        draft.username.hasError = false;
         draft.username.value = action.value;
+
+        if (draft.username.value == '') {
+          draft.username.hasError = true;
+          draft.username.message = 'Username name field is empty.';
+        }
         return;
       case 'emailImmediately':
+        draft.email.hasError = false;
         draft.email.value = action.value;
+
+        if (draft.email.value == '') {
+          draft.email.hasError = true;
+          draft.email.message = 'Email name field is empty.';
+        }
         return;
       case 'cityImmediately':
         draft.city.value = action.value;
@@ -111,7 +135,7 @@ function ProfileInfoSettings({ history }) {
     })();
 
     return () => request.cancel();
-  }, [state.username.value]);
+  }, []);
 
   if (state.isFetching) {
     return <LoadingDotsAnimation />;
@@ -138,7 +162,9 @@ function ProfileInfoSettings({ history }) {
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                     type="text"
                   />
-                  {}
+                  {state.firstName.hasError && (
+                    <div className="text-red-600">{state.firstName.message}</div>
+                  )}
                 </div>
                 <div className="w-full md:w-1/2 px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
@@ -152,6 +178,9 @@ function ProfileInfoSettings({ history }) {
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                     type="text"
                   />
+                  {state.lastName.hasError && (
+                    <div className="text-red-600">{state.lastName.message}</div>
+                  )}
                 </div>
               </div>
 
@@ -168,6 +197,9 @@ function ProfileInfoSettings({ history }) {
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                     type="text"
                   />
+                  {state.username.hasError && (
+                    <div className="text-red-600">{state.username.message}</div>
+                  )}
                 </div>
                 <div className="w-full md:w-full px-3 mb-6">
                   <label
@@ -186,6 +218,9 @@ function ProfileInfoSettings({ history }) {
                     type="text"
                     placeholder="Enter email"
                   />
+                  {state.email.hasError && (
+                    <div className="text-red-600">{state.email.message}</div>
+                  )}
                 </div>
               </div>
 
