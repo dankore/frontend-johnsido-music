@@ -137,6 +137,17 @@ function ProfileInfoSettings({ history }) {
     return () => request.cancel();
   }, []);
 
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    profileInfoDispatch({ type: 'firstNameImmediately', value: state.firstName.value });
+    profileInfoDispatch({ type: 'lastNameImmediately', value: state.lastName.value });
+    profileInfoDispatch({ type: 'usernameImmediately', value: state.username.value });
+    profileInfoDispatch({ type: 'emailImmediately', value: state.email.value });
+
+    // profileInfoDispatch({ type: 'submitForm' });
+  }
+
   if (state.isFetching) {
     return <LoadingDotsAnimation />;
   }
@@ -146,7 +157,7 @@ function ProfileInfoSettings({ history }) {
       <div className="bg-gray-200 font-mono">
         <div className="container mx-auto">
           <div className="inputs w-full max-w-2xl p-6 mx-auto">
-            <form className="mt-6 pt-4">
+            <form onSubmit={handleSubmit} className="mt-6 pt-4">
               <h2 className="text-2xl text-gray-900">Profile information</h2>
 
               <div className="flex items-center justify-between mt-4">
@@ -249,6 +260,7 @@ function ProfileInfoSettings({ history }) {
                     }
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                     type="text"
+                    placeholder="E.g Gospel"
                   />
                 </div>
               </div>
