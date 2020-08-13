@@ -10,13 +10,40 @@ import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 function ProfileInfoSettings({ history }) {
   const appState = useContext(StateContext);
   const initialState = {
-    user: {
-      profileUsername: '',
-      profileFirstName: '',
-      profileLastName: '',
-      profileAvatar: '',
-      profileEmail: '',
-      profileAbout: { bio: '', musicCategory: '', city: '' },
+    username: {
+      value: '',
+      hasError: false,
+      message: '',
+    },
+    firstName: {
+      value: '',
+      hasError: false,
+      message: '',
+    },
+    lastName: {
+      value: '',
+      hasError: false,
+      message: '',
+    },
+    email: {
+      value: '',
+      hasError: false,
+      message: '',
+    },
+    city: {
+      value: '',
+      hasError: false,
+      message: '',
+    },
+    musicCategory: {
+      value: '',
+      hasError: false,
+      message: '',
+    },
+    bio: {
+      value: '',
+      hasError: false,
+      message: '',
     },
     isFetching: false,
   };
@@ -24,28 +51,34 @@ function ProfileInfoSettings({ history }) {
   function profileInfoReducer(draft, action) {
     switch (action.type) {
       case 'updateUserInfo':
-        draft.user = action.value;
+        draft.username.value = action.value.profileUsername;
+        draft.firstName.value = action.value.profileFirstName;
+        draft.lastName.value = action.value.profileLastName;
+        draft.email.value = action.value.profileEmail;
+        draft.city.value = action.value.profileAbout.city;
+        draft.bio.value = action.value.profileAbout.bio;
+        draft.musicCategory.value = action.value.profileAbout.musicCategory;
         return;
       case 'firstNameImmediately':
-        draft.user.profileFirstName = action.value;
+        draft.firstName.value = action.value;
         return;
       case 'lastNameImmediately':
-        draft.user.profileLastName = action.value;
+        draft.lastName.value = action.value;
         return;
       case 'usernameImmediately':
-        draft.user.profileUsername = action.value;
+        draft.username.value = action.value;
         return;
       case 'emailImmediately':
-        draft.user.profileEmail = action.value;
+        draft.email.value = action.value;
         return;
       case 'cityImmediately':
-        draft.user.profileAbout.city = action.value;
+        draft.city.value = action.value;
         return;
       case 'musicImmediately':
-        draft.user.profileAbout.musicCategory = action.value;
+        draft.musicCategory.value = action.value;
         return;
       case 'bioImmediately':
-        draft.user.profileAbout.bio = action.value;
+        draft.bio.value = action.value;
         return;
       case 'isFetchingStarts':
         draft.isFetching = true;
@@ -68,7 +101,6 @@ function ProfileInfoSettings({ history }) {
       });
 
       profileInfoDispatch({ type: 'isFetchingEnds' });
-
       if (response.data) {
         // SAVE DATA TO STATE
         profileInfoDispatch({ type: 'updateUserInfo', value: response.data });
@@ -79,7 +111,7 @@ function ProfileInfoSettings({ history }) {
     })();
 
     return () => request.cancel();
-  }, [state.user.username]);
+  }, [state.username.value]);
 
   if (state.isFetching) {
     return <LoadingDotsAnimation />;
@@ -99,20 +131,21 @@ function ProfileInfoSettings({ history }) {
                     first name
                   </label>
                   <input
-                    value={state.user.profileFirstName}
+                    value={state.firstName.value}
                     onChange={e =>
                       profileInfoDispatch({ type: 'firstNameImmediately', value: e.target.value })
                     }
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                     type="text"
                   />
+                  {}
                 </div>
                 <div className="w-full md:w-1/2 px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                     last name
                   </label>
                   <input
-                    value={state.user.profileLastName}
+                    value={state.lastName.value}
                     onChange={e =>
                       profileInfoDispatch({ type: 'lastNameImmediately', value: e.target.value })
                     }
@@ -128,7 +161,7 @@ function ProfileInfoSettings({ history }) {
                     username
                   </label>
                   <input
-                    value={state.user.profileUsername}
+                    value={state.username.value}
                     onChange={e =>
                       profileInfoDispatch({ type: 'usernameImmediately', value: e.target.value })
                     }
@@ -144,7 +177,7 @@ function ProfileInfoSettings({ history }) {
                     email address
                   </label>
                   <input
-                    value={state.user.profileEmail}
+                    value={state.email.value}
                     onChange={e =>
                       profileInfoDispatch({ type: 'emailImmediately', value: e.target.value })
                     }
@@ -162,7 +195,7 @@ function ProfileInfoSettings({ history }) {
                     City of Residence
                   </label>
                   <input
-                    value={state.user.profileAbout.city}
+                    value={state.city.value}
                     onChange={e =>
                       profileInfoDispatch({ type: 'cityImmediately', value: e.target.value })
                     }
@@ -175,7 +208,7 @@ function ProfileInfoSettings({ history }) {
                     Music Genre
                   </label>
                   <input
-                    value={state.user.profileAbout.musicCategory}
+                    value={state.musicCategory.value}
                     onChange={e =>
                       profileInfoDispatch({ type: 'musicImmediately', value: e.target.value })
                     }
@@ -190,7 +223,7 @@ function ProfileInfoSettings({ history }) {
                   Bio
                 </label>
                 <textarea
-                  value={state.user.profileAbout.bio}
+                  value={state.bio.value}
                   onChange={e =>
                     profileInfoDispatch({ type: 'bioImmediately', value: e.target.value })
                   }
