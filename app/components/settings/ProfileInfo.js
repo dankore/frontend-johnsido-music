@@ -15,7 +15,7 @@ function ProfileInfoSettings({ history }) {
       profileLastName: '',
       profileAvatar: '',
       profileEmail: '',
-      profileAbout: {},
+      profileAbout: { bio: '', musicCategory: '', city: '' },
     },
   };
 
@@ -86,10 +86,7 @@ function ProfileInfoSettings({ history }) {
                   <input
                     value={state.user.profileFirstName}
                     onChange={e =>
-                      profileInfoDispatch({
-                        type: 'firstNameImmediately',
-                        value: e.target.value,
-                      })
+                      profileInfoDispatch({ type: 'firstNameImmediately', value: e.target.value })
                     }
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                     type="text"
@@ -102,10 +99,7 @@ function ProfileInfoSettings({ history }) {
                   <input
                     value={state.user.profileLastName}
                     onChange={e =>
-                      profileInfoDispatch({
-                        type: 'lastNameImmediately',
-                        value: e.target.value,
-                      })
+                      profileInfoDispatch({ type: 'lastNameImmediately', value: e.target.value })
                     }
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                     type="text"
@@ -116,15 +110,12 @@ function ProfileInfoSettings({ history }) {
               <div className="flex items-center justify-between mb-6">
                 <div className="w-full md:w-full px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                    user name
+                    username
                   </label>
                   <input
                     value={state.user.profileUsername}
                     onChange={e =>
-                      profileInfoDispatch({
-                        type: 'usernameImmediately',
-                        value: e.target.value,
-                      })
+                      profileInfoDispatch({ type: 'usernameImmediately', value: e.target.value })
                     }
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                     type="text"
@@ -140,10 +131,7 @@ function ProfileInfoSettings({ history }) {
                   <input
                     value={state.user.profileEmail}
                     onChange={e =>
-                      profileInfoDispatch({
-                        type: 'emailImmediately',
-                        value: e.target.value,
-                      })
+                      profileInfoDispatch({ type: 'emailImmediately', value: e.target.value })
                     }
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                     id="grid-text-1"
@@ -161,10 +149,7 @@ function ProfileInfoSettings({ history }) {
                   <input
                     value={state.user.profileAbout.city}
                     onChange={e =>
-                      profileInfoDispatch({
-                        type: 'cityImmediately',
-                        value: e.target.value,
-                      })
+                      profileInfoDispatch({ type: 'cityImmediately', value: e.target.value })
                     }
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                     type="text"
@@ -177,10 +162,7 @@ function ProfileInfoSettings({ history }) {
                   <input
                     value={state.user.profileAbout.musicCategory}
                     onChange={e =>
-                      profileInfoDispatch({
-                        type: 'musicImmediately',
-                        value: e.target.value,
-                      })
+                      profileInfoDispatch({ type: 'musicImmediately', value: e.target.value })
                     }
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                     type="text"
@@ -195,10 +177,7 @@ function ProfileInfoSettings({ history }) {
                 <textarea
                   value={state.user.profileAbout.bio}
                   onChange={e =>
-                    profileInfoDispatch({
-                      type: 'bioImmediately',
-                      value: e.target.value,
-                    })
+                    profileInfoDispatch({ type: 'bioImmediately', value: e.target.value })
                   }
                   className="bg-gray-100 rounded-md leading-normal resize-none w-full h-20 py-2 px-3 shadow-inner border border-gray-400 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
                 ></textarea>
