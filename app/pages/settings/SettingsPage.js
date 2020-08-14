@@ -1,0 +1,72 @@
+import React, { useContext } from 'react';
+import Page from '../../components/layouts/Page';
+import { Route, Switch, NavLink, Link, Redirect } from 'react-router-dom';
+import ProfileInfoSettings from '../../components/settings/ProfileInfo';
+import StateContext from '../../contextsProviders/StateContext';
+
+function SettingsPage() {
+  const appState = useContext(StateContext);
+  console.log(appState.user);
+
+  return (
+    <Page title="Settings">
+      <main>
+        {/* <!--Sidebar--> */}
+        <div className="flex flex-wrap lg:flex-no-wrap">
+          <div className="pt-0 h-16 lg:min-h-screen lg:pt-10 w-full lg:max-w-xs">
+            <div className="text-3xl w-full text-center hidden lg:block lg:mb-6">Settings</div>
+            <div className="flex justify-between text-xl w-full border-b px-6">
+              <Link to="/">Home</Link>
+              <Link to={`/profile/${appState.user.username}`}>Profile</Link>
+            </div>
+            <div className="mx-auto lg:px-6">
+              <ul className="list-reset flex flex-row lg:flex-col text-center lg:text-left">
+                <li className="mr-3 flex-1">
+                  <NavLink
+                    to="/settings/info"
+                    className="block py-1 lg:py-3 pl-1 align-middle  no-underline hover:text-pink-500 border-b-2 border-gray-800 lg:border-gray-900 hover:border-pink-500"
+                  >
+                    <i className="fas fa-link pr-0 lg:pr-3"></i>
+                    <span className="pb-1 lg:pb-0 text-xs lg:text-base block lg:inline-block">
+                      Profile Information
+                    </span>
+                  </NavLink>
+                </li>
+                <li className="mr-3 flex-1">
+                  <NavLink
+                    to="/settings/change-password"
+                    className="block py-1 lg:py-3 pl-1 align-middle  no-underline hover:text-pink-500 border-b-2 border-gray-800 lg:border-gray-900 hover:border-pink-500"
+                  >
+                    <i className="fas fa-link pr-0 lg:pr-3"></i>
+                    <span className="pb-1 lg:pb-0 text-xs lg:text-base block lg:inline-block">
+                      Change Password
+                    </span>
+                  </NavLink>
+                </li>
+              </ul>
+            </div>
+          </div>
+          {/* CONTENTS */}
+          <div className="w-full mt-6 lg:mt-0 bg-gray-200">
+            <Switch>
+              <Route path="/settings/info">
+                <ProfileInfoSettings />
+              </Route>
+              <Route path="/settings/change-password">
+                <div>changePassword</div>
+              </Route>
+              <Route path="/settings/delete-account">
+                <div>delete account</div>
+              </Route>
+              <Route>
+                <Redirect to="/settings/info" />
+              </Route>
+            </Switch>
+          </div>
+        </div>
+      </main>
+    </Page>
+  );
+}
+
+export default SettingsPage;

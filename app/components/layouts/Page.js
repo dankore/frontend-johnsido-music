@@ -1,19 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import Container from './Container';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { formatTitleAndDescription } from '../../helpers/JSHelpers';
+import DispatchContext from '../../contextsProviders/DispatchContext';
 
 function Page(props) {
+  const appDispatch = useContext(DispatchContext);
+
   useEffect(() => {
     window.scrollTo(0, 0);
+    appDispatch({ type: 'turnOff' });
   }, [props.title]);
 
   return (
     <Container>
       <Helmet>
         {/* General tags */}
-        <title>{`${props.title} | Harnak Spices`}</title>
+        <title>{`${props.title} | Johnsido Music`}</title>
         <meta name="description" content={formatTitleAndDescription(props.description)} />
         <meta name="image" content={props.image} />
 

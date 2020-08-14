@@ -1,9 +1,12 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import StateContext from '../contextsProviders/StateContext';
+import DispatchContext from '../contextsProviders/DispatchContext';
 
 function LandingPage() {
   const appState = useContext(StateContext);
+  const appDispatch = useContext(DispatchContext);
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-gray-900 lg:bg-gray-300">
       <div
@@ -35,44 +38,106 @@ function LandingPage() {
                   alt={appState.logo.alt}
                 />
               </div>
-              <div>
-                <div className="block lg:hidden">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="white">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
+              <div className="relative">
+                <button
+                  onClick={() => appDispatch({ type: 'toggleLandingPageMenu' })}
+                  className="text-white flex text-center"
+                >
+                  <svg
+                    className="h-6 w-6"
+                    stroke="white"
+                    fill="none"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M6,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM16,6c0,1.1 0.9,2 2,2s2,-0.9 2,-2 -0.9,-2 -2,-2 -2,0.9 -2,2zM12,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2z"></path>
                   </svg>
-                </div>
-                <div className="hidden lg:block text-right">
-                  <Link
-                    to="/login"
-                    className="text-sm block -mr-1 font-semibold text-white focus:outline-none focus:underline"
-                  >
-                    Login
-                  </Link>
-
-                  <Link
-                    to="/about"
-                    className="text-sm block mr-1 font-semibold text-white focus:outline-none focus:underline"
-                  >
-                    About
-                  </Link>
-                  <Link
-                    to="/profile"
-                    className="text-sm block mr-2 font-semibold text-white focus:outline-none focus:underline"
-                  >
-                    Profile
-                  </Link>
-                  <Link
-                    to="/register"
-                    className="text-sm mr-3 text-rightblock font-semibold text-white focus:outline-none focus:underline"
-                  >
-                    Register
-                  </Link>
-                </div>
+                  <p>Menu</p>
+                </button>
+                {appState.toggleLandingPageMenu && (
+                  <div className="origin-top-right absolute right-0  w-48 rounded-md shadow-lg  z-10">
+                    <div
+                      className="rounded-md bg-white shadow-xs"
+                      role="menu"
+                      aria-orientation="vertical"
+                      aria-labelledby="user-menu"
+                    >
+                      {appState.loggedIn ? (
+                        <>
+                          <div className="origin-top-right absolute right-0 mt-1 w-48 rounded-md shadow-lg z-10">
+                            <div
+                              className="py-1 rounded-md bg-white shadow-xs"
+                              role="menu"
+                              aria-orientation="vertical"
+                              aria-labelledby="user-menu"
+                            >
+                              <Link
+                                to={`/profile/${appState.user.username}`}
+                                className="flex items-center px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                                role="menuitem"
+                              >
+                                <img
+                                  className="h-8 w-8 rounded-full mr-2"
+                                  src={appState.user.avatar}
+                                  alt="Profile Pic"
+                                />
+                                <p>Your Profile</p>
+                              </Link>
+                              <Link
+                                to="/settings"
+                                className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                                role="menuitem"
+                              >
+                                About
+                              </Link>
+                              <button
+                                onClick={() => appDispatch({ type: 'logout' })}
+                                className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                                role="menuitem"
+                              >
+                                Sign out
+                              </button>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          {' '}
+                          <div className="origin-top-right absolute right-0 mt-1 w-48 rounded-md shadow-lg z-10">
+                            <div
+                              className="py-1 rounded-md bg-white shadow-xs"
+                              role="menu"
+                              aria-orientation="vertical"
+                              aria-labelledby="user-menu"
+                            >
+                              <Link
+                                to="/login"
+                                className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                                role="menuitem"
+                              >
+                                Login
+                              </Link>
+                              <Link
+                                to="/register"
+                                className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                                role="menuitem"
+                              >
+                                Register
+                              </Link>
+                              <Link
+                                to="/about"
+                                className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                                role="menuitem"
+                              >
+                                About
+                              </Link>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
