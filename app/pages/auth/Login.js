@@ -10,7 +10,7 @@ import FlashMsgError from '../../components/shared/FlashMsgError';
 
 function Login({ history }) {
   const appState = useContext(StateContext);
-  const appsDispatch = useContext(DispatchContext);
+  const appDispatch = useContext(DispatchContext);
   const initialState = {
     username: {
       value: '',
@@ -80,11 +80,11 @@ function Login({ history }) {
           );
           if (response.data.token) {
             // LOGIN
-            appsDispatch({ type: 'login', value: response.data });
+            appDispatch({ type: 'login', value: response.data });
             history.push('/');
           } else {
             // DISPLAY ERROR
-            appsDispatch({ type: 'flashMsgError', value: response.data });
+            appDispatch({ type: 'flashMsgError', value: response.data });
           }
         } catch (error) {
           // FAIL SILENTLY

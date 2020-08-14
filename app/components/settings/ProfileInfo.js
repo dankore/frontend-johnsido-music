@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 import DispatchContext from '../../contextsProviders/DispatchContext';
+import FlashMsgError from '../../components/shared/FlashMsgError';
 
 function ProfileInfoSettings({ history }) {
   const appState = useContext(StateContext);
@@ -194,8 +195,9 @@ function ProfileInfoSettings({ history }) {
             userData.token = response.data.token;
             appDispatch({ type: 'updateLocalStorage', value: userData });
           } else {
-            // FAILURE
-            console.log('failure');
+            console.log(response.data);
+            // DISPLAY VALADATION ERRORS
+            appDispatch({ type: 'flashMsgError', value: response.data });
           }
         }
       } catch (error) {
@@ -216,6 +218,9 @@ function ProfileInfoSettings({ history }) {
       <div className="bg-gray-200 font-mono">
         <div className="container mx-auto">
           <div className="inputs w-full max-w-2xl p-6 mx-auto">
+            {appState.flashMsgErrors.isDisplay && (
+              <FlashMsgError errors={appState.flashMsgErrors.value} />
+            )}
             <form onSubmit={handleSubmit} className="mt-6 pt-4">
               <h2 className="text-2xl text-gray-900">Profile information</h2>
 

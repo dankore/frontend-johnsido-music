@@ -6,7 +6,6 @@ import StateContext from '../../contextsProviders/StateContext';
 
 function SettingsPage() {
   const appState = useContext(StateContext);
-  console.log(appState.user);
 
   return (
     <Page title="Settings">
