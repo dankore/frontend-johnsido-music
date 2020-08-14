@@ -73,6 +73,15 @@ function Main() {
         draft.isOpenProfileDropdown = false;
         draft.toggleLandingPageMenu = false;
         return;
+      case 'updateLocalStorage':
+        console.log({ hi: action.value.token });
+
+        localStorage.setItem('johnsido-token', action.value.token);
+        localStorage.setItem('johnsido-username', action.value.username);
+        localStorage.setItem('johnsido-firstname', action.value.firstName);
+        localStorage.setItem('johnsido-lastname', action.value.lastName);
+        localStorage.setItem('johnsido-about', JSON.stringify(action.value.about));
+        return;
     }
   }
 

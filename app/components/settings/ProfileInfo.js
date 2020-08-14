@@ -6,9 +6,11 @@ import Page from '../layouts/Page';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
+import DispatchContext from '../../contextsProviders/DispatchContext';
 
 function ProfileInfoSettings({ history }) {
   const appState = useContext(StateContext);
+  const appDispatch = useContext(DispatchContext);
   const initialState = {
     username: {
       value: '',
@@ -46,6 +48,7 @@ function ProfileInfoSettings({ history }) {
       message: '',
     },
     isFetching: false,
+    submitCount: 0,
   };
 
   function profileInfoReducer(draft, action) {
@@ -110,6 +113,16 @@ function ProfileInfoSettings({ history }) {
       case 'isFetchingEnds':
         draft.isFetching = false;
         return;
+      case 'submitForm':
+        if (
+          !draft.username.hasError &&
+          !draft.firstName.hasError &&
+          !draft.lastName.hasError &&
+          !draft.email.hasError
+        ) {
+          draft.submitCount++;
+        }
+        return;
     }
   }
 
@@ -117,23 +130,27 @@ function ProfileInfoSettings({ history }) {
 
   useEffect(() => {
     const request = Axios.CancelToken.source();
-    profileInfoDispatch({ type: 'isFetchingStarts' });
 
-    (async function getUserInfo() {
-      const response = await Axios.post(`/profile/${appState.user.username}`, {
-        CancelToken: request.token,
-      });
+    try {
+      profileInfoDispatch({ type: 'isFetchingStarts' });
 
-      profileInfoDispatch({ type: 'isFetchingEnds' });
-      if (response.data) {
-        // SAVE DATA TO STATE
-        profileInfoDispatch({ type: 'updateUserInfo', value: response.data });
-      } else {
-        // USER DOES NOT EXISTS
-        history.push('/404');
-      }
-    })();
+      (async function getUserInfo() {
+        const response = await Axios.post(`/profile/${appState.user.username}`, {
+          CancelToken: request.token,
+        });
 
+        profileInfoDispatch({ type: 'isFetchingEnds' });
+        if (response.data) {
+          // SAVE DATA TO STATE
+          profileInfoDispatch({ type: 'updateUserInfo', value: response.data });
+        } else {
+          // USER DOES NOT EXISTS
+          history.push('/404');
+        }
+      })();
+    } catch (error) {
+      console.log(error.message);
+    }
     return () => request.cancel();
   }, []);
 
@@ -145,8 +162,50 @@ function ProfileInfoSettings({ history }) {
     profileInfoDispatch({ type: 'usernameImmediately', value: state.username.value });
     profileInfoDispatch({ type: 'emailImmediately', value: state.email.value });
 
-    // profileInfoDispatch({ type: 'submitForm' });
+    profileInfoDispatch({ type: 'submitForm' });
   }
+
+  useEffect(() => {
+    const request = Axios.CancelToken.source();
+
+    (async function saveUpdateProfileInfo() {
+      try {
+        if (state.submitCount) {
+          const userData = {
+            username: state.username.value,
+            firstName: state.firstName.value,
+            lastName: state.lastName.value,
+            email: state.email.value,
+            about: {
+              bio: state.bio.value,
+              city: state.city.value,
+              musicCategory: state.musicCategory.value,
+            },
+            userCreationDate: appState.user.userCreationDate,
+          };
+
+          const response = await Axios.post('/saveUpdatedProfileInfo', {
+            userData,
+            token: appState.user.token,
+          });
+
+          if (response.data.token) {
+            // SUCCESS
+            userData.token = response.data.token;
+            appDispatch({ type: 'updateLocalStorage', value: userData });
+          } else {
+            // FAILURE
+            console.log('failure');
+          }
+        }
+      } catch (error) {
+        // NETWORK ERROR MOST LIKELY
+        console.log(error.message);
+      }
+    })();
+
+    return () => request.cancel();
+  }, [state.submitCount]);
 
   if (state.isFetching) {
     return <LoadingDotsAnimation />;
