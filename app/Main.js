@@ -33,7 +33,6 @@ function Main() {
       about: JSON.parse(localStorage.getItem('johnsido-about')),
       userCreationDate: localStorage.getItem('johnsido-userCreationDate'),
     },
-    url: '',
     logo: {
       url:
         'https://res.cloudinary.com/my-nigerian-projects/image/upload/f_auto,q_auto/v1596961997/Others/john/logo.png',
@@ -46,6 +45,7 @@ function Main() {
     isOpenProfileDropdown: false,
     toggleLandingPageMenu: false,
   };
+
   function appReducer(draft, action) {
     switch (action.type) {
       case 'login':
@@ -74,13 +74,23 @@ function Main() {
         draft.toggleLandingPageMenu = false;
         return;
       case 'updateLocalStorage':
-        console.log({ hi: action.value.token });
-
+        // UPDATE LOCAL STORAGE
         localStorage.setItem('johnsido-token', action.value.token);
         localStorage.setItem('johnsido-username', action.value.username);
         localStorage.setItem('johnsido-firstname', action.value.firstName);
         localStorage.setItem('johnsido-lastname', action.value.lastName);
         localStorage.setItem('johnsido-about', JSON.stringify(action.value.about));
+
+        // UPDATE STATE
+        draft.user.username = action.value.token;
+        draft.user.username = action.value.username;
+        draft.user.firstName = action.value.firstName;
+        draft.user.lastName = action.value.lastName;
+        draft.user.about = {
+          bio: action.value.about.bio,
+          city: action.value.about.city,
+          musicCategory: action.value.about.musicCategory,
+        };
         return;
     }
   }
