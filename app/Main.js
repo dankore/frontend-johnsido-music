@@ -42,6 +42,10 @@ function Main() {
       value: [],
       isDisplay: false,
     },
+    flashMsgSuccess: {
+      value: [],
+      isDisplay: false,
+    },
     isOpenProfileDropdown: false,
     toggleLandingPageMenu: false,
   };
@@ -68,8 +72,13 @@ function Main() {
         draft.flashMsgErrors.value = action.value;
         draft.flashMsgErrors.isDisplay = true;
         return;
+      case 'flashMsgSuccess':
+        draft.flashMsgSuccess.value.push(action.value);
+        draft.flashMsgSuccess.isDisplay = true;
+        return;
       case 'turnOff':
         draft.flashMsgErrors.isDisplay = false;
+        draft.flashMsgSuccess.isDisplay = false;
         draft.isOpenProfileDropdown = false;
         draft.toggleLandingPageMenu = false;
         return;

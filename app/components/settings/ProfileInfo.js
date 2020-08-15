@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 import DispatchContext from '../../contextsProviders/DispatchContext';
 import FlashMsgError from '../../components/shared/FlashMsgError';
+import FlashMsgSuccess from '../../components/shared/FlashMsgSuccess';
 
 function ProfileInfoSettings({ history }) {
   const appState = useContext(StateContext);
@@ -194,6 +195,7 @@ function ProfileInfoSettings({ history }) {
             // SUCCESS
             userData.token = response.data.token;
             appDispatch({ type: 'updateLocalStorage', value: userData });
+            appDispatch({ type: 'flashMsgSuccess', value: 'Updated successfully!' });
           } else {
             console.log(response.data);
             // DISPLAY VALADATION ERRORS
@@ -221,6 +223,7 @@ function ProfileInfoSettings({ history }) {
             {appState.flashMsgErrors.isDisplay && (
               <FlashMsgError errors={appState.flashMsgErrors.value} />
             )}
+            {appState.flashMsgSuccess.isDisplay && <FlashMsgSuccess />}
             <form onSubmit={handleSubmit} className="mt-6 pt-4">
               <h2 className="text-2xl text-gray-900">Profile information</h2>
 
