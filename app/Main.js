@@ -18,6 +18,8 @@ import Login from './pages/auth/Login';
 import Header from './components/shared/Header';
 import SettingsPage from './pages/settings/SettingsPage';
 import LandingPage from './pages/LandingPage';
+import FlashMsgError from './components/shared/FlashMsgError';
+import FlashMsgSuccess from './components/shared/FlashMsgSuccess';
 
 function Main() {
   const initialState = {
@@ -138,6 +140,8 @@ function Main() {
           <Route path="(/profile)">
             <Header />
           </Route>
+          {state.flashMsgErrors.isDisplay && <FlashMsgError errors={state.flashMsgErrors.value} />}
+          {state.flashMsgSuccess.isDisplay && <FlashMsgSuccess />}
           <Switch>
             <Route path="/home">
               <Homepage />

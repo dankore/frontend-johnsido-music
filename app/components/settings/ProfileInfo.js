@@ -7,8 +7,6 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 import DispatchContext from '../../contextsProviders/DispatchContext';
-import FlashMsgError from '../../components/shared/FlashMsgError';
-import FlashMsgSuccess from '../../components/shared/FlashMsgSuccess';
 
 function ProfileInfoSettings({ history }) {
   const appState = useContext(StateContext);
@@ -252,13 +250,8 @@ function ProfileInfoSettings({ history }) {
       <div className="bg-gray-200 font-mono">
         <div className="container mx-auto">
           <div className="inputs w-full max-w-2xl p-6 mx-auto">
-            {appState.flashMsgErrors.isDisplay && (
-              <FlashMsgError errors={appState.flashMsgErrors.value} />
-            )}
-            {appState.flashMsgSuccess.isDisplay && <FlashMsgSuccess />}
             <form onSubmit={handleSubmit} className="mt-6 pt-4">
               <h2 className="text-2xl text-gray-900">Profile information</h2>
-
               <div className="flex items-center justify-between mt-4">
                 <div className="w-full md:w-1/2 px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
