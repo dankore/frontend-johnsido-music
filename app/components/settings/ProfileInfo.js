@@ -199,10 +199,9 @@ function ProfileInfoSettings({ history }) {
             appDispatch({ type: 'turnOff' });
             appDispatch({
               type: 'flashMsgSuccess',
-              value: 'Updated successfully!',
+              value: ['Updated successfully!'],
             });
           } else {
-            console.log(response.data);
             // TURN OFF ANY FLASH SUCCESS MESSAGE
             appDispatch({ type: 'turnOff' });
             // DISPLAY VALADATION ERRORS
@@ -230,8 +229,7 @@ function ProfileInfoSettings({ history }) {
             {appState.flashMsgErrors.isDisplay && (
               <FlashMsgError errors={appState.flashMsgErrors.value} />
             )}
-            {appState.flashMsgSuccess.isDisplay && <FlashMsgSuccess />}
-            <form onSubmit={handleSubmit} className="mt-6 pt-4">
+            <form onSubmit={handleSubmit} className="mt-6 mb-3 pt-4">
               <h2 className="text-2xl text-gray-900">Profile information</h2>
 
               <div className="flex items-center justify-between mt-4">
@@ -360,6 +358,7 @@ function ProfileInfoSettings({ history }) {
                 </button>
               </div>
             </form>
+            {appState.flashMsgSuccess.isDisplay && <FlashMsgSuccess />}
           </div>
         </div>
       </div>

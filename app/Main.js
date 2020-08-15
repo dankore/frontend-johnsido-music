@@ -73,7 +73,7 @@ function Main() {
         draft.flashMsgErrors.isDisplay = true;
         return;
       case 'flashMsgSuccess':
-        draft.flashMsgSuccess.value.push(action.value);
+        draft.flashMsgSuccess.value = action.value;
         draft.flashMsgSuccess.isDisplay = true;
         return;
       case 'turnOff':
