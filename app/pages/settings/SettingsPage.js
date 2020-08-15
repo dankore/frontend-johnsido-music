@@ -39,7 +39,7 @@ function SettingsPage() {
             </div>
           </div>
           {/* CONTENTS */}
-          <div className="w-full mt-6 lg:mt-0 bg-gray-200">
+          <div className="w-full bg-gray-200">
             <Switch>
               <Route path="/settings/info">
                 <ProfileInfoSettings />
