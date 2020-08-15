@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Axios from 'axios';
@@ -136,37 +136,41 @@ function Main() {
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
         <BrowserRouter>
-          {/* SHOW HEADER TO CERTAIN PAGES https://codelikethis.com/lessons/react/routing-in-react-going-further*/}
-          <Route path="(/profile)">
-            <Header />
-          </Route>
-          {state.flashMsgErrors.isDisplay && <FlashMsgError errors={state.flashMsgErrors.value} />}
-          {state.flashMsgSuccess.isDisplay && <FlashMsgSuccess />}
           <Switch>
-            <Route path="/home">
-              <Homepage />
-            </Route>
+            {/* ROUTES WITHOUT HEADER COMPONENT */}
             <Route exact path="/">
               <LandingPage />
             </Route>
-            <Route path="/profile/:username">
-              <ProfilePage />
-            </Route>
-            <Route path="/register">
-              <Register />
-            </Route>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/settings">
-              <SettingsPage />
-            </Route>
-            <Route to="/404">
-              <div>Not found</div>
-            </Route>
-            <Route>
-              <div>Not found</div>
-            </Route>
+            {/* ROUTES WITH HEADER COMPONENT */}
+            <Fragment>
+              <Header />
+              {state.flashMsgErrors.isDisplay && (
+                <FlashMsgError errors={state.flashMsgErrors.value} />
+              )}
+              {state.flashMsgSuccess.isDisplay && <FlashMsgSuccess />}
+              <Route path="/home">
+                <Homepage />
+              </Route>
+
+              <Route path="/profile/:username">
+                <ProfilePage />
+              </Route>
+              <Route path="/register">
+                <Register />
+              </Route>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route path="/settings">
+                <SettingsPage />
+              </Route>
+              <Route to="/404">
+                <div>Not found</div>
+              </Route>
+              <Route>
+                <div>Not found</div>
+              </Route>
+            </Fragment>
           </Switch>
         </BrowserRouter>
       </DispatchContext.Provider>

@@ -6,7 +6,7 @@ function FlashMsgSuccess() {
 
   return (
     <div className="absolute w-full">
-      <div className="max-w-md mt-5 mx-auto bg-green-100 border border-green-900 text-center text-sm">
+      <div className="bg-green-100 border-b border-green-900 text-center text-sm">
         {appState.flashMsgSuccess.value.map((success, index) => {
           return (
             <p className="text-green-700" key={index}>

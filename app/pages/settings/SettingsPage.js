@@ -1,12 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Page from '../../components/layouts/Page';
-import { Route, Switch, NavLink, Link, Redirect } from 'react-router-dom';
+import { Route, Switch, NavLink, Redirect } from 'react-router-dom';
 import ProfileInfoSettings from '../../components/settings/ProfileInfo';
-import StateContext from '../../contextsProviders/StateContext';
 
 function SettingsPage() {
-  const appState = useContext(StateContext);
-
   return (
     <Page title="Settings">
       <main>
@@ -14,10 +11,6 @@ function SettingsPage() {
         <div className="flex flex-wrap lg:flex-no-wrap">
           <div className="pt-0 h-16 lg:min-h-screen lg:pt-10 w-full lg:max-w-xs">
             <div className="text-3xl w-full text-center hidden lg:block lg:mb-6">Settings</div>
-            <div className="flex justify-between text-xl w-full border-b px-6">
-              <Link to="/">Home</Link>
-              <Link to={`/profile/${appState.user.username}`}>Profile</Link>
-            </div>
             <div className="mx-auto lg:px-6">
               <ul className="list-reset flex flex-row lg:flex-col text-center lg:text-left">
                 <li className="mr-3 flex-1">

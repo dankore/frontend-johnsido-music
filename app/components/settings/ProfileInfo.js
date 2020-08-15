@@ -253,7 +253,7 @@ function ProfileInfoSettings({ history }) {
             <form onSubmit={handleSubmit} className="mt-6 pt-4">
               <h2 className="text-2xl text-gray-900">Profile information</h2>
               <div className="flex items-center justify-between mt-4">
-                <div className="w-full md:w-1/2 px-3 mb-6">
+                <div className="relative w-full md:w-1/2 px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                     first name
                   </label>
@@ -266,10 +266,10 @@ function ProfileInfoSettings({ history }) {
                     type="text"
                   />
                   {state.firstName.hasError && (
-                    <div className="text-red-600">{state.firstName.message}</div>
+                    <div className="absolute text-sm text-red-600">{state.firstName.message}</div>
                   )}
                 </div>
-                <div className="w-full md:w-1/2 px-3 mb-6">
+                <div className="relative w-full md:w-1/2 px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                     last name
                   </label>
@@ -282,13 +282,13 @@ function ProfileInfoSettings({ history }) {
                     type="text"
                   />
                   {state.lastName.hasError && (
-                    <div className="text-red-600">{state.lastName.message}</div>
+                    <div className="absolute text-sm text-red-600">{state.lastName.message}</div>
                   )}
                 </div>
               </div>
 
               <div className="flex items-center justify-between mb-6">
-                <div className="w-full md:w-full px-3 mb-6">
+                <div className="relative w-full md:w-full px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                     username
                   </label>
@@ -301,10 +301,10 @@ function ProfileInfoSettings({ history }) {
                     type="text"
                   />
                   {state.username.hasError && (
-                    <div className="text-red-600">{state.username.message}</div>
+                    <div className="absolute text-sm text-red-600">{state.username.message}</div>
                   )}
                 </div>
-                <div className="w-full md:w-full px-3 mb-6">
+                <div className="relative w-full md:w-full px-3 mb-6">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                     htmlFor="grid-text-1"
@@ -322,13 +322,13 @@ function ProfileInfoSettings({ history }) {
                     placeholder="Enter email"
                   />
                   {state.email.hasError && (
-                    <div className="text-red-600">{state.email.message}</div>
+                    <div className="absolute text-sm text-red-600">{state.email.message}</div>
                   )}
                 </div>
               </div>
 
               <div className="flex items-center justify-between mt-4">
-                <div className="w-full md:w-1/2 px-3 mb-6">
+                <div className="relative w-full md:w-1/2 px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                     City of Residence
                   </label>
@@ -341,7 +341,7 @@ function ProfileInfoSettings({ history }) {
                     type="text"
                   />
                 </div>
-                <div className="w-full md:w-1/2 px-3 mb-6">
+                <div className="relative w-full md:w-1/2 px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                     Music Genre
                   </label>
@@ -357,7 +357,7 @@ function ProfileInfoSettings({ history }) {
                 </div>
               </div>
 
-              <div className="w-full md:w-full px-3 mb-6">
+              <div className="relative w-full md:w-full px-3 mb-6">
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                   Bio
                 </label>
