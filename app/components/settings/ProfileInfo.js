@@ -263,6 +263,7 @@ function ProfileInfoSettings({ history }) {
                     first name
                   </label>
                   <input
+                    placeholder="Enter first name"
                     value={state.firstName.value}
                     onChange={e =>
                       profileInfoDispatch({ type: 'firstNameImmediately', value: e.target.value })
@@ -279,6 +280,7 @@ function ProfileInfoSettings({ history }) {
                     last name
                   </label>
                   <input
+                    placeholder="Enter last name"
                     value={state.lastName.value}
                     onChange={e =>
                       profileInfoDispatch({ type: 'lastNameImmediately', value: e.target.value })
@@ -298,6 +300,7 @@ function ProfileInfoSettings({ history }) {
                     username
                   </label>
                   <input
+                    placeholder="Enter username"
                     value={state.username.value}
                     onChange={e =>
                       profileInfoDispatch({ type: 'usernameImmediately', value: e.target.value })
@@ -317,6 +320,7 @@ function ProfileInfoSettings({ history }) {
                     email address
                   </label>
                   <input
+                    placeholder="Enter email"
                     value={state.email.value}
                     onChange={e =>
                       profileInfoDispatch({ type: 'emailImmediately', value: e.target.value })
@@ -324,7 +328,6 @@ function ProfileInfoSettings({ history }) {
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                     id="grid-text-1"
                     type="text"
-                    placeholder="Enter email"
                   />
                   {state.email.hasError && (
                     <div className="absolute text-sm text-red-600">{state.email.message}</div>
@@ -338,6 +341,7 @@ function ProfileInfoSettings({ history }) {
                     City of Residence
                   </label>
                   <input
+                    placeholder="Enter city/town"
                     value={state.city.value}
                     onChange={e =>
                       profileInfoDispatch({ type: 'cityImmediately', value: e.target.value })
@@ -351,13 +355,13 @@ function ProfileInfoSettings({ history }) {
                     Music Genre
                   </label>
                   <input
+                    placeholder="E.g Gospel"
                     value={state.musicCategory.value}
                     onChange={e =>
                       profileInfoDispatch({ type: 'musicImmediately', value: e.target.value })
                     }
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                     type="text"
-                    placeholder="E.g Gospel"
                   />
                 </div>
               </div>
@@ -367,11 +371,12 @@ function ProfileInfoSettings({ history }) {
                   Bio
                 </label>
                 <textarea
+                  placeholder="About you"
                   value={state.bio.value}
                   onChange={e =>
                     profileInfoDispatch({ type: 'bioImmediately', value: e.target.value })
                   }
-                  className="rounded-md leading-normal resize-none w-full h-20 py-2 px-3 shadow-inner border border-gray-400 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
+                  className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                 ></textarea>
               </div>
               <div className="flex justify-end">
