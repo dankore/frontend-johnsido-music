@@ -88,6 +88,11 @@ function ProfileInfoSettings({ history }) {
           draft.username.hasError = true;
           draft.username.message = 'Username name field is empty.';
         }
+
+        if (/[^a-zA-Z0-9]/.test(draft.username.value)) {
+          draft.username.hasError = true;
+          draft.username.message = 'Username can only contain letters and numbers.';
+        }
         return;
       case 'emailImmediately':
         draft.email.hasError = false;
