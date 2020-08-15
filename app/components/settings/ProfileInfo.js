@@ -195,9 +195,16 @@ function ProfileInfoSettings({ history }) {
             // SUCCESS
             userData.token = response.data.token;
             appDispatch({ type: 'updateLocalStorage', value: userData });
-            appDispatch({ type: 'flashMsgSuccess', value: 'Updated successfully!' });
+            // TURN OFF ANY FLASH ERROR MESSAGE
+            appDispatch({ type: 'turnOff' });
+            appDispatch({
+              type: 'flashMsgSuccess',
+              value: 'Updated successfully!',
+            });
           } else {
             console.log(response.data);
+            // TURN OFF ANY FLASH SUCCESS MESSAGE
+            appDispatch({ type: 'turnOff' });
             // DISPLAY VALADATION ERRORS
             appDispatch({ type: 'flashMsgError', value: response.data });
           }
