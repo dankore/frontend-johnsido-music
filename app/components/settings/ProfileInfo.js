@@ -143,7 +143,6 @@ function ProfileInfoSettings({ history }) {
   }
 
   const [state, profileInfoDispatch] = useImmerReducer(profileInfoReducer, initialState);
-  console.log(state.email.hasError);
 
   // EMAIL AFTER DELAY
   useEffect(() => {

@@ -84,6 +84,7 @@ function Login({ history }) {
             history.push('/');
           } else {
             // DISPLAY ERROR
+            console.log(response.data);
             appDispatch({ type: 'flashMsgError', value: response.data });
           }
         } catch (error) {
