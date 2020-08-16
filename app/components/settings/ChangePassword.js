@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import Page from '../layouts/Page';
 import { useImmerReducer } from 'use-immer';
+import Axios from 'axios';
+import StateContext from '../../contextsProviders/StateContext';
 
 function ChangePassword() {
+  const appState = useContext(StateContext);
   const initialState = {
     currentPassword: {
       value: '',
@@ -19,6 +22,7 @@ function ChangePassword() {
       hasError: '',
       message: '',
     },
+    submitCount: 0,
   };
 
   function changePasswordReducer(draft, action) {
@@ -26,14 +30,38 @@ function ChangePassword() {
       case 'currentPasswordImmediately':
         draft.currentPassword.hasError = false;
         draft.currentPassword.value = action.value;
+
+        if (draft.currentPassword.value == '') {
+          draft.currentPassword.hasError = true;
+          draft.currentPassword.message = 'Current password field is empty.';
+        }
         return;
       case 'newPasswordImmediately':
         draft.newPassword.hasError = false;
         draft.newPassword.value = action.value;
+
+        if (draft.newPassword.value == '') {
+          draft.newPassword.hasError = true;
+          draft.newPassword.message = 'New password field is empty.';
+        }
         return;
       case 'reEnteredNewPasswordImmediately':
         draft.reEnteredNewPassword.hasError = false;
         draft.reEnteredNewPassword.value = action.value;
+
+        if (draft.reEnteredNewPassword.value == '') {
+          draft.reEnteredNewPassword.hasError = true;
+          draft.reEnteredNewPassword.message = 'Re-enter password field is empty.';
+        }
+        return;
+      case 'sendForm':
+        if (
+          !draft.currentPassword.hasError &&
+          !draft.newPassword.hasError &&
+          !draft.reEnteredNewPassword.hasError
+        ) {
+          draft.submitCount++;
+        }
         return;
     }
   }
@@ -42,7 +70,41 @@ function ChangePassword() {
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    changePasswordDispatch({
+      type: 'currentPasswordImmediately',
+      value: state.currentPassword.value,
+    });
+    changePasswordDispatch({ type: 'newPasswordImmediately', value: state.newPassword.value });
+    changePasswordDispatch({
+      type: 'reEnteredPasswordImmediately',
+      value: state.reEnteredPassword.value,
+    });
+
+    changePasswordDispatch({ type: 'sendForm' });
   }
+
+  useEffect(() => {
+    const request = Axios.CancelToken.source();
+    if (state.submitCount) {
+      try {
+        (async function saveChangedPassword() {
+          const response = Axios.post('/change-password', {
+            username: appState.user.username,
+            currentPassword: state.currentPassword.value,
+            newPassword: state.newPassword.value,
+            reEnteredNewPassword: state.reEnteredNewPassword.value,
+            token: appState.user.token,
+          });
+          console.log({ response });
+        });
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+    return () => request.cancel();
+  }, [state.submitCount]);
+
   return (
     <Page title="Settings - Profile Info">
       <div className="bg-gray-200 font-mono">
