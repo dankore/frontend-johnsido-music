@@ -2,11 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function Container(props) {
-  return (
-    <div style={{ minHeight: `calc(100vh - 20rem)` }} className="bg-white">
-      {props.children}
-    </div>
-  );
+  return <div className="bg-white">{props.children}</div>;
 }
 
 Container.propTypes = {
