@@ -77,27 +77,33 @@ function ChangePassword() {
     });
     changePasswordDispatch({ type: 'newPasswordImmediately', value: state.newPassword.value });
     changePasswordDispatch({
-      type: 'reEnteredPasswordImmediately',
-      value: state.reEnteredPassword.value,
+      type: 'reEnteredNewPasswordImmediately',
+      value: state.reEnteredNewPassword.value,
     });
 
     changePasswordDispatch({ type: 'sendForm' });
   }
 
   useEffect(() => {
+    console.log('a');
     const request = Axios.CancelToken.source();
     if (state.submitCount) {
       try {
         (async function saveChangedPassword() {
-          const response = Axios.post('/change-password', {
-            username: appState.user.username,
-            currentPassword: state.currentPassword.value,
-            newPassword: state.newPassword.value,
-            reEnteredNewPassword: state.reEnteredNewPassword.value,
-            token: appState.user.token,
-          });
-          console.log({ response });
-        });
+          const response = await Axios.post(
+            '/change-password',
+            {
+              currentPassword: state.currentPassword.value,
+              newPassword: state.newPassword.value,
+              reEnteredNewPassword: state.reEnteredNewPassword.value,
+              token: appState.user.token,
+            },
+            {
+              cancelToken: request.token,
+            }
+          );
+          console.log({ response: response.data });
+        })();
       } catch (error) {
         console.log(error.message);
       }
@@ -111,7 +117,7 @@ function ChangePassword() {
         <div className="w-full max-w-2xl p-6 mx-auto">
           <form onSubmit={handleSubmit} className="mt-6">
             <h2 className="pl-3 text-2xl text-gray-900 mb-4">Change Password</h2>
-            <div className="relative w-full md:w-1/2 px-3 mb-6">
+            <div className="relative w-full lg:w-1/2 px-3 mb-6">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 Current Password
               </label>
@@ -131,7 +137,7 @@ function ChangePassword() {
                 <div className="absolute text-sm text-red-600">{state.currentPassword.message}</div>
               )}
             </div>
-            <div className="relative w-full md:w-1/2 px-3 mb-6">
+            <div className="relative w-full lg:w-1/2 px-3 mb-6">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 New Password
               </label>
@@ -148,12 +154,12 @@ function ChangePassword() {
                 <div className="absolute text-sm text-red-600">{state.newPassword.message}</div>
               )}
             </div>
-            <div className="relative w-full md:w-1/2 px-3 mb-6">
+            <div className="relative w-full lg:w-1/2 px-3 mb-6">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                Re-enter currrent password
+                Re-enter new password
               </label>
               <input
-                placeholder="Enter Re-enter currrent password"
+                placeholder="Enter Re-enter new password"
                 value={state.reEnteredNewPassword.value}
                 onChange={e =>
                   changePasswordDispatch({
@@ -171,7 +177,7 @@ function ChangePassword() {
               )}
             </div>
 
-            <div className="w-full md:w-1/2 flex justify-end">
+            <div className="w-full lg:w-1/2 flex justify-end px-3">
               <button
                 className="px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md bg-white hover:bg-gray-100 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
                 type="submit"
