@@ -138,8 +138,8 @@ function ChangePassword() {
             '/change-password',
             {
               currentPassword: state.currentPassword.value,
-              newPassword: state.newPassword.value,
-              reEnteredNewPassword: state.reEnteredNewPassword.value,
+              password: state.newPassword.value,
+              confirmPassword: state.reEnteredNewPassword.value,
               token: appState.user.token,
             },
             {
