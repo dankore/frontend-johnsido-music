@@ -153,7 +153,10 @@ function ChangePassword() {
               value: ['Updated successfully!'],
             });
           } else {
-            console.log(response.data);
+            appDispatch({
+              type: 'flashMsgError',
+              value: response.data,
+            });
           }
         })();
       } catch (error) {
