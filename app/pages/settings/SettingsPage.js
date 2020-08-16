@@ -1,7 +1,7 @@
 import React from 'react';
 import Page from '../../components/layouts/Page';
 import { Route, Switch, NavLink, Redirect } from 'react-router-dom';
-import ProfileInfoSettings from '../../components/settings/ProfileInfo';
+import ProfileInfoSettings from '../../components/settings/UpdateProfileInfo';
 import ChangePassword from '../../components/settings/ChangePassword';
 
 function SettingsPage() {

@@ -35,6 +35,7 @@ function ChangePassword() {
           draft.currentPassword.hasError = true;
           draft.currentPassword.message = 'Current password field is empty.';
         }
+
         return;
       case 'newPasswordImmediately':
         draft.newPassword.hasError = false;
@@ -45,6 +46,16 @@ function ChangePassword() {
           draft.newPassword.message = 'New password field is empty.';
         }
         return;
+      case 'newPasswordAfterDelay':
+        if (draft.newPassword.value.length < 6) {
+          draft.newPassword.hasError = true;
+          draft.newPassword.message = 'New password must be at least 6 characters.';
+        }
+        if (draft.newPassword.value.length > 50) {
+          draft.newPassword.hasError = true;
+          draft.newPassword.message = 'New password cannot exceed 50 characters.';
+        }
+        return;
       case 'reEnteredNewPasswordImmediately':
         draft.reEnteredNewPassword.hasError = false;
         draft.reEnteredNewPassword.value = action.value;
@@ -52,6 +63,12 @@ function ChangePassword() {
         if (draft.reEnteredNewPassword.value == '') {
           draft.reEnteredNewPassword.hasError = true;
           draft.reEnteredNewPassword.message = 'Re-enter password field is empty.';
+        }
+        return;
+      case 'reEnterNewPasswordAfterDelay':
+        if (draft.newPassword.value.length !== draft.reEnteredNewPassword.value.length) {
+          draft.reEnteredNewPassword.hasError = true;
+          draft.reEnteredNewPassword.message = 'Passwords do not match.';
         }
         return;
       case 'sendForm':
@@ -68,6 +85,31 @@ function ChangePassword() {
 
   const [state, changePasswordDispatch] = useImmerReducer(changePasswordReducer, initialState);
 
+  // DELAY: NEW PASSWORD
+  useEffect(() => {
+    if (state.newPassword.value) {
+      const delay = setTimeout(
+        () => changePasswordDispatch({ type: 'newPasswordAfterDelay' }),
+        800
+      );
+
+      return () => clearTimeout(delay);
+    }
+  }, [state.newPassword.value]);
+
+  // DELAY: RE ENTER PASSWORD
+  useEffect(() => {
+    if (state.reEnteredNewPassword.value) {
+      const delay = setTimeout(
+        () => changePasswordDispatch({ type: 'reEnterNewPasswordAfterDelay' }),
+        800
+      );
+
+      return () => clearTimeout(delay);
+    }
+  }, [state.reEnteredNewPassword.value]);
+
+  // INITIAL SUBMIT
   function handleSubmit(e) {
     e.preventDefault();
 
@@ -84,8 +126,8 @@ function ChangePassword() {
     changePasswordDispatch({ type: 'sendForm' });
   }
 
+  // SUBMIT FORM
   useEffect(() => {
-    console.log('a');
     const request = Axios.CancelToken.source();
     if (state.submitCount) {
       try {
