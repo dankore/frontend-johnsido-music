@@ -2,6 +2,7 @@ import React from 'react';
 import Page from '../../components/layouts/Page';
 import { Route, Switch, NavLink, Redirect } from 'react-router-dom';
 import ProfileInfoSettings from '../../components/settings/ProfileInfo';
+import ChangePassword from '../../components/settings/ChangePassword';
 
 function SettingsPage() {
   return (
@@ -9,7 +10,7 @@ function SettingsPage() {
       <main>
         {/* <!--Sidebar--> */}
         <div className="flex flex-wrap lg:flex-no-wrap">
-          <div className="pt-0 h-16 lg:min-h-screen lg:pt-10 w-full lg:max-w-xs">
+          <div className="pt-0 h-16 lg:min-h-full lg:pt-10 w-full lg:max-w-xs">
             <div className="text-3xl w-full text-center hidden lg:block lg:mb-6">Settings</div>
             <div className="mx-auto lg:px-6">
               <ul className="list-reset flex flex-row lg:flex-col text-center lg:text-left">
@@ -45,7 +46,7 @@ function SettingsPage() {
                 <ProfileInfoSettings />
               </Route>
               <Route path="/settings/change-password">
-                <div>changePassword</div>
+                <ChangePassword />
               </Route>
               <Route path="/settings/delete-account">
                 <div>delete account</div>
