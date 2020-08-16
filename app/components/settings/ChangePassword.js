@@ -3,9 +3,11 @@ import Page from '../layouts/Page';
 import { useImmerReducer } from 'use-immer';
 import Axios from 'axios';
 import StateContext from '../../contextsProviders/StateContext';
+import DispatchContext from '../../contextsProviders/DispatchContext';
 
 function ChangePassword() {
   const appState = useContext(StateContext);
+  const appDispatch = useContext(DispatchContext);
   const initialState = {
     currentPassword: {
       value: '',
@@ -144,7 +146,15 @@ function ChangePassword() {
               cancelToken: request.token,
             }
           );
-          console.log({ response: response.data });
+          if (response.data == 'Success') {
+            //SUCCESS
+            appDispatch({
+              type: 'flashMsgSuccess',
+              value: ['Updated successfully!'],
+            });
+          } else {
+            console.log(response.data);
+          }
         })();
       } catch (error) {
         console.log(error.message);
