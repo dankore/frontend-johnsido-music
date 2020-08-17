@@ -94,6 +94,12 @@ function ProfileInfoSettings({ history }) {
           draft.username.message = 'Username can only contain letters and numbers.';
         }
         return;
+      case 'usernameAfterDelay':
+        if (draft.username.value.length < 3) {
+          draft.username.hasError = true;
+          draft.username.message = 'Username must be at least 3 letters.';
+        }
+        return;
       case 'emailImmediately':
         draft.email.hasError = false;
         draft.email.value = action.value;
@@ -143,6 +149,15 @@ function ProfileInfoSettings({ history }) {
   }
 
   const [state, profileInfoDispatch] = useImmerReducer(profileInfoReducer, initialState);
+
+  // USERNAME AFTER DELAY
+  useEffect(() => {
+    if (state.username.value) {
+      const delay = setTimeout(() => profileInfoDispatch({ type: 'usernameAfterDelay' }), 800);
+
+      return () => clearTimeout(delay);
+    }
+  }, [state.username.value]);
 
   // EMAIL AFTER DELAY
   useEffect(() => {
