@@ -11,7 +11,7 @@ Axios.defaults.baseURL = process.env.BACKENDURL;
 import StateContext from './contextsProviders/StateContext';
 import DispatchContext from './contextsProviders/DispatchContext';
 //COMPONENTS
-import Homepage from './pages/Homepage';
+import UploadMusic from './pages/uploadMusic';
 import ProfilePage from './pages/profile/ProfilePage';
 import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
@@ -144,8 +144,8 @@ function Main() {
             {state.flashMsgSuccess.isDisplay && <FlashMsgSuccess />}
           </Route>
           <Switch>
-            <Route path="/home">
-              <Homepage />
+            <Route path="/upload-song">
+              <UploadMusic />
             </Route>
             <Route exact path="/">
               <LandingPage />
@@ -160,7 +160,11 @@ function Main() {
               <Login />
             </Route>
             <Route path="/settings">
-              <SettingsPage />
+              {state.loggedIn ? (
+                <SettingsPage />
+              ) : (
+                <div>Please login or register to view this page.</div>
+              )}
             </Route>
             <Route to="/404">
               <div>Not found</div>
