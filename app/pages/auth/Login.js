@@ -109,12 +109,14 @@ function Login({ history }) {
               <img className="w-32 h-32" src={appState.logo.url} alt={appState.logo.alt} />
             </Link>
           </div>
-
-          <div className="flex flex-col justify-center lg:justify-start my-auto  px-3 md:px-32 lg:px-3">
-            <p className="text-center text-3xl">Login</p>
+          <div className="relative">
             {appState.flashMsgErrors.isDisplay && (
               <FlashMsgError errors={appState.flashMsgErrors.value} />
             )}
+          </div>
+          <div className="flex flex-col justify-center lg:justify-start my-auto  px-3 md:px-32 lg:px-3">
+            <p className="text-center text-3xl">Login</p>
+
             <form onSubmit={handleSubmitForm} className="flex flex-col pt-3">
               <div className="flex flex-col pt-4">
                 <label htmlFor="username" className="text-lg">
