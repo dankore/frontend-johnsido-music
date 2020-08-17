@@ -70,6 +70,12 @@ function ProfileInfoSettings({ history }) {
           draft.firstName.hasError = true;
           draft.firstName.message = 'First name field is empty.';
         }
+        // CHECK FOR INVALID CHARACTERS
+        if (/[^\d\w\s-]/.test(draft.firstName.value)) {
+          draft.firstName.hasError = true;
+          draft.firstName.message =
+            'First name can only contain letters, numbers, spaces, and dashes.';
+        }
         return;
       case 'lastNameImmediately':
         draft.lastName.hasError = false;
@@ -78,6 +84,13 @@ function ProfileInfoSettings({ history }) {
         if (draft.lastName.value == '') {
           draft.lastName.hasError = true;
           draft.lastName.message = 'Last name field is empty.';
+        }
+
+        // CHECK FOR INVALID CHARACTERS
+        if (/[^\d\w\s-]/.test(draft.lastName.value)) {
+          draft.lastName.hasError = true;
+          draft.lastName.message =
+            'Last name can only contain letters, numbers, spaces, and dashes.';
         }
         return;
       case 'usernameImmediately':
@@ -277,6 +290,7 @@ function ProfileInfoSettings({ history }) {
                     first name
                   </label>
                   <input
+                    autoComplete="off"
                     placeholder="Enter first name"
                     value={state.firstName.value}
                     onChange={e =>
@@ -294,6 +308,7 @@ function ProfileInfoSettings({ history }) {
                     last name
                   </label>
                   <input
+                    autoComplete="off"
                     placeholder="Enter last name"
                     value={state.lastName.value}
                     onChange={e =>
@@ -314,6 +329,7 @@ function ProfileInfoSettings({ history }) {
                     username
                   </label>
                   <input
+                    autoComplete="off"
                     placeholder="Enter username"
                     value={state.username.value}
                     onChange={e =>
@@ -334,6 +350,7 @@ function ProfileInfoSettings({ history }) {
                     email address
                   </label>
                   <input
+                    autoComplete="off"
                     placeholder="Enter email"
                     value={state.email.value}
                     onChange={e =>
@@ -355,6 +372,7 @@ function ProfileInfoSettings({ history }) {
                     City of Residence
                   </label>
                   <input
+                    autoComplete="off"
                     placeholder="Enter city/town"
                     value={state.city.value}
                     onChange={e =>
@@ -369,6 +387,7 @@ function ProfileInfoSettings({ history }) {
                     Music Genre
                   </label>
                   <input
+                    autoComplete="off"
                     placeholder="E.g Gospel"
                     value={state.musicCategory.value}
                     onChange={e =>
