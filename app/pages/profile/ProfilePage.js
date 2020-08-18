@@ -15,9 +15,14 @@ function ProfilePage({ history }) {
       profileAvatar: '',
       profileEmail: '',
       profileAbout: { bio: '', musicCategory: '', city: '' },
+      isFollowing: false,
+      counts: {
+        followerCount: 0,
+      },
     },
     username: useParams().username,
     isFetching: false,
+    startFollowingCount: 0,
   };
 
   function profileReducer(draft, action) {
@@ -30,6 +35,13 @@ function ProfilePage({ history }) {
         return;
       case 'isFetchingEnds':
         draft.isFetching = false;
+        return;
+      case 'startFollowing':
+        draft.startFollowingCount++;
+        return;
+      case 'addFollow':
+        draft.user.isFollowing = true;
+        draft.user.counts.followerCount++;
         return;
     }
   }
@@ -55,6 +67,21 @@ function ProfilePage({ history }) {
     })();
     return () => request.cancel();
   }, [state.username]);
+
+  useEffect(() => {
+    if (state.startFollowingCount) {
+      const request = Axios.CancelToken.source();
+
+      (async function addFollow() {
+        const response = await Axios.post(`/addFollow/${state.user.profileUsername}`, {
+          CancelToken: request.token,
+        });
+        profileDispatch({ type: 'addFollow', value: response.data });
+      })();
+
+      return () => request.cancel();
+    }
+  }, [state.startFollowingCount]);
 
   if (state.isFetching) {
     return <LoadingDotsAnimation />;
@@ -116,6 +143,7 @@ function ProfilePage({ history }) {
                         className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1"
                         type="button"
                         style={{ transition: 'all .15s ease' }}
+                        onClick={() => profileDispatch({ type: 'startFollowing' })}
                       >
                         Follow
                       </button>
