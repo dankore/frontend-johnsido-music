@@ -134,13 +134,31 @@ function ProfileInfoSettings({ history }) {
         }
         return;
       case 'cityImmediately':
+        draft.city.hasError = false;
         draft.city.value = action.value;
+
+        if (draft.city.value.length > 70) {
+          draft.city.hasError = true;
+          draft.city.message = 'City/town name cannot exceed 70 characters.';
+        }
         return;
       case 'musicImmediately':
+        draft.musicCategory.hasError = false;
         draft.musicCategory.value = action.value;
+
+        if (draft.musicCategory.value.length > 50) {
+          draft.musicCategory.hasError = true;
+          draft.musicCategory.message = 'Music genre cannot exceed 50 characters.';
+        }
         return;
       case 'bioImmediately':
+        draft.bio.hasError = false;
         draft.bio.value = action.value;
+
+        if (draft.bio.value.length > 400) {
+          draft.bio.hasError = true;
+          draft.bio.message = 'Bio cannot exceed 400 characters.';
+        }
         return;
       case 'isFetchingStarts':
         draft.isFetching = true;
@@ -381,6 +399,9 @@ function ProfileInfoSettings({ history }) {
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                     type="text"
                   />
+                  {state.city.hasError && (
+                    <div className="absolute text-sm text-red-600">{state.city.message}</div>
+                  )}
                 </div>
                 <div className="relative w-full md:w-1/2 px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
@@ -396,6 +417,11 @@ function ProfileInfoSettings({ history }) {
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                     type="text"
                   />
+                  {state.musicCategory.hasError && (
+                    <div className="absolute text-sm text-red-600">
+                      {state.musicCategory.message}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -411,6 +437,9 @@ function ProfileInfoSettings({ history }) {
                   }
                   className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                 ></textarea>
+                {state.bio.hasError && (
+                  <div className="absolute text-sm text-red-600">{state.bio.message}</div>
+                )}
               </div>
               <div className="flex justify-end">
                 <button

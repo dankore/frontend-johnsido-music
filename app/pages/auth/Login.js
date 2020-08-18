@@ -131,11 +131,11 @@ function Login({ history }) {
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
                 />
                 {state.username.hasError && (
-                  <div className="text-red-600">{state.username.message}</div>
+                  <div className="absolute text-red-600">{state.username.message}</div>
                 )}
               </div>
 
-              <div className="flex flex-col pt-4">
+              <div className="relative flex flex-col pt-4">
                 <label htmlFor="password" className="text-lg">
                   Password
                 </label>
@@ -148,7 +148,7 @@ function Login({ history }) {
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
                 />
                 {state.password.hasError && (
-                  <div className="text-red-600">{state.password.message}</div>
+                  <div className="absolute text-red-600">{state.password.message}</div>
                 )}
               </div>
 
