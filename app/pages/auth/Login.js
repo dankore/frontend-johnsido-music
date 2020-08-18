@@ -7,8 +7,11 @@ import DispatchContext from '../../contextsProviders/DispatchContext';
 import Axios from 'axios';
 import PropTypes from 'prop-types';
 import FlashMsgError from '../../components/shared/FlashMsgError';
+import { CSSTransition } from 'react-transition-group';
+import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
 
 function Login({ history }) {
+  CSSTransitionStyle.marginTop = 1.3 + 'rem';
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
   const initialState = {
@@ -118,7 +121,7 @@ function Login({ history }) {
             <p className="text-center text-3xl">Login</p>
 
             <form onSubmit={handleSubmitForm} className="flex flex-col pt-3">
-              <div className="flex flex-col pt-4">
+              <div className="relative flex flex-col pt-4">
                 <label htmlFor="username" className="text-lg">
                   Username
                 </label>
@@ -130,9 +133,16 @@ function Login({ history }) {
                   placeholder="don"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
                 />
-                {state.username.hasError && (
-                  <div className="absolute text-red-600">{state.username.message}</div>
-                )}
+                <CSSTransition
+                  in={state.username.hasError}
+                  timeout={330}
+                  classNames="liveValidateMessage"
+                  unmountOnExit
+                >
+                  <div style={CSSTransitionStyle} className="liveValidateMessage">
+                    {state.username.message}
+                  </div>
+                </CSSTransition>
               </div>
 
               <div className="relative flex flex-col pt-4">
@@ -147,9 +157,16 @@ function Login({ history }) {
                   placeholder="Password"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
                 />
-                {state.password.hasError && (
-                  <div className="absolute text-red-600">{state.password.message}</div>
-                )}
+                <CSSTransition
+                  in={state.password.hasError}
+                  timeout={330}
+                  classNames="liveValidateMessage"
+                  unmountOnExit
+                >
+                  <div style={CSSTransitionStyle} className="liveValidateMessage">
+                    {state.password.message}
+                  </div>
+                </CSSTransition>
               </div>
 
               <input

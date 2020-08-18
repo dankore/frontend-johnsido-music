@@ -4,6 +4,8 @@ import { useImmerReducer } from 'use-immer';
 import Axios from 'axios';
 import StateContext from '../../contextsProviders/StateContext';
 import DispatchContext from '../../contextsProviders/DispatchContext';
+import { CSSTransition } from 'react-transition-group';
+import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
 
 function ChangePassword() {
   const appState = useContext(StateContext);
@@ -188,9 +190,16 @@ function ChangePassword() {
                 className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                 type="password"
               />
-              {state.currentPassword.hasError && (
-                <div className="absolute text-sm text-red-600">{state.currentPassword.message}</div>
-              )}
+              <CSSTransition
+                in={state.currentPassword.hasError}
+                timeout={330}
+                classNames="liveValidateMessage"
+                unmountOnExit
+              >
+                <div style={CSSTransitionStyle} className="liveValidateMessage">
+                  {state.currentPassword.message}
+                </div>
+              </CSSTransition>
             </div>
             <div className="relative w-full lg:w-1/2 px-3 mb-6">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
@@ -205,9 +214,16 @@ function ChangePassword() {
                 className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                 type="password"
               />
-              {state.newPassword.hasError && (
-                <div className="absolute text-sm text-red-600">{state.newPassword.message}</div>
-              )}
+              <CSSTransition
+                in={state.newPassword.hasError}
+                timeout={330}
+                classNames="liveValidateMessage"
+                unmountOnExit
+              >
+                <div style={CSSTransitionStyle} className="liveValidateMessage">
+                  {state.newPassword.message}
+                </div>
+              </CSSTransition>
             </div>
             <div className="relative w-full lg:w-1/2 px-3 mb-6">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
@@ -225,11 +241,16 @@ function ChangePassword() {
                 className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                 type="password"
               />
-              {state.reEnteredNewPassword.hasError && (
-                <div className="absolute text-sm text-red-600">
+              <CSSTransition
+                in={state.reEnteredNewPassword.hasError}
+                timeout={330}
+                classNames="liveValidateMessage"
+                unmountOnExit
+              >
+                <div style={CSSTransitionStyle} className="liveValidateMessage">
                   {state.reEnteredNewPassword.message}
                 </div>
-              )}
+              </CSSTransition>
             </div>
 
             <div className="w-full lg:w-1/2 flex justify-end px-3">
