@@ -7,6 +7,8 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 import DispatchContext from '../../contextsProviders/DispatchContext';
+import { CSSTransition } from 'react-transition-group';
+import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
 
 function ProfileInfoSettings({ history }) {
   const appState = useContext(StateContext);
@@ -134,13 +136,31 @@ function ProfileInfoSettings({ history }) {
         }
         return;
       case 'cityImmediately':
+        draft.city.hasError = false;
         draft.city.value = action.value;
+
+        if (draft.city.value.length > 70) {
+          draft.city.hasError = true;
+          draft.city.message = 'City cannot exceed 70 characters.';
+        }
         return;
       case 'musicImmediately':
+        draft.musicCategory.hasError = false;
         draft.musicCategory.value = action.value;
+
+        if (draft.musicCategory.value.length > 50) {
+          draft.musicCategory.hasError = true;
+          draft.musicCategory.message = 'Music genre cannot exceed 50 characters.';
+        }
         return;
       case 'bioImmediately':
+        draft.bio.hasError = false;
         draft.bio.value = action.value;
+
+        if (draft.bio.value.length > 400) {
+          draft.bio.hasError = true;
+          draft.bio.message = 'Bio cannot exceed 400 characters.';
+        }
         return;
       case 'isFetchingStarts':
         draft.isFetching = true;
@@ -284,7 +304,7 @@ function ProfileInfoSettings({ history }) {
           <div className="inputs w-full max-w-2xl p-6 mx-auto">
             <form onSubmit={handleSubmit} className="mt-6">
               <h2 className="pl-3 text-2xl text-gray-900">Profile information</h2>
-              <div className="flex items-center justify-between mt-4">
+              <div className="flex flex-wrap items-center justify-between mt-4">
                 <div className="relative w-full md:w-1/2 px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                     first name
@@ -299,9 +319,16 @@ function ProfileInfoSettings({ history }) {
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                     type="text"
                   />
-                  {state.firstName.hasError && (
-                    <div className="absolute text-sm text-red-600">{state.firstName.message}</div>
-                  )}
+                  <CSSTransition
+                    in={state.firstName.hasError}
+                    timeout={330}
+                    classNames="liveValidateMessage"
+                    unmountOnExit
+                  >
+                    <div style={CSSTransitionStyle} className="liveValidateMessage">
+                      {state.firstName.message}
+                    </div>
+                  </CSSTransition>
                 </div>
                 <div className="relative w-full md:w-1/2 px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
@@ -317,14 +344,21 @@ function ProfileInfoSettings({ history }) {
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                     type="text"
                   />
-                  {state.lastName.hasError && (
-                    <div className="absolute text-sm text-red-600">{state.lastName.message}</div>
-                  )}
+                  <CSSTransition
+                    in={state.lastName.hasError}
+                    timeout={330}
+                    classNames="liveValidateMessage"
+                    unmountOnExit
+                  >
+                    <div style={CSSTransitionStyle} className="liveValidateMessage">
+                      {state.lastName.message}
+                    </div>
+                  </CSSTransition>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between mb-6">
-                <div className="relative w-full md:w-full px-3 mb-6">
+              <div className="flex flex-wrap items-center justify-between mb-6">
+                <div className="relative w-full md:w-1/2 px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                     username
                   </label>
@@ -338,11 +372,18 @@ function ProfileInfoSettings({ history }) {
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                     type="text"
                   />
-                  {state.username.hasError && (
-                    <div className="absolute text-sm text-red-600">{state.username.message}</div>
-                  )}
+                  <CSSTransition
+                    in={state.username.hasError}
+                    timeout={330}
+                    classNames="liveValidateMessage"
+                    unmountOnExit
+                  >
+                    <div style={CSSTransitionStyle} className="liveValidateMessage">
+                      {state.username.message}
+                    </div>
+                  </CSSTransition>
                 </div>
-                <div className="relative w-full md:w-full px-3 mb-6">
+                <div className="relative w-full md:w-1/2 px-3 mb-6">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                     htmlFor="grid-text-1"
@@ -360,13 +401,20 @@ function ProfileInfoSettings({ history }) {
                     id="grid-text-1"
                     type="text"
                   />
-                  {state.email.hasError && (
-                    <div className="absolute text-sm text-red-600">{state.email.message}</div>
-                  )}
+                  <CSSTransition
+                    in={state.email.hasError}
+                    timeout={330}
+                    classNames="liveValidateMessage"
+                    unmountOnExit
+                  >
+                    <div style={CSSTransitionStyle} className="liveValidateMessage">
+                      {state.email.message}
+                    </div>
+                  </CSSTransition>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between mt-4">
+              <div className="flex flex-wrap items-center justify-between mb-6">
                 <div className="relative w-full md:w-1/2 px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                     City of Residence
@@ -381,6 +429,16 @@ function ProfileInfoSettings({ history }) {
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                     type="text"
                   />
+                  <CSSTransition
+                    in={state.city.hasError}
+                    timeout={330}
+                    classNames="liveValidateMessage"
+                    unmountOnExit
+                  >
+                    <div style={CSSTransitionStyle} className="liveValidateMessage">
+                      {state.city.message}
+                    </div>
+                  </CSSTransition>
                 </div>
                 <div className="relative w-full md:w-1/2 px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
@@ -396,10 +454,20 @@ function ProfileInfoSettings({ history }) {
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                     type="text"
                   />
+                  <CSSTransition
+                    in={state.musicCategory.hasError}
+                    timeout={330}
+                    classNames="liveValidateMessage"
+                    unmountOnExit
+                  >
+                    <div style={CSSTransitionStyle} className="liveValidateMessage">
+                      {state.musicCategory.message}
+                    </div>
+                  </CSSTransition>
                 </div>
               </div>
 
-              <div className="relative w-full md:w-full px-3 mb-6">
+              <div className="relative w-full px-3 mb-6">
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                   Bio
                 </label>
@@ -411,6 +479,16 @@ function ProfileInfoSettings({ history }) {
                   }
                   className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
                 ></textarea>
+                <CSSTransition
+                  in={state.bio.hasError}
+                  timeout={330}
+                  classNames="liveValidateMessage"
+                  unmountOnExit
+                >
+                  <div style={CSSTransitionStyle} className="liveValidateMessage">
+                    {state.bio.message}
+                  </div>
+                </CSSTransition>
               </div>
               <div className="flex justify-end">
                 <button

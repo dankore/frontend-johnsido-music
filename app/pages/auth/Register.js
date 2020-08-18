@@ -8,8 +8,11 @@ import moment from 'moment-timezone';
 import FlashMsgError from '../../components/shared/FlashMsgError';
 import DispatchContext from '../../contextsProviders/DispatchContext';
 import PropTypes from 'prop-types';
+import { CSSTransition } from 'react-transition-group';
+import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
 
 function Register({ history }) {
+  const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: '1.3rem' };
   const appState = useContext(StateContext);
   const appsDispatch = useContext(DispatchContext);
 
@@ -362,9 +365,16 @@ function Register({ history }) {
                   placeholder="don"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
                 />
-                {state.username.hasError && (
-                  <div className="text-red-600">{state.username.message}</div>
-                )}
+                <CSSTransition
+                  in={state.username.hasError}
+                  timeout={330}
+                  classNames="liveValidateMessage"
+                  unmountOnExit
+                >
+                  <div style={CSSTransitionStyleModified} className="liveValidateMessage">
+                    {state.username.message}
+                  </div>
+                </CSSTransition>
               </div>
               {/* FIRST NAME */}
               <div className="relative flex flex-col pt-4">
@@ -379,9 +389,16 @@ function Register({ history }) {
                   placeholder="John"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
                 />
-                {state.firstName.hasError && (
-                  <div className="text-red-600">{state.firstName.message}</div>
-                )}
+                <CSSTransition
+                  in={state.firstName.hasError}
+                  timeout={330}
+                  classNames="liveValidateMessage"
+                  unmountOnExit
+                >
+                  <div style={CSSTransitionStyleModified} className="liveValidateMessage">
+                    {state.firstName.message}
+                  </div>
+                </CSSTransition>
               </div>
               {/* LAST NAME*/}
               <div className="relative flex flex-col pt-4">
@@ -396,9 +413,16 @@ function Register({ history }) {
                   placeholder="Sido"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
                 />
-                {state.lastName.hasError && (
-                  <div className="text-red-600">{state.lastName.message}</div>
-                )}
+                <CSSTransition
+                  in={state.lastName.hasError}
+                  timeout={330}
+                  classNames="liveValidateMessage"
+                  unmountOnExit
+                >
+                  <div style={CSSTransitionStyleModified} className="liveValidateMessage">
+                    {state.lastName.message}
+                  </div>
+                </CSSTransition>
               </div>
               {/* EMAIL */}
               <div className="relative flex flex-col pt-4">
@@ -413,7 +437,16 @@ function Register({ history }) {
                   placeholder="your@email.com"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
                 />
-                {state.email.hasError && <div className="text-red-600">{state.email.message}</div>}
+                <CSSTransition
+                  in={state.email.hasError}
+                  timeout={330}
+                  classNames="liveValidateMessage"
+                  unmountOnExit
+                >
+                  <div style={CSSTransitionStyleModified} className="liveValidateMessage">
+                    {state.email.message}
+                  </div>
+                </CSSTransition>
               </div>
               {/* PASSWORD */}
               <div className="relative flex flex-col pt-4">
@@ -428,9 +461,16 @@ function Register({ history }) {
                   placeholder="Password"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
                 />
-                {state.password.hasError && (
-                  <div className="text-red-600">{state.password.message}</div>
-                )}
+                <CSSTransition
+                  in={state.password.hasError}
+                  timeout={330}
+                  classNames="liveValidateMessage"
+                  unmountOnExit
+                >
+                  <div style={CSSTransitionStyleModified} className="liveValidateMessage">
+                    {state.password.message}
+                  </div>
+                </CSSTransition>
               </div>
               {/* CONFIRM PASSWORD */}
               <div className="relative flex flex-col pt-4">
@@ -447,9 +487,16 @@ function Register({ history }) {
                   placeholder="Password"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
                 />
-                {state.confirmPassword.hasError && (
-                  <div className="text-red-600">{state.confirmPassword.message}</div>
-                )}
+                <CSSTransition
+                  in={state.confirmPassword.hasError}
+                  timeout={330}
+                  classNames="liveValidateMessage"
+                  unmountOnExit
+                >
+                  <div style={CSSTransitionStyleModified} className="liveValidateMessage">
+                    {state.confirmPassword.message}
+                  </div>
+                </CSSTransition>
               </div>
               {/* SUBMIT */}
               <input
@@ -461,9 +508,9 @@ function Register({ history }) {
             <div className="text-center pt-12 pb-12">
               <p>
                 Already have an account?{' '}
-                <a href="/login" className="underline font-semibold">
+                <Link to="/login" className="underline font-semibold">
                   Log in here.
-                </a>
+                </Link>
               </p>
             </div>
           </div>
