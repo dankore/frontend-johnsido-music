@@ -141,7 +141,7 @@ function ProfileInfoSettings({ history }) {
 
         if (draft.city.value.length > 70) {
           draft.city.hasError = true;
-          draft.city.message = 'City/town name cannot exceed 70 characters.';
+          draft.city.message = 'City cannot exceed 70 characters.';
         }
         return;
       case 'musicImmediately':
@@ -304,7 +304,7 @@ function ProfileInfoSettings({ history }) {
           <div className="inputs w-full max-w-2xl p-6 mx-auto">
             <form onSubmit={handleSubmit} className="mt-6">
               <h2 className="pl-3 text-2xl text-gray-900">Profile information</h2>
-              <div className="flex items-center justify-between mt-4">
+              <div className="flex flex-wrap items-center justify-between mt-4">
                 <div className="relative w-full md:w-1/2 px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                     first name
@@ -357,8 +357,8 @@ function ProfileInfoSettings({ history }) {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between mb-6">
-                <div className="relative w-full md:w-full px-3 mb-6">
+              <div className="flex flex-wrap items-center justify-between mb-6">
+                <div className="relative w-full md:w-1/2 px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                     username
                   </label>
@@ -383,7 +383,7 @@ function ProfileInfoSettings({ history }) {
                     </div>
                   </CSSTransition>
                 </div>
-                <div className="relative w-full md:w-full px-3 mb-6">
+                <div className="relative w-full md:w-1/2 px-3 mb-6">
                   <label
                     className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                     htmlFor="grid-text-1"
@@ -414,8 +414,8 @@ function ProfileInfoSettings({ history }) {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between mb-6">
-                <div className="relative w-full md:w-full px-3 mb-6">
+              <div className="flex flex-wrap items-center justify-between mb-6">
+                <div className="relative w-full md:w-1/2 px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                     City of Residence
                   </label>
@@ -440,7 +440,7 @@ function ProfileInfoSettings({ history }) {
                     </div>
                   </CSSTransition>
                 </div>
-                <div className="relative w-full md:w-full px-3 mb-6">
+                <div className="relative w-full md:w-1/2 px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                     Music Genre
                   </label>
@@ -467,7 +467,7 @@ function ProfileInfoSettings({ history }) {
                 </div>
               </div>
 
-              <div className="relative w-full md:w-full px-3 mb-6">
+              <div className="relative w-full px-3 mb-6">
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                   Bio
                 </label>
