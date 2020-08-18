@@ -11,7 +11,7 @@ import { CSSTransition } from 'react-transition-group';
 import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
 
 function Login({ history }) {
-  CSSTransitionStyle.marginTop = 1.3 + 'rem';
+  const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: '1.3rem' };
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
   const initialState = {
@@ -139,7 +139,7 @@ function Login({ history }) {
                   classNames="liveValidateMessage"
                   unmountOnExit
                 >
-                  <div style={CSSTransitionStyle} className="liveValidateMessage">
+                  <div style={CSSTransitionStyleModified} className="liveValidateMessage">
                     {state.username.message}
                   </div>
                 </CSSTransition>
@@ -163,7 +163,7 @@ function Login({ history }) {
                   classNames="liveValidateMessage"
                   unmountOnExit
                 >
-                  <div style={CSSTransitionStyle} className="liveValidateMessage">
+                  <div style={CSSTransitionStyleModified} className="liveValidateMessage">
                     {state.password.message}
                   </div>
                 </CSSTransition>
