@@ -18256,6 +18256,58 @@ h1 {
   }
 }
 
+.liveValidateMessage {
+  top: -5px;
+  position: absolute;
+  z-index: 1;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
+  border-left-width: 1px;
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-top-left-radius: .25rem;
+  border-top-right-radius: .25rem;
+  text-align: center;
+  --text-opacity: 1;
+  color: #c53030;
+  color: rgba(197, 48, 48, var(--text-opacity));
+  --border-opacity: 1;
+  border-color: #fc8181;
+  border-color: rgba(252, 129, 129, var(--border-opacity));
+  --bg-opacity: 1;
+  background-color: #fff5f5;
+  background-color: rgba(255, 245, 245, var(--bg-opacity));
+}
+
+.liveValidateMessage--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.liveValidateMessage-enter {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+.liveValidateMessage-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: 0.33s opacity ease-in-out, 0.33s transform ease-in-out;
+}
+
+.liveValidateMessage-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.liveValidateMessage-exit-active {
+  opacity: 0;
+  transform: translateY(100%);
+  transition: 0.33s opacity ease-in-out, 0.33s transform ease-in-out;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;
