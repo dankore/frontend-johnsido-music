@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useParams, withRouter, Link } from 'react-router-dom';
 import { useImmerReducer } from 'use-immer';
 import Axios from 'axios';
 import PropTypes from 'prop-types';
 import Page from '../../components/layouts/Page';
 import LoadingDotsAnimation from '../../components/shared/LoadingDotsAnimation';
+import StateContext from '../../contextsProviders/StateContext';
 
 function ProfilePage({ history }) {
+  const appState = useContext(StateContext);
   const initialState = {
     user: {
       profileUsername: '',
@@ -41,13 +43,14 @@ function ProfilePage({ history }) {
         return;
       case 'addFollow':
         draft.user.isFollowing = true;
-        draft.user.counts.followerCount++;
+        // draft.user.counts.followerCount++;
         return;
     }
   }
 
   const [state, profileDispatch] = useImmerReducer(profileReducer, initialState);
 
+  // FETCH PROFILE DATA
   useEffect(() => {
     const request = Axios.CancelToken.source();
     profileDispatch({ type: 'isFetchingStarts' });
@@ -68,15 +71,21 @@ function ProfilePage({ history }) {
     return () => request.cancel();
   }, [state.username]);
 
+  // ADD FOLLOW
   useEffect(() => {
     if (state.startFollowingCount) {
       const request = Axios.CancelToken.source();
 
       (async function addFollow() {
-        const response = await Axios.post(`/addFollow/${state.user.profileUsername}`, {
-          CancelToken: request.token,
-        });
-        profileDispatch({ type: 'addFollow', value: response.data });
+        const response = await Axios.post(
+          `/addFollow/${state.user.profileUsername}`,
+          { token: appState.user.token },
+          {
+            CancelToken: request.token,
+          }
+        );
+        profileDispatch({ type: 'addFollow' });
+        console.log(response.data);
       })();
 
       return () => request.cancel();
