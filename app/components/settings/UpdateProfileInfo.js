@@ -231,6 +231,7 @@ function ProfileInfoSettings({ history }) {
     return () => request.cancel();
   }, []);
 
+  // INITIAL SUBMIT
   function handleSubmit(e) {
     e.preventDefault();
 
@@ -243,54 +244,57 @@ function ProfileInfoSettings({ history }) {
     profileInfoDispatch({ type: 'submitForm' });
   }
 
+  // FINALLY SUBMIT
   useEffect(() => {
-    const request = Axios.CancelToken.source();
+    if (state.submitCount) {
+      const request = Axios.CancelToken.source();
+      appDispatch({ type: 'turnOff' }); // CLOSE FLASH MESSAGING MODAL IF OPENED
 
-    (async function saveUpdateProfileInfo() {
-      try {
-        if (state.submitCount) {
-          const userData = {
-            username: state.username.value,
-            firstName: state.firstName.value,
-            lastName: state.lastName.value,
-            email: state.email.value,
-            about: {
-              bio: state.bio.value,
-              city: state.city.value,
-              musicCategory: state.musicCategory.value,
-            },
-            userCreationDate: appState.user.userCreationDate,
-          };
+      (async function saveUpdateProfileInfo() {
+        try {
+          if (state.submitCount) {
+            const userData = {
+              username: state.username.value,
+              firstName: state.firstName.value,
+              lastName: state.lastName.value,
+              email: state.email.value,
+              about: {
+                bio: state.bio.value,
+                city: state.city.value,
+                musicCategory: state.musicCategory.value,
+              },
+              userCreationDate: appState.user.userCreationDate,
+            };
 
-          const response = await Axios.post('/saveUpdatedProfileInfo', {
-            userData,
-            token: appState.user.token,
-          });
-
-          if (response.data.token) {
-            // SUCCESS
-            userData.token = response.data.token;
-            appDispatch({ type: 'updateLocalStorage', value: userData });
-            // TURN OFF ANY FLASH ERROR MESSAGE
-            appDispatch({ type: 'turnOff' });
-            appDispatch({
-              type: 'flashMsgSuccess',
-              value: ['Updated successfully!'],
+            const response = await Axios.post('/saveUpdatedProfileInfo', {
+              userData,
+              token: appState.user.token,
             });
-          } else {
-            // TURN OFF ANY FLASH SUCCESS MESSAGE
-            appDispatch({ type: 'turnOff' });
-            // DISPLAY VALADATION ERRORS
-            appDispatch({ type: 'flashMsgError', value: response.data });
-          }
-        }
-      } catch (error) {
-        // NETWORK ERROR MOST LIKELY
-        console.log(error.message);
-      }
-    })();
 
-    return () => request.cancel();
+            if (response.data.token) {
+              // SUCCESS
+              userData.token = response.data.token;
+              appDispatch({ type: 'updateLocalStorage', value: userData });
+              // TURN OFF ANY FLASH ERROR MESSAGE
+              appDispatch({ type: 'turnOff' });
+              appDispatch({
+                type: 'flashMsgSuccess',
+                value: ['Updated successfully!'],
+              });
+            } else {
+              // TURN OFF ANY FLASH SUCCESS MESSAGE
+              appDispatch({ type: 'turnOff' });
+              // DISPLAY VALADATION ERRORS
+              appDispatch({ type: 'flashMsgError', value: response.data });
+            }
+          }
+        } catch (error) {
+          // NETWORK ERROR MOST LIKELY
+          console.log(error.message);
+        }
+      })();
+      return () => request.cancel();
+    }
   }, [state.submitCount]);
 
   if (state.isFetching) {
