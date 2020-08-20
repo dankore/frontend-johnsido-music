@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
 import StateContext from '../../contextsProviders/StateContext';
+import DispatchContext from '../../contextsProviders/DispatchContext';
 
 function FlashMsgSuccess() {
   const appState = useContext(StateContext);
+  const appDispatch = useContext(DispatchContext);
 
   return (
     <div className="absolute w-full z-1">
@@ -21,7 +23,12 @@ function FlashMsgSuccess() {
           <div className="mx-3">
             <div className="flex justify-between">
               <span className="text-green-500 font-semibold">Success</span>
-              <button className="text-green-500 font-semibold">X</button>
+              <button
+                onClick={() => appDispatch({ type: 'turnOff' })}
+                className="text-green-500 font-semibold"
+              >
+                X
+              </button>
             </div>
             {appState.flashMsgSuccess.value.map((success, index) => {
               return (
