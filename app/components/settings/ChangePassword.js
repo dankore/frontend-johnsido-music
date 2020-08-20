@@ -13,17 +13,17 @@ function ChangePassword() {
   const initialState = {
     currentPassword: {
       value: '',
-      hasError: '',
+      hasError: false,
       message: '',
     },
     newPassword: {
       value: '',
-      hasError: '',
+      hasError: false,
       message: '',
     },
     reEnteredNewPassword: {
       value: '',
-      hasError: '',
+      hasError: false,
       message: '',
     },
     submitCount: 0,
