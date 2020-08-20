@@ -13,17 +13,17 @@ function ChangePassword() {
   const initialState = {
     currentPassword: {
       value: '',
-      hasError: '',
+      hasError: false,
       message: '',
     },
     newPassword: {
       value: '',
-      hasError: '',
+      hasError: false,
       message: '',
     },
     reEnteredNewPassword: {
       value: '',
-      hasError: '',
+      hasError: false,
       message: '',
     },
     submitCount: 0,
@@ -132,8 +132,9 @@ function ChangePassword() {
 
   // SUBMIT FORM
   useEffect(() => {
-    const request = Axios.CancelToken.source();
     if (state.submitCount) {
+      const request = Axios.CancelToken.source();
+      appDispatch({ type: 'turnOff' }); // CLOSE FLASH MESSAGING MODAL IF OPENED
       try {
         (async function saveChangedPassword() {
           const response = await Axios.post(
@@ -164,8 +165,9 @@ function ChangePassword() {
       } catch (error) {
         console.log(error.message);
       }
+
+      return () => request.cancel();
     }
-    return () => request.cancel();
   }, [state.submitCount]);
 
   return (
