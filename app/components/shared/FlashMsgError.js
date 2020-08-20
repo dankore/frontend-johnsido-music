@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import DispatchContext from '../../contextsProviders/DispatchContext';
 
 function FlashMsgError({ errors }) {
+  const appDispatch = useContext(DispatchContext);
+
   return (
     <div className="absolute w-full z-1">
       <div className=" flex max-w-sm w-full mx-auto bg-white overflow-hidden border-b border-r border-red-500">
@@ -18,7 +21,12 @@ function FlashMsgError({ errors }) {
           <div className="mx-3">
             <div className="flex justify-between">
               <span className="text-red-500 font-semibold">Error</span>
-              <button className="text-red-500 font-semibold">X</button>
+              <button
+                onClick={() => appDispatch({ type: 'turnOff' })}
+                className="text-red-500 font-semibold"
+              >
+                X
+              </button>
             </div>
             {errors.map((error, index) => {
               return (
