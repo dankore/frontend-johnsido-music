@@ -56,9 +56,13 @@ function ProfilePage({ history }) {
     profileDispatch({ type: 'isFetchingStarts' });
 
     (async function getProfileInfo() {
-      const response = await Axios.post(`/profile/${state.username}`, {
-        CancelToken: request.token,
-      });
+      const response = await Axios.post(
+        `/profile/${state.username}`,
+        { token: appState.user.token },
+        {
+          CancelToken: request.token,
+        }
+      );
 
       profileDispatch({ type: 'isFetchingEnds' });
 
@@ -96,8 +100,8 @@ function ProfilePage({ history }) {
     return <LoadingDotsAnimation />;
   }
 
-  const background =
-    'https://res.cloudinary.com/my-nigerian-projects/image/upload/v1594992703/projects/rtysccgzrf3hsmgecdhd.jpg';
+  console.log(state);
+
   return (
     <Page title={`${state.user.profileFirstName} ${state.user.profileLastName}'s profile`}>
       <main className="profile-page">
@@ -139,8 +143,8 @@ function ProfilePage({ history }) {
                   <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                     <div className="relative">
                       <img
-                        alt="..."
-                        src={background}
+                        alt="Profile avatar"
+                        src={state.user.profileAvatar}
                         className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16"
                         style={{ maxWidth: '150px' }}
                       />
@@ -220,13 +224,6 @@ function ProfilePage({ history }) {
                       <p className="mb-4 text-lg leading-relaxed text-gray-800">
                         {state.user.profileAbout.bio}
                       </p>
-                      <a
-                        href="#pablo"
-                        className="font-normal text-pink-500"
-                        onClick={e => e.preventDefault()}
-                      >
-                        Show more
-                      </a>
                     </div>
                   </div>
                 </div>
