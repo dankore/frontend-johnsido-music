@@ -113,7 +113,7 @@ function ProfilePage({ history }) {
                 "url('https://images.unsplash.com/photo-1499336315816-097655dcfbda?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2710&q=80')",
             }}
           >
-            <span id="blackOverlay" className="w-full h-full absolute opacity-50 bg-black"></span>
+            <span className="w-full h-full absolute opacity-50 bg-black"></span>
           </div>
           <div
             className="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden"
@@ -154,7 +154,8 @@ function ProfilePage({ history }) {
                     <div className="py-6 px-3 mt-32 sm:mt-0">
                       {appState.loggedIn &&
                         appState.user.username != state.user.profileUsername &&
-                        !state.user.isFollowing && (
+                        !state.user.isFollowing &&
+                        state.user.profileUsername != '' && (
                           <button
                             className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1"
                             type="button"
@@ -162,6 +163,19 @@ function ProfilePage({ history }) {
                             onClick={() => profileDispatch({ type: 'startFollowing' })}
                           >
                             Follow
+                          </button>
+                        )}
+                      {appState.loggedIn &&
+                        appState.user.username != state.user.profileusername &&
+                        state.user.isFollowing &&
+                        state.user.profileusername != '' && (
+                          <button
+                            className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1"
+                            type="button"
+                            style={{ transition: 'all .15s ease' }}
+                            onClick={() => profileDispatch({ type: 'startFollowing' })}
+                          >
+                            Stop Following
                           </button>
                         )}
                     </div>
