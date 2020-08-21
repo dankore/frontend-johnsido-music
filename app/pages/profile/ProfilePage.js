@@ -20,6 +20,7 @@ function ProfilePage({ history }) {
       isFollowing: false,
       counts: {
         followerCount: 0,
+        followingCount: 0,
       },
     },
     username: useParams().username,
@@ -43,7 +44,7 @@ function ProfilePage({ history }) {
         return;
       case 'addFollow':
         draft.user.isFollowing = true;
-        // draft.user.counts.followerCount++;
+        draft.user.counts.followerCount++;
         return;
     }
   }
@@ -56,9 +57,13 @@ function ProfilePage({ history }) {
     profileDispatch({ type: 'isFetchingStarts' });
 
     (async function getProfileInfo() {
-      const response = await Axios.post(`/profile/${state.username}`, {
-        CancelToken: request.token,
-      });
+      const response = await Axios.post(
+        `/profile/${state.username}`,
+        { token: appState.user.token },
+        {
+          CancelToken: request.token,
+        }
+      );
 
       profileDispatch({ type: 'isFetchingEnds' });
 
@@ -77,7 +82,7 @@ function ProfilePage({ history }) {
       const request = Axios.CancelToken.source();
 
       (async function addFollow() {
-        const response = await Axios.post(
+        await Axios.post(
           `/addFollow/${state.user.profileUsername}`,
           { token: appState.user.token },
           {
@@ -85,7 +90,6 @@ function ProfilePage({ history }) {
           }
         );
         profileDispatch({ type: 'addFollow' });
-        console.log(response.data);
       })();
 
       return () => request.cancel();
@@ -96,8 +100,6 @@ function ProfilePage({ history }) {
     return <LoadingDotsAnimation />;
   }
 
-  const background =
-    'https://res.cloudinary.com/my-nigerian-projects/image/upload/v1594992703/projects/rtysccgzrf3hsmgecdhd.jpg';
   return (
     <Page title={`${state.user.profileFirstName} ${state.user.profileLastName}'s profile`}>
       <main className="profile-page">
@@ -109,7 +111,7 @@ function ProfilePage({ history }) {
                 "url('https://images.unsplash.com/photo-1499336315816-097655dcfbda?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2710&q=80')",
             }}
           >
-            <span id="blackOverlay" className="w-full h-full absolute opacity-50 bg-black"></span>
+            <span className="w-full h-full absolute opacity-50 bg-black"></span>
           </div>
           <div
             className="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden"
@@ -139,8 +141,8 @@ function ProfilePage({ history }) {
                   <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                     <div className="relative">
                       <img
-                        alt="..."
-                        src={background}
+                        alt="Profile avatar"
+                        src={state.user.profileAvatar}
                         className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16"
                         style={{ maxWidth: '150px' }}
                       />
@@ -150,7 +152,8 @@ function ProfilePage({ history }) {
                     <div className="py-6 px-3 mt-32 sm:mt-0">
                       {appState.loggedIn &&
                         appState.user.username != state.user.profileUsername &&
-                        !state.user.isFollowing && (
+                        !state.user.isFollowing &&
+                        state.user.profileUsername != '' && (
                           <button
                             className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1"
                             type="button"
@@ -160,13 +163,26 @@ function ProfilePage({ history }) {
                             Follow
                           </button>
                         )}
+                      {appState.loggedIn &&
+                        appState.user.username != state.user.profileusername &&
+                        state.user.isFollowing &&
+                        state.user.profileusername != '' && (
+                          <button
+                            className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1"
+                            type="button"
+                            style={{ transition: 'all .15s ease' }}
+                            onClick={() => profileDispatch({ type: 'startFollowing' })}
+                          >
+                            Stop Following
+                          </button>
+                        )}
                     </div>
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-1">
                     <div className="flex justify-center py-4 lg:pt-4 pt-8">
                       <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
-                          22
+                          {state.user.counts.followerCount}
                         </span>
                         <Link
                           to={`/profile/${state.user.profileUsername}/followers`}
@@ -177,7 +193,7 @@ function ProfilePage({ history }) {
                       </div>
                       <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
-                          10
+                          {state.user.counts.followingCount}
                         </span>
                         <Link
                           to={`/profile/${state.user.profileUsername}/following`}
@@ -220,13 +236,6 @@ function ProfilePage({ history }) {
                       <p className="mb-4 text-lg leading-relaxed text-gray-800">
                         {state.user.profileAbout.bio}
                       </p>
-                      <a
-                        href="#pablo"
-                        className="font-normal text-pink-500"
-                        onClick={e => e.preventDefault()}
-                      >
-                        Show more
-                      </a>
                     </div>
                   </div>
                 </div>
