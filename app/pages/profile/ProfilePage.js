@@ -20,6 +20,7 @@ function ProfilePage({ history }) {
       isFollowing: false,
       counts: {
         followerCount: 0,
+        followingCount: 0,
       },
     },
     username: useParams().username,
@@ -43,7 +44,7 @@ function ProfilePage({ history }) {
         return;
       case 'addFollow':
         draft.user.isFollowing = true;
-        // draft.user.counts.followerCount++;
+        draft.user.counts.followerCount++;
         return;
     }
   }
@@ -81,7 +82,7 @@ function ProfilePage({ history }) {
       const request = Axios.CancelToken.source();
 
       (async function addFollow() {
-        const response = await Axios.post(
+        await Axios.post(
           `/addFollow/${state.user.profileUsername}`,
           { token: appState.user.token },
           {
@@ -89,7 +90,6 @@ function ProfilePage({ history }) {
           }
         );
         profileDispatch({ type: 'addFollow' });
-        console.log(response.data);
       })();
 
       return () => request.cancel();
@@ -99,8 +99,6 @@ function ProfilePage({ history }) {
   if (state.isFetching) {
     return <LoadingDotsAnimation />;
   }
-
-  console.log(state);
 
   return (
     <Page title={`${state.user.profileFirstName} ${state.user.profileLastName}'s profile`}>
@@ -184,7 +182,7 @@ function ProfilePage({ history }) {
                     <div className="flex justify-center py-4 lg:pt-4 pt-8">
                       <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
-                          22
+                          {state.user.counts.followerCount}
                         </span>
                         <Link
                           to={`/profile/${state.user.profileUsername}/followers`}
@@ -195,7 +193,7 @@ function ProfilePage({ history }) {
                       </div>
                       <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
-                          10
+                          {state.user.counts.followingCount}
                         </span>
                         <Link
                           to={`/profile/${state.user.profileUsername}/following`}
