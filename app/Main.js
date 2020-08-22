@@ -150,7 +150,7 @@ function Main() {
             <Route exact path="/">
               <LandingPage />
             </Route>
-            <Route path="/profile/:username">
+            <Route exact path="/profile/:username">
               <ProfilePage />
             </Route>
             <Route path="/register">
