@@ -478,6 +478,7 @@ function ProfileInfoSettings({ history }) {
                 <textarea
                   placeholder="About you"
                   value={state.bio.value}
+                  rows="5"
                   onChange={e =>
                     profileInfoDispatch({ type: 'bioImmediately', value: e.target.value })
                   }

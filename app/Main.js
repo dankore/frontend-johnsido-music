@@ -136,7 +136,7 @@ function Main() {
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
         <BrowserRouter>
-          <Route path={['/profile/:username', '/settings']}>
+          <Route path={['/profile/:username', '/settings', '/upload-song']}>
             <Header />
             {state.flashMsgErrors.isDisplay && (
               <FlashMsgError errors={state.flashMsgErrors.value} />
