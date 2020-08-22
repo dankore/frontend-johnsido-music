@@ -38,7 +38,7 @@ function HeaderLoggedIn() {
               </svg>
             </button>
           </div>
-          <div className="flex items-center justify-center ">
+          <div className="flex items-center justify-center">
             <div className="flex-shrink-0 ml-10">
               <Link to="/">
                 <img
