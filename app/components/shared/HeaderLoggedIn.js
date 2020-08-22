@@ -39,8 +39,8 @@ function HeaderLoggedIn() {
               </svg>
             </button>
           </div>
-          <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-            <div className="flex-shrink-0">
+          <div className="flex items-center justify-center">
+            <div className="flex-shrink-0 ml-10">
               <Link to="/">
                 <img
                   className="block lg:hidden h-10 w-auto"
@@ -56,18 +56,18 @@ function HeaderLoggedIn() {
             </div>
             <div className="hidden sm:block sm:ml-6">
               <div className="flex">
-                <a
-                  href="#"
+                <Link
+                  to="my-songs"
                   className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
                 >
                   My Songs
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  to="/explore"
                   className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
                 >
-                  Other Artists Songs
-                </a>
+                  Explore Other Artistes Songs
+                </Link>
               </div>
             </div>
           </div>
