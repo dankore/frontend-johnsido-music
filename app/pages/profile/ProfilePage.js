@@ -26,6 +26,7 @@ function ProfilePage({ history }) {
     username: useParams().username,
     isFetching: false,
     startFollowingCount: 0,
+    stopFollowingCount: 0,
   };
 
   function profileReducer(draft, action) {
@@ -42,9 +43,16 @@ function ProfilePage({ history }) {
       case 'startFollowing':
         draft.startFollowingCount++;
         return;
+      case 'stopFollowing':
+        draft.stopFollowingCount++;
+        return;
       case 'addFollow':
         draft.user.isFollowing = true;
         draft.user.counts.followerCount++;
+        return;
+      case 'removeFollow':
+        draft.user.isFollowing = false;
+        draft.user.counts.followerCount--;
         return;
     }
   }
@@ -55,24 +63,28 @@ function ProfilePage({ history }) {
   useEffect(() => {
     const request = Axios.CancelToken.source();
     profileDispatch({ type: 'isFetchingStarts' });
+    try {
+      (async function getProfileInfo() {
+        const response = await Axios.post(
+          `/profile/${state.username}`,
+          { token: appState.user.token },
+          {
+            CancelToken: request.token,
+          }
+        );
 
-    (async function getProfileInfo() {
-      const response = await Axios.post(
-        `/profile/${state.username}`,
-        { token: appState.user.token },
-        {
-          CancelToken: request.token,
+        profileDispatch({ type: 'isFetchingEnds' });
+
+        if (response.data) {
+          profileDispatch({ type: 'addProfileUserInfo', value: response.data });
+        } else {
+          history.push('/404');
         }
-      );
-
-      profileDispatch({ type: 'isFetchingEnds' });
-
-      if (response.data) {
-        profileDispatch({ type: 'addProfileUserInfo', value: response.data });
-      } else {
-        history.push('/404');
-      }
-    })();
+      })();
+    } catch (error) {
+      // FAIL SILENTLY
+      console.log(error);
+    }
     return () => request.cancel();
   }, [state.username]);
 
@@ -81,20 +93,49 @@ function ProfilePage({ history }) {
     if (state.startFollowingCount) {
       const request = Axios.CancelToken.source();
 
-      (async function addFollow() {
-        await Axios.post(
-          `/addFollow/${state.user.profileUsername}`,
-          { token: appState.user.token },
-          {
-            CancelToken: request.token,
-          }
-        );
-        profileDispatch({ type: 'addFollow' });
-      })();
+      try {
+        (async function addFollow() {
+          await Axios.post(
+            `/addFollow/${state.user.profileUsername}`,
+            { token: appState.user.token },
+            {
+              CancelToken: request.token,
+            }
+          );
+          profileDispatch({ type: 'addFollow' });
+        })();
+      } catch (error) {
+        // FAIL SILENTLY
+        console.log(error);
+      }
 
       return () => request.cancel();
     }
   }, [state.startFollowingCount]);
+
+  // REMOVE FOLLOW
+  useEffect(() => {
+    if (state.stopFollowingCount) {
+      const request = Axios.CancelToken.source();
+
+      (async function stopFollowing() {
+        try {
+          await Axios.post(
+            `/stopFollowing/${state.user.profileUsername}`,
+            { token: appState.user.token },
+            { cancelToken: request.token }
+          );
+
+          profileDispatch({ type: 'removeFollow' });
+        } catch (error) {
+          // FAIL SILENTLY
+          console.log(error);
+        }
+      })();
+
+      return () => request.cancel();
+    }
+  }, [state.stopFollowingCount]);
 
   if (state.isFetching) {
     return <LoadingDotsAnimation />;
@@ -148,6 +189,7 @@ function ProfilePage({ history }) {
                       />
                     </div>
                   </div>
+                  {/* FOLLOW BUTTON */}
                   <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
                     <div className="flex justify-center lg:justify-end py-6 px-3 mt-32 sm:mt-0">
                       {appState.loggedIn &&
