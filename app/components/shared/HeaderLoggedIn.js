@@ -1,11 +1,19 @@
 import React, { useContext } from 'react';
 import StateContext from '../../contextsProviders/StateContext';
 import DispatchContext from '../../contextsProviders/DispatchContext';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-function HeaderLoggedIn() {
+function HeaderLoggedIn({ history }) {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
+
+  function handleLogout() {
+    appDispatch({ type: 'logout' });
+    appDispatch({ type: 'turnOff' });
+    history.push('/');
+  }
+
   return (
     <nav className="bg-gray-700">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
@@ -43,12 +51,12 @@ function HeaderLoggedIn() {
             <div className="flex-shrink-0 ml-10">
               <Link to="/">
                 <img
-                  className="block lg:hidden h-10 w-auto"
+                  className="block lg:hidden h-12 w-auto"
                   src={appState.logo.url}
                   alt={appState.logo.alt}
                 />
                 <img
-                  className="hidden lg:block h-10 w-auto"
+                  className="hidden lg:block h-12 w-auto"
                   src={appState.logo.url}
                   alt={appState.logo.alt}
                 />
@@ -127,7 +135,7 @@ function HeaderLoggedIn() {
                       Settings
                     </Link>
                     <button
-                      onClick={() => appDispatch({ type: 'logout' })}
+                      onClick={handleLogout}
                       className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
                       role="menuitem"
                     >
@@ -161,4 +169,8 @@ function HeaderLoggedIn() {
   );
 }
 
-export default HeaderLoggedIn;
+HeaderLoggedIn.propTypes = {
+  history: PropTypes.object,
+};
+
+export default withRouter(HeaderLoggedIn);

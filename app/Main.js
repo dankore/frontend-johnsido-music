@@ -20,6 +20,8 @@ import SettingsPage from './pages/settings/SettingsPage';
 import LandingPage from './pages/LandingPage';
 import FlashMsgError from './components/shared/FlashMsgError';
 import FlashMsgSuccess from './components/shared/FlashMsgSuccess';
+import AboutPage from './pages/AboutPage';
+import Comments from './components/profile/Comments';
 
 function Main() {
   const initialState = {
@@ -136,7 +138,7 @@ function Main() {
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
         <BrowserRouter>
-          <Route path={['/profile/:username', '/settings', '/upload-song']}>
+          <Route path={['/profile/:username', '/settings', '/upload-song', '/about']}>
             <Header />
             {state.flashMsgErrors.isDisplay && (
               <FlashMsgError errors={state.flashMsgErrors.value} />
@@ -153,11 +155,17 @@ function Main() {
             <Route exact path="/profile/:username">
               <ProfilePage />
             </Route>
+            <Route exact path="/profile/:username/comments">
+              <Comments />
+            </Route>
             <Route path="/register">
               <Register />
             </Route>
             <Route path="/login">
               <Login />
+            </Route>
+            <Route path="/about">
+              <AboutPage />
             </Route>
             <Route path="/settings">
               {state.loggedIn ? (
