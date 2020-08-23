@@ -5,14 +5,20 @@ import Page from '../layouts/Page';
 function Comments() {
   const { username } = useParams();
   console.log(username);
+  const commentsArray = [1, 2, 3, 4];
 
   return (
     <Page title="Comments">
-      <div className="max-w-4xl mx-auto grid grid-cols-2">
+      <h1>{username}</h1>
+      <div className="w-full sm:max-w-md lg:max-w-4xl mx-auto grid lg:grid-cols-2">
         <div>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit quas assumenda laboriosam?
-          Autem labore repudiandae officiis doloribus ducimus, distinctio tempora illo debitis ea
-          sed omnis sequi eaque nemo voluptas iste?
+          {commentsArray.map((comment, index) => {
+            return (
+              <div key={index} className="mb-3 border p-3 bg-gray-200">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit quas assumenda
+              </div>
+            );
+          })}
         </div>
         <div>
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iusto autem quidem hic illum
