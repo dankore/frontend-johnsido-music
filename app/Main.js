@@ -21,6 +21,7 @@ import LandingPage from './pages/LandingPage';
 import FlashMsgError from './components/shared/FlashMsgError';
 import FlashMsgSuccess from './components/shared/FlashMsgSuccess';
 import AboutPage from './pages/AboutPage';
+import Comments from './components/profile/Comments';
 
 function Main() {
   const initialState = {
@@ -153,6 +154,9 @@ function Main() {
             </Route>
             <Route exact path="/profile/:username">
               <ProfilePage />
+            </Route>
+            <Route exact path="/profile/:username/comments">
+              <Comments />
             </Route>
             <Route path="/register">
               <Register />
