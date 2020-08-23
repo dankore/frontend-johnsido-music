@@ -10,6 +10,7 @@ function HeaderLoggedIn({ history }) {
 
   function handleLogout() {
     appDispatch({ type: 'logout' });
+    appDispatch({ type: 'turnOff' });
     history.push('/');
   }
 

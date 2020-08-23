@@ -7,6 +7,11 @@ function LandingPage() {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
 
+  function handleLogout() {
+    appDispatch({ type: 'logout' });
+    appDispatch({ type: 'turnOff' });
+  }
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-gray-900 lg:bg-gray-300">
       <div
@@ -91,7 +96,7 @@ function LandingPage() {
                                 About
                               </Link>
                               <button
-                                onClick={() => appDispatch({ type: 'logout' })}
+                                onClick={handleLogout}
                                 className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
                                 role="menuitem"
                               >
