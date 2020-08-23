@@ -223,36 +223,47 @@ function ProfilePage({ history }) {
                   <div className="w-full lg:w-4/12 px-4 lg:order-1">
                     <div className="flex justify-center py-4 lg:pt-4 pt-8">
                       <div className="mr-4 p-3 text-center">
-                        <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
-                          {state.user.counts.followerCount}
-                        </span>
                         <Link
                           to={`/profile/${state.user.profileUsername}/followers`}
                           className="text-sm text-gray-500"
                         >
+                          <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
+                            {state.user.counts.followerCount}
+                          </span>
                           {state.user.counts.followerCount > 1 ? 'Followers' : 'Follower'}
                         </Link>
                       </div>
                       <div className="mr-4 p-3 text-center">
-                        <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
-                          {state.user.counts.followingCount}
-                        </span>
                         <Link
                           to={`/profile/${state.user.profileUsername}/following`}
                           className="text-sm text-gray-500"
                         >
+                          <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
+                            {state.user.counts.followingCount}
+                          </span>
                           Following
                         </Link>
                       </div>
                       <div className="lg:mr-4 p-3 text-center">
-                        <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
-                          89
-                        </span>
                         <Link
                           to={`/profile/${state.user.profileUsername}/songs`}
                           className="text-sm text-gray-500"
                         >
+                          <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
+                            89
+                          </span>
                           Songs
+                        </Link>
+                      </div>
+                      <div className="lg:mr-4 p-3 text-center">
+                        <Link
+                          to={`/profile/${state.user.profileUsername}/comments`}
+                          className="text-sm text-gray-500"
+                        >
+                          <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
+                            8
+                          </span>
+                          Comments
                         </Link>
                       </div>
                     </div>

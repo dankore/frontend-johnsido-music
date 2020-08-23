@@ -89,7 +89,7 @@ function LandingPage() {
                                 <p>Your Profile</p>
                               </Link>
                               <Link
-                                to="/settings"
+                                to="/about"
                                 className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
                                 role="menuitem"
                               >
@@ -158,13 +158,13 @@ function LandingPage() {
             </p>
             <div className="mt-6 sm:flex sm:mt-8 xl:mt-12">
               <Link
-                to="/components"
+                to="/my-songs"
                 className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border border-transparent text-base leading-6 font-semibold rounded-md text-gray-900 bg-white shadow-sm hover:text-gray-600 focus:outline-none focus:text-gray-600 transition ease-in-out duration-150 xl:text-lg xl:py-4"
               >
                 Listen to my music
               </Link>
               <Link
-                to="/pricing"
+                to="/explore"
                 className="mt-4 sm:ml-4 sm:mt-0 w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border border-transparent text-base leading-6 font-semibold rounded-md text-white bg-gray-800 shadow-sm hover:bg-gray-700 focus:outline-none focus:bg-gray-700 transition ease-in-out duration-150 xl:text-lg xl:py-4"
               >
                 Explore music from others →

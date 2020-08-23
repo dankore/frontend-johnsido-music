@@ -21,7 +21,7 @@ function AboutPage() {
         <div>
           <img
             src="https://res.cloudinary.com/my-nigerian-projects/image/upload/w_400/v1598170089/Others/john/john-nobg_rusr9o.png"
-            alt="John"
+            alt="John's photo"
           />
         </div>
       </div>
