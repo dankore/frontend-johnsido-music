@@ -59,6 +59,8 @@ function ProfilePage({ history }) {
 
   const [state, profileDispatch] = useImmerReducer(profileReducer, initialState);
 
+  console.log(state.user.profileId);
+
   // FETCH PROFILE DATA
   useEffect(() => {
     const request = Axios.CancelToken.source();
@@ -257,7 +259,13 @@ function ProfilePage({ history }) {
                       </div>
                       <div className="lg:mr-4 p-3 text-center">
                         <Link
-                          to={`/profile/${state.user.profileUsername}/comments`}
+                          to={{
+                            pathname: `/profile/${state.user.profileUsername}/comments`,
+                            data: {
+                              userId: state.user.profileId,
+                            },
+                          }}
+                          // to={`/profile/${state.user.profileUsername}/comments`}
                           className="text-sm text-gray-500"
                         >
                           <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">

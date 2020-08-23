@@ -1,18 +1,11 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, withRouter } from 'react-router-dom';
 import Page from '../layouts/Page';
 import { useImmerReducer } from 'use-immer';
 import Axios from 'axios';
+import PropTypes from 'prop-types';
 
-// {
-//     _id: 5f425cc5219744b8730a4200,
-//     comment: 'first comment',
-//     author: {
-//       username: 'dankore3',
-//       firstName: 'Chantel',
-//       lastName: 'Boldon',
-//       avatar: 'https://res.cloudinary.com/my-nigerian-projects/image/upload/f_auto,q_auto/v1597076721/Others/john/default-avatar.jpg'    }
-function Comments() {
+function Comments({ history }) {
   const initialState = {
     username: useParams().username,
     comments: [],
@@ -27,15 +20,21 @@ function Comments() {
   }
 
   const [state, commentsDispatch] = useImmerReducer(commentsReducer, initialState);
+  console.log({ history });
 
   // FETCH COMMENTS
   useEffect(() => {
     const request = Axios.CancelToken.source();
     try {
       (async function fetchComments() {
-        const response = await Axios.post(`/profile/${state.username}/comments`, {
-          CancelToken: request.token,
-        });
+        // GET _ID OF USER TO FETCH COMMENTS
+        const response = await Axios.post(
+          `/profile/${state.username}/comments`,
+          { userId: history.location?.data?.userId },
+          {
+            CancelToken: request.token,
+          }
+        );
 
         commentsDispatch({ type: 'fetchComments', value: response.data });
       })();
@@ -45,8 +44,6 @@ function Comments() {
     }
     return () => request.cancel();
   }, []);
-
-  console.log(state.comments);
 
   return (
     <Page title="Comments">
@@ -74,4 +71,8 @@ function Comments() {
   );
 }
 
-export default Comments;
+Comments.propTypes = {
+  history: PropTypes.object,
+};
+
+export default withRouter(Comments);
