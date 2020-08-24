@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, withRouter } from 'react-router-dom';
 import Page from '../layouts/Page';
 import { useImmerReducer } from 'use-immer';
 import Axios from 'axios';
@@ -7,8 +7,9 @@ import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 import { CSSTransition } from 'react-transition-group';
 import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
 import StateContext from '../../contextsProviders/StateContext';
+import PropTypes from 'prop-types';
 
-function Comments() {
+function Comments({ history }) {
   const appState = useContext(StateContext);
   const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: -1.57 + 'rem' };
   const initialState = {
@@ -67,9 +68,17 @@ function Comments() {
 
         commentsDispatch({ type: 'fetchEnds' });
 
+        console.log(response.data);
+
         // RESPONSE.DATA RETURNS A FALSE OR AN ARRAY
-        if (response.data) {
+        if (Array.isArray(response.data)) {
           commentsDispatch({ type: 'fetchComments', value: response.data });
+        } else if (typeof response.data == 'object') {
+          // NETWORK PROBLEMS TO DB. RETURNS AND OBJECT
+          console.log('BD NOT RETURNING ANYTHING');
+        } else {
+          // RETURNS FALSE
+          history.push('/404');
         }
       })();
     } catch (error) {
@@ -161,4 +170,8 @@ function Comments() {
   );
 }
 
-export default Comments;
+Comments.propTypes = {
+  history: PropTypes.object,
+};
+
+export default withRouter(Comments);
