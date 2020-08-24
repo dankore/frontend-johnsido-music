@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
-import { useParams, withRouter } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Page from '../layouts/Page';
 import { useImmerReducer } from 'use-immer';
 import Axios from 'axios';
-import PropTypes from 'prop-types';
 
-function Comments({ history }) {
+function Comments() {
   const initialState = {
     username: useParams().username,
     comments: [],
@@ -20,7 +19,6 @@ function Comments({ history }) {
   }
 
   const [state, commentsDispatch] = useImmerReducer(commentsReducer, initialState);
-  console.log({ history });
 
   // FETCH COMMENTS
   useEffect(() => {
@@ -28,15 +26,14 @@ function Comments({ history }) {
     try {
       (async function fetchComments() {
         // GET _ID OF USER TO FETCH COMMENTS
-        const response = await Axios.post(
-          `/profile/${state.username}/comments`,
-          { userId: history.location?.data?.userId },
-          {
-            CancelToken: request.token,
-          }
-        );
+        const response = await Axios.post(`/profile/${state.username}/comments`, {
+          CancelToken: request.token,
+        });
 
-        commentsDispatch({ type: 'fetchComments', value: response.data });
+        // RESPONSE.DATA RETURNS A FALSE OR AN ARRAY
+        if (response.data) {
+          commentsDispatch({ type: 'fetchComments', value: response.data });
+        }
       })();
     } catch (error) {
       // FAIL SILENTLY
@@ -71,8 +68,4 @@ function Comments({ history }) {
   );
 }
 
-Comments.propTypes = {
-  history: PropTypes.object,
-};
-
-export default withRouter(Comments);
+export default Comments;
