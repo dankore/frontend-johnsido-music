@@ -22,6 +22,7 @@ function Comments({ history }) {
     },
     isFetching: false,
     sendCount: 0,
+    re_render_on_comment_add: 0,
   };
 
   function commentsReducer(draft, action) {
@@ -44,6 +45,9 @@ function Comments({ history }) {
         return;
       case 'fetchEnds':
         draft.isFetching = false;
+        return;
+      case 're_render_on_comment_add':
+        draft.re_render_on_comment_add++;
         return;
       case 'sendCommentForm':
         if (!draft.comment.hasError) {
@@ -68,8 +72,6 @@ function Comments({ history }) {
 
         commentsDispatch({ type: 'fetchEnds' });
 
-        console.log(response.data);
-
         // RESPONSE.DATA RETURNS A FALSE OR AN ARRAY
         if (Array.isArray(response.data)) {
           commentsDispatch({ type: 'fetchComments', value: response.data });
@@ -86,7 +88,7 @@ function Comments({ history }) {
       console.log(error);
     }
     return () => request.cancel();
-  }, []);
+  }, [state.re_render_on_comment_add]);
 
   // SUBMIT COMMENT
   useEffect(() => {
@@ -105,7 +107,9 @@ function Comments({ history }) {
             { cancelToken: request.token }
           );
 
-          console.log({ response });
+          console.log(response.data);
+
+          commentsDispatch({ type: 're_render_on_comment_add' });
         } catch (error) {
           // FAIL SILENTLY
           console.log(error);
