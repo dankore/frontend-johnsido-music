@@ -21,6 +21,7 @@ function ProfilePage({ history }) {
       counts: {
         followerCount: 0,
         followingCount: 0,
+        commentsCount: 0,
       },
     },
     username: useParams().username,
@@ -261,7 +262,7 @@ function ProfilePage({ history }) {
                           className="text-sm text-gray-500"
                         >
                           <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
-                            8
+                            {state.user.counts.commentsCount}
                           </span>
                           Comments
                         </Link>
