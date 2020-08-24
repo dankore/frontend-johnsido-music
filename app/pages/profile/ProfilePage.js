@@ -21,6 +21,7 @@ function ProfilePage({ history }) {
       counts: {
         followerCount: 0,
         followingCount: 0,
+        commentsCount: 0,
       },
     },
     username: useParams().username,
@@ -58,8 +59,6 @@ function ProfilePage({ history }) {
   }
 
   const [state, profileDispatch] = useImmerReducer(profileReducer, initialState);
-
-  console.log(state.user.profileId);
 
   // FETCH PROFILE DATA
   useEffect(() => {
@@ -259,17 +258,11 @@ function ProfilePage({ history }) {
                       </div>
                       <div className="lg:mr-4 p-3 text-center">
                         <Link
-                          to={{
-                            pathname: `/profile/${state.user.profileUsername}/comments`,
-                            data: {
-                              userId: state.user.profileId,
-                            },
-                          }}
-                          // to={`/profile/${state.user.profileUsername}/comments`}
+                          to={`/profile/${state.user.profileUsername}/comments`}
                           className="text-sm text-gray-500"
                         >
                           <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
-                            8
+                            {state.user.counts.commentsCount}
                           </span>
                           Comments
                         </Link>
