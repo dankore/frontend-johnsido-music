@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import Page from '../layouts/Page';
 import { useImmerReducer } from 'use-immer';
@@ -6,18 +6,21 @@ import Axios from 'axios';
 import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 import { CSSTransition } from 'react-transition-group';
 import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
+import StateContext from '../../contextsProviders/StateContext';
 
 function Comments() {
+  const appState = useContext(StateContext);
   const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: -1.57 + 'rem' };
   const initialState = {
     username: useParams().username,
     comments: [],
     comment: {
       value: '',
-      hasError: '',
+      hasError: false,
       message: '',
     },
     isFetching: false,
+    sendCount: 0,
   };
 
   function commentsReducer(draft, action) {
@@ -40,6 +43,11 @@ function Comments() {
         return;
       case 'fetchEnds':
         draft.isFetching = false;
+        return;
+      case 'sendCommentForm':
+        if (!draft.comment.hasError) {
+          draft.sendCount++;
+        }
         return;
     }
   }
@@ -71,9 +79,38 @@ function Comments() {
     return () => request.cancel();
   }, []);
 
+  // SUBMIT COMMENT
+  useEffect(() => {
+    if (state.sendCount) {
+      const request = Axios.CancelToken.source();
+      (async function sendFrom() {
+        try {
+          const response = await Axios.post(
+            '/addComment',
+            {
+              author: appState.user._id,
+              comment: state.comment.value,
+              profileOwner: state.username, // USE THIS TO GET THE ID ON THE SERVER
+              token: appState.user.token,
+            },
+            { cancelToken: request.token }
+          );
+
+          console.log({ response });
+        } catch (error) {
+          // FAIL SILENTLY
+          console.log(error);
+        }
+      })();
+
+      return () => request.cancel();
+    }
+  }, [state.sendCount]);
+
   function handleSubmit(e) {
     e.preventDefault();
     commentsDispatch({ type: 'checkCommentFieldForErrors', value: state.comment.value });
+    commentsDispatch({ type: 'sendCommentForm' });
   }
 
   if (state.isFetching) {
