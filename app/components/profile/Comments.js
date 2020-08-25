@@ -21,15 +21,31 @@ function Comments({ history }) {
       hasError: false,
       message: '',
     },
+    user: {
+      profileUsername: '',
+      profileFirstName: '',
+      profileLastName: '',
+      profileAvatar: '',
+      profileEmail: '',
+      profileAbout: { bio: '', musicCategory: '', city: '' },
+      isFollowing: false,
+      counts: {
+        followerCount: 0,
+        followingCount: 0,
+        commentsCount: 0,
+      },
+    },
     isFetching: false,
     sendCount: 0,
-    re_render_on_comment_add: 0,
   };
 
   function commentsReducer(draft, action) {
     switch (action.type) {
       case 'fetchComments':
         draft.comments = action.value;
+        return;
+      case 'addProfileUserInfo':
+        draft.user = action.value;
         return;
       case 'updateComment':
         draft.comment.hasError = false;
@@ -46,9 +62,6 @@ function Comments({ history }) {
         return;
       case 'fetchEnds':
         draft.isFetching = false;
-        return;
-      case 're_render_on_comment_add':
-        draft.re_render_on_comment_add++;
         return;
       case 'addNewComment':
         draft.comments.unshift(action.value);
@@ -69,6 +82,30 @@ function Comments({ history }) {
   }
 
   const [state, commentsDispatch] = useImmerReducer(commentsReducer, initialState);
+
+  // FETCH PROFILE INFO
+  useEffect(() => {
+    const request = Axios.CancelToken.source();
+    commentsDispatch({ type: 'fetchStart' });
+    try {
+      (async function fetchProfileData() {
+        const response = await Axios.post(`/profile/${state.username}`, {
+          cancelToken: request.token,
+        });
+
+        commentsDispatch({ type: 'fetchEnds' });
+
+        if (response.data) {
+          commentsDispatch({ type: 'addProfileUserInfo', value: response.data });
+        } else {
+          history.push('/404');
+        }
+      })();
+    } catch (error) {
+      console.log(error);
+    }
+    return () => request.cancel();
+  }, [state.username]);
 
   // FETCH COMMENTS
   useEffect(() => {
@@ -99,7 +136,7 @@ function Comments({ history }) {
       console.log(error);
     }
     return () => request.cancel();
-  }, [state.re_render_on_comment_add]);
+  }, []);
 
   // SUBMIT COMMENT
   useEffect(() => {
@@ -173,11 +210,16 @@ function Comments({ history }) {
 
   return (
     <Page title="Comments">
-      <h1>{state.username}</h1>
+      <div className="w-full sm:max-w-md lg:max-w-4xl mx-auto bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+        <h1>
+          {state.user.profileFirstName} {state.user.profileLastName}
+        </h1>
+        <p className="-mt-4">{state.user.profileAbout.musicCategory}</p>
+      </div>
       <div className="w-full sm:max-w-md lg:max-w-4xl mx-auto grid lg:grid-cols-2">
         <div className="lg:pl-3">
           <form onSubmit={handleSubmit}>
-            <h3>Add a Comment</h3>
+            <h2 className="text-xl mb-3">Add a Comment</h2>
             <div className="relative flex p-2 border">
               <div className="mr-1">
                 <Link to={`/profile/${appState.user.username}`}>
@@ -188,12 +230,12 @@ function Comments({ history }) {
                   />
                 </Link>
               </div>
-              <div style={{ width: 15 + 'rem' }}>
+              <div className="w-full">
                 <textarea
                   value={state.comment.value}
                   onChange={e => commentsDispatch({ type: 'updateComment', value: e.target.value })}
                   id="input-comment"
-                  className="focus:bg-gray-100 w-full rounded p-2"
+                  className="focus:bg-gray-100 w-full p-2"
                   placeholder="What's on your mind?"
                   style={{ backgroundColor: '#F2F3F5', whiteSpace: 'pre-wrap', overflow: 'hidden' }}
                 ></textarea>
@@ -207,10 +249,7 @@ function Comments({ history }) {
                     {state.comment.message}
                   </div>
                 </CSSTransition>
-                <button
-                  id="add-comment-button"
-                  className="rounded bg-blue-600 hover:bg-blue-800 text-white w-full"
-                >
+                <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
                   Submit
                 </button>
               </div>
@@ -229,7 +268,7 @@ function Comments({ history }) {
             {state.comments.map((comment, index) => {
               return (
                 <ul key={index} className="mb-3 border bg-white">
-                  <li id="li-comment" className="my-2 p-2 rounded">
+                  <li id="li-comment" className="my-2 p-2">
                     <div className="flex">
                       <div className="flex mr-1">
                         <Link to={`/profile/${comment.author.username}`}>
@@ -241,11 +280,10 @@ function Comments({ history }) {
                         </Link>
                       </div>
                       <div
-                        className="rounded px-2"
+                        className="w-full px-2"
                         style={{
                           overflowWrap: 'break-word',
                           minWidth: 0 + 'px',
-                          width: 15 + 'rem',
                           backgroundColor: '#F2F3F5',
                         }}
                       >
