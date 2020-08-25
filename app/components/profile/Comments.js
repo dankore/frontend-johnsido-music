@@ -56,7 +56,10 @@ function Comments({ history }) {
         draft.comment.value = '';
         return;
       case 'deleteComment':
-        draft.comments.splice(action.value._id, 1);
+        draft.comments.splice(
+          draft.comments.map(item => item.action.value._id).indexOf(action.value._id),
+          1
+        );
         return;
       case 'sendCommentForm':
         if (!draft.comment.hasError) {
@@ -138,20 +141,24 @@ function Comments({ history }) {
     const confirm = window.confirm('Are you sure?');
 
     if (confirm) {
-      const request = Axios.CancelToken.source();
-      const commentId = e.target.getAttribute('data-id');
-      const response = await Axios.post(
-        '/delete-comment',
-        { commentId, token: appState.user.token },
-        { cancelToken: request.token }
-      );
+      try {
+        const request = Axios.CancelToken.source();
+        const commentId = e.target.getAttribute('data-id');
+        const response = await Axios.post(
+          '/delete-comment',
+          { commentId, apiUser: appState.user.username, token: appState.user.token },
+          { cancelToken: request.token }
+        );
 
-      console.log(response.data);
-      if (response.data == 'Success') {
-        commentsDispatch({ type: 'deleteComment', value: { _id: commentId } });
-      } else {
-        // DELETE FAILED
-        console.log(response.data);
+        if (response.data == 'Success') {
+          commentsDispatch({ type: 'deleteComment', value: { _id: commentId } });
+        } else {
+          // DELETE FAILED
+          console.log(response.data);
+        }
+      } catch (error) {
+        // NETWORK ERROR
+        console.log(error);
       }
     }
   }
@@ -254,23 +261,25 @@ function Comments({ history }) {
                     </div>
                     <div className="flex justify-between items-center mt-2 text-xs">
                       <p>{comment.createdDate}</p>
-                      <div className="flex">
-                        <input
-                          type="button"
-                          value="Edit"
-                          id="edit-comment-button"
-                          className="flex bg-white items-center cursor-pointer"
-                        />
+                      {appState.loggedIn && appState.user.username == comment.author.username && (
+                        <div className="flex">
+                          <input
+                            type="button"
+                            value="Edit"
+                            id="edit-comment-button"
+                            className="flex bg-white items-center cursor-pointer"
+                          />
 
-                        <input
-                          onClick={handleDelete}
-                          type="button"
-                          value="Delete"
-                          id="delete-comment-button"
-                          data-id={`${comment._id}`}
-                          className="flex items-center text-red-600 bg-white cursor-pointer ml-3"
-                        />
-                      </div>
+                          <input
+                            onClick={handleDelete}
+                            type="button"
+                            value="Delete"
+                            id="delete-comment-button"
+                            data-id={`${comment._id}`}
+                            className="flex items-center text-red-600 bg-white cursor-pointer ml-3"
+                          />
+                        </div>
+                      )}
                     </div>
                   </li>
                 </ul>
