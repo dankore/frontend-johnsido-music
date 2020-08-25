@@ -49,6 +49,9 @@ function Comments({ history }) {
       case 're_render_on_comment_add':
         draft.re_render_on_comment_add++;
         return;
+      case 'addNewComment':
+        draft.comments.push(action.value);
+        return;
       case 'sendCommentForm':
         if (!draft.comment.hasError) {
           draft.sendCount++;
@@ -107,9 +110,7 @@ function Comments({ history }) {
             { cancelToken: request.token }
           );
 
-          console.log(response.data);
-
-          commentsDispatch({ type: 're_render_on_comment_add' });
+          commentsDispatch({ type: 'addNewComment', value: response.data });
         } catch (error) {
           // FAIL SILENTLY
           console.log(error);
