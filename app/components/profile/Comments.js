@@ -50,7 +50,7 @@ function Comments({ history }) {
         draft.re_render_on_comment_add++;
         return;
       case 'addNewComment':
-        draft.comments.push(action.value);
+        draft.comments.unshift(action.value);
         // CLEAR INPUT FIELD
         draft.comment.value = '';
         return;
@@ -142,67 +142,76 @@ function Comments({ history }) {
     <Page title="Comments">
       <h1>{state.username}</h1>
       <div className="w-full sm:max-w-md lg:max-w-4xl mx-auto grid lg:grid-cols-2">
-        <div>
-          {state.comments.map((comment, index) => {
-            return (
-              <ul key={index} className="mb-3 border bg-white">
-                <li id="li-comment" className="my-2 p-2 rounded">
-                  <div className="flex">
-                    <div className="flex mr-1">
-                      <Link to={`/profile/${comment.author.username}`}>
-                        <img
-                          src={comment.author.avatar}
-                          className="w-8 h-8 rounded-full"
-                          alt="profile pic"
-                        />
-                      </Link>
-                    </div>
-                    <div
-                      className="rounded px-2"
-                      style={{
-                        overflowWrap: 'break-word',
-                        minWidth: 0 + 'px',
-                        width: 15 + 'rem',
-                        backgroundColor: '#F2F3F5',
-                      }}
-                    >
-                      <Link to={`/profile/${comment.author.username}`} className="font-medium">
-                        {comment.author.firstName} {comment.author.lastName}
-                      </Link>
-                      <div>
-                        <p>{comment.comment}</p>
+        <div
+          style={{
+            height: 500 + 'px',
+            flexDirection: 'column-reverse',
+            display: 'flex',
+          }}
+          className="bg-red-500"
+        >
+          <div style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}>
+            {state.comments.map((comment, index) => {
+              return (
+                <ul key={index} className="mb-3 border bg-white">
+                  <li id="li-comment" className="my-2 p-2 rounded">
+                    <div className="flex">
+                      <div className="flex mr-1">
+                        <Link to={`/profile/${comment.author.username}`}>
+                          <img
+                            src={comment.author.avatar}
+                            className="w-8 h-8 rounded-full"
+                            alt="profile pic"
+                          />
+                        </Link>
+                      </div>
+                      <div
+                        className="rounded px-2"
+                        style={{
+                          overflowWrap: 'break-word',
+                          minWidth: 0 + 'px',
+                          width: 15 + 'rem',
+                          backgroundColor: '#F2F3F5',
+                        }}
+                      >
+                        <Link to={`/profile/${comment.author.username}`} className="font-medium">
+                          {comment.author.firstName} {comment.author.lastName}
+                        </Link>
+                        <div>
+                          <p>{comment.comment}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex justify-between items-center mt-2 text-xs">
-                    <p>Mar. 19</p>
-                    <div className="flex">
-                      <input
-                        type="button"
-                        value="Edit"
-                        id="edit-comment-button"
-                        className="flex bg-white items-center cursor-pointer"
-                      />
+                    <div className="flex justify-between items-center mt-2 text-xs">
+                      <p>Mar. 19</p>
+                      <div className="flex">
+                        <input
+                          type="button"
+                          value="Edit"
+                          id="edit-comment-button"
+                          className="flex bg-white items-center cursor-pointer"
+                        />
 
-                      <input
-                        type="button"
-                        value="Delete"
-                        id="delete-comment-button"
-                        data-id="5e7388741d1cea0004d45616"
-                        className="flex items-center text-red-600 bg-white cursor-pointer ml-3"
-                      />
+                        <input
+                          type="button"
+                          value="Delete"
+                          id="delete-comment-button"
+                          data-id="5e7388741d1cea0004d45616"
+                          className="flex items-center text-red-600 bg-white cursor-pointer ml-3"
+                        />
+                      </div>
                     </div>
-                  </div>
-                </li>
-              </ul>
-            );
-          })}
+                  </li>
+                </ul>
+              );
+            })}
+          </div>
         </div>
         <div className="lg:pl-3">
           <form onSubmit={handleSubmit}>
             <h3>Add a Comment</h3>
 
-            <div className="relative flex p-2">
+            <div className="relative flex p-2 border">
               <div className="mr-1">
                 <Link to={`/profile/${appState.user.username}`}>
                   <img
