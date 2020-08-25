@@ -55,6 +55,9 @@ function Comments({ history }) {
         // CLEAR INPUT FIELD
         draft.comment.value = '';
         return;
+      case 'deleteComment':
+        draft.comments.splice(action.value._id, 1);
+        return;
       case 'sendCommentForm':
         if (!draft.comment.hasError) {
           draft.sendCount++;
@@ -64,6 +67,7 @@ function Comments({ history }) {
   }
 
   const [state, commentsDispatch] = useImmerReducer(commentsReducer, initialState);
+  console.log(state.comments);
 
   // FETCH COMMENTS
   useEffect(() => {
@@ -135,13 +139,20 @@ function Comments({ history }) {
 
     if (confirm) {
       const request = Axios.CancelToken.source();
+      const commentId = e.target.getAttribute('data-id');
       const response = await Axios.post(
         '/delete-comment',
-        { commentId: e.target.getAttribute('data-id'), token: appState.user.token },
+        { commentId, token: appState.user.token },
         { cancelToken: request.token }
       );
 
       console.log(response.data);
+      if (response.data == 'Success') {
+        commentsDispatch({ type: 'deleteComment', value: { _id: commentId } });
+      } else {
+        // DELETE FAILED
+        console.log(response.data);
+      }
     }
   }
 
