@@ -51,6 +51,7 @@ function Comments({ history }) {
         return;
       case 'addNewComment':
         draft.comments.push(action.value);
+        draft.comment.value = '';
         return;
       case 'sendCommentForm':
         if (!draft.comment.hasError) {
@@ -113,7 +114,7 @@ function Comments({ history }) {
           if (response.data._id) {
             commentsDispatch({ type: 'addNewComment', value: response.data });
           } else {
-            // ERROR E.G COMMENT FIELD IS EMPTY;
+            // ERROR E.G COMMENT FIELD IS EMPTY CATCHED BY THE SERVER;
             console.log(response.data);
           }
         } catch (error) {
@@ -157,6 +158,7 @@ function Comments({ history }) {
             <h3>Add a Comment</h3>
             <div className="relative">
               <input
+                value={state.comment.value}
                 onChange={e => commentsDispatch({ type: 'updateComment', value: e.target.value })}
                 className="bg-gray-200 border focus:border-transparent pl-2 py-3"
                 type="text"
