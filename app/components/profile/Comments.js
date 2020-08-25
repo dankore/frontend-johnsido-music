@@ -110,7 +110,12 @@ function Comments({ history }) {
             { cancelToken: request.token }
           );
 
-          commentsDispatch({ type: 'addNewComment', value: response.data });
+          if (response.data._id) {
+            commentsDispatch({ type: 'addNewComment', value: response.data });
+          } else {
+            // ERROR E.G COMMENT FIELD IS EMPTY;
+            console.log(response.data);
+          }
         } catch (error) {
           // FAIL SILENTLY
           console.log(error);
