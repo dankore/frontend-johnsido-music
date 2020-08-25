@@ -201,25 +201,44 @@ function Comments({ history }) {
         <div className="lg:pl-3">
           <form onSubmit={handleSubmit}>
             <h3>Add a Comment</h3>
-            <div className="relative">
-              <input
-                value={state.comment.value}
-                onChange={e => commentsDispatch({ type: 'updateComment', value: e.target.value })}
-                className="bg-gray-200 border focus:border-transparent pl-2 py-3"
-                type="text"
-              />
-              <CSSTransition
-                in={state.comment.hasError}
-                timeout={330}
-                classNames="liveValidateMessage"
-                unmountOnExit
-              >
-                <div style={CSSTransitionStyleModified} className="liveValidateMessage">
-                  {state.comment.message}
-                </div>
-              </CSSTransition>
+
+            <div className="relative flex p-2">
+              <div className="mr-1">
+                <Link to={`/profile/${appState.user.username}`}>
+                  <img
+                    src={appState.user.avatar}
+                    className="w-8 h-8 rounded-full"
+                    alt="profile pic"
+                  />
+                </Link>
+              </div>
+              <div style={{ width: 15 + 'rem' }}>
+                <textarea
+                  value={state.comment.value}
+                  onChange={e => commentsDispatch({ type: 'updateComment', value: e.target.value })}
+                  id="input-comment"
+                  className="focus:bg-gray-100 w-full rounded p-2"
+                  placeholder="What's on your mind?"
+                  style={{ backgroundColor: '#F2F3F5', whiteSpace: 'pre-wrap', overflow: 'hidden' }}
+                ></textarea>
+                <CSSTransition
+                  in={state.comment.hasError}
+                  timeout={330}
+                  classNames="liveValidateMessage"
+                  unmountOnExit
+                >
+                  <div style={CSSTransitionStyleModified} className="liveValidateMessage">
+                    {state.comment.message}
+                  </div>
+                </CSSTransition>
+                <button
+                  id="add-comment-button"
+                  className="rounded bg-blue-600 hover:bg-blue-800 text-white w-full"
+                >
+                  Submit
+                </button>
+              </div>
             </div>
-            <button>Submit</button>
           </form>
         </div>
       </div>
