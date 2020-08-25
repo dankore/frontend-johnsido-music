@@ -55,12 +55,11 @@ function Comments({ history }) {
         // CLEAR INPUT FIELD
         draft.comment.value = '';
         return;
-      case 'deleteComment':
-        draft.comments.splice(
-          draft.comments.map(item => item.action.value._id).indexOf(action.value._id),
-          1
-        );
+      case 'deleteComment': {
+        const index = draft.comments.map(item => item._id).indexOf(action.value);
+        draft.comments.splice(index, 1);
         return;
+      }
       case 'sendCommentForm':
         if (!draft.comment.hasError) {
           draft.sendCount++;
@@ -70,7 +69,6 @@ function Comments({ history }) {
   }
 
   const [state, commentsDispatch] = useImmerReducer(commentsReducer, initialState);
-  console.log(state.comments);
 
   // FETCH COMMENTS
   useEffect(() => {
@@ -151,7 +149,7 @@ function Comments({ history }) {
         );
 
         if (response.data == 'Success') {
-          commentsDispatch({ type: 'deleteComment', value: { _id: commentId } });
+          commentsDispatch({ type: 'deleteComment', value: commentId });
         } else {
           // DELETE FAILED
           console.log(response.data);
