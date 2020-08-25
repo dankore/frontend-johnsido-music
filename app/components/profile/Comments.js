@@ -8,6 +8,7 @@ import { CSSTransition } from 'react-transition-group';
 import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
 import StateContext from '../../contextsProviders/StateContext';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 function Comments({ history }) {
   const appState = useContext(StateContext);
@@ -107,6 +108,7 @@ function Comments({ history }) {
               author: appState.user._id,
               comment: state.comment.value,
               profileOwner: state.username, // USE THIS TO GET THE ID ON THE SERVER
+              createdDate: moment().format('lll'),
               token: appState.user.token,
             },
             { cancelToken: request.token }
@@ -190,7 +192,7 @@ function Comments({ history }) {
             flexDirection: 'column-reverse',
             display: 'flex',
           }}
-          className="bg-red-500"
+          className=""
         >
           <div style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}>
             {state.comments.map((comment, index) => {
@@ -225,7 +227,7 @@ function Comments({ history }) {
                       </div>
                     </div>
                     <div className="flex justify-between items-center mt-2 text-xs">
-                      <p>Mar. 19</p>
+                      <p>{comment.createdDate}</p>
                       <div className="flex">
                         <input
                           type="button"
