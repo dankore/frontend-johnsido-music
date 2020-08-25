@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { useParams, withRouter } from 'react-router-dom';
+import { useParams, withRouter, Link } from 'react-router-dom';
 import Page from '../layouts/Page';
 import { useImmerReducer } from 'use-immer';
 import Axios from 'axios';
@@ -145,12 +145,56 @@ function Comments({ history }) {
         <div>
           {state.comments.map((comment, index) => {
             return (
-              <div key={index} className="mb-3 border p-3 bg-gray-200">
-                <p>{comment.comment}</p>
-                <p>
-                  {comment.author.firstName} {comment.author.lastName}
-                </p>
-              </div>
+              <ul key={index} className="mb-3 border bg-white">
+                <li id="li-comment" className="my-2 p-2 rounded">
+                  <div className="flex">
+                    <div className="flex mr-1">
+                      <Link to={`/profile/${comment.author.username}`}>
+                        <img
+                          src={comment.author.avatar}
+                          className="w-8 h-8 rounded-full"
+                          alt="profile pic"
+                        />
+                      </Link>
+                    </div>
+                    <div
+                      className="rounded px-2"
+                      style={{
+                        overflowWrap: 'break-word',
+                        minWidth: 0 + 'px',
+                        width: 15 + 'rem',
+                        backgroundColor: '#F2F3F5',
+                      }}
+                    >
+                      <Link to={`/profile/${comment.author.username}`} className="font-medium">
+                        {comment.author.firstName} {comment.author.lastName}
+                      </Link>
+                      <div>
+                        <p>{comment.comment}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center mt-2 text-xs">
+                    <p>Mar. 19</p>
+                    <div className="flex">
+                      <input
+                        type="button"
+                        value="Edit"
+                        id="edit-comment-button"
+                        className="flex bg-white items-center cursor-pointer"
+                      />
+
+                      <input
+                        type="button"
+                        value="Delete"
+                        id="delete-comment-button"
+                        data-id="5e7388741d1cea0004d45616"
+                        className="flex items-center text-red-600 bg-white cursor-pointer ml-3"
+                      />
+                    </div>
+                  </div>
+                </li>
+              </ul>
             );
           })}
         </div>
