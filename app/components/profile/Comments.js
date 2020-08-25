@@ -130,6 +130,21 @@ function Comments({ history }) {
     }
   }, [state.sendCount]);
 
+  async function handleDelete(e) {
+    const confirm = window.confirm('Are you sure?');
+
+    if (confirm) {
+      const request = Axios.CancelToken.source();
+      const response = await Axios.post(
+        '/delete-comment',
+        { commentId: e.target.getAttribute('data-id'), token: appState.user.token },
+        { cancelToken: request.token }
+      );
+
+      console.log(response.data);
+    }
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     commentsDispatch({ type: 'checkCommentFieldForErrors', value: state.comment.value });
@@ -237,10 +252,11 @@ function Comments({ history }) {
                         />
 
                         <input
+                          onClick={handleDelete}
                           type="button"
                           value="Delete"
                           id="delete-comment-button"
-                          data-id="5e7388741d1cea0004d45616"
+                          data-id={`${comment._id}`}
                           className="flex items-center text-red-600 bg-white cursor-pointer ml-3"
                         />
                       </div>
