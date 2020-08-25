@@ -51,6 +51,7 @@ function Comments({ history }) {
         return;
       case 'addNewComment':
         draft.comments.push(action.value);
+        // CLEAR INPUT FIELD
         draft.comment.value = '';
         return;
       case 'sendCommentForm':
