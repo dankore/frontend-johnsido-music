@@ -25,6 +25,7 @@ function Comments({ history }) {
     },
     editComment: {
       value: '',
+      commentId: '',
       hasError: false,
       message: '',
     },
@@ -88,6 +89,10 @@ function Comments({ history }) {
       case 'editComment':
         draft.editComment.hasError = false;
         draft.editComment.value = action.value;
+
+        if (action.updateCommentId) {
+          draft.editComment.commentId = action.commentId;
+        }
         return;
       case 'deleteComment': {
         const index = draft.comments.map(item => item._id).indexOf(action.value);
@@ -95,8 +100,11 @@ function Comments({ history }) {
         return;
       }
       case 'sendCommentForm':
-        if (!draft.comment.hasError) {
+        if (action.add && !draft.comment.hasError) {
           draft.sendCountAdd++;
+        }
+        if (action.edit && !draft.editComment.hasError) {
+          draft.sendCountEdit++;
         }
         return;
     }
@@ -203,7 +211,7 @@ function Comments({ history }) {
             '/editComment',
             {
               author: appState.user._id,
-              commentId: '',
+              commentId: state.editComment.commentId,
               comment: state.editComment.value,
               profileOwner: state.username, // USE THIS TO GET THE ID ON THE SERVER
               editedDate: moment().format('lll'),
@@ -258,8 +266,9 @@ function Comments({ history }) {
     const currentText =
       e.target.parentElement.parentElement.parentElement.childNodes[0].childNodes[1].childNodes[1]
         .childNodes[0].innerText;
+    const commentId = e.target.getAttribute('data-id');
 
-    commentsDispatch({ type: 'editComment', value: currentText });
+    commentsDispatch({ type: 'editComment', value: currentText, commentId, updateCommentId: true });
 
     appDispatch({ type: 'editComment' }); // MAKE MODAL TRUE
   }
@@ -273,7 +282,7 @@ function Comments({ history }) {
           value: state.comment.value,
           process: 'add',
         });
-        commentsDispatch({ type: 'sendCommentForm' });
+        commentsDispatch({ type: 'sendCommentForm', add: true });
         return;
       case 'edit':
         commentsDispatch({
@@ -281,7 +290,7 @@ function Comments({ history }) {
           value: state.editComment.value,
           process: 'edit',
         });
-        //  commentsDispatch({ type: 'sendCommentForm' });
+        commentsDispatch({ type: 'sendCommentForm', edit: true });
         return;
     }
   }
@@ -289,6 +298,8 @@ function Comments({ history }) {
   if (state.isFetching) {
     return <LoadingDotsAnimation />;
   }
+
+  console.log(state.editComment);
 
   return (
     <Page
@@ -394,6 +405,7 @@ function Comments({ history }) {
                         <input
                           type="button"
                           value="Edit"
+                          data-id={comment._id}
                           onClick={handleEditClick}
                           className="flex bg-white items-center cursor-pointer"
                         />
@@ -418,7 +430,6 @@ function Comments({ history }) {
                   <textarea
                     value={state.editComment.value}
                     onChange={e => commentsDispatch({ type: 'editComment', value: e.target.value })}
-                    id="input-comment"
                     className="focus:bg-gray-100 w-full p-2"
                     placeholder="What's on your mind?"
                     style={{
