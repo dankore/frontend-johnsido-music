@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { useParams, withRouter } from 'react-router-dom';
+import { useParams, withRouter, Link } from 'react-router-dom';
 import Page from '../layouts/Page';
 import { useImmerReducer } from 'use-immer';
 import Axios from 'axios';
@@ -8,6 +8,7 @@ import { CSSTransition } from 'react-transition-group';
 import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
 import StateContext from '../../contextsProviders/StateContext';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 function Comments({ history }) {
   const appState = useContext(StateContext);
@@ -20,15 +21,31 @@ function Comments({ history }) {
       hasError: false,
       message: '',
     },
+    user: {
+      profileUsername: '',
+      profileFirstName: '',
+      profileLastName: '',
+      profileAvatar: '',
+      profileEmail: '',
+      profileAbout: { bio: '', musicCategory: '', city: '' },
+      isFollowing: false,
+      counts: {
+        followerCount: 0,
+        followingCount: 0,
+        commentsCount: 0,
+      },
+    },
     isFetching: false,
     sendCount: 0,
-    re_render_on_comment_add: 0,
   };
 
   function commentsReducer(draft, action) {
     switch (action.type) {
       case 'fetchComments':
         draft.comments = action.value;
+        return;
+      case 'addProfileUserInfo':
+        draft.user = action.value;
         return;
       case 'updateComment':
         draft.comment.hasError = false;
@@ -46,12 +63,16 @@ function Comments({ history }) {
       case 'fetchEnds':
         draft.isFetching = false;
         return;
-      case 're_render_on_comment_add':
-        draft.re_render_on_comment_add++;
-        return;
       case 'addNewComment':
-        draft.comments.push(action.value);
+        draft.comments.unshift(action.value);
+        // CLEAR INPUT FIELD
+        draft.comment.value = '';
         return;
+      case 'deleteComment': {
+        const index = draft.comments.map(item => item._id).indexOf(action.value);
+        draft.comments.splice(index, 1);
+        return;
+      }
       case 'sendCommentForm':
         if (!draft.comment.hasError) {
           draft.sendCount++;
@@ -61,6 +82,30 @@ function Comments({ history }) {
   }
 
   const [state, commentsDispatch] = useImmerReducer(commentsReducer, initialState);
+
+  // FETCH PROFILE INFO
+  useEffect(() => {
+    const request = Axios.CancelToken.source();
+    commentsDispatch({ type: 'fetchStart' });
+    try {
+      (async function fetchProfileData() {
+        const response = await Axios.post(`/profile/${state.username}`, {
+          cancelToken: request.token,
+        });
+
+        commentsDispatch({ type: 'fetchEnds' });
+
+        if (response.data) {
+          commentsDispatch({ type: 'addProfileUserInfo', value: response.data });
+        } else {
+          history.push('/404');
+        }
+      })();
+    } catch (error) {
+      console.log(error);
+    }
+    return () => request.cancel();
+  }, [state.username]);
 
   // FETCH COMMENTS
   useEffect(() => {
@@ -91,7 +136,7 @@ function Comments({ history }) {
       console.log(error);
     }
     return () => request.cancel();
-  }, [state.re_render_on_comment_add]);
+  }, []);
 
   // SUBMIT COMMENT
   useEffect(() => {
@@ -105,12 +150,18 @@ function Comments({ history }) {
               author: appState.user._id,
               comment: state.comment.value,
               profileOwner: state.username, // USE THIS TO GET THE ID ON THE SERVER
+              createdDate: moment().format('lll'),
               token: appState.user.token,
             },
             { cancelToken: request.token }
           );
 
-          commentsDispatch({ type: 'addNewComment', value: response.data });
+          if (response.data._id) {
+            commentsDispatch({ type: 'addNewComment', value: response.data });
+          } else {
+            // ERROR E.G COMMENT FIELD IS EMPTY CATCHED BY THE SERVER;
+            console.log(response.data);
+          }
         } catch (error) {
           // FAIL SILENTLY
           console.log(error);
@@ -120,6 +171,32 @@ function Comments({ history }) {
       return () => request.cancel();
     }
   }, [state.sendCount]);
+
+  async function handleDelete(e) {
+    const confirm = window.confirm('Are you sure?');
+
+    if (confirm) {
+      try {
+        const request = Axios.CancelToken.source();
+        const commentId = e.target.getAttribute('data-id');
+        const response = await Axios.post(
+          '/delete-comment',
+          { commentId, apiUser: appState.user.username, token: appState.user.token },
+          { cancelToken: request.token }
+        );
+
+        if (response.data == 'Success') {
+          commentsDispatch({ type: 'deleteComment', value: commentId });
+        } else {
+          // DELETE FAILED
+          console.log(response.data);
+        }
+      } catch (error) {
+        // NETWORK ERROR
+        console.log(error);
+      }
+    }
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -133,42 +210,118 @@ function Comments({ history }) {
 
   return (
     <Page title="Comments">
-      <h1>{state.username}</h1>
+      <div className="w-full sm:max-w-md lg:max-w-4xl mx-auto bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+        <h1>
+          {state.user.profileFirstName} {state.user.profileLastName}
+        </h1>
+        <p className="-mt-4">{state.user.profileAbout.musicCategory}</p>
+      </div>
       <div className="w-full sm:max-w-md lg:max-w-4xl mx-auto grid lg:grid-cols-2">
-        <div>
-          {state.comments.map((comment, index) => {
-            return (
-              <div key={index} className="mb-3 border p-3 bg-gray-200">
-                <p>{comment.comment}</p>
-                <p>
-                  {comment.author.firstName} {comment.author.lastName}
-                </p>
-              </div>
-            );
-          })}
-        </div>
         <div className="lg:pl-3">
           <form onSubmit={handleSubmit}>
-            <h3>Add a Comment</h3>
-            <div className="relative">
-              <input
-                onChange={e => commentsDispatch({ type: 'updateComment', value: e.target.value })}
-                className="bg-gray-200 border focus:border-transparent pl-2 py-3"
-                type="text"
-              />
-              <CSSTransition
-                in={state.comment.hasError}
-                timeout={330}
-                classNames="liveValidateMessage"
-                unmountOnExit
-              >
-                <div style={CSSTransitionStyleModified} className="liveValidateMessage">
-                  {state.comment.message}
-                </div>
-              </CSSTransition>
+            <h2 className="text-xl mb-3">Add a Comment</h2>
+            <div className="relative flex p-2 border">
+              <div className="mr-1">
+                <Link to={`/profile/${appState.user.username}`}>
+                  <img
+                    src={appState.user.avatar}
+                    className="w-8 h-8 rounded-full"
+                    alt="profile pic"
+                  />
+                </Link>
+              </div>
+              <div className="w-full">
+                <textarea
+                  value={state.comment.value}
+                  onChange={e => commentsDispatch({ type: 'updateComment', value: e.target.value })}
+                  id="input-comment"
+                  className="focus:bg-gray-100 w-full p-2"
+                  placeholder="What's on your mind?"
+                  style={{ backgroundColor: '#F2F3F5', whiteSpace: 'pre-wrap', overflow: 'hidden' }}
+                ></textarea>
+                <CSSTransition
+                  in={state.comment.hasError}
+                  timeout={330}
+                  classNames="liveValidateMessage"
+                  unmountOnExit
+                >
+                  <div style={CSSTransitionStyleModified} className="liveValidateMessage">
+                    {state.comment.message}
+                  </div>
+                </CSSTransition>
+                <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
+                  Submit
+                </button>
+              </div>
             </div>
-            <button>Submit</button>
           </form>
+        </div>
+        <div
+          style={{
+            height: 500 + 'px',
+            flexDirection: 'column-reverse',
+            display: 'flex',
+          }}
+          className=""
+        >
+          <div style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}>
+            {state.comments.map((comment, index) => {
+              return (
+                <ul key={index} className="mb-3 border bg-white">
+                  <li id="li-comment" className="my-2 p-2">
+                    <div className="flex">
+                      <div className="flex mr-1">
+                        <Link to={`/profile/${comment.author.username}`}>
+                          <img
+                            src={comment.author.avatar}
+                            className="w-8 h-8 rounded-full"
+                            alt="profile pic"
+                          />
+                        </Link>
+                      </div>
+                      <div
+                        className="w-full px-2"
+                        style={{
+                          overflowWrap: 'break-word',
+                          minWidth: 0 + 'px',
+                          backgroundColor: '#F2F3F5',
+                        }}
+                      >
+                        <Link to={`/profile/${comment.author.username}`} className="font-medium">
+                          {comment.author.firstName} {comment.author.lastName}
+                        </Link>
+                        <div>
+                          <p>{comment.comment}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center mt-2 text-xs">
+                      <p>{comment.createdDate}</p>
+                      {appState.loggedIn && appState.user.username == comment.author.username && (
+                        <div className="flex">
+                          <input
+                            type="button"
+                            value="Edit"
+                            id="edit-comment-button"
+                            className="flex bg-white items-center cursor-pointer"
+                          />
+
+                          <input
+                            onClick={handleDelete}
+                            type="button"
+                            value="Delete"
+                            id="delete-comment-button"
+                            data-id={`${comment._id}`}
+                            className="flex items-center text-red-600 bg-white cursor-pointer ml-3"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </li>
+                </ul>
+              );
+            })}
+          </div>
         </div>
       </div>
     </Page>
