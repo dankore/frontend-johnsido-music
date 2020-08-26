@@ -9,14 +9,21 @@ import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
 import StateContext from '../../contextsProviders/StateContext';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import DispatchContext from '../../contextsProviders/DispatchContext';
 
 function Comments({ history }) {
   const appState = useContext(StateContext);
+  const appDispatch = useContext(DispatchContext);
   const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: -1.57 + 'rem' };
   const initialState = {
     username: useParams().username,
     comments: [],
     comment: {
+      value: '',
+      hasError: false,
+      message: '',
+    },
+    editComment: {
       value: '',
       hasError: false,
       message: '',
@@ -67,6 +74,9 @@ function Comments({ history }) {
         draft.comments.unshift(action.value);
         // CLEAR INPUT FIELD
         draft.comment.value = '';
+        return;
+      case 'editComment':
+        draft.editComment.value = action.value;
         return;
       case 'deleteComment': {
         const index = draft.comments.map(item => item._id).indexOf(action.value);
@@ -198,6 +208,18 @@ function Comments({ history }) {
     }
   }
 
+  function handleEditClick(e) {
+    const currentText =
+      e.target.parentElement.parentElement.parentElement.childNodes[0].childNodes[1].childNodes[1]
+        .childNodes[0].innerText;
+    commentsDispatch({ type: 'editComment', value: currentText });
+
+    appDispatch({ type: 'editComment' });
+
+    console.log(currentText);
+    // commentsDispatch({ type: 'updateComment', value: e.target.value })
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     commentsDispatch({ type: 'checkCommentFieldForErrors', value: state.comment.value });
@@ -209,17 +231,29 @@ function Comments({ history }) {
   }
 
   return (
-    <Page title="Comments">
-      <div className="w-full sm:max-w-md lg:max-w-4xl mx-auto bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
-        <h1>
+    <Page
+      title={`Comments on ${state.user.profileFirstName} ${state.user.profileLastName}'s profile`}
+    >
+      <div className="p-3 w-full sm:max-w-md lg:max-w-4xl mx-auto bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+        <p className="text-5xl">Comments</p>
+        <p className="text-xl">
           {state.user.profileFirstName} {state.user.profileLastName}
-        </h1>
-        <p className="-mt-4">{state.user.profileAbout.musicCategory}</p>
+        </p>
+        <div className="flex mr-4">
+          <div className="mr-5">
+            <i className="fas fa-music mr-2 text-lg text-white"></i>
+            {state.user.profileAbout.musicCategory}
+          </div>
+          <div className="">
+            <i className="fas fa-map-marker-alt mr-2 text-lg text-white"></i>
+            {state.user.profileAbout.city}
+          </div>
+        </div>
       </div>
       <div className="w-full sm:max-w-md lg:max-w-4xl mx-auto grid lg:grid-cols-2">
         <div className="lg:pl-3">
           <form onSubmit={handleSubmit}>
-            <h2 className="text-xl mb-3">Add a Comment</h2>
+            <h2 className="px-3 text-xl mb-3">Add a Comment</h2>
             <div className="relative flex p-2 border">
               <div className="mr-1">
                 <Link to={`/profile/${appState.user.username}`}>
@@ -293,6 +327,44 @@ function Comments({ history }) {
                         <div>
                           <p>{comment.comment}</p>
                         </div>
+                        {/* EDIT COMMENT */}
+                        {appState.editComment && (
+                          <div className="w-full modal border bg-yellow-200">
+                            <textarea
+                              value={state.editComment.value}
+                              onChange={e =>
+                                commentsDispatch({ type: 'editComment', value: e.target.value })
+                              }
+                              id="input-comment"
+                              className="focus:bg-gray-100 w-full p-2"
+                              placeholder="What's on your mind?"
+                              style={{
+                                backgroundColor: '#F2F3F5',
+                                whiteSpace: 'pre-wrap',
+                                overflow: 'hidden',
+                              }}
+                            >
+                              {state.editComment.value}
+                            </textarea>
+                            <CSSTransition
+                              in={state.comment.hasError}
+                              timeout={330}
+                              classNames="liveValidateMessage"
+                              unmountOnExit
+                            >
+                              <div
+                                style={CSSTransitionStyleModified}
+                                className="liveValidateMessage"
+                              >
+                                {state.comment.message}
+                              </div>
+                            </CSSTransition>
+                            <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
+                              Submit
+                            </button>
+                          </div>
+                        )}
+                        {/* EDIT COMMENT ENDS */}
                       </div>
                     </div>
                     <div className="flex justify-between items-center mt-2 text-xs">
@@ -302,7 +374,7 @@ function Comments({ history }) {
                           <input
                             type="button"
                             value="Edit"
-                            id="edit-comment-button"
+                            onClick={handleEditClick}
                             className="flex bg-white items-center cursor-pointer"
                           />
 
@@ -310,7 +382,6 @@ function Comments({ history }) {
                             onClick={handleDelete}
                             type="button"
                             value="Delete"
-                            id="delete-comment-button"
                             data-id={`${comment._id}`}
                             className="flex items-center text-red-600 bg-white cursor-pointer ml-3"
                           />

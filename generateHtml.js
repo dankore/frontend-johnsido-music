@@ -2,16 +2,18 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import fs from 'fs';
 // import Footer from './app/components/shared/Footer';
-// import Header from './app/components/shared/Header';
+import HeaderLoggedOut from './app/components/shared/HeaderLoggedOut';
 // import LoadingDotsIcon from './app/components/shared/LoadingDotsAnimation';
-import { StaticRouter as Router } from 'react-router-dom';
+import { StaticRouter as Router, Switch } from 'react-router-dom';
 import StateContext from './app/contextsProviders/StateContext';
 
 function RENDER_THIS_HTML() {
   return (
     <StateContext.Provider>
-      <Router>
-        <div></div>
+      <Router path={['/profile/:username', '/settings', '/upload-song', '/about']}>
+        <Switch>
+          <HeaderLoggedOut />
+        </Switch>
       </Router>
     </StateContext.Provider>
   );
