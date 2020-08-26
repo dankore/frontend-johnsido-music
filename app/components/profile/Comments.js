@@ -94,6 +94,11 @@ function Comments({ history }) {
           draft.editComment.commentId = action.commentId;
         }
         return;
+      case 'updateEditedComment': {
+        const index = draft.comments.map(item => item._id).indexOf(action.value.commentId);
+        draft.comments[index].comment = action.value.comment;
+        return;
+      }
       case 'deleteComment': {
         const index = draft.comments.map(item => item._id).indexOf(action.value);
         draft.comments.splice(index, 1);
@@ -210,7 +215,6 @@ function Comments({ history }) {
           const response = await Axios.post(
             '/edit-comment',
             {
-              author: appState.user._id,
               commentId: state.editComment.commentId,
               comment: state.editComment.value,
               profileOwner: state.username, // USE THIS TO GET THE ID ON THE SERVER
@@ -221,8 +225,12 @@ function Comments({ history }) {
             { cancelToken: request.token }
           );
 
-          if (response.data._id) {
-            commentsDispatch({ type: 'addEditComment', value: response.data });
+          if (response.data == 'Success') {
+            commentsDispatch({
+              type: 'updateEditedComment',
+              value: { commentId: state.editComment.commentId, comment: state.editComment.value },
+            });
+            appDispatch({ type: 'editComment' });
           } else {
             // ERROR E.G COMMENT FIELD IS EMPTY CATCHED BY THE SERVER;
             console.log(response.data);
@@ -299,8 +307,6 @@ function Comments({ history }) {
   if (state.isFetching) {
     return <LoadingDotsAnimation />;
   }
-
-  console.log(state.editComment);
 
   return (
     <Page
@@ -400,7 +406,7 @@ function Comments({ history }) {
                     </div>
                   </div>
                   <div className="flex justify-between items-center mt-2 text-xs">
-                    <p>{comment.createdDate}</p>
+                    <p>Created {comment.createdDate}</p>
                     {appState.loggedIn && appState.user.username == comment.author.username && (
                       <div className="flex">
                         <input
