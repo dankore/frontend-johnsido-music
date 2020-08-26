@@ -43,7 +43,8 @@ function Comments({ history }) {
       },
     },
     isFetching: false,
-    sendCount: 0,
+    sendCountAdd: 0,
+    sendCountEdit: 0,
   };
 
   function commentsReducer(draft, action) {
@@ -95,7 +96,7 @@ function Comments({ history }) {
       }
       case 'sendCommentForm':
         if (!draft.comment.hasError) {
-          draft.sendCount++;
+          draft.sendCountAdd++;
         }
         return;
     }
@@ -160,9 +161,9 @@ function Comments({ history }) {
 
   // SUBMIT COMMENT
   useEffect(() => {
-    if (state.sendCount) {
+    if (state.sendCountAdd) {
       const request = Axios.CancelToken.source();
-      (async function sendFrom() {
+      (async function sendForm() {
         try {
           const response = await Axios.post(
             '/addComment',
@@ -190,7 +191,42 @@ function Comments({ history }) {
 
       return () => request.cancel();
     }
-  }, [state.sendCount]);
+  }, [state.sendCountAdd]);
+
+  // SUBMIT EDIT COMMENT
+  useEffect(() => {
+    if (state.sendCountEdit) {
+      const request = Axios.CancelToken.source();
+      (async function sendForm() {
+        try {
+          const response = await Axios.post(
+            '/editComment',
+            {
+              author: appState.user._id,
+              commentId: '',
+              comment: state.editComment.value,
+              profileOwner: state.username, // USE THIS TO GET THE ID ON THE SERVER
+              editedDate: moment().format('lll'),
+              token: appState.user.token,
+            },
+            { cancelToken: request.token }
+          );
+
+          if (response.data._id) {
+            commentsDispatch({ type: 'addEditComment', value: response.data });
+          } else {
+            // ERROR E.G COMMENT FIELD IS EMPTY CATCHED BY THE SERVER;
+            console.log(response.data);
+          }
+        } catch (error) {
+          // FAIL SILENTLY
+          console.log(error);
+        }
+      })();
+
+      return () => request.cancel();
+    }
+  }, [state.sendCountEdit]);
 
   async function handleDelete(e) {
     const confirm = window.confirm('Are you sure?');
@@ -222,16 +258,13 @@ function Comments({ history }) {
     const currentText =
       e.target.parentElement.parentElement.parentElement.childNodes[0].childNodes[1].childNodes[1]
         .childNodes[0].innerText;
+
     commentsDispatch({ type: 'editComment', value: currentText });
 
-    appDispatch({ type: 'editComment' });
-
-    console.log(currentText);
-    // commentsDispatch({ type: 'updateComment', value: e.target.value })
+    appDispatch({ type: 'editComment' }); // MAKE MODAL TRUE
   }
 
   function handleSubmit(e, type) {
-    console.log(type);
     e.preventDefault();
     switch (type) {
       case 'add':
