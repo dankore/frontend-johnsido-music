@@ -296,103 +296,95 @@ function Comments({ history }) {
             flexDirection: 'column-reverse',
             display: 'flex',
           }}
-          className=""
         >
-          <div style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}>
+          <ul style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}>
             {state.comments.map((comment, index) => {
               return (
-                <ul key={index} className="mb-3 border bg-white">
-                  <li id="li-comment" className="my-2 p-2">
-                    <div className="flex">
-                      <div className="flex mr-1">
-                        <Link to={`/profile/${comment.author.username}`}>
-                          <img
-                            src={comment.author.avatar}
-                            className="w-8 h-8 rounded-full"
-                            alt="profile pic"
-                          />
-                        </Link>
-                      </div>
-                      <div
-                        className="w-full px-2"
-                        style={{
-                          overflowWrap: 'break-word',
-                          minWidth: 0 + 'px',
-                          backgroundColor: '#F2F3F5',
-                        }}
-                      >
-                        <Link to={`/profile/${comment.author.username}`} className="font-medium">
-                          {comment.author.firstName} {comment.author.lastName}
-                        </Link>
-                        <div>
-                          <p>{comment.comment}</p>
-                        </div>
-                        {/* EDIT COMMENT */}
-                        {appState.editComment && (
-                          <div className="w-full modal border bg-yellow-200">
-                            <textarea
-                              value={state.editComment.value}
-                              onChange={e =>
-                                commentsDispatch({ type: 'editComment', value: e.target.value })
-                              }
-                              id="input-comment"
-                              className="focus:bg-gray-100 w-full p-2"
-                              placeholder="What's on your mind?"
-                              style={{
-                                backgroundColor: '#F2F3F5',
-                                whiteSpace: 'pre-wrap',
-                                overflow: 'hidden',
-                              }}
-                            >
-                              {state.editComment.value}
-                            </textarea>
-                            <CSSTransition
-                              in={state.comment.hasError}
-                              timeout={330}
-                              classNames="liveValidateMessage"
-                              unmountOnExit
-                            >
-                              <div
-                                style={CSSTransitionStyleModified}
-                                className="liveValidateMessage"
-                              >
-                                {state.comment.message}
-                              </div>
-                            </CSSTransition>
-                            <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
-                              Submit
-                            </button>
-                          </div>
-                        )}
-                        {/* EDIT COMMENT ENDS */}
+                <li key={index} className="my-2 border bg-white p-2">
+                  <div className="flex">
+                    <div className="flex mr-1">
+                      <Link to={`/profile/${comment.author.username}`}>
+                        <img
+                          src={comment.author.avatar}
+                          className="w-8 h-8 rounded-full"
+                          alt="profile pic"
+                        />
+                      </Link>
+                    </div>
+                    <div
+                      className="w-full px-2"
+                      style={{
+                        overflowWrap: 'break-word',
+                        minWidth: 0 + 'px',
+                        backgroundColor: '#F2F3F5',
+                      }}
+                    >
+                      <Link to={`/profile/${comment.author.username}`} className="font-medium">
+                        {comment.author.firstName} {comment.author.lastName}
+                      </Link>
+                      <div>
+                        <p>{comment.comment}</p>
                       </div>
                     </div>
-                    <div className="flex justify-between items-center mt-2 text-xs">
-                      <p>{comment.createdDate}</p>
-                      {appState.loggedIn && appState.user.username == comment.author.username && (
-                        <div className="flex">
-                          <input
-                            type="button"
-                            value="Edit"
-                            onClick={handleEditClick}
-                            className="flex bg-white items-center cursor-pointer"
-                          />
+                  </div>
+                  <div className="flex justify-between items-center mt-2 text-xs">
+                    <p>{comment.createdDate}</p>
+                    {appState.loggedIn && appState.user.username == comment.author.username && (
+                      <div className="flex">
+                        <input
+                          type="button"
+                          value="Edit"
+                          onClick={handleEditClick}
+                          className="flex bg-white items-center cursor-pointer"
+                        />
 
-                          <input
-                            onClick={handleDelete}
-                            type="button"
-                            value="Delete"
-                            data-id={`${comment._id}`}
-                            className="flex items-center text-red-600 bg-white cursor-pointer ml-3"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </li>
-                </ul>
+                        <input
+                          onClick={handleDelete}
+                          type="button"
+                          value="Delete"
+                          data-id={`${comment._id}`}
+                          className="flex items-center text-red-600 bg-white cursor-pointer ml-3"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </li>
               );
             })}
-          </div>
+            {/* EDIT COMMENT */}
+            {appState.editComment && (
+              <div className="w-full modal border bg-yellow-200">
+                <textarea
+                  value={state.editComment.value}
+                  onChange={e => commentsDispatch({ type: 'editComment', value: e.target.value })}
+                  id="input-comment"
+                  className="focus:bg-gray-100 w-full p-2"
+                  placeholder="What's on your mind?"
+                  style={{
+                    backgroundColor: '#F2F3F5',
+                    whiteSpace: 'pre-wrap',
+                    overflow: 'hidden',
+                  }}
+                >
+                  {state.editComment.value}
+                </textarea>
+                <CSSTransition
+                  in={state.comment.hasError}
+                  timeout={330}
+                  classNames="liveValidateMessage"
+                  unmountOnExit
+                >
+                  <div style={CSSTransitionStyleModified} className="liveValidateMessage">
+                    {state.comment.message}
+                  </div>
+                </CSSTransition>
+                <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
+                  Submit
+                </button>
+              </div>
+            )}
+            {/* EDIT COMMENT ENDS */}
+          </ul>
         </div>
       </div>
     </Page>
