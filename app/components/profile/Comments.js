@@ -174,7 +174,7 @@ function Comments({ history }) {
       (async function sendForm() {
         try {
           const response = await Axios.post(
-            '/addComment',
+            '/add-comment',
             {
               author: appState.user._id,
               comment: state.comment.value,
@@ -208,12 +208,13 @@ function Comments({ history }) {
       (async function sendForm() {
         try {
           const response = await Axios.post(
-            '/editComment',
+            '/edit-comment',
             {
               author: appState.user._id,
               commentId: state.editComment.commentId,
               comment: state.editComment.value,
               profileOwner: state.username, // USE THIS TO GET THE ID ON THE SERVER
+              apiUser: appState.user.username,
               editedDate: moment().format('lll'),
               token: appState.user.token,
             },
