@@ -43,13 +43,13 @@ function HeaderLoggedIn() {
               <Link to="/">
                 <img
                   className="block lg:hidden h-12 w-auto"
-                  src={appState.logo.url}
-                  alt={appState.logo.alt}
+                  src={appState?.logo.url}
+                  alt={appState?.logo.alt}
                 />
                 <img
                   className="hidden lg:block h-12 w-auto"
-                  src={appState.logo.url}
-                  alt={appState.logo.alt}
+                  src={appState?.logo.url}
+                  alt={appState?.logo.alt}
                 />
               </Link>
             </div>

@@ -22,6 +22,7 @@ import FlashMsgError from './components/shared/FlashMsgError';
 import FlashMsgSuccess from './components/shared/FlashMsgSuccess';
 import AboutPage from './pages/AboutPage';
 import Comments from './components/profile/Comments';
+import Footer from './components/shared/Footer';
 
 function Main() {
   const initialState = {
@@ -52,6 +53,7 @@ function Main() {
     },
     isOpenProfileDropdown: false,
     toggleLandingPageMenu: false,
+    editComment: false,
   };
 
   function appReducer(draft, action) {
@@ -79,6 +81,9 @@ function Main() {
       case 'flashMsgSuccess':
         draft.flashMsgSuccess.value = action.value;
         draft.flashMsgSuccess.isDisplay = true;
+        return;
+      case 'editComment':
+        draft.editComment = !draft.editComment;
         return;
       case 'turnOff':
         draft.flashMsgErrors.isDisplay = false;
@@ -145,6 +150,7 @@ function Main() {
             )}
             {state.flashMsgSuccess.isDisplay && <FlashMsgSuccess />}
           </Route>
+
           <Switch>
             <Route path="/upload-song">
               <UploadMusic />
@@ -181,6 +187,9 @@ function Main() {
               <div>Not found</div>
             </Route>
           </Switch>
+          <Route path={['/profile/:username', '/settings', '/upload-song', '/about']}>
+            <Footer />
+          </Route>
         </BrowserRouter>
       </DispatchContext.Provider>
     </StateContext.Provider>

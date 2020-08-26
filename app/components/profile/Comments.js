@@ -9,15 +9,23 @@ import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
 import StateContext from '../../contextsProviders/StateContext';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import DispatchContext from '../../contextsProviders/DispatchContext';
 
 function Comments({ history }) {
   const appState = useContext(StateContext);
+  const appDispatch = useContext(DispatchContext);
   const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: -1.57 + 'rem' };
   const initialState = {
     username: useParams().username,
     comments: [],
     comment: {
       value: '',
+      hasError: false,
+      message: '',
+    },
+    editComment: {
+      value: '',
+      commentId: '',
       hasError: false,
       message: '',
     },
@@ -36,7 +44,8 @@ function Comments({ history }) {
       },
     },
     isFetching: false,
-    sendCount: 0,
+    sendCountAdd: 0,
+    sendCountEdit: 0,
   };
 
   function commentsReducer(draft, action) {
@@ -52,9 +61,18 @@ function Comments({ history }) {
         draft.comment.value = action.value;
         return;
       case 'checkCommentFieldForErrors':
-        if (draft.comment.value == '') {
-          draft.comment.hasError = true;
-          draft.comment.message = 'Comment field is empty.';
+        if (action.process == 'add') {
+          if (draft.comment.value == '') {
+            draft.comment.hasError = true;
+            draft.comment.message = 'Comment field is empty.';
+          }
+        }
+
+        if (action.process == 'edit') {
+          if (draft.editComment.value == '') {
+            draft.editComment.hasError = true;
+            draft.editComment.message = 'Edit comment field is empty.';
+          }
         }
         return;
       case 'fetchStart':
@@ -68,14 +86,30 @@ function Comments({ history }) {
         // CLEAR INPUT FIELD
         draft.comment.value = '';
         return;
+      case 'editComment':
+        draft.editComment.hasError = false;
+        draft.editComment.value = action.value;
+
+        if (action.updateCommentId) {
+          draft.editComment.commentId = action.commentId;
+        }
+        return;
+      case 'updateEditedComment': {
+        const index = draft.comments.map(item => item._id).indexOf(action.value.commentId);
+        draft.comments[index].comment = action.value.comment;
+        return;
+      }
       case 'deleteComment': {
         const index = draft.comments.map(item => item._id).indexOf(action.value);
         draft.comments.splice(index, 1);
         return;
       }
       case 'sendCommentForm':
-        if (!draft.comment.hasError) {
-          draft.sendCount++;
+        if (action.add && !draft.comment.hasError) {
+          draft.sendCountAdd++;
+        }
+        if (action.edit && !draft.editComment.hasError) {
+          draft.sendCountEdit++;
         }
         return;
     }
@@ -140,12 +174,12 @@ function Comments({ history }) {
 
   // SUBMIT COMMENT
   useEffect(() => {
-    if (state.sendCount) {
+    if (state.sendCountAdd) {
       const request = Axios.CancelToken.source();
-      (async function sendFrom() {
+      (async function sendForm() {
         try {
           const response = await Axios.post(
-            '/addComment',
+            '/add-comment',
             {
               author: appState.user._id,
               comment: state.comment.value,
@@ -170,7 +204,46 @@ function Comments({ history }) {
 
       return () => request.cancel();
     }
-  }, [state.sendCount]);
+  }, [state.sendCountAdd]);
+
+  // SUBMIT EDIT COMMENT
+  useEffect(() => {
+    if (state.sendCountEdit) {
+      const request = Axios.CancelToken.source();
+      (async function sendForm() {
+        try {
+          const response = await Axios.post(
+            '/edit-comment',
+            {
+              commentId: state.editComment.commentId,
+              comment: state.editComment.value,
+              profileOwner: state.username, // USE THIS TO GET THE ID ON THE SERVER
+              apiUser: appState.user.username,
+              editedDate: moment().format('lll'),
+              token: appState.user.token,
+            },
+            { cancelToken: request.token }
+          );
+
+          if (response.data == 'Success') {
+            commentsDispatch({
+              type: 'updateEditedComment',
+              value: { commentId: state.editComment.commentId, comment: state.editComment.value },
+            });
+            appDispatch({ type: 'editComment' });
+          } else {
+            // ERROR E.G COMMENT FIELD IS EMPTY CATCHED BY THE SERVER;
+            console.log(response.data);
+          }
+        } catch (error) {
+          // FAIL SILENTLY
+          console.log(error);
+        }
+      })();
+
+      return () => request.cancel();
+    }
+  }, [state.sendCountEdit]);
 
   async function handleDelete(e) {
     const confirm = window.confirm('Are you sure?');
@@ -198,10 +271,37 @@ function Comments({ history }) {
     }
   }
 
-  function handleSubmit(e) {
+  function handleEditClick(e) {
+    const currentText =
+      e.target.parentElement.parentElement.parentElement.childNodes[0].childNodes[1].childNodes[1]
+        .childNodes[0].innerText;
+    const commentId = e.target.getAttribute('data-id');
+
+    commentsDispatch({ type: 'editComment', value: currentText, commentId, updateCommentId: true });
+
+    appDispatch({ type: 'editComment' }); // MAKE MODAL TRUE
+  }
+
+  function handleSubmit(e, type) {
     e.preventDefault();
-    commentsDispatch({ type: 'checkCommentFieldForErrors', value: state.comment.value });
-    commentsDispatch({ type: 'sendCommentForm' });
+    switch (type) {
+      case 'add':
+        commentsDispatch({
+          type: 'checkCommentFieldForErrors',
+          value: state.comment.value,
+          process: 'add',
+        });
+        commentsDispatch({ type: 'sendCommentForm', add: true });
+        return;
+      case 'edit':
+        commentsDispatch({
+          type: 'checkCommentFieldForErrors',
+          value: state.editComment.value,
+          process: 'edit',
+        });
+        commentsDispatch({ type: 'sendCommentForm', edit: true });
+        return;
+    }
   }
 
   if (state.isFetching) {
@@ -209,17 +309,29 @@ function Comments({ history }) {
   }
 
   return (
-    <Page title="Comments">
-      <div className="w-full sm:max-w-md lg:max-w-4xl mx-auto bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
-        <h1>
+    <Page
+      title={`Comments on ${state.user.profileFirstName} ${state.user.profileLastName}'s profile`}
+    >
+      <div className="p-3 w-full sm:max-w-md lg:max-w-4xl mx-auto bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+        <p className="text-5xl">Comments</p>
+        <p className="text-xl">
           {state.user.profileFirstName} {state.user.profileLastName}
-        </h1>
-        <p className="-mt-4">{state.user.profileAbout.musicCategory}</p>
+        </p>
+        <div className="flex mr-4">
+          <div className="mr-5">
+            <i className="fas fa-music mr-2 text-lg text-white"></i>
+            {state.user.profileAbout.musicCategory}
+          </div>
+          <div className="">
+            <i className="fas fa-map-marker-alt mr-2 text-lg text-white"></i>
+            {state.user.profileAbout.city}
+          </div>
+        </div>
       </div>
       <div className="w-full sm:max-w-md lg:max-w-4xl mx-auto grid lg:grid-cols-2">
         <div className="lg:pl-3">
-          <form onSubmit={handleSubmit}>
-            <h2 className="text-xl mb-3">Add a Comment</h2>
+          <form onSubmit={e => handleSubmit(e, 'add')}>
+            <h2 className="px-3 text-xl mb-3">Add a Comment</h2>
             <div className="relative flex p-2 border">
               <div className="mr-1">
                 <Link to={`/profile/${appState.user.username}`}>
@@ -262,66 +374,97 @@ function Comments({ history }) {
             flexDirection: 'column-reverse',
             display: 'flex',
           }}
-          className=""
         >
-          <div style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}>
+          <ul style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}>
             {state.comments.map((comment, index) => {
               return (
-                <ul key={index} className="mb-3 border bg-white">
-                  <li id="li-comment" className="my-2 p-2">
-                    <div className="flex">
-                      <div className="flex mr-1">
-                        <Link to={`/profile/${comment.author.username}`}>
-                          <img
-                            src={comment.author.avatar}
-                            className="w-8 h-8 rounded-full"
-                            alt="profile pic"
-                          />
-                        </Link>
-                      </div>
-                      <div
-                        className="w-full px-2"
-                        style={{
-                          overflowWrap: 'break-word',
-                          minWidth: 0 + 'px',
-                          backgroundColor: '#F2F3F5',
-                        }}
-                      >
-                        <Link to={`/profile/${comment.author.username}`} className="font-medium">
-                          {comment.author.firstName} {comment.author.lastName}
-                        </Link>
-                        <div>
-                          <p>{comment.comment}</p>
-                        </div>
+                <li key={index} className="my-2 border bg-white p-2">
+                  <div className="flex">
+                    <div className="flex mr-1">
+                      <Link to={`/profile/${comment.author.username}`}>
+                        <img
+                          src={comment.author.avatar}
+                          className="w-8 h-8 rounded-full"
+                          alt="profile pic"
+                        />
+                      </Link>
+                    </div>
+                    <div
+                      className="w-full px-2"
+                      style={{
+                        overflowWrap: 'break-word',
+                        minWidth: 0 + 'px',
+                        backgroundColor: '#F2F3F5',
+                      }}
+                    >
+                      <Link to={`/profile/${comment.author.username}`} className="font-medium">
+                        {comment.author.firstName} {comment.author.lastName}
+                      </Link>
+                      <div>
+                        <p>{comment.comment}</p>
                       </div>
                     </div>
-                    <div className="flex justify-between items-center mt-2 text-xs">
-                      <p>{comment.createdDate}</p>
-                      {appState.loggedIn && appState.user.username == comment.author.username && (
-                        <div className="flex">
-                          <input
-                            type="button"
-                            value="Edit"
-                            id="edit-comment-button"
-                            className="flex bg-white items-center cursor-pointer"
-                          />
+                  </div>
+                  <div className="flex justify-between items-center mt-2 text-xs">
+                    <p>Created {comment.createdDate}</p>
+                    {appState.loggedIn && appState.user.username == comment.author.username && (
+                      <div className="flex">
+                        <input
+                          type="button"
+                          value="Edit"
+                          data-id={comment._id}
+                          onClick={handleEditClick}
+                          className="flex bg-white items-center cursor-pointer"
+                        />
 
-                          <input
-                            onClick={handleDelete}
-                            type="button"
-                            value="Delete"
-                            id="delete-comment-button"
-                            data-id={`${comment._id}`}
-                            className="flex items-center text-red-600 bg-white cursor-pointer ml-3"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </li>
-                </ul>
+                        <input
+                          onClick={handleDelete}
+                          type="button"
+                          value="Delete"
+                          data-id={`${comment._id}`}
+                          className="flex items-center text-red-600 bg-white cursor-pointer ml-3"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </li>
               );
             })}
-          </div>
+            {/* EDIT COMMENT */}
+            {appState.editComment && (
+              <form onSubmit={e => handleSubmit(e, 'edit')}>
+                <div className="w-full relative modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+                  <textarea
+                    value={state.editComment.value}
+                    onChange={e => commentsDispatch({ type: 'editComment', value: e.target.value })}
+                    className="focus:bg-gray-100 w-full p-2"
+                    placeholder="What's on your mind?"
+                    style={{
+                      backgroundColor: '#F2F3F5',
+                      whiteSpace: 'pre-wrap',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {state.editComment.value}
+                  </textarea>
+                  <CSSTransition
+                    in={state.editComment.hasError}
+                    timeout={330}
+                    classNames="liveValidateMessage"
+                    unmountOnExit
+                  >
+                    <div style={CSSTransitionStyleModified} className="liveValidateMessage">
+                      {state.editComment.message}
+                    </div>
+                  </CSSTransition>
+                  <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
+                    Submit
+                  </button>
+                </div>
+              </form>
+            )}
+            {/* EDIT COMMENT ENDS */}
+          </ul>
         </div>
       </div>
     </Page>
