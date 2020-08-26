@@ -34,7 +34,7 @@ function Footer() {
       {appState && appState.editComment && (
         <div
           onClick={() => appDispatch({ type: 'editComment' })}
-          className="modal-overlay  absolute cursor-pointer"
+          className="modal-overlay bg-gray-300 bg-opacity-50 absolute cursor-pointer"
         ></div>
       )}
       <div>

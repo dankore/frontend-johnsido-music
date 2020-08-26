@@ -59,9 +59,18 @@ function Comments({ history }) {
         draft.comment.value = action.value;
         return;
       case 'checkCommentFieldForErrors':
-        if (draft.comment.value == '') {
-          draft.comment.hasError = true;
-          draft.comment.message = 'Comment field is empty.';
+        if (action.process == 'add') {
+          if (draft.comment.value == '') {
+            draft.comment.hasError = true;
+            draft.comment.message = 'Comment field is empty.';
+          }
+        }
+
+        if (action.process == 'edit') {
+          if (draft.editComment.value == '') {
+            draft.editComment.hasError = true;
+            draft.editComment.message = 'Edit comment field is empty.';
+          }
         }
         return;
       case 'fetchStart':
@@ -76,6 +85,7 @@ function Comments({ history }) {
         draft.comment.value = '';
         return;
       case 'editComment':
+        draft.editComment.hasError = false;
         draft.editComment.value = action.value;
         return;
       case 'deleteComment': {
@@ -220,10 +230,27 @@ function Comments({ history }) {
     // commentsDispatch({ type: 'updateComment', value: e.target.value })
   }
 
-  function handleSubmit(e) {
+  function handleSubmit(e, type) {
+    console.log(type);
     e.preventDefault();
-    commentsDispatch({ type: 'checkCommentFieldForErrors', value: state.comment.value });
-    commentsDispatch({ type: 'sendCommentForm' });
+    switch (type) {
+      case 'add':
+        commentsDispatch({
+          type: 'checkCommentFieldForErrors',
+          value: state.comment.value,
+          process: 'add',
+        });
+        commentsDispatch({ type: 'sendCommentForm' });
+        return;
+      case 'edit':
+        commentsDispatch({
+          type: 'checkCommentFieldForErrors',
+          value: state.editComment.value,
+          process: 'edit',
+        });
+        //  commentsDispatch({ type: 'sendCommentForm' });
+        return;
+    }
   }
 
   if (state.isFetching) {
@@ -252,7 +279,7 @@ function Comments({ history }) {
       </div>
       <div className="w-full sm:max-w-md lg:max-w-4xl mx-auto grid lg:grid-cols-2">
         <div className="lg:pl-3">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={e => handleSubmit(e, 'add')}>
             <h2 className="px-3 text-xl mb-3">Add a Comment</h2>
             <div className="relative flex p-2 border">
               <div className="mr-1">
@@ -353,35 +380,37 @@ function Comments({ history }) {
             })}
             {/* EDIT COMMENT */}
             {appState.editComment && (
-              <div className="w-full modal border bg-yellow-200">
-                <textarea
-                  value={state.editComment.value}
-                  onChange={e => commentsDispatch({ type: 'editComment', value: e.target.value })}
-                  id="input-comment"
-                  className="focus:bg-gray-100 w-full p-2"
-                  placeholder="What's on your mind?"
-                  style={{
-                    backgroundColor: '#F2F3F5',
-                    whiteSpace: 'pre-wrap',
-                    overflow: 'hidden',
-                  }}
-                >
-                  {state.editComment.value}
-                </textarea>
-                <CSSTransition
-                  in={state.comment.hasError}
-                  timeout={330}
-                  classNames="liveValidateMessage"
-                  unmountOnExit
-                >
-                  <div style={CSSTransitionStyleModified} className="liveValidateMessage">
-                    {state.comment.message}
-                  </div>
-                </CSSTransition>
-                <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
-                  Submit
-                </button>
-              </div>
+              <form onSubmit={e => handleSubmit(e, 'edit')}>
+                <div className="w-full relative modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+                  <textarea
+                    value={state.editComment.value}
+                    onChange={e => commentsDispatch({ type: 'editComment', value: e.target.value })}
+                    id="input-comment"
+                    className="focus:bg-gray-100 w-full p-2"
+                    placeholder="What's on your mind?"
+                    style={{
+                      backgroundColor: '#F2F3F5',
+                      whiteSpace: 'pre-wrap',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {state.editComment.value}
+                  </textarea>
+                  <CSSTransition
+                    in={state.editComment.hasError}
+                    timeout={330}
+                    classNames="liveValidateMessage"
+                    unmountOnExit
+                  >
+                    <div style={CSSTransitionStyleModified} className="liveValidateMessage">
+                      {state.editComment.message}
+                    </div>
+                  </CSSTransition>
+                  <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
+                    Submit
+                  </button>
+                </div>
+              </form>
             )}
             {/* EDIT COMMENT ENDS */}
           </ul>
