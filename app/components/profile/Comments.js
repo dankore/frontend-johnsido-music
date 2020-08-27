@@ -508,7 +508,10 @@ function Comments({ history }) {
                 }}
                 className="w-full modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500"
               >
-                <div style={{ flexShrink: 10, maxHeight: 100 + '%', overflow: 'auto' }}>
+                <div
+                  className="bg-white"
+                  style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}
+                >
                   <div className="pr-4 flex text-2xl w-full justify-between bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
                     <h2 className="font-semibold">Comment Edit History</h2>
                     <button onClick={() => appDispatch({ type: 'commentHistory' })}>Close</button>
