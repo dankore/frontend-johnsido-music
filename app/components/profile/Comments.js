@@ -44,10 +44,7 @@ function Comments({ history }) {
       },
     },
     isFetching: false,
-    toggleCommentHistory: {
-      comments: [],
-      toggle: false,
-    },
+    commentHistory: [],
     sendCountAdd: 0,
     sendCountEdit: 0,
   };
@@ -116,9 +113,8 @@ function Comments({ history }) {
           draft.sendCountEdit++;
         }
         return;
-      case 'toggleCommentHistory':
-        draft.toggleCommentHistory.comments = action.value;
-        draft.toggleCommentHistory.toggle = !draft.toggleCommentHistory.toggle;
+      case 'commentHistory':
+        draft.commentHistory = action.value;
         return;
     }
   }
@@ -326,7 +322,7 @@ function Comments({ history }) {
         <div className="flex">
           <p className="mr-2">{timeAgo(commentObject.createdDate)}</p>
           <button
-            onClick={handleToggleCommentHistory}
+            onClick={handleCommentHistory}
             data-comments={JSON.stringify(commentObject)}
             className="hover:underline"
           >
@@ -339,12 +335,13 @@ function Comments({ history }) {
     return timeAgo(commentObject.createdDate);
   }
 
-  function handleToggleCommentHistory(e) {
+  function handleCommentHistory(e) {
     const comments = e.target.parentElement.parentElement.parentElement.getAttribute(
       'data-comments'
     );
 
-    commentsDispatch({ type: 'toggleCommentHistory', value: JSON.parse(comments) });
+    commentsDispatch({ type: 'commentHistory', value: JSON.parse(comments) });
+    appDispatch({ type: 'commentHistory' });
   }
 
   if (state.isFetching) {
@@ -481,13 +478,14 @@ function Comments({ history }) {
             })}
 
             {/* VIEW COMMENT HISTORY */}
-            {state.toggleCommentHistory.toggle && (
-              <div>
-                {state.toggleCommentHistory.comments.map((item, index) => {
+            {appState.commentHistory && (
+              <div className="w-full modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+                <h2 className="font-semibold text-xl">Comment Edit History</h2>
+                {state.commentHistory.map((item, index) => {
                   return (
-                    <div className="bg-gray-100 flex" key={index}>
-                      <p className="mr-3">{item.text}</p>
-                      <p>{timeAgo(item.createdDate)}</p>
+                    <div className="border-b p-3 bg-gray-100" key={index}>
+                      <p className="text-gray-700">{timeAgo(item.createdDate)}</p>
+                      <p className="">{item.text}</p>
                     </div>
                   );
                 })}
@@ -498,7 +496,8 @@ function Comments({ history }) {
             {/* EDIT COMMENT */}
             {appState.editComment && (
               <form onSubmit={e => handleSubmit(e, 'edit')}>
-                <div className="w-full relative modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+                <div className="w-full modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+                  <h2 className="font-semibold text-xl">Edit Comment</h2>
                   <textarea
                     value={state.editComment.value}
                     onChange={e => commentsDispatch({ type: 'editComment', value: e.target.value })}

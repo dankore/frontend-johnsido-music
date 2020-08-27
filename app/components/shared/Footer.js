@@ -30,10 +30,16 @@ function Footer() {
   return (
     <div className="text-center mt-10 relative">
       {welcome && state && <Welcome />}
-      {/* MODAL OVERLAY */}
+      {/* MODAL OVERLAYS */}
       {appState && appState.editComment && (
         <div
           onClick={() => appDispatch({ type: 'editComment' })}
+          className="modal-overlay bg-gray-300 bg-opacity-50 absolute cursor-pointer"
+        ></div>
+      )}
+      {appState && appState.commentHistory && (
+        <div
+          onClick={() => appDispatch({ type: 'commentHistory' })}
           className="modal-overlay bg-gray-300 bg-opacity-50 absolute cursor-pointer"
         ></div>
       )}
