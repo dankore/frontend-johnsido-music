@@ -100,7 +100,6 @@ function Comments({ history }) {
         return;
       case 'updateEditedComment': {
         const index = draft.comments.map(item => item._id).indexOf(action.value.commentId);
-        console.log(action.value.comment);
         draft.comments[index].comment.push(action.value.comment);
         return;
       }
@@ -240,7 +239,11 @@ function Comments({ history }) {
               type: 'updateEditedComment',
               value: {
                 commentId: state.editComment.commentId,
-                comment: { text: newComment.text, createdDate: newComment.createdDate },
+                comment: {
+                  text: newComment.text,
+                  createdDate: newComment.createdDate,
+                  edited: true,
+                },
               },
             });
             appDispatch({ type: 'editComment' }); // CLOSE MODAL
