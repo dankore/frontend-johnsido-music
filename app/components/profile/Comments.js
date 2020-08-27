@@ -96,7 +96,8 @@ function Comments({ history }) {
         return;
       case 'updateEditedComment': {
         const index = draft.comments.map(item => item._id).indexOf(action.value.commentId);
-        draft.comments[index].comment = action.value.comment;
+        console.log(action.value.comment);
+        draft.comments[index].comment.push(action.value.comment);
         return;
       }
       case 'deleteComment': {
@@ -172,7 +173,7 @@ function Comments({ history }) {
     return () => request.cancel();
   }, []);
 
-  // SUBMIT COMMENT
+  // ADD SUBMIT COMMENT
   useEffect(() => {
     if (state.sendCountAdd) {
       const request = Axios.CancelToken.source();
@@ -206,7 +207,7 @@ function Comments({ history }) {
     }
   }, [state.sendCountAdd]);
 
-  // SUBMIT EDIT COMMENT
+  // EDIT SUBMIT COMMENT
   useEffect(() => {
     if (state.sendCountEdit) {
       const request = Axios.CancelToken.source();
@@ -219,18 +220,22 @@ function Comments({ history }) {
               comment: state.editComment.value,
               profileOwner: state.username, // USE THIS TO GET THE ID ON THE SERVER
               apiUser: appState.user.username,
-              editedDate: moment().format('lll'),
+              createdDate: moment().format('lll'),
               token: appState.user.token,
             },
             { cancelToken: request.token }
           );
 
-          if (response.data == 'Success') {
+          if (response.data.length > 0) {
+            const newComment = response.data[response.data.length - 1];
             commentsDispatch({
               type: 'updateEditedComment',
-              value: { commentId: state.editComment.commentId, comment: state.editComment.value },
+              value: {
+                commentId: state.editComment.commentId,
+                comment: { text: newComment.text, createdDate: newComment.createdDate },
+              },
             });
-            appDispatch({ type: 'editComment' });
+            appDispatch({ type: 'editComment' }); // CLOSE MODAL
           } else {
             // ERROR E.G COMMENT FIELD IS EMPTY CATCHED BY THE SERVER;
             console.log(response.data);
@@ -377,6 +382,8 @@ function Comments({ history }) {
         >
           <ul style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}>
             {state.comments.map((comment, index) => {
+              const lastComment = comment.comment[comment.comment.length - 1];
+
               return (
                 <li key={index} className="my-2 border bg-white p-2">
                   <div className="flex">
@@ -401,12 +408,12 @@ function Comments({ history }) {
                         {comment.author.firstName} {comment.author.lastName}
                       </Link>
                       <div>
-                        <p>{comment.comment}</p>
+                        <p>{lastComment.text}</p>
                       </div>
                     </div>
                   </div>
                   <div className="flex justify-between items-center mt-2 text-xs">
-                    <p>Created {comment.createdDate}</p>
+                    <p>Created {lastComment.createdDate}</p>
                     {appState.loggedIn && appState.user.username == comment.author.username && (
                       <div className="flex">
                         <input
