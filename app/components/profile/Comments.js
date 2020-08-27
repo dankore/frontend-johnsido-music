@@ -357,7 +357,7 @@ function Comments({ history }) {
       </div>
       <div className="w-full sm:max-w-xl lg:max-w-6xl mx-auto grid lg:grid-cols-2">
         <div className="w-full">
-          <div className="mx-auto max-w-sm">
+          <div className="mx-auto max-w-sm py-10">
             <img
               className="mx-auto max-w-sm"
               style={{
@@ -372,19 +372,21 @@ function Comments({ history }) {
               </p>
               <div className="flex justify-center mr-4">
                 <div className="mr-5">
-                  <i className="fas fa-music mr-2 text-lg text-white"></i>
+                  <i className="fas fa-music mr-2 text-lg"></i>
                   {state.user.profileAbout.musicCategory}
                 </div>
                 <div className="">
-                  <i className="fas fa-map-marker-alt mr-2 text-lg text-white"></i>
+                  <i className="fas fa-map-marker-alt mr-2 text-lg"></i>
                   {state.user.profileAbout.city}
                 </div>
               </div>
             </div>
           </div>
-          <div className="lg:pl-3 mt-10">
+          <div className="lg:pl-3">
             <form onSubmit={e => handleSubmit(e, 'add')}>
-              <h2 className="px-3 text-xl mb-3">Add a Comment</h2>
+              <h2 className="px-3 text-xl mb-3 bg-clip-text text-transparent bg-gradient-to-r  from-orange-400 via-red-500 to-pink-500">
+                Add a Comment
+              </h2>
               <div className="relative flex p-2 border">
                 <div className="mr-1">
                   <Link to={`/profile/${appState.user.username}`}>
