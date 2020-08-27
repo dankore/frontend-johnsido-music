@@ -229,8 +229,8 @@ function Comments({ history }) {
             { cancelToken: request.token }
           );
 
-          if (response.data.length > 0) {
-            const newComment = response.data[response.data.length - 1];
+          if (response.data.status) {
+            const newComment = response.data.comments[response.data.comments.length - 1];
             commentsDispatch({
               type: 'updateEditedComment',
               value: {
@@ -352,12 +352,12 @@ function Comments({ history }) {
     <Page
       title={`Comments on ${state.user.profileFirstName} ${state.user.profileLastName}'s profile`}
     >
-      <div className="p-3 w-full sm:max-w-xl lg:max-w-6xl mx-auto bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
-        <p className="text-5xl">Comments</p>
+      <div className="p-3 w-full  bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+        <p className="text-5xl sm:max-w-xl lg:max-w-6xl mx-auto">Comments</p>
       </div>
       <div className="w-full sm:max-w-xl lg:max-w-6xl mx-auto grid lg:grid-cols-2">
         <div className="w-full">
-          <div className="mx-auto max-w-sm py-10">
+          <div className="mx-auto max-w-sm py-3">
             <img
               className="mx-auto max-w-sm"
               style={{
@@ -367,10 +367,10 @@ function Comments({ history }) {
               src={state.user.profileAvatar}
             />
             <div className="mx-auto max-w-sm">
-              <p className="text-center text-xl">
+              <p className="text-center text-2xl bg-clip-text text-transparent bg-gradient-to-r  from-orange-400 via-red-500 to-pink-500">
                 {state.user.profileFirstName} {state.user.profileLastName}
               </p>
-              <div className="flex justify-center mr-4">
+              <div className="flex justify-center mt-3">
                 <div className="mr-5">
                   <i className="fas fa-music mr-2 text-lg"></i>
                   {state.user.profileAbout.musicCategory}
@@ -384,9 +384,7 @@ function Comments({ history }) {
           </div>
           <div className="lg:pl-3">
             <form onSubmit={e => handleSubmit(e, 'add')}>
-              <h2 className="px-3 text-xl mb-3 bg-clip-text text-transparent bg-gradient-to-r  from-orange-400 via-red-500 to-pink-500">
-                Add a Comment
-              </h2>
+              <h2 className="px-3 text-xl mb-3">Add a Comment</h2>
               <div className="relative flex p-2 border">
                 <div className="mr-1">
                   <Link to={`/profile/${appState.user.username}`}>
@@ -445,7 +443,7 @@ function Comments({ history }) {
               return (
                 <li
                   key={index}
-                  className="relative my-2 border bg-white p-2"
+                  className="relative border bg-white p-2"
                   data-comments={JSON.stringify(comment.comment)}
                 >
                   <div className="flex">
