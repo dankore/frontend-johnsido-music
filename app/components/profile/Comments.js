@@ -480,7 +480,10 @@ function Comments({ history }) {
             {/* VIEW COMMENT HISTORY */}
             {appState.commentHistory && (
               <div className="w-full modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
-                <h2 className="font-semibold text-xl">Comment Edit History</h2>
+                <div className="flex text-2xl justify-between">
+                  <h2 className="font-semibold">Comment Edit History</h2>
+                  <button onClick={() => appDispatch({ type: 'commentHistory' })}>X</button>
+                </div>
                 {state.commentHistory.map((item, index) => {
                   return (
                     <div className="border-b p-3 bg-gray-100" key={index}>
@@ -497,7 +500,10 @@ function Comments({ history }) {
             {appState.editComment && (
               <form onSubmit={e => handleSubmit(e, 'edit')}>
                 <div className="w-full modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
-                  <h2 className="font-semibold text-xl">Edit Comment</h2>
+                  <div className="flex text-2xl justify-between">
+                    <h2 className="font-semibold">Edit Comment</h2>
+                    <button onClick={() => appDispatch({ type: 'editComment' })}>X</button>
+                  </div>
                   <textarea
                     value={state.editComment.value}
                     onChange={e => commentsDispatch({ type: 'editComment', value: e.target.value })}
