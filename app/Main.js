@@ -54,6 +54,7 @@ function Main() {
     isOpenProfileDropdown: false,
     toggleLandingPageMenu: false,
     editComment: false,
+    commentHistory: false,
   };
 
   function appReducer(draft, action) {
@@ -84,6 +85,9 @@ function Main() {
         return;
       case 'editComment':
         draft.editComment = !draft.editComment;
+        return;
+      case 'commentHistory':
+        draft.commentHistory = !draft.commentHistory;
         return;
       case 'turnOff':
         draft.flashMsgErrors.isDisplay = false;

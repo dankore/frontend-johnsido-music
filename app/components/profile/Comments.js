@@ -6,9 +6,9 @@ import Axios from 'axios';
 import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 import { CSSTransition } from 'react-transition-group';
 import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
+import { timeAgo } from '../../helpers/JSHelpers';
 import StateContext from '../../contextsProviders/StateContext';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import DispatchContext from '../../contextsProviders/DispatchContext';
 
 function Comments({ history }) {
@@ -44,6 +44,7 @@ function Comments({ history }) {
       },
     },
     isFetching: false,
+    commentHistory: [],
     sendCountAdd: 0,
     sendCountEdit: 0,
   };
@@ -96,7 +97,7 @@ function Comments({ history }) {
         return;
       case 'updateEditedComment': {
         const index = draft.comments.map(item => item._id).indexOf(action.value.commentId);
-        draft.comments[index].comment = action.value.comment;
+        draft.comments[index].comment.push(action.value.comment);
         return;
       }
       case 'deleteComment': {
@@ -111,6 +112,9 @@ function Comments({ history }) {
         if (action.edit && !draft.editComment.hasError) {
           draft.sendCountEdit++;
         }
+        return;
+      case 'commentHistory':
+        draft.commentHistory = action.value;
         return;
     }
   }
@@ -172,7 +176,7 @@ function Comments({ history }) {
     return () => request.cancel();
   }, []);
 
-  // SUBMIT COMMENT
+  // ADD SUBMIT COMMENT
   useEffect(() => {
     if (state.sendCountAdd) {
       const request = Axios.CancelToken.source();
@@ -184,7 +188,7 @@ function Comments({ history }) {
               author: appState.user._id,
               comment: state.comment.value,
               profileOwner: state.username, // USE THIS TO GET THE ID ON THE SERVER
-              createdDate: moment().format('lll'),
+              createdDate: Date.now(),
               token: appState.user.token,
             },
             { cancelToken: request.token }
@@ -206,7 +210,7 @@ function Comments({ history }) {
     }
   }, [state.sendCountAdd]);
 
-  // SUBMIT EDIT COMMENT
+  // EDIT SUBMIT COMMENT
   useEffect(() => {
     if (state.sendCountEdit) {
       const request = Axios.CancelToken.source();
@@ -219,18 +223,26 @@ function Comments({ history }) {
               comment: state.editComment.value,
               profileOwner: state.username, // USE THIS TO GET THE ID ON THE SERVER
               apiUser: appState.user.username,
-              editedDate: moment().format('lll'),
+              createdDate: Date.now(),
               token: appState.user.token,
             },
             { cancelToken: request.token }
           );
 
-          if (response.data == 'Success') {
+          if (response.data.length > 0) {
+            const newComment = response.data[response.data.length - 1];
             commentsDispatch({
               type: 'updateEditedComment',
-              value: { commentId: state.editComment.commentId, comment: state.editComment.value },
+              value: {
+                commentId: state.editComment.commentId,
+                comment: {
+                  text: newComment.text,
+                  createdDate: newComment.createdDate,
+                  edited: true,
+                },
+              },
             });
-            appDispatch({ type: 'editComment' });
+            appDispatch({ type: 'editComment' }); // CLOSE MODAL
           } else {
             // ERROR E.G COMMENT FIELD IS EMPTY CATCHED BY THE SERVER;
             console.log(response.data);
@@ -304,6 +316,34 @@ function Comments({ history }) {
     }
   }
 
+  function time(commentObject) {
+    if (commentObject.edited) {
+      return (
+        <div className="flex">
+          <p className="mr-2">{timeAgo(commentObject.createdDate)}</p>
+          <button
+            onClick={handleCommentHistory}
+            data-comments={JSON.stringify(commentObject)}
+            className="hover:underline"
+          >
+            Edited
+          </button>
+        </div>
+      );
+    }
+
+    return timeAgo(commentObject.createdDate);
+  }
+
+  function handleCommentHistory(e) {
+    const comments = e.target.parentElement.parentElement.parentElement.getAttribute(
+      'data-comments'
+    );
+
+    commentsDispatch({ type: 'commentHistory', value: JSON.parse(comments) });
+    appDispatch({ type: 'commentHistory' });
+  }
+
   if (state.isFetching) {
     return <LoadingDotsAnimation />;
   }
@@ -312,62 +352,83 @@ function Comments({ history }) {
     <Page
       title={`Comments on ${state.user.profileFirstName} ${state.user.profileLastName}'s profile`}
     >
-      <div className="p-3 w-full sm:max-w-md lg:max-w-4xl mx-auto bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+      <div className="p-3 w-full sm:max-w-xl lg:max-w-6xl mx-auto bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
         <p className="text-5xl">Comments</p>
-        <p className="text-xl">
-          {state.user.profileFirstName} {state.user.profileLastName}
-        </p>
-        <div className="flex mr-4">
-          <div className="mr-5">
-            <i className="fas fa-music mr-2 text-lg text-white"></i>
-            {state.user.profileAbout.musicCategory}
-          </div>
-          <div className="">
-            <i className="fas fa-map-marker-alt mr-2 text-lg text-white"></i>
-            {state.user.profileAbout.city}
-          </div>
-        </div>
       </div>
-      <div className="w-full sm:max-w-md lg:max-w-4xl mx-auto grid lg:grid-cols-2">
-        <div className="lg:pl-3">
-          <form onSubmit={e => handleSubmit(e, 'add')}>
-            <h2 className="px-3 text-xl mb-3">Add a Comment</h2>
-            <div className="relative flex p-2 border">
-              <div className="mr-1">
-                <Link to={`/profile/${appState.user.username}`}>
-                  <img
-                    src={appState.user.avatar}
-                    className="w-8 h-8 rounded-full"
-                    alt="profile pic"
-                  />
-                </Link>
-              </div>
-              <div className="w-full">
-                <textarea
-                  value={state.comment.value}
-                  onChange={e => commentsDispatch({ type: 'updateComment', value: e.target.value })}
-                  id="input-comment"
-                  className="focus:bg-gray-100 w-full p-2"
-                  placeholder="What's on your mind?"
-                  style={{ backgroundColor: '#F2F3F5', whiteSpace: 'pre-wrap', overflow: 'hidden' }}
-                ></textarea>
-                <CSSTransition
-                  in={state.comment.hasError}
-                  timeout={330}
-                  classNames="liveValidateMessage"
-                  unmountOnExit
-                >
-                  <div style={CSSTransitionStyleModified} className="liveValidateMessage">
-                    {state.comment.message}
-                  </div>
-                </CSSTransition>
-                <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
-                  Submit
-                </button>
+      <div className="w-full sm:max-w-xl lg:max-w-6xl mx-auto grid lg:grid-cols-2">
+        <div className="w-full">
+          <div className="mx-auto max-w-sm">
+            <img
+              className="mx-auto max-w-sm"
+              style={{
+                height: 300 + 'px',
+                borderRadius: 50 + '%',
+              }}
+              src={state.user.profileAvatar}
+            />
+            <div className="mx-auto max-w-sm">
+              <p className="text-center text-xl">
+                {state.user.profileFirstName} {state.user.profileLastName}
+              </p>
+              <div className="flex justify-center mr-4">
+                <div className="mr-5">
+                  <i className="fas fa-music mr-2 text-lg text-white"></i>
+                  {state.user.profileAbout.musicCategory}
+                </div>
+                <div className="">
+                  <i className="fas fa-map-marker-alt mr-2 text-lg text-white"></i>
+                  {state.user.profileAbout.city}
+                </div>
               </div>
             </div>
-          </form>
+          </div>
+          <div className="lg:pl-3 mt-10">
+            <form onSubmit={e => handleSubmit(e, 'add')}>
+              <h2 className="px-3 text-xl mb-3">Add a Comment</h2>
+              <div className="relative flex p-2 border">
+                <div className="mr-1">
+                  <Link to={`/profile/${appState.user.username}`}>
+                    <img
+                      src={appState.user.avatar}
+                      className="w-8 h-8 rounded-full"
+                      alt="profile pic"
+                    />
+                  </Link>
+                </div>
+                <div className="w-full">
+                  <textarea
+                    value={state.comment.value}
+                    onChange={e =>
+                      commentsDispatch({ type: 'updateComment', value: e.target.value })
+                    }
+                    id="input-comment"
+                    className="focus:bg-gray-100 w-full p-2"
+                    placeholder="What's on your mind?"
+                    style={{
+                      backgroundColor: '#F2F3F5',
+                      whiteSpace: 'pre-wrap',
+                      overflow: 'hidden',
+                    }}
+                  ></textarea>
+                  <CSSTransition
+                    in={state.comment.hasError}
+                    timeout={330}
+                    classNames="liveValidateMessage"
+                    unmountOnExit
+                  >
+                    <div style={CSSTransitionStyleModified} className="liveValidateMessage">
+                      {state.comment.message}
+                    </div>
+                  </CSSTransition>
+                  <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
+
         <div
           style={{
             height: 500 + 'px',
@@ -375,10 +436,16 @@ function Comments({ history }) {
             display: 'flex',
           }}
         >
-          <ul style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}>
+          <ul className="relative" style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}>
             {state.comments.map((comment, index) => {
+              const lastComment = comment.comment[comment.comment.length - 1];
+
               return (
-                <li key={index} className="my-2 border bg-white p-2">
+                <li
+                  key={index}
+                  className="relative my-2 border bg-white p-2"
+                  data-comments={JSON.stringify(comment.comment)}
+                >
                   <div className="flex">
                     <div className="flex mr-1">
                       <Link to={`/profile/${comment.author.username}`}>
@@ -401,12 +468,12 @@ function Comments({ history }) {
                         {comment.author.firstName} {comment.author.lastName}
                       </Link>
                       <div>
-                        <p>{comment.comment}</p>
+                        <p>{lastComment.text}</p>
                       </div>
                     </div>
                   </div>
                   <div className="flex justify-between items-center mt-2 text-xs">
-                    <p>Created {comment.createdDate}</p>
+                    {time(lastComment)}
                     {appState.loggedIn && appState.user.username == comment.author.username && (
                       <div className="flex">
                         <input
@@ -430,10 +497,34 @@ function Comments({ history }) {
                 </li>
               );
             })}
+
+            {/* VIEW COMMENT HISTORY */}
+            {appState.commentHistory && (
+              <div className="w-full modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+                <div className="flex text-2xl justify-between">
+                  <h2 className="font-semibold">Comment Edit History</h2>
+                  <button onClick={() => appDispatch({ type: 'commentHistory' })}>X</button>
+                </div>
+                {state.commentHistory.map((item, index) => {
+                  return (
+                    <div className="border-b p-3 bg-gray-100" key={index}>
+                      <p className="text-gray-700">{timeAgo(item.createdDate)}</p>
+                      <p className="">{item.text}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            {/* VIEW COMMENT HISTORY ENDS */}
+
             {/* EDIT COMMENT */}
             {appState.editComment && (
               <form onSubmit={e => handleSubmit(e, 'edit')}>
-                <div className="w-full relative modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+                <div className="w-full modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+                  <div className="flex text-2xl justify-between">
+                    <h2 className="font-semibold">Edit Comment</h2>
+                    <button onClick={() => appDispatch({ type: 'editComment' })}>X</button>
+                  </div>
                   <textarea
                     value={state.editComment.value}
                     onChange={e => commentsDispatch({ type: 'editComment', value: e.target.value })}
