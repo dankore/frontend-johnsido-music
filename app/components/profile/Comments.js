@@ -6,9 +6,9 @@ import Axios from 'axios';
 import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 import { CSSTransition } from 'react-transition-group';
 import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
+import { timeAgo } from '../../helpers/JSHelpers';
 import StateContext from '../../contextsProviders/StateContext';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import DispatchContext from '../../contextsProviders/DispatchContext';
 
 function Comments({ history }) {
@@ -185,7 +185,7 @@ function Comments({ history }) {
               author: appState.user._id,
               comment: state.comment.value,
               profileOwner: state.username, // USE THIS TO GET THE ID ON THE SERVER
-              createdDate: moment().format('lll'),
+              createdDate: Date.now(),
               token: appState.user.token,
             },
             { cancelToken: request.token }
@@ -220,7 +220,7 @@ function Comments({ history }) {
               comment: state.editComment.value,
               profileOwner: state.username, // USE THIS TO GET THE ID ON THE SERVER
               apiUser: appState.user.username,
-              createdDate: moment().format('lll'),
+              createdDate: Date.now(),
               token: appState.user.token,
             },
             { cancelToken: request.token }
@@ -307,6 +307,19 @@ function Comments({ history }) {
         commentsDispatch({ type: 'sendCommentForm', edit: true });
         return;
     }
+  }
+
+  function time(commentObject) {
+    if (commentObject.edited) {
+      return (
+        <div className="flex">
+          <p className="mr-2">{timeAgo(commentObject.createdDate)}</p>
+          <button>Edited</button>
+        </div>
+      );
+    }
+
+    return timeAgo(commentObject.createdDate);
   }
 
   if (state.isFetching) {
@@ -413,7 +426,7 @@ function Comments({ history }) {
                     </div>
                   </div>
                   <div className="flex justify-between items-center mt-2 text-xs">
-                    <p>Created {lastComment.createdDate}</p>
+                    {time(lastComment)}
                     {appState.loggedIn && appState.user.username == comment.author.username && (
                       <div className="flex">
                         <input

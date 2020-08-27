@@ -1,5 +1,5 @@
 module.exports = {
-  timeAgo: function timeDifference(previous) {
+  timeAgo: function (previous) {
     var msPerMinute = 60 * 1000;
     var msPerHour = msPerMinute * 60;
     var msPerDay = msPerHour * 24;
