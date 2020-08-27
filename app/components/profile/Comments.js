@@ -44,6 +44,7 @@ function Comments({ history }) {
       },
     },
     isFetching: false,
+    toggleCommentHistory: false,
     sendCountAdd: 0,
     sendCountEdit: 0,
   };
@@ -112,6 +113,9 @@ function Comments({ history }) {
         if (action.edit && !draft.editComment.hasError) {
           draft.sendCountEdit++;
         }
+        return;
+      case 'toggleCommentHistory':
+        draft.toggleCommentHistory = !draft.toggleCommentHistory;
         return;
     }
   }
@@ -314,12 +318,27 @@ function Comments({ history }) {
       return (
         <div className="flex">
           <p className="mr-2">{timeAgo(commentObject.createdDate)}</p>
-          <button>Edited</button>
+          <button
+            onClick={handleToggleCommentHistory}
+            data-comments={JSON.stringify(commentObject)}
+            className="hover:underline"
+          >
+            Edited
+          </button>
         </div>
       );
     }
 
     return timeAgo(commentObject.createdDate);
+  }
+
+  function handleToggleCommentHistory(e) {
+    //    commentsDispatch({ type: 'toggleCommentHistory' })
+    const comments = e.target.parentElement.parentElement.parentElement.getAttribute(
+      'data-comments'
+    );
+
+    console.log(JSON.parse(comments));
   }
 
   if (state.isFetching) {
@@ -398,7 +417,11 @@ function Comments({ history }) {
               const lastComment = comment.comment[comment.comment.length - 1];
 
               return (
-                <li key={index} className="my-2 border bg-white p-2">
+                <li
+                  key={index}
+                  className="relative my-2 border bg-white p-2"
+                  data-comments={JSON.stringify(comment.comment)}
+                >
                   <div className="flex">
                     <div className="flex mr-1">
                       <Link to={`/profile/${comment.author.username}`}>
@@ -447,6 +470,18 @@ function Comments({ history }) {
                       </div>
                     )}
                   </div>
+                  {state.toggleCommentHistory && (
+                    <div className="absolute">
+                      {comment.comment.map((item, index) => {
+                        return (
+                          <div className="bg-gray-100" key={index}>
+                            <p>{item.text}</p>
+                            <p>{item.createdDate}</p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </li>
               );
             })}
