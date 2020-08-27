@@ -502,19 +502,26 @@ function Comments({ history }) {
 
             {/* VIEW COMMENT HISTORY */}
             {appState.commentHistory && (
-              <div className="w-full modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
-                <div className="flex text-2xl justify-between">
-                  <h2 className="font-semibold">Comment Edit History</h2>
-                  <button onClick={() => appDispatch({ type: 'commentHistory' })}>X</button>
+              <div
+                style={{
+                  height: 500 + 'px',
+                }}
+                className="w-full modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500"
+              >
+                <div style={{ flexShrink: 10, maxHeight: 100 + '%', overflow: 'auto' }}>
+                  <div className="pr-4 flex text-2xl w-full justify-between bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+                    <h2 className="font-semibold">Comment Edit History</h2>
+                    <button onClick={() => appDispatch({ type: 'commentHistory' })}>Close</button>
+                  </div>
+                  {state.commentHistory.map((item, index) => {
+                    return (
+                      <div className="border-b p-3 bg-gray-100" key={index}>
+                        <p className="text-gray-700">{timeAgo(item.createdDate)}</p>
+                        <p className="">{item.text}</p>
+                      </div>
+                    );
+                  })}
                 </div>
-                {state.commentHistory.map((item, index) => {
-                  return (
-                    <div className="border-b p-3 bg-gray-100" key={index}>
-                      <p className="text-gray-700">{timeAgo(item.createdDate)}</p>
-                      <p className="">{item.text}</p>
-                    </div>
-                  );
-                })}
               </div>
             )}
             {/* VIEW COMMENT HISTORY ENDS */}
