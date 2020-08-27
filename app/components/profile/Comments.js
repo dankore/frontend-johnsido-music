@@ -231,6 +231,7 @@ function Comments({ history }) {
 
           if (response.data.status) {
             const newComment = response.data.comments[response.data.comments.length - 1];
+
             commentsDispatch({
               type: 'updateEditedComment',
               value: {
@@ -242,6 +243,7 @@ function Comments({ history }) {
                 },
               },
             });
+
             appDispatch({ type: 'editComment' }); // CLOSE MODAL
           } else {
             // ERROR E.G COMMENT FIELD IS EMPTY CATCHED BY THE SERVER;
@@ -353,7 +355,14 @@ function Comments({ history }) {
       title={`Comments on ${state.user.profileFirstName} ${state.user.profileLastName}'s profile`}
     >
       <div className="p-3 w-full  bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
-        <p className="text-5xl sm:max-w-xl lg:max-w-6xl mx-auto">Comments</p>
+        <p
+          style={{
+            backgroundImage: `url(https://res.cloudinary.com/my-nigerian-projects/image/upload/f_auto,g_auto/v1596725538/Others/layout-pattern.png)`,
+          }}
+          className="text-5xl sm:max-w-xl lg:max-w-6xl mx-auto"
+        >
+          Comments
+        </p>
       </div>
       <div className="w-full sm:max-w-xl lg:max-w-6xl mx-auto grid lg:grid-cols-2">
         <div className="w-full">
@@ -533,7 +542,7 @@ function Comments({ history }) {
                 <div className="w-full modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
                   <div className="flex text-2xl justify-between">
                     <h2 className="font-semibold">Edit Comment</h2>
-                    <button onClick={() => appDispatch({ type: 'editComment' })}>X</button>
+                    <button onClick={() => appDispatch({ type: 'editComment' })}>Close</button>
                   </div>
                   <textarea
                     value={state.editComment.value}
@@ -559,7 +568,7 @@ function Comments({ history }) {
                     </div>
                   </CSSTransition>
                   <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
-                    Submit
+                    Update Comment
                   </button>
                 </div>
               </form>
