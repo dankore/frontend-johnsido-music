@@ -352,62 +352,83 @@ function Comments({ history }) {
     <Page
       title={`Comments on ${state.user.profileFirstName} ${state.user.profileLastName}'s profile`}
     >
-      <div className="p-3 w-full sm:max-w-md lg:max-w-4xl mx-auto bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+      <div className="p-3 w-full sm:max-w-xl lg:max-w-6xl mx-auto bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
         <p className="text-5xl">Comments</p>
-        <p className="text-xl">
-          {state.user.profileFirstName} {state.user.profileLastName}
-        </p>
-        <div className="flex mr-4">
-          <div className="mr-5">
-            <i className="fas fa-music mr-2 text-lg text-white"></i>
-            {state.user.profileAbout.musicCategory}
-          </div>
-          <div className="">
-            <i className="fas fa-map-marker-alt mr-2 text-lg text-white"></i>
-            {state.user.profileAbout.city}
-          </div>
-        </div>
       </div>
-      <div className="w-full sm:max-w-md lg:max-w-4xl mx-auto grid lg:grid-cols-2">
-        <div className="lg:pl-3">
-          <form onSubmit={e => handleSubmit(e, 'add')}>
-            <h2 className="px-3 text-xl mb-3">Add a Comment</h2>
-            <div className="relative flex p-2 border">
-              <div className="mr-1">
-                <Link to={`/profile/${appState.user.username}`}>
-                  <img
-                    src={appState.user.avatar}
-                    className="w-8 h-8 rounded-full"
-                    alt="profile pic"
-                  />
-                </Link>
-              </div>
-              <div className="w-full">
-                <textarea
-                  value={state.comment.value}
-                  onChange={e => commentsDispatch({ type: 'updateComment', value: e.target.value })}
-                  id="input-comment"
-                  className="focus:bg-gray-100 w-full p-2"
-                  placeholder="What's on your mind?"
-                  style={{ backgroundColor: '#F2F3F5', whiteSpace: 'pre-wrap', overflow: 'hidden' }}
-                ></textarea>
-                <CSSTransition
-                  in={state.comment.hasError}
-                  timeout={330}
-                  classNames="liveValidateMessage"
-                  unmountOnExit
-                >
-                  <div style={CSSTransitionStyleModified} className="liveValidateMessage">
-                    {state.comment.message}
-                  </div>
-                </CSSTransition>
-                <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
-                  Submit
-                </button>
+      <div className="w-full sm:max-w-xl lg:max-w-6xl mx-auto grid lg:grid-cols-2">
+        <div className="w-full">
+          <div className="mx-auto max-w-sm">
+            <img
+              className="mx-auto max-w-sm"
+              style={{
+                height: 300 + 'px',
+                borderRadius: 50 + '%',
+              }}
+              src={state.user.profileAvatar}
+            />
+            <div className="mx-auto max-w-sm">
+              <p className="text-center text-xl">
+                {state.user.profileFirstName} {state.user.profileLastName}
+              </p>
+              <div className="flex justify-center mr-4">
+                <div className="mr-5">
+                  <i className="fas fa-music mr-2 text-lg text-white"></i>
+                  {state.user.profileAbout.musicCategory}
+                </div>
+                <div className="">
+                  <i className="fas fa-map-marker-alt mr-2 text-lg text-white"></i>
+                  {state.user.profileAbout.city}
+                </div>
               </div>
             </div>
-          </form>
+          </div>
+          <div className="lg:pl-3 mt-10">
+            <form onSubmit={e => handleSubmit(e, 'add')}>
+              <h2 className="px-3 text-xl mb-3">Add a Comment</h2>
+              <div className="relative flex p-2 border">
+                <div className="mr-1">
+                  <Link to={`/profile/${appState.user.username}`}>
+                    <img
+                      src={appState.user.avatar}
+                      className="w-8 h-8 rounded-full"
+                      alt="profile pic"
+                    />
+                  </Link>
+                </div>
+                <div className="w-full">
+                  <textarea
+                    value={state.comment.value}
+                    onChange={e =>
+                      commentsDispatch({ type: 'updateComment', value: e.target.value })
+                    }
+                    id="input-comment"
+                    className="focus:bg-gray-100 w-full p-2"
+                    placeholder="What's on your mind?"
+                    style={{
+                      backgroundColor: '#F2F3F5',
+                      whiteSpace: 'pre-wrap',
+                      overflow: 'hidden',
+                    }}
+                  ></textarea>
+                  <CSSTransition
+                    in={state.comment.hasError}
+                    timeout={330}
+                    classNames="liveValidateMessage"
+                    unmountOnExit
+                  >
+                    <div style={CSSTransitionStyleModified} className="liveValidateMessage">
+                      {state.comment.message}
+                    </div>
+                  </CSSTransition>
+                  <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
+
         <div
           style={{
             height: 500 + 'px',
