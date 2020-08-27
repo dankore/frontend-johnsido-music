@@ -44,7 +44,10 @@ function Comments({ history }) {
       },
     },
     isFetching: false,
-    toggleCommentHistory: false,
+    toggleCommentHistory: {
+      comments: [],
+      toggle: false,
+    },
     sendCountAdd: 0,
     sendCountEdit: 0,
   };
@@ -115,7 +118,8 @@ function Comments({ history }) {
         }
         return;
       case 'toggleCommentHistory':
-        draft.toggleCommentHistory = !draft.toggleCommentHistory;
+        draft.toggleCommentHistory.comments = action.value;
+        draft.toggleCommentHistory.toggle = !draft.toggleCommentHistory.toggle;
         return;
     }
   }
@@ -333,12 +337,11 @@ function Comments({ history }) {
   }
 
   function handleToggleCommentHistory(e) {
-    //    commentsDispatch({ type: 'toggleCommentHistory' })
     const comments = e.target.parentElement.parentElement.parentElement.getAttribute(
       'data-comments'
     );
 
-    console.log(JSON.parse(comments));
+    commentsDispatch({ type: 'toggleCommentHistory', value: JSON.parse(comments) });
   }
 
   if (state.isFetching) {
@@ -412,7 +415,7 @@ function Comments({ history }) {
             display: 'flex',
           }}
         >
-          <ul style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}>
+          <ul className="relative" style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}>
             {state.comments.map((comment, index) => {
               const lastComment = comment.comment[comment.comment.length - 1];
 
@@ -470,21 +473,25 @@ function Comments({ history }) {
                       </div>
                     )}
                   </div>
-                  {state.toggleCommentHistory && (
-                    <div className="absolute">
-                      {comment.comment.map((item, index) => {
-                        return (
-                          <div className="bg-gray-100" key={index}>
-                            <p>{item.text}</p>
-                            <p>{item.createdDate}</p>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
                 </li>
               );
             })}
+
+            {/* VIEW COMMENT HISTORY */}
+            {state.toggleCommentHistory.toggle && (
+              <div>
+                {state.toggleCommentHistory.comments.map((item, index) => {
+                  return (
+                    <div className="bg-gray-100 flex" key={index}>
+                      <p className="mr-3">{item.text}</p>
+                      <p>{timeAgo(item.createdDate)}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            {/* VIEW COMMENT HISTORY ENDS */}
+
             {/* EDIT COMMENT */}
             {appState.editComment && (
               <form onSubmit={e => handleSubmit(e, 'edit')}>
