@@ -23,7 +23,7 @@ import FlashMsgSuccess from './components/shared/FlashMsgSuccess';
 import AboutPage from './pages/AboutPage';
 import Comments from './components/profile/Comments';
 import Footer from './components/shared/Footer';
-import Followers from './components/profile/Followers';
+import FollowPage from './components/profile/FollowPage';
 
 function Main() {
   const initialState = {
@@ -169,8 +169,8 @@ function Main() {
             <Route exact path="/profile/:username/comments">
               <Comments />
             </Route>
-            <Route exact path="/profile/:username/followers">
-              <Followers />
+            <Route exact path="/profile/:username/followPage">
+              <FollowPage />
             </Route>
             <Route path="/register">
               <Register />
@@ -188,12 +188,12 @@ function Main() {
                 <div>Please login or register to view this page.</div>
               )}
             </Route>
-            <Route to="/404">
-              <div>Not found</div>
+            {/* <Route to="/404">
+              <div>Not found!!</div>
             </Route>
             <Route>
               <div>Not found</div>
-            </Route>
+            </Route> */}
           </Switch>
           <Route path={['/profile/:username', '/settings', '/upload-song', '/about']}>
             <Footer />
