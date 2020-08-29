@@ -188,12 +188,12 @@ function Main() {
                 <div>Please login or register to view this page.</div>
               )}
             </Route>
-            {/* <Route to="/404">
-              <div>Not found!!</div>
+            <Route to="/404">
+              <div>404!</div>
             </Route>
             <Route>
               <div>Not found</div>
-            </Route> */}
+            </Route>
           </Switch>
           <Route path={['/profile/:username', '/settings', '/upload-song', '/about']}>
             <Footer />
