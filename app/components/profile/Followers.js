@@ -57,8 +57,6 @@ function Followers() {
 
         followDispatch({ type: 'isFetchingProfileData' });
 
-        console.log(response.data);
-
         if (response.data) {
           followDispatch({ type: 'fetchVisistedProfileInfo', value: response.data });
         } else {
