@@ -229,8 +229,9 @@ function Comments({ history }) {
             { cancelToken: request.token }
           );
 
-          if (response.data.length > 0) {
-            const newComment = response.data[response.data.length - 1];
+          if (response.data.status) {
+            const newComment = response.data.comments[response.data.comments.length - 1];
+
             commentsDispatch({
               type: 'updateEditedComment',
               value: {
@@ -242,6 +243,7 @@ function Comments({ history }) {
                 },
               },
             });
+
             appDispatch({ type: 'editComment' }); // CLOSE MODAL
           } else {
             // ERROR E.G COMMENT FIELD IS EMPTY CATCHED BY THE SERVER;
@@ -352,12 +354,19 @@ function Comments({ history }) {
     <Page
       title={`Comments on ${state.user.profileFirstName} ${state.user.profileLastName}'s profile`}
     >
-      <div className="p-3 w-full sm:max-w-xl lg:max-w-6xl mx-auto bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
-        <p className="text-5xl">Comments</p>
+      <div className="p-3 w-full  bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+        <p
+          style={{
+            backgroundImage: `url(https://res.cloudinary.com/my-nigerian-projects/image/upload/f_auto,g_auto/v1596725538/Others/layout-pattern.png)`,
+          }}
+          className="text-5xl sm:max-w-xl lg:max-w-6xl mx-auto"
+        >
+          Comments
+        </p>
       </div>
       <div className="w-full sm:max-w-xl lg:max-w-6xl mx-auto grid lg:grid-cols-2">
         <div className="w-full">
-          <div className="mx-auto max-w-sm py-10">
+          <div className="mx-auto max-w-sm py-3">
             <img
               className="mx-auto max-w-sm"
               style={{
@@ -367,10 +376,10 @@ function Comments({ history }) {
               src={state.user.profileAvatar}
             />
             <div className="mx-auto max-w-sm">
-              <p className="text-center text-xl">
+              <p className="text-center text-2xl bg-clip-text text-transparent bg-gradient-to-r  from-orange-400 via-red-500 to-pink-500">
                 {state.user.profileFirstName} {state.user.profileLastName}
               </p>
-              <div className="flex justify-center mr-4">
+              <div className="flex justify-center mt-3">
                 <div className="mr-5">
                   <i className="fas fa-music mr-2 text-lg"></i>
                   {state.user.profileAbout.musicCategory}
@@ -445,7 +454,7 @@ function Comments({ history }) {
               return (
                 <li
                   key={index}
-                  className="relative my-2 border bg-white p-2"
+                  className="relative border bg-white p-2"
                   data-comments={JSON.stringify(comment.comment)}
                 >
                   <div className="flex">
@@ -502,19 +511,29 @@ function Comments({ history }) {
 
             {/* VIEW COMMENT HISTORY */}
             {appState.commentHistory && (
-              <div className="w-full modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
-                <div className="flex text-2xl justify-between">
-                  <h2 className="font-semibold">Comment Edit History</h2>
-                  <button onClick={() => appDispatch({ type: 'commentHistory' })}>X</button>
+              <div
+                style={{
+                  height: 500 + 'px',
+                }}
+                className="w-full modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500"
+              >
+                <div
+                  className="bg-white"
+                  style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}
+                >
+                  <div className="pr-4 flex text-2xl w-full justify-between bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+                    <h2 className="font-semibold">Comment Edit History</h2>
+                    <button onClick={() => appDispatch({ type: 'commentHistory' })}>Close</button>
+                  </div>
+                  {state.commentHistory.map((item, index) => {
+                    return (
+                      <div className="border-b p-3 bg-gray-100" key={index}>
+                        <p className="text-gray-700">{timeAgo(item.createdDate)}</p>
+                        <p className="">{item.text}</p>
+                      </div>
+                    );
+                  })}
                 </div>
-                {state.commentHistory.map((item, index) => {
-                  return (
-                    <div className="border-b p-3 bg-gray-100" key={index}>
-                      <p className="text-gray-700">{timeAgo(item.createdDate)}</p>
-                      <p className="">{item.text}</p>
-                    </div>
-                  );
-                })}
               </div>
             )}
             {/* VIEW COMMENT HISTORY ENDS */}
@@ -525,7 +544,7 @@ function Comments({ history }) {
                 <div className="w-full modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
                   <div className="flex text-2xl justify-between">
                     <h2 className="font-semibold">Edit Comment</h2>
-                    <button onClick={() => appDispatch({ type: 'editComment' })}>X</button>
+                    <button onClick={() => appDispatch({ type: 'editComment' })}>Close</button>
                   </div>
                   <textarea
                     value={state.editComment.value}
@@ -551,7 +570,7 @@ function Comments({ history }) {
                     </div>
                   </CSSTransition>
                   <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
-                    Submit
+                    Update Comment
                   </button>
                 </div>
               </form>

@@ -9,6 +9,7 @@ import StateContext from '../../contextsProviders/StateContext';
 
 function ProfilePage({ history }) {
   const appState = useContext(StateContext);
+  const { username } = useParams();
   const initialState = {
     user: {
       profileUsername: '',
@@ -24,7 +25,6 @@ function ProfilePage({ history }) {
         commentsCount: 0,
       },
     },
-    username: useParams().username,
     isFetching: false,
     startFollowingCount: 0,
     stopFollowingCount: 0,
@@ -67,7 +67,7 @@ function ProfilePage({ history }) {
     try {
       (async function getProfileInfo() {
         const response = await Axios.post(
-          `/profile/${state.username}`,
+          `/profile/${username}`,
           { token: appState.user.token },
           {
             CancelToken: request.token,
@@ -87,7 +87,7 @@ function ProfilePage({ history }) {
       console.log(error);
     }
     return () => request.cancel();
-  }, [state.username]);
+  }, [username]);
 
   // ADD FOLLOW
   useEffect(() => {
