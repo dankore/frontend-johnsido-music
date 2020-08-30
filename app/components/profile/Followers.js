@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useImmerReducer } from 'use-immer';
 import Axios from 'axios';
 import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 import FollowPageHeader from './FollowPageHeader';
 import Page from '../layouts/Page';
+import StateContext from '../../contextsProviders/StateContext';
 
 function Followers() {
+  const appState = useContext(StateContext);
   const initialState = {
     username: useParams().username,
     profileUser: {},
@@ -78,12 +80,16 @@ function Followers() {
     try {
       followDispatch({ type: 'isFetchingFollowers', process: 'starts' });
       (async function fetchFollowers() {
-        const response = await Axios.post(`/profile/${state.username}/followers`, {
-          CancelToken: request.token,
-        });
+        const response = await Axios.post(
+          `/profile/${state.username}/followers`,
+          { loggedInUserId: appState.user._id },
+          {
+            CancelToken: request.token,
+          }
+        );
 
         followDispatch({ type: 'isFetchingFollowers' });
-        console.log(response.data.followers);
+        console.log({ followers: response.data.followers });
 
         if (response.data.status) {
           followDispatch({ type: 'fetchVisistedProfileFollowers', value: response.data.followers });
@@ -105,19 +111,40 @@ function Followers() {
 
   return (
     <Page title="people following">
-      <div className="mx-auto bg-yellow-300">
+      <div className="w-full sm:max-w-lg lg:max-w-xl mx-auto bg-yellow-300">
         <FollowPageHeader profileUser={state.profileUser} />
         {state.followers.map((follower, index) => {
           return (
-            <Link
-              className="flex items-center"
-              key={index}
-              to={`/profile/${follower.author.username}`}
-            >
-              <img className="w-12 h-12 rounded-full mr-3" src={`${follower.author.avatar}`} />
-
-              <p>{follower.author.firstName}</p>
-            </Link>
+            <div key={index} className=" block relative border bg-white p-2">
+              <div className="flex">
+                <div className="flex mr-1">
+                  <Link to={`/profile/${follower.author.username}`}>
+                    <img
+                      src={follower.author.avatar}
+                      className="w-8 h-8 rounded-full"
+                      alt="profile pic"
+                    />
+                  </Link>
+                </div>
+                <div
+                  className="w-full px-2"
+                  style={{
+                    overflowWrap: 'break-word',
+                    minWidth: 0 + 'px',
+                    backgroundColor: '#F2F3F5',
+                  }}
+                >
+                  <div className="flex justify-between">
+                    <Link to={`/profile/${follower.author.username}`} className="font-medium">
+                      {follower.author.firstName} {follower.author.lastName}
+                    </Link>
+                    <button>Follow</button>
+                  </div>
+                  <p>@{follower.author.username}</p>
+                  <p>{follower.author.about.bio}</p>
+                </div>
+              </div>
+            </div>
           );
         })}
       </div>
