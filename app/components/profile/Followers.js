@@ -87,7 +87,6 @@ function Followers() {
         );
 
         followDispatch({ type: 'isFetchingFollowers' });
-        console.log({ followers: response.data.followers });
 
         if (response.data.status) {
           followDispatch({ type: 'fetchVisistedProfileFollowers', value: response.data.followers });
@@ -132,13 +131,37 @@ function Followers() {
                     backgroundColor: '#F2F3F5',
                   }}
                 >
-                  <div className="flex justify-between">
-                    <Link to={`/profile/${follower.author.username}`} className="font-medium">
-                      {follower.author.firstName} {follower.author.lastName}
-                    </Link>
-                    <button>Follow</button>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <Link to={`/profile/${follower.author.username}`} className="font-medium">
+                        {follower.author.firstName} {follower.author.lastName}
+                      </Link>
+                      <p>@{follower.author.username}</p>
+                    </div>
+
+                    {appState.loggedIn && follower.loggedInUserFollowsVisitedUser && (
+                      <button
+                        className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-3 py-1 rounded outline-none focus:outline-none sm:mr-2 mb-1"
+                        type="button"
+                        style={{ transition: 'all .15s ease' }}
+                        // onClick={() => profileDispatch({ type: 'stopFollowing' })}
+                      >
+                        Stop Following
+                      </button>
+                    )}
+                    {appState.loggedIn &&
+                      appState.user.username != follower.author.username &&
+                      !follower.loggedInUserFollowsVisitedUser && (
+                        <button
+                          className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1"
+                          type="button"
+                          style={{ transition: 'all .15s ease' }}
+                          // onClick={() => profileDispatch({ type: 'startFollowing' })}
+                        >
+                          Follow
+                        </button>
+                      )}
                   </div>
-                  <p>@{follower.author.username}</p>
                   <p>{follower.author.about.bio}</p>
                 </div>
               </div>
