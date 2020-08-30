@@ -24,6 +24,7 @@ import AboutPage from './pages/AboutPage';
 import Comments from './components/profile/Comments';
 import Footer from './components/shared/Footer';
 import FollowPage from './components/profile/FollowPage';
+import Followers from './components/profile/Followers';
 
 function Main() {
   const initialState = {
@@ -171,6 +172,9 @@ function Main() {
             </Route>
             <Route exact path="/profile/:username/followPage">
               <FollowPage />
+            </Route>
+            <Route exact path="/profile/:username/followers">
+              <Followers />
             </Route>
             <Route path="/register">
               <Register />
