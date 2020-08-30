@@ -225,7 +225,7 @@ function ProfilePage({ history }) {
                     <div className="flex justify-center py-4 lg:pt-4 pt-8">
                       <div className="mr-4 p-3 text-center">
                         <Link
-                          to={`/profile/${state.user.profileUsername}/followPage`}
+                          to={`/profile/${state.user.profileUsername}/followers`}
                           className="text-sm text-gray-500"
                         >
                           <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
@@ -236,7 +236,7 @@ function ProfilePage({ history }) {
                       </div>
                       <div className="mr-4 p-3 text-center">
                         <Link
-                          to={`/profile/${state.user.profileUsername}/followPage`}
+                          to={`/profile/${state.user.profileUsername}/following`}
                           className="text-sm text-gray-500"
                         >
                           <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">

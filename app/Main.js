@@ -23,7 +23,6 @@ import FlashMsgSuccess from './components/shared/FlashMsgSuccess';
 import AboutPage from './pages/AboutPage';
 import Comments from './components/profile/Comments';
 import Footer from './components/shared/Footer';
-import FollowPage from './components/profile/FollowPage';
 import Followers from './components/profile/Followers';
 
 function Main() {
@@ -169,9 +168,6 @@ function Main() {
             </Route>
             <Route exact path="/profile/:username/comments">
               <Comments />
-            </Route>
-            <Route exact path="/profile/:username/followPage">
-              <FollowPage />
             </Route>
             <Route exact path="/profile/:username/followers">
               <Followers />
