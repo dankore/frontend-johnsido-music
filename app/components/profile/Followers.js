@@ -136,10 +136,15 @@ function Followers() {
                       <Link to={`/profile/${follower.author.username}`} className="font-medium">
                         {follower.author.firstName} {follower.author.lastName}
                       </Link>
-                      <p>@{follower.author.username}</p>
+                      <div className="flex flex-wrap items-center text-sm">
+                        <p className="mr-2">@{follower.author.username}</p>
+                        {appState.loggedIn && follower.visitedUserFollowslogged && (
+                          <p className="text-pink-500 font-semibold italic p-1">Follows you</p>
+                        )}
+                      </div>
                     </div>
 
-                    {appState.loggedIn && follower.loggedInUserFollowsVisitedUser && (
+                    {appState.loggedIn && follower.loggedInUserFollowsVisited && (
                       <button
                         className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-3 py-1 rounded outline-none focus:outline-none sm:mr-2 mb-1"
                         type="button"
@@ -151,7 +156,7 @@ function Followers() {
                     )}
                     {appState.loggedIn &&
                       appState.user.username != follower.author.username &&
-                      !follower.loggedInUserFollowsVisitedUser && (
+                      !follower.loggedInUserFollowsVisited && (
                         <button
                           className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1"
                           type="button"
