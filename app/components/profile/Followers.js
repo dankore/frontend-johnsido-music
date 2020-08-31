@@ -15,6 +15,18 @@ function Followers() {
     followers: [],
     isFetchingProfileData: false,
     isFetchingFollowers: false,
+    startFollowing: {
+      id: '',
+      username: '',
+      count: 0,
+      isFollowing: false,
+    },
+    stopFollowing: {
+      id: '',
+      username: '',
+      count: 0,
+      isNotFollowing: false,
+    },
   };
 
   function followReducer(draft, action) {
@@ -38,6 +50,30 @@ function Followers() {
         } else {
           draft.isFetchingFollowers = false;
         }
+        return;
+      case 'startFollowing':
+        draft.startFollowing.id = action.value.id;
+        draft.startFollowing.username = action.value.username;
+        draft.startFollowing.count++;
+        return;
+      case 'stopFollowing':
+        draft.stopFollowing.username = action.value.username;
+        draft.stopFollowing.id = action.value.id;
+        draft.stopFollowing.count++;
+        return;
+      case 'updateFollowState': {
+        const index = draft.followers.map(follower => follower._id).indexOf(action.value);
+
+        if (action.process == 'add') {
+          draft.followers[index].loggedInUserFollowsVisited = true;
+        } else {
+          draft.followers[index].loggedInUserFollowsVisited = false;
+        }
+
+        return;
+      }
+      case 'UpdateStopFollowing':
+        draft.stopFollowing.isNotFollowing = true;
         return;
     }
   }
@@ -102,6 +138,60 @@ function Followers() {
     return () => request.cancel();
   }, [state.username]);
 
+  // ADD FOLLOW
+  useEffect(() => {
+    if (state.startFollowing.count) {
+      const request = Axios.CancelToken.source();
+
+      try {
+        (async function addFollow() {
+          await Axios.post(
+            `/addFollow/${state.startFollowing.username}`,
+            { token: appState.user.token },
+            {
+              CancelToken: request.token,
+            }
+          );
+
+          followDispatch({
+            type: 'updateFollowState',
+            value: state.startFollowing.id,
+            process: 'add',
+          });
+        })();
+      } catch (error) {
+        // FAIL SILENTLY
+        console.log(error);
+      }
+
+      return () => request.cancel();
+    }
+  }, [state.startFollowing.count]);
+
+  // REMOVE FOLLOW
+  useEffect(() => {
+    if (state.stopFollowing.count) {
+      const request = Axios.CancelToken.source();
+
+      (async function stopFollowing() {
+        try {
+          await Axios.post(
+            `/stopFollowing/${state.stopFollowing.username}`,
+            { token: appState.user.token },
+            { cancelToken: request.token }
+          );
+
+          followDispatch({ type: 'updateFollowState', value: state.stopFollowing.id });
+        } catch (error) {
+          // FAIL SILENTLY
+          console.log(error);
+        }
+      })();
+
+      return () => request.cancel();
+    }
+  }, [state.stopFollowing.count]);
+
   if (state.isFetchingProfileData || state.isFetchingFollowers) {
     return <LoadingDotsAnimation />;
   }
@@ -144,24 +234,43 @@ function Followers() {
                       </div>
                     </div>
 
-                    {appState.loggedIn && follower.loggedInUserFollowsVisited && (
-                      <button
-                        className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-3 py-1 rounded outline-none focus:outline-none sm:mr-2 mb-1"
-                        type="button"
-                        style={{ transition: 'all .15s ease' }}
-                        // onClick={() => profileDispatch({ type: 'stopFollowing' })}
-                      >
-                        Stop Following
-                      </button>
-                    )}
+                    {appState.loggedIn &&
+                      follower.loggedInUserFollowsVisited &&
+                      follower.author.username != '' && (
+                        <button
+                          className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-3 py-1 rounded outline-none focus:outline-none sm:mr-2 mb-1"
+                          type="button"
+                          style={{ transition: 'all .15s ease' }}
+                          onClick={() =>
+                            followDispatch({
+                              type: 'stopFollowing',
+                              value: {
+                                id: follower._id,
+                                username: follower.author.username,
+                              },
+                            })
+                          }
+                        >
+                          Stop Following
+                        </button>
+                      )}
                     {appState.loggedIn &&
                       appState.user.username != follower.author.username &&
-                      !follower.loggedInUserFollowsVisited && (
+                      !follower.loggedInUserFollowsVisited &&
+                      follower.author.username != '' && (
                         <button
                           className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1"
                           type="button"
                           style={{ transition: 'all .15s ease' }}
-                          // onClick={() => profileDispatch({ type: 'startFollowing' })}
+                          onClick={() =>
+                            followDispatch({
+                              type: 'startFollowing',
+                              value: {
+                                id: follower._id,
+                                username: follower.author.username,
+                              },
+                            })
+                          }
                         >
                           Follow
                         </button>
