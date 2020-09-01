@@ -6,7 +6,7 @@ import { useImmerReducer } from 'use-immer';
 
 // AXIOS COMMENT URL
 console.log(process.env.BACKENDURL);
-Axios.defaults.baseURL = process.env.BACKENDURL || https://backend-johnsido-music.herokuapp.com;
+Axios.defaults.baseURL = process.env.BACKENDURL || 'https://backend-johnsido-music.herokuapp.com';
 // STATE MANAGEMENT
 import StateContext from './contextsProviders/StateContext';
 import DispatchContext from './contextsProviders/DispatchContext';
