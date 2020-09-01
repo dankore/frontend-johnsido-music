@@ -19,14 +19,13 @@ function Followers() {
       id: '',
       username: '',
       count: 0,
-      isFollowing: false,
     },
     stopFollowing: {
       id: '',
       username: '',
       count: 0,
-      isNotFollowing: false,
     },
+    isLoadingFollow: false,
   };
 
   function followReducer(draft, action) {
@@ -72,8 +71,8 @@ function Followers() {
 
         return;
       }
-      case 'UpdateStopFollowing':
-        draft.stopFollowing.isNotFollowing = true;
+      case 'isLoadingFollow':
+        draft.isLoadingFollow = action.value;
         return;
     }
   }
@@ -141,6 +140,7 @@ function Followers() {
   // ADD FOLLOW
   useEffect(() => {
     if (state.startFollowing.count) {
+      followDispatch({ type: 'isLoadingFollow', value: true });
       const request = Axios.CancelToken.source();
 
       try {
@@ -152,6 +152,8 @@ function Followers() {
               CancelToken: request.token,
             }
           );
+
+          followDispatch({ type: 'isLoadingFollow', value: false });
 
           followDispatch({
             type: 'updateFollowState',
@@ -171,6 +173,7 @@ function Followers() {
   // REMOVE FOLLOW
   useEffect(() => {
     if (state.stopFollowing.count) {
+      followDispatch({ type: 'isLoadingFollow', value: true });
       const request = Axios.CancelToken.source();
 
       (async function stopFollowing() {
@@ -180,6 +183,8 @@ function Followers() {
             { token: appState.user.token },
             { cancelToken: request.token }
           );
+
+          followDispatch({ type: 'isLoadingFollow', value: false });
 
           followDispatch({ type: 'updateFollowState', value: state.stopFollowing.id });
         } catch (error) {
@@ -251,7 +256,14 @@ function Followers() {
                             })
                           }
                         >
-                          Stop Following
+                          {state.isLoadingFollow ? (
+                            <div className="flex items-center">
+                              <i className="fa text-2xl fa-spinner fa-spin"></i>{' '}
+                              <spa className="ml-2">Unfollowing...</spa>
+                            </div>
+                          ) : (
+                            'Stop Following'
+                          )}
                         </button>
                       )}
                     {appState.loggedIn &&
@@ -272,7 +284,14 @@ function Followers() {
                             })
                           }
                         >
-                          Follow
+                          {state.isLoadingFollow ? (
+                            <div className="flex items-center">
+                              <i className="fa text-2xl fa-spinner fa-spin"></i>{' '}
+                              <spa className="ml-2">Following..</spa>
+                            </div>
+                          ) : (
+                            'Follow'
+                          )}
                         </button>
                       )}
                   </div>
