@@ -28,6 +28,7 @@ function ProfilePage({ history }) {
     isFetching: false,
     startFollowingCount: 0,
     stopFollowingCount: 0,
+    isLoadingFollow: false,
   };
 
   function profileReducer(draft, action) {
@@ -54,6 +55,9 @@ function ProfilePage({ history }) {
       case 'removeFollow':
         draft.user.isFollowing = false;
         draft.user.counts.followerCount--;
+        return;
+      case 'isLoadingFollow':
+        draft.isLoadingFollow = action.value;
         return;
     }
   }
@@ -92,6 +96,7 @@ function ProfilePage({ history }) {
   // ADD FOLLOW
   useEffect(() => {
     if (state.startFollowingCount) {
+      profileDispatch({ type: 'isLoadingFollow', value: true });
       const request = Axios.CancelToken.source();
 
       try {
@@ -103,6 +108,7 @@ function ProfilePage({ history }) {
               CancelToken: request.token,
             }
           );
+          profileDispatch({ type: 'isLoadingFollow', value: false });
           profileDispatch({ type: 'addFollow' });
         })();
       } catch (error) {
@@ -117,6 +123,7 @@ function ProfilePage({ history }) {
   // REMOVE FOLLOW
   useEffect(() => {
     if (state.stopFollowingCount) {
+      profileDispatch({ type: 'isLoadingFollow', value: true });
       const request = Axios.CancelToken.source();
 
       (async function stopFollowing() {
@@ -127,6 +134,7 @@ function ProfilePage({ history }) {
             { cancelToken: request.token }
           );
 
+          profileDispatch({ type: 'isLoadingFollow', value: false });
           profileDispatch({ type: 'removeFollow' });
         } catch (error) {
           // FAIL SILENTLY
@@ -203,7 +211,14 @@ function ProfilePage({ history }) {
                             style={{ transition: 'all .15s ease' }}
                             onClick={() => profileDispatch({ type: 'startFollowing' })}
                           >
-                            Follow
+                            {state.isLoadingFollow ? (
+                              <div className="flex items-center">
+                                <i className="fa text-2xl fa-spinner fa-spin"></i>{' '}
+                                <span className="ml-2 italic">Following..</span>
+                              </div>
+                            ) : (
+                              'Follow'
+                            )}
                           </button>
                         )}
                       {appState.loggedIn &&
@@ -216,7 +231,14 @@ function ProfilePage({ history }) {
                             style={{ transition: 'all .15s ease' }}
                             onClick={() => profileDispatch({ type: 'stopFollowing' })}
                           >
-                            Stop Following
+                            {state.isLoadingFollow ? (
+                              <div className="flex items-center">
+                                <i className="fa text-2xl fa-spinner fa-spin"></i>{' '}
+                                <span className="ml-2 italic">Unfollowing...</span>
+                              </div>
+                            ) : (
+                              'Stop Following'
+                            )}
                           </button>
                         )}
                     </div>
