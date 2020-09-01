@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import Page from '../../components/layouts/Page';
 import LoadingDotsAnimation from '../../components/shared/LoadingDotsAnimation';
 import StateContext from '../../contextsProviders/StateContext';
-import { followBtnCSS } from '../../helpers/CSSHelpers';
+import { followBtnCSS, stopFollowBtnCSS } from '../../helpers/CSSHelpers';
 
 function ProfilePage({ history }) {
   const appState = useContext(StateContext);
@@ -213,12 +213,13 @@ function ProfilePage({ history }) {
                             onClick={() => profileDispatch({ type: 'startFollowing' })}
                           >
                             {state.isLoadingFollow ? (
-                              <div className="flex items-center">
+                              <div className="flex items-center justify-center">
                                 <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
-                                <span className="ml-2 italic">Following..</span>
                               </div>
                             ) : (
-                              'Follow'
+                              <span>
+                                Follow <i className="fas fa-user-plus"></i>
+                              </span>
                             )}
                           </button>
                         )}
@@ -227,18 +228,19 @@ function ProfilePage({ history }) {
                         state.user.isFollowing &&
                         state.user.profileusername != '' && (
                           <button
-                            className={followBtnCSS}
+                            className={stopFollowBtnCSS}
                             type="button"
                             style={{ transition: 'all .15s ease' }}
                             onClick={() => profileDispatch({ type: 'stopFollowing' })}
                           >
                             {state.isLoadingFollow ? (
-                              <div className="flex items-center">
+                              <div className="flex items-center justify-center">
                                 <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
-                                <span className="ml-2 italic">Unfollowing...</span>
                               </div>
                             ) : (
-                              'Stop Following'
+                              <span>
+                                Stop Following <i className="fas fa-user-times"></i>
+                              </span>
                             )}
                           </button>
                         )}
