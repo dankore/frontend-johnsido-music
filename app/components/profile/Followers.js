@@ -6,8 +6,9 @@ import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 import FollowPageHeader from './FollowPageHeader';
 import Page from '../layouts/Page';
 import StateContext from '../../contextsProviders/StateContext';
+import PropTypes from 'prop-types';
 
-function Followers() {
+function Followers({ history }) {
   const appState = useContext(StateContext);
   const initialState = {
     username: useParams().username,
@@ -234,7 +235,7 @@ function Followers() {
                       <div className="flex flex-wrap items-center text-sm">
                         <p className="mr-2">@{follower.author.username}</p>
                         {appState.loggedIn && follower.visitedUserFollowslogged && (
-                          <p className="text-pink-500 font-semibold italic p-1">Follows you</p>
+                          <p className="js-brown font-semibold italic p-1">Follows you</p>
                         )}
                       </div>
                     </div>
@@ -243,7 +244,7 @@ function Followers() {
                       follower.loggedInUserFollowsVisited &&
                       follower.author.username != '' && (
                         <button
-                          className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-3 py-1 rounded outline-none focus:outline-none sm:mr-2 mb-1"
+                          className="js-brown-bg active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-3 py-1 rounded outline-none focus:outline-none sm:mr-2 mb-1"
                           type="button"
                           style={{ transition: 'all .15s ease' }}
                           onClick={() =>
@@ -259,7 +260,7 @@ function Followers() {
                           {state.isLoadingFollow ? (
                             <div className="flex items-center">
                               <i className="fa text-2xl fa-spinner fa-spin"></i>{' '}
-                              <spa className="ml-2">Unfollowing...</spa>
+                              <span className="ml-2 italic">Unfollowing...</span>
                             </div>
                           ) : (
                             'Stop Following'
@@ -271,7 +272,7 @@ function Followers() {
                       !follower.loggedInUserFollowsVisited &&
                       follower.author.username != '' && (
                         <button
-                          className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1"
+                          className="js-brown-bg active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1"
                           type="button"
                           style={{ transition: 'all .15s ease' }}
                           onClick={() =>
@@ -287,7 +288,7 @@ function Followers() {
                           {state.isLoadingFollow ? (
                             <div className="flex items-center">
                               <i className="fa text-2xl fa-spinner fa-spin"></i>{' '}
-                              <spa className="ml-2">Following..</spa>
+                              <span className="ml-2 italic">Following..</span>
                             </div>
                           ) : (
                             'Follow'
@@ -305,5 +306,9 @@ function Followers() {
     </Page>
   );
 }
+
+Followers.propTypes = {
+  history: PropTypes.object,
+};
 
 export default Followers;
