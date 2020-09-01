@@ -10,129 +10,165 @@
 .js-brown {
   color: #987631;
 }
+
 .js-brown-bg {
-  background-color: #987631;
+  background-color: #a16900;
 }
+
 .js-blue-1 {
   color: #2c308a;
 }
+
+.js-blue-bg {
+  background-color: #1DA1F2;
+}
+
 .js-blue-2 {
   color: #191940;
 }
+
 .js-blue-3 {
   color: #242561;
 }
+
 .custom-layout-bg {
   height: auto;
   order: 1;
   background-image: url(https://res.cloudinary.com/my-nigerian-projects/image/upload/f_auto,g_auto/v1596725538/Others/layout-pattern.png),
-  linear-gradient(225deg, rgba(19, 84, 122, 1) 0%, rgba(128, 208, 199, 1) 100%);
+    linear-gradient(225deg, rgba(19, 84, 122, 1) 0%, rgba(128, 208, 199, 1) 100%);
 }
+
 @-webkit-keyframes scrollSmall {
- 0% {
-  transform:rotate(-13deg) translateY(0)
- }
- to {
-  transform:rotate(-13deg) translateY(-639px)
- }
+  0% {
+    transform: rotate(-13deg) translateY(0)
+  }
+
+  to {
+    transform: rotate(-13deg) translateY(-639px)
+  }
 }
+
 @keyframes scrollSmall {
- 0% {
-  transform:rotate(-13deg) translateY(0)
- }
- to {
-  transform:rotate(-13deg) translateY(-639px)
- }
+  0% {
+    transform: rotate(-13deg) translateY(0)
+  }
+
+  to {
+    transform: rotate(-13deg) translateY(-639px)
+  }
 }
+
 @-webkit-keyframes scrollLarge {
- 0% {
-  transform:rotate(-13deg) translateY(0)
- }
- to {
-  transform:rotate(-13deg) translateY(-1278px)
- }
+  0% {
+    transform: rotate(-13deg) translateY(0)
+  }
+
+  to {
+    transform: rotate(-13deg) translateY(-1278px)
+  }
 }
+
 @keyframes scrollLarge {
- 0% {
-  transform:rotate(-13deg) translateY(0)
- }
- to {
-  transform:rotate(-13deg) translateY(-1278px)
- }
+  0% {
+    transform: rotate(-13deg) translateY(0)
+  }
+
+  to {
+    transform: rotate(-13deg) translateY(-1278px)
+  }
 }
+
 @-webkit-keyframes spin {
- 0% {
-  transform:rotate(0deg)
- }
- to {
-  transform:rotate(359deg)
- }
+  0% {
+    transform: rotate(0deg)
+  }
+
+  to {
+    transform: rotate(359deg)
+  }
 }
+
 @keyframes spin {
- 0% {
-  transform:rotate(0deg)
- }
- to {
-  transform:rotate(359deg)
- }
+  0% {
+    transform: rotate(0deg)
+  }
+
+  to {
+    transform: rotate(359deg)
+  }
 }
+
 @-webkit-keyframes pulse {
- 0% {
-  opacity:1
- }
- 50% {
-  opacity:.5
- }
- to {
-  opacity:1
- }
+  0% {
+    opacity: 1
+  }
+
+  50% {
+    opacity: .5
+  }
+
+  to {
+    opacity: 1
+  }
 }
+
 @keyframes pulse {
- 0% {
-  opacity:1
- }
- 50% {
-  opacity:.5
- }
- to {
-  opacity:1
- }
+  0% {
+    opacity: 1
+  }
+
+  50% {
+    opacity: .5
+  }
+
+  to {
+    opacity: 1
+  }
 }
+
 .spin {
- -webkit-animation:spin .5s linear infinite;
- animation:spin .5s linear infinite
+  -webkit-animation: spin .5s linear infinite;
+  animation: spin .5s linear infinite
 }
+
 .pulse {
- -webkit-animation:pulse 2s ease infinite;
- animation:pulse 2s ease infinite
+  -webkit-animation: pulse 2s ease infinite;
+  animation: pulse 2s ease infinite
 }
+
 .scroll-bg {
- -webkit-animation-name:scrollSmall;
- animation-name:scrollSmall;
- -webkit-animation-duration:15s;
- animation-duration:15s;
- -webkit-animation-timing-function:linear;
- animation-timing-function:linear;
- -webkit-animation-iteration-count:infinite;
- animation-iteration-count:infinite
+  -webkit-animation-name: scrollSmall;
+  animation-name: scrollSmall;
+  -webkit-animation-duration: 15s;
+  animation-duration: 15s;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite
 }
+
 @media (min-width:1024px) {
- .scroll-bg {
-  -webkit-animation-name:scrollLarge;
-  animation-name:scrollLarge;
-  -webkit-animation-duration:35s;
-  animation-duration:35s;
-  -webkit-animation-timing-function:linear;
-  animation-timing-function:linear;
-  -webkit-animation-iteration-count:infinite;
-  animation-iteration-count:infinite
- }
+  .scroll-bg {
+    -webkit-animation-name: scrollLarge;
+    animation-name: scrollLarge;
+    -webkit-animation-duration: 35s;
+    animation-duration: 35s;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite
+  }
 }
+
 .custom-gradient {
-  background: #525252;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #3d72b4, #525252);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #3d72b4, #525252); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #525252;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #3d72b4, #525252);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #3d72b4, #525252);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
+
 .preventAutoZoom {
   touch-action: none;
 }
@@ -140,6 +176,7 @@
 .word-break {
   word-break: break-word;
 }
+
 .custom-shadow {
   box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .3),
     0 2px 6px 2px rgba(60, 64, 67, .15);
@@ -228,6 +265,7 @@ h1 {
     opacity: 1;
   }
 }
+
 .liveValidateMessage {
   top: -5px;
   position: absolute;

@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import Page from '../../components/layouts/Page';
 import LoadingDotsAnimation from '../../components/shared/LoadingDotsAnimation';
 import StateContext from '../../contextsProviders/StateContext';
+import { followBtnCSS } from '../../helpers/CSSHelpers';
 
 function ProfilePage({ history }) {
   const appState = useContext(StateContext);
@@ -206,14 +207,14 @@ function ProfilePage({ history }) {
                         !state.user.isFollowing &&
                         state.user.profileUsername != '' && (
                           <button
-                            className="js-brown-bg uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1"
+                            className={followBtnCSS}
                             type="button"
                             style={{ transition: 'all .15s ease' }}
                             onClick={() => profileDispatch({ type: 'startFollowing' })}
                           >
                             {state.isLoadingFollow ? (
                               <div className="flex items-center">
-                                <i className="fa text-2xl fa-spinner fa-spin"></i>{' '}
+                                <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
                                 <span className="ml-2 italic">Following..</span>
                               </div>
                             ) : (
@@ -226,14 +227,14 @@ function ProfilePage({ history }) {
                         state.user.isFollowing &&
                         state.user.profileusername != '' && (
                           <button
-                            className="js-brown-bg uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1"
+                            className={followBtnCSS}
                             type="button"
                             style={{ transition: 'all .15s ease' }}
                             onClick={() => profileDispatch({ type: 'stopFollowing' })}
                           >
                             {state.isLoadingFollow ? (
                               <div className="flex items-center">
-                                <i className="fa text-2xl fa-spinner fa-spin"></i>{' '}
+                                <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
                                 <span className="ml-2 italic">Unfollowing...</span>
                               </div>
                             ) : (

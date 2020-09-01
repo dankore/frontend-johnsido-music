@@ -7,6 +7,7 @@ import FollowPageHeader from './FollowPageHeader';
 import Page from '../layouts/Page';
 import StateContext from '../../contextsProviders/StateContext';
 import PropTypes from 'prop-types';
+import { followBtnCSS } from '../../helpers/CSSHelpers';
 
 function Followers({ history }) {
   const appState = useContext(StateContext);
@@ -239,40 +240,13 @@ function Followers({ history }) {
                         )}
                       </div>
                     </div>
-
-                    {appState.loggedIn &&
-                      follower.loggedInUserFollowsVisited &&
-                      follower.author.username != '' && (
-                        <button
-                          className="js-brown-bg active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-3 py-1 rounded outline-none focus:outline-none sm:mr-2 mb-1"
-                          type="button"
-                          style={{ transition: 'all .15s ease' }}
-                          onClick={() =>
-                            followDispatch({
-                              type: 'stopFollowing',
-                              value: {
-                                id: follower._id,
-                                username: follower.author.username,
-                              },
-                            })
-                          }
-                        >
-                          {state.isLoadingFollow ? (
-                            <div className="flex items-center">
-                              <i className="fa text-2xl fa-spinner fa-spin"></i>{' '}
-                              <span className="ml-2 italic">Unfollowing...</span>
-                            </div>
-                          ) : (
-                            'Stop Following'
-                          )}
-                        </button>
-                      )}
+                    {/* FOLLOW BUTTON */}
                     {appState.loggedIn &&
                       appState.user.username != follower.author.username &&
                       !follower.loggedInUserFollowsVisited &&
                       follower.author.username != '' && (
                         <button
-                          className="js-brown-bg active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1"
+                          className={followBtnCSS}
                           type="button"
                           style={{ transition: 'all .15s ease' }}
                           onClick={() =>
@@ -287,11 +261,39 @@ function Followers({ history }) {
                         >
                           {state.isLoadingFollow ? (
                             <div className="flex items-center">
-                              <i className="fa text-2xl fa-spinner fa-spin"></i>{' '}
+                              <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
                               <span className="ml-2 italic">Following..</span>
                             </div>
                           ) : (
                             'Follow'
+                          )}
+                        </button>
+                      )}
+
+                    {appState.loggedIn &&
+                      follower.loggedInUserFollowsVisited &&
+                      follower.author.username != '' && (
+                        <button
+                          className={followBtnCSS}
+                          type="button"
+                          style={{ transition: 'all .15s ease' }}
+                          onClick={() =>
+                            followDispatch({
+                              type: 'stopFollowing',
+                              value: {
+                                id: follower._id,
+                                username: follower.author.username,
+                              },
+                            })
+                          }
+                        >
+                          {state.isLoadingFollow ? (
+                            <div className="flex items-center">
+                              <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
+                              <span className="ml-2 italic">Unfollowing...</span>
+                            </div>
+                          ) : (
+                            'Stop Following'
                           )}
                         </button>
                       )}
