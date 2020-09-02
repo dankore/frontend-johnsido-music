@@ -9,7 +9,7 @@ import StateContext from '../../contextsProviders/StateContext';
 import PropTypes from 'prop-types';
 import { followBtnCSS, stopFollowBtnCSS } from '../../helpers/CSSHelpers';
 
-function Followers({ history }) {
+function Following({ history }) {
   const appState = useContext(StateContext);
   const initialState = {
     username: useParams().username,
@@ -117,7 +117,7 @@ function Followers({ history }) {
     return () => request.cancel();
   }, [state.username]);
 
-  // FETCH FOLLOWERS
+  // FETCH FOLLOWING
   useEffect(() => {
     const request = Axios.CancelToken.source();
 
@@ -125,7 +125,7 @@ function Followers({ history }) {
       followDispatch({ type: 'isFetchingFollowers', process: 'starts' });
       (async function fetchFollowers() {
         const response = await Axios.post(
-          `/profile/${state.username}/followers`,
+          `/profile/${state.username}/following`,
           { loggedInUserId: appState.user._id },
           {
             CancelToken: request.token,
@@ -135,7 +135,7 @@ function Followers({ history }) {
         followDispatch({ type: 'isFetchingFollowers' });
 
         if (response.data.status) {
-          followDispatch({ type: 'fetchVisistedProfileFollowers', value: response.data.followers });
+          followDispatch({ type: 'fetchVisistedProfileFollowers', value: response.data.following });
         } else {
           // FAIL SILENTLY
           console.log(response.data);
@@ -212,7 +212,7 @@ function Followers({ history }) {
 
   return (
     <Page
-      title={`People following ${state.profileUser.profileFirstName} ${state.profileUser.profileLastName}`}
+      title={`People followed by ${state.profileUser.profileFirstName} ${state.profileUser.profileLastName}`}
     >
       <div className="w-full sm:max-w-lg lg:max-w-xl mx-auto">
         <FollowPageHeader profileUser={state.profileUser} />
@@ -320,8 +320,8 @@ function Followers({ history }) {
   );
 }
 
-Followers.propTypes = {
+Following.propTypes = {
   history: PropTypes.object,
 };
 
-export default Followers;
+export default Following;
