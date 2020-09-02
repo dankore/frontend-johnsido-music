@@ -204,8 +204,10 @@ function Followers({ history }) {
   }
 
   return (
-    <Page title="people following">
-      <div className="w-full sm:max-w-lg lg:max-w-xl mx-auto bg-yellow-300">
+    <Page
+      title={`People following ${state.profileUser.profileFirstName} ${state.profileUser.profileLastName}`}
+    >
+      <div className="w-full sm:max-w-lg lg:max-w-xl mx-auto">
         <FollowPageHeader profileUser={state.profileUser} />
         {state.followers.map((follower, index) => {
           return (
