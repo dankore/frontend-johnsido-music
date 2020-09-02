@@ -21,13 +21,14 @@ function Followers({ history }) {
       id: '',
       username: '',
       count: 0,
+      isLoading: '',
     },
     stopFollowing: {
       id: '',
       username: '',
       count: 0,
+      isLoading: '',
     },
-    isLoadingFollow: false,
   };
 
   function followReducer(draft, action) {
@@ -56,11 +57,13 @@ function Followers({ history }) {
         draft.startFollowing.id = action.value.id;
         draft.startFollowing.username = action.value.username;
         draft.startFollowing.count++;
+        draft.startFollowing.isLoading = action.value.username;
         return;
       case 'stopFollowing':
         draft.stopFollowing.username = action.value.username;
         draft.stopFollowing.id = action.value.id;
         draft.stopFollowing.count++;
+        draft.stopFollowing.isLoading = action.value.username;
         return;
       case 'updateFollowState': {
         const index = draft.followers.map(follower => follower._id).indexOf(action.value);
@@ -73,8 +76,14 @@ function Followers({ history }) {
 
         return;
       }
-      case 'isLoadingFollow':
-        draft.isLoadingFollow = action.value;
+      case 'stopLoadingFollow':
+        if (action.process == 'add') {
+          draft.startFollowing.isLoading = '';
+        }
+
+        if (action.process == 'remove') {
+          draft.stopFollowing.isLoading = '';
+        }
         return;
     }
   }
@@ -142,7 +151,6 @@ function Followers({ history }) {
   // ADD FOLLOW
   useEffect(() => {
     if (state.startFollowing.count) {
-      followDispatch({ type: 'isLoadingFollow', value: true });
       const request = Axios.CancelToken.source();
 
       try {
@@ -155,7 +163,7 @@ function Followers({ history }) {
             }
           );
 
-          followDispatch({ type: 'isLoadingFollow', value: false });
+          followDispatch({ type: 'stopLoadingFollow', process: 'add' });
 
           followDispatch({
             type: 'updateFollowState',
@@ -175,7 +183,6 @@ function Followers({ history }) {
   // REMOVE FOLLOW
   useEffect(() => {
     if (state.stopFollowing.count) {
-      followDispatch({ type: 'isLoadingFollow', value: true });
       const request = Axios.CancelToken.source();
 
       (async function stopFollowing() {
@@ -186,7 +193,7 @@ function Followers({ history }) {
             { cancelToken: request.token }
           );
 
-          followDispatch({ type: 'isLoadingFollow', value: false });
+          followDispatch({ type: 'stopLoadingFollow', process: 'remove' });
 
           followDispatch({ type: 'updateFollowState', value: state.stopFollowing.id });
         } catch (error) {
@@ -261,7 +268,7 @@ function Followers({ history }) {
                             })
                           }
                         >
-                          {state.isLoadingFollow ? (
+                          {state.startFollowing.isLoading == follower.author.username ? (
                             <div className="flex items-center justify-center">
                               <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
                             </div>
@@ -290,7 +297,7 @@ function Followers({ history }) {
                             })
                           }
                         >
-                          {state.isLoadingFollow ? (
+                          {state.stopFollowing.isLoading == follower.author.username ? (
                             <div className="flex items-center justify-center">
                               <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
                             </div>
