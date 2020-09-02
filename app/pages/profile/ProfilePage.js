@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import Page from '../../components/layouts/Page';
 import LoadingDotsAnimation from '../../components/shared/LoadingDotsAnimation';
 import StateContext from '../../contextsProviders/StateContext';
+import { followBtnCSS, stopFollowBtnCSS } from '../../helpers/CSSHelpers';
 
 function ProfilePage({ history }) {
   const appState = useContext(StateContext);
@@ -25,9 +26,14 @@ function ProfilePage({ history }) {
         commentsCount: 0,
       },
     },
+    networkError: {
+      hasError: false,
+      message: '',
+    },
     isFetching: false,
     startFollowingCount: 0,
     stopFollowingCount: 0,
+    isLoadingFollow: false,
   };
 
   function profileReducer(draft, action) {
@@ -54,6 +60,13 @@ function ProfilePage({ history }) {
       case 'removeFollow':
         draft.user.isFollowing = false;
         draft.user.counts.followerCount--;
+        return;
+      case 'isLoadingFollow':
+        draft.isLoadingFollow = action.value;
+        return;
+      case 'networkError':
+        draft.networkError.hasError = true;
+        draft.networkError.message = 'Network error';
         return;
     }
   }
@@ -84,7 +97,7 @@ function ProfilePage({ history }) {
       })();
     } catch (error) {
       // FAIL SILENTLY
-      console.log(error);
+      profileDispatch({ type: 'networkError' });
     }
     return () => request.cancel();
   }, [username]);
@@ -92,6 +105,7 @@ function ProfilePage({ history }) {
   // ADD FOLLOW
   useEffect(() => {
     if (state.startFollowingCount) {
+      profileDispatch({ type: 'isLoadingFollow', value: true });
       const request = Axios.CancelToken.source();
 
       try {
@@ -103,6 +117,7 @@ function ProfilePage({ history }) {
               CancelToken: request.token,
             }
           );
+          profileDispatch({ type: 'isLoadingFollow', value: false });
           profileDispatch({ type: 'addFollow' });
         })();
       } catch (error) {
@@ -117,6 +132,7 @@ function ProfilePage({ history }) {
   // REMOVE FOLLOW
   useEffect(() => {
     if (state.stopFollowingCount) {
+      profileDispatch({ type: 'isLoadingFollow', value: true });
       const request = Axios.CancelToken.source();
 
       (async function stopFollowing() {
@@ -127,6 +143,7 @@ function ProfilePage({ history }) {
             { cancelToken: request.token }
           );
 
+          profileDispatch({ type: 'isLoadingFollow', value: false });
           profileDispatch({ type: 'removeFollow' });
         } catch (error) {
           // FAIL SILENTLY
@@ -145,6 +162,7 @@ function ProfilePage({ history }) {
   return (
     <Page title={`${state.user.profileFirstName} ${state.user.profileLastName}'s profile`}>
       <main className="profile-page">
+        {state.networkError.hasError && <div>{state.networkError.message}</div>}
         <section className="relative block" style={{ height: '500px' }}>
           <div
             className="absolute top-0 w-full h-full bg-center bg-cover"
@@ -198,12 +216,20 @@ function ProfilePage({ history }) {
                         !state.user.isFollowing &&
                         state.user.profileUsername != '' && (
                           <button
-                            className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1"
+                            className={followBtnCSS}
                             type="button"
                             style={{ transition: 'all .15s ease' }}
                             onClick={() => profileDispatch({ type: 'startFollowing' })}
                           >
-                            Follow
+                            {state.isLoadingFollow ? (
+                              <div className="flex items-center justify-center">
+                                <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
+                              </div>
+                            ) : (
+                              <span>
+                                Follow <i className="fas fa-user-plus"></i>
+                              </span>
+                            )}
                           </button>
                         )}
                       {appState.loggedIn &&
@@ -211,12 +237,20 @@ function ProfilePage({ history }) {
                         state.user.isFollowing &&
                         state.user.profileusername != '' && (
                           <button
-                            className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1"
+                            className={stopFollowBtnCSS}
                             type="button"
                             style={{ transition: 'all .15s ease' }}
                             onClick={() => profileDispatch({ type: 'stopFollowing' })}
                           >
-                            Stop Following
+                            {state.isLoadingFollow ? (
+                              <div className="flex items-center justify-center">
+                                <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
+                              </div>
+                            ) : (
+                              <span>
+                                Stop Following <i className="fas fa-user-times"></i>
+                              </span>
+                            )}
                           </button>
                         )}
                     </div>
