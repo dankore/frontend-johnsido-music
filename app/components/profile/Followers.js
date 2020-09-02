@@ -238,17 +238,17 @@ function Followers({ history }) {
                   }}
                 >
                   <div className="flex justify-between items-center">
-                    <div>
-                      <Link to={`/profile/${follower.author.username}`} className="font-medium">
+                    <Link to={`/profile/${follower.author.username}`}>
+                      <p className="font-medium">
                         {follower.author.firstName} {follower.author.lastName}
-                      </Link>
+                      </p>
                       <div className="flex flex-wrap items-center text-sm">
                         <p className="mr-2">@{follower.author.username}</p>
                         {appState.loggedIn && follower.visitedUserFollowslogged && (
                           <p className="js-brown font-semibold italic p-1">Follows you</p>
                         )}
                       </div>
-                    </div>
+                    </Link>
                     {/* FOLLOW BUTTON */}
                     {appState.loggedIn &&
                       appState.user.username != follower.author.username &&
@@ -309,7 +309,9 @@ function Followers({ history }) {
                         </button>
                       )}
                   </div>
-                  <p>{follower.author.about.bio}</p>
+                  <Link to={`/profile/${follower.author.username}`}>
+                    <p>{follower.author.about.bio}</p>
+                  </Link>
                 </div>
               </div>
             </div>
