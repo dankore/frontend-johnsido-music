@@ -26,6 +26,10 @@ function ProfilePage({ history }) {
         commentsCount: 0,
       },
     },
+    networkError: {
+      hasError: false,
+      message: '',
+    },
     isFetching: false,
     startFollowingCount: 0,
     stopFollowingCount: 0,
@@ -60,6 +64,10 @@ function ProfilePage({ history }) {
       case 'isLoadingFollow':
         draft.isLoadingFollow = action.value;
         return;
+      case 'networkError':
+        draft.networkError.hasError = true;
+        draft.networkError.message = 'Network error';
+        return;
     }
   }
 
@@ -89,7 +97,7 @@ function ProfilePage({ history }) {
       })();
     } catch (error) {
       // FAIL SILENTLY
-      console.log(error);
+      profileDispatch({ type: 'networkError' });
     }
     return () => request.cancel();
   }, [username]);
@@ -154,6 +162,7 @@ function ProfilePage({ history }) {
   return (
     <Page title={`${state.user.profileFirstName} ${state.user.profileLastName}'s profile`}>
       <main className="profile-page">
+        {state.networkError.hasError && <div>{state.networkError.message}</div>}
         <section className="relative block" style={{ height: '500px' }}>
           <div
             className="absolute top-0 w-full h-full bg-center bg-cover"
