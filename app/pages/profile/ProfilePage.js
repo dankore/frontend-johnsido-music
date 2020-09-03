@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import Page from '../../components/layouts/Page';
 import LoadingDotsAnimation from '../../components/shared/LoadingDotsAnimation';
 import StateContext from '../../contextsProviders/StateContext';
-import { followBtnCSS, stopFollowBtnCSS } from '../../helpers/CSSHelpers';
+import { followBtnCSS, stopFollowBtnCSS, linkCSS } from '../../helpers/CSSHelpers';
 
 function ProfilePage({ history }) {
   const appState = useContext(StateContext);
@@ -260,7 +260,7 @@ function ProfilePage({ history }) {
                       <div className="mr-4 p-3 text-center">
                         <Link
                           to={`/profile/${state.user.profileUsername}/followers`}
-                          className="text-sm text-gray-500"
+                          className={`text-sm text-gray-500 ${linkCSS}`}
                         >
                           <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
                             {state.user.counts.followerCount}
@@ -271,7 +271,7 @@ function ProfilePage({ history }) {
                       <div className="mr-4 p-3 text-center">
                         <Link
                           to={`/profile/${state.user.profileUsername}/following`}
-                          className="text-sm text-gray-500"
+                          className={`text-sm text-gray-500 ${linkCSS}`}
                         >
                           <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
                             {state.user.counts.followingCount}
@@ -282,7 +282,7 @@ function ProfilePage({ history }) {
                       <div className="lg:mr-4 p-3 text-center">
                         <Link
                           to={`/profile/${state.user.profileUsername}/songs`}
-                          className="text-sm text-gray-500"
+                          className={`text-sm text-gray-500 ${linkCSS}`}
                         >
                           <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
                             89
@@ -293,7 +293,7 @@ function ProfilePage({ history }) {
                       <div className="lg:mr-4 p-3 text-center">
                         <Link
                           to={`/profile/${state.user.profileUsername}/comments`}
-                          className="text-sm text-gray-500"
+                          className={`text-sm text-gray-500 ${linkCSS}`}
                         >
                           <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
                             {state.user.counts.commentsCount}

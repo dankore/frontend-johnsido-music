@@ -7,7 +7,7 @@ import FollowPageHeader from './FollowPageHeader';
 import Page from '../layouts/Page';
 import StateContext from '../../contextsProviders/StateContext';
 import PropTypes from 'prop-types';
-import { followBtnCSS, stopFollowBtnCSS } from '../../helpers/CSSHelpers';
+import { followBtnCSS, stopFollowBtnCSS, linkCSS } from '../../helpers/CSSHelpers';
 
 function FollowTemplate({ history, type }) {
   const appState = useContext(StateContext);
@@ -226,9 +226,9 @@ function FollowTemplate({ history, type }) {
         <FollowPageHeader profileUser={state.profileUser} />
         {state.follows.map((follow, index) => {
           return (
-            <div key={index} className=" block relative border bg-white p-2">
+            <div key={index} className="block relative border bg-white p-2">
               <div className="flex">
-                <Link className="flex mr-1" to={`/profile/${follow.author.username}`}>
+                <Link className={`flex mr-1 ${linkCSS}`} to={`/profile/${follow.author.username}`}>
                   <img
                     src={follow.author.avatar}
                     className="w-8 h-8 rounded-full"
@@ -240,18 +240,18 @@ function FollowTemplate({ history, type }) {
                   style={{
                     overflowWrap: 'break-word',
                     minWidth: 0 + 'px',
-                    backgroundColor: '#F2F3F5',
+                    backgroundColor: '#fff',
                   }}
                 >
                   <div className="flex justify-between items-center">
-                    <Link to={`/profile/${follow.author.username}`}>
+                    <Link className={linkCSS} to={`/profile/${follow.author.username}`}>
                       <p className="font-medium">
                         {follow.author.firstName} {follow.author.lastName}
                       </p>
                       <div className="flex flex-wrap items-center text-sm">
                         <p className="mr-2">@{follow.author.username}</p>
                         {appState.loggedIn && follow.visitedUserFollowslogged && (
-                          <p className="js-brown font-semibold italic p-1">Follows you</p>
+                          <p className="text-green-600 bg-green-100 italic px-1">Follows you</p>
                         )}
                       </div>
                     </Link>
@@ -315,7 +315,7 @@ function FollowTemplate({ history, type }) {
                         </button>
                       )}
                   </div>
-                  <Link to={`/profile/${follow.author.username}`}>
+                  <Link className={linkCSS} to={`/profile/${follow.author.username}`}>
                     <p>{follow.author.about.bio}</p>
                   </Link>
                 </div>
