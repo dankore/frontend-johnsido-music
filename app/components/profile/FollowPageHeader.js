@@ -5,7 +5,7 @@ import { activeNavCSS, linkCSS } from '../../helpers/CSSHelpers';
 
 function FollowPage({ profileUser }) {
   return (
-    <>
+    <div className="px-2 lg:px-0">
       <div className="flex justify-between py-3">
         <Link className={linkCSS} to={`/profile/${profileUser.profileUsername}`}>
           &lt;
@@ -32,7 +32,7 @@ function FollowPage({ profileUser }) {
           Following
         </NavLink>
       </div>
-    </>
+    </div>
   );
 }
 
