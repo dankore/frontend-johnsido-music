@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { activeNavCSS, linkCSS } from '../../helpers/CSSHelpers';
+import { activeNavCSS, linkCSS, navLinkCSS } from '../../helpers/CSSHelpers';
 
 function FollowPage({ profileUser }) {
   return (
@@ -17,7 +17,7 @@ function FollowPage({ profileUser }) {
       </div>
       <div className="flex justify-between pb-2">
         <NavLink
-          className={linkCSS}
+          className={linkCSS + navLinkCSS}
           activeStyle={activeNavCSS}
           to={`/profile/${profileUser.profileUsername}/followers`}
         >
@@ -25,7 +25,7 @@ function FollowPage({ profileUser }) {
         </NavLink>
 
         <NavLink
-          className={linkCSS}
+          className={linkCSS + navLinkCSS}
           activeStyle={activeNavCSS}
           to={`/profile/${profileUser.profileUsername}/following`}
         >

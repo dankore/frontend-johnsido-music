@@ -210,20 +210,20 @@ function FollowTemplate({ history, type }) {
   function noFollow() {
     return state.follows.length < 1 && type == 'followers' ? (
       appState.user.username == state.profileUser.profileUsername ? (
-        <span>You don&apos;t have followers yet.</span>
+        <span className="block text-center">You don&apos;t have followers yet.</span>
       ) : (
-        <span>
+        <span className="block text-center">
           {' '}
           {state.profileUser.profileFirstName} {state.profileUser.profileLastName} does not have
           followers yet.
         </span>
       )
     ) : appState.user.username == state.profileUser.profileUsername ? (
-      <span>You are not following anyone.</span>
+      <span className="block text-center">You are not following anyone.</span>
     ) : (
-      <span>
+      <span className="block text-center">
         {' '}
-        <span>
+        <span className="block text-center">
           {state.profileUser.profileFirstName} {state.profileUser.profileLastName} is not following
           anyone.
         </span>

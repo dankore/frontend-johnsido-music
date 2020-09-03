@@ -3,7 +3,7 @@ module.exports = {
   activeNavCSS: {
     borderBottom: '2px solid #987631',
   },
-  linkCSS: 'leading-5 hover:text-gray-800 focus:outline-none',
+  linkCSS: 'leading-5 hover:text-gray-800 focus:outline-none ',
   stopFollowBtnCSS:
     'bg-red-600 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-1 rounded outline-none focus:outline-none sm:mr-2 mb-1',
   followBtnCSS:
