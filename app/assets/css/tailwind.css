@@ -6,6 +6,10 @@
 
 /* NON-TAILWIND CSS
    ========================================================================== */
+
+ .custom-box-shadow {
+   box-shadow: 0 -6px 4px -7px rgba(0,0,0,0.1) inset
+ }
 .loader {
   color: #ffffff;
   font-size: 20px;
