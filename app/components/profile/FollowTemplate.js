@@ -16,7 +16,7 @@ function FollowTemplate({ history, type }) {
     profileUser: {},
     follows: [], // FOLLOWERS OR FOLLWOING
     isFetchingProfileData: false,
-    isFetchingFollowers: false,
+    isFetchingFollows: false,
     startFollowing: {
       id: '',
       username: '',
@@ -36,7 +36,7 @@ function FollowTemplate({ history, type }) {
       case 'fetchVisistedProfileInfo':
         draft.profileUser = action.value;
         return;
-      case 'fetchVisistedProfileFollowers':
+      case 'fetchVisistedProfileFollows':
         draft.follows = action.value;
         return;
       case 'isFetchingProfileData':
@@ -46,11 +46,11 @@ function FollowTemplate({ history, type }) {
           draft.isFetchingProfileData = false;
         }
         return;
-      case 'isFetchingFollowers':
+      case 'isFetchingFollows':
         if (action.process == 'starts') {
-          draft.isFetchingFollowers = true;
+          draft.isFetchingFollows = true;
         } else {
-          draft.isFetchingFollowers = false;
+          draft.isFetchingFollows = false;
         }
         return;
       case 'startFollowing':
@@ -123,8 +123,8 @@ function FollowTemplate({ history, type }) {
     const param = type == 'followers' ? 'followers' : 'following';
 
     try {
-      followDispatch({ type: 'isFetchingFollowers', process: 'starts' });
-      (async function fetchFollowers() {
+      followDispatch({ type: 'isFetchingFollows', process: 'starts' });
+      (async function fetchFollows() {
         const response = await Axios.post(
           `/profile/${state.username}/${param}`,
           { loggedInUserId: appState.user._id },
@@ -133,10 +133,10 @@ function FollowTemplate({ history, type }) {
           }
         );
 
-        followDispatch({ type: 'isFetchingFollowers' });
+        followDispatch({ type: 'isFetchingFollows' });
 
         if (response.data.status) {
-          followDispatch({ type: 'fetchVisistedProfileFollowers', value: response.data.follows });
+          followDispatch({ type: 'fetchVisistedProfileFollows', value: response.data.follows });
         } else {
           // FAIL SILENTLY
           console.log(response.data);
@@ -207,32 +207,34 @@ function FollowTemplate({ history, type }) {
     }
   }, [state.stopFollowing.count]);
 
-  if (state.isFetchingProfileData || state.isFetchingFollowers) {
+  if (state.isFetchingProfileData || state.isFetchingFollows) {
     return <LoadingDotsAnimation />;
   }
 
   const title =
     type == 'followers'
-      ? `People following ${state.profileUser.profileFirstName} ${state.profileUser.profileLastName}`
-      : `People followed by ${state.profileUser.profileFirstName} ${state.profileUser.profileLastName}`;
+      ? `People following ${state.profileUser.profileFirstName || '..'} ${
+          state.profileUser.profileLastName || '..'
+        }`
+      : `People followed by ${state.profileUser.profileFirstName || '..'} ${
+          state.profileUser.profileLastName || '..'
+        }`;
 
   return (
     <Page title={title}>
       <div className="w-full sm:max-w-lg lg:max-w-xl mx-auto">
         <FollowPageHeader profileUser={state.profileUser} />
-        {state.follows.map((follower, index) => {
+        {state.follows.map((follow, index) => {
           return (
             <div key={index} className=" block relative border bg-white p-2">
               <div className="flex">
-                <div className="flex mr-1">
-                  <Link to={`/profile/${follower.author.username}`}>
-                    <img
-                      src={follower.author.avatar}
-                      className="w-8 h-8 rounded-full"
-                      alt="profile pic"
-                    />
-                  </Link>
-                </div>
+                <Link className="flex mr-1" to={`/profile/${follow.author.username}`}>
+                  <img
+                    src={follow.author.avatar}
+                    className="w-8 h-8 rounded-full"
+                    alt="profile pic"
+                  />
+                </Link>
                 <div
                   className="w-full px-2"
                   style={{
@@ -242,22 +244,22 @@ function FollowTemplate({ history, type }) {
                   }}
                 >
                   <div className="flex justify-between items-center">
-                    <Link to={`/profile/${follower.author.username}`}>
+                    <Link to={`/profile/${follow.author.username}`}>
                       <p className="font-medium">
-                        {follower.author.firstName} {follower.author.lastName}
+                        {follow.author.firstName} {follow.author.lastName}
                       </p>
                       <div className="flex flex-wrap items-center text-sm">
-                        <p className="mr-2">@{follower.author.username}</p>
-                        {appState.loggedIn && follower.visitedUserFollowslogged && (
+                        <p className="mr-2">@{follow.author.username}</p>
+                        {appState.loggedIn && follow.visitedUserFollowslogged && (
                           <p className="js-brown font-semibold italic p-1">Follows you</p>
                         )}
                       </div>
                     </Link>
                     {/* FOLLOW BUTTON */}
                     {appState.loggedIn &&
-                      appState.user.username != follower.author.username &&
-                      !follower.loggedInUserFollowsVisited &&
-                      follower.author.username != '' && (
+                      appState.user.username != follow.author.username &&
+                      !follow.loggedInUserFollowsVisited &&
+                      follow.author.username != '' && (
                         <button
                           className={followBtnCSS}
                           type="button"
@@ -266,13 +268,13 @@ function FollowTemplate({ history, type }) {
                             followDispatch({
                               type: 'startFollowing',
                               value: {
-                                id: follower._id,
-                                username: follower.author.username,
+                                id: follow._id,
+                                username: follow.author.username,
                               },
                             })
                           }
                         >
-                          {state.startFollowing.isLoading == follower.author.username ? (
+                          {state.startFollowing.isLoading == follow.author.username ? (
                             <div className="flex items-center justify-center">
                               <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
                             </div>
@@ -285,8 +287,8 @@ function FollowTemplate({ history, type }) {
                       )}
 
                     {appState.loggedIn &&
-                      follower.loggedInUserFollowsVisited &&
-                      follower.author.username != '' && (
+                      follow.loggedInUserFollowsVisited &&
+                      follow.author.username != '' && (
                         <button
                           className={stopFollowBtnCSS}
                           type="button"
@@ -295,13 +297,13 @@ function FollowTemplate({ history, type }) {
                             followDispatch({
                               type: 'stopFollowing',
                               value: {
-                                id: follower._id,
-                                username: follower.author.username,
+                                id: follow._id,
+                                username: follow.author.username,
                               },
                             })
                           }
                         >
-                          {state.stopFollowing.isLoading == follower.author.username ? (
+                          {state.stopFollowing.isLoading == follow.author.username ? (
                             <div className="flex items-center justify-center">
                               <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
                             </div>
@@ -313,8 +315,8 @@ function FollowTemplate({ history, type }) {
                         </button>
                       )}
                   </div>
-                  <Link to={`/profile/${follower.author.username}`}>
-                    <p>{follower.author.about.bio}</p>
+                  <Link to={`/profile/${follow.author.username}`}>
+                    <p>{follow.author.about.bio}</p>
                   </Link>
                 </div>
               </div>
@@ -328,7 +330,7 @@ function FollowTemplate({ history, type }) {
 
 FollowTemplate.propTypes = {
   history: PropTypes.object,
-  type: PropTypes.string,
+  type: PropTypes.string.isRequired,
 };
 
 export default FollowTemplate;
