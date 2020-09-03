@@ -207,7 +207,7 @@ function FollowTemplate({ history, type }) {
     }
   }, [state.stopFollowing.count]);
 
-  function noFollow() {
+  function noFollows() {
     return (
       state.follows.length < 1 &&
       (type == 'followers' ? (
@@ -355,7 +355,7 @@ function FollowTemplate({ history, type }) {
             );
           })}
         {/* NO FOLLOWS */}
-        {noFollow()}
+        {noFollows()}
       </div>
     </Page>
   );
