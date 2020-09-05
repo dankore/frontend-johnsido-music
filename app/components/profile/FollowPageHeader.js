@@ -27,11 +27,9 @@ function FollowPage({ profileUser, error }) {
         </div>
         <p className="ml-12 -m-2 text-gray-700">@{profileUser.profileUsername}</p>
       </div>
-      {error.hasErrors && (
-        <div className="text-red-600 text-sm text-right absolute -mt-10 w-full pr-5 lg:pr-0">
-          {error.message}
-        </div>
-      )}
+
+      {/* ERROR DISPLAY */}
+      {error.hasErrors && <div className="liveValidateMessage w-full h-12">{error.message}</div>}
 
       <div className="flex justify-between pb-2">
         <NavLink
