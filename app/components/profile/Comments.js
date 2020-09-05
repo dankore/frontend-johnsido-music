@@ -75,6 +75,11 @@ function Comments({ history }) {
             draft.editComment.message = 'Edit comment field is empty.';
           }
         }
+
+        if (action.process == 'server') {
+          draft.comment.hasError = true;
+          draft.comment.message = action.value[0];
+        }
         return;
       case 'fetchStart':
         draft.isFetching = true;
@@ -197,7 +202,12 @@ function Comments({ history }) {
           if (response.data._id) {
             commentsDispatch({ type: 'addNewComment', value: response.data });
           } else {
-            // ERROR E.G COMMENT FIELD IS EMPTY CATCHED BY THE SERVER;
+            // ERROR E.G COMMENT FIELD IS EMPTY/NOT LOGGED IN CATCHED BY THE SERVER;
+            commentsDispatch({
+              type: 'checkCommentFieldForErrors',
+              value: response.data,
+              process: 'server',
+            });
             console.log(response.data);
           }
         } catch (error) {
@@ -398,9 +408,9 @@ function Comments({ history }) {
               </h2>
               <div className="relative flex p-2 border">
                 <div className="mr-1">
-                  <Link to={`/profile/${appState.user.username}`}>
+                  <Link to={`/profile/${state.user.profileUsername}`}>
                     <img
-                      src={appState.user.avatar}
+                      src={state.user.profileAvatar}
                       className="w-8 h-8 rounded-full"
                       alt="profile pic"
                     />
