@@ -350,7 +350,7 @@ function FollowTemplate({ history, type }) {
                             </div>
                           ) : (
                             <span>
-                              Stop Following <i className="fas fa-user-times"></i>
+                              Unfollow <i className="fas fa-user-times"></i>
                             </span>
                           )}
                         </button>
