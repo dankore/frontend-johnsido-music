@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, withRouter } from 'react-router-dom';
 import { useImmerReducer } from 'use-immer';
 import Axios from 'axios';
 import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
@@ -376,4 +376,4 @@ FollowTemplate.propTypes = {
   type: PropTypes.string.isRequired,
 };
 
-export default FollowTemplate;
+export default withRouter(FollowTemplate);
