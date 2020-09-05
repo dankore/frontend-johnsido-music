@@ -3,9 +3,15 @@ import { NavLink, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { activeNavCSS, linkCSS, navLinkCSS } from '../../helpers/CSSHelpers';
 
-function FollowPage({ profileUser }) {
+function FollowPage({ profileUser, error }) {
   return (
-    <div className="px-2 lg:px-0">
+    <div
+      className="relative px-2 lg:px-0"
+      style={{
+        overflowWrap: 'break-word',
+        minWidth: 0 + 'px',
+      }}
+    >
       <div className="mt-2 mb-2">
         <div className="flex items-center">
           <Link className={linkCSS} to={`/profile/${profileUser.profileUsername}`}>
@@ -21,6 +27,12 @@ function FollowPage({ profileUser }) {
         </div>
         <p className="ml-12 -m-2 text-gray-700">@{profileUser.profileUsername}</p>
       </div>
+      {error.hasErrors && (
+        <div className="text-red-600 text-sm text-right absolute -mt-10 w-full pr-5 lg:pr-0">
+          {error.message}
+        </div>
+      )}
+
       <div className="flex justify-between pb-2">
         <NavLink
           className={linkCSS + navLinkCSS + ' js-brown-bg-hover'}
@@ -44,6 +56,7 @@ function FollowPage({ profileUser }) {
 
 FollowPage.propTypes = {
   profileUser: PropTypes.object,
+  error: PropTypes.object,
 };
 
 export default FollowPage;

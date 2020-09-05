@@ -29,6 +29,10 @@ function FollowTemplate({ history, type }) {
       count: 0,
       isLoading: '',
     },
+    error: {
+      hasErrors: false,
+      message: '',
+    },
   };
 
   function followReducer(draft, action) {
@@ -84,6 +88,10 @@ function FollowTemplate({ history, type }) {
         if (action.process == 'remove') {
           draft.stopFollowing.isLoading = '';
         }
+        return;
+      case 'error':
+        draft.error.hasErrors = true;
+        draft.error.message = action.value;
         return;
     }
   }
@@ -156,7 +164,7 @@ function FollowTemplate({ history, type }) {
 
       try {
         (async function addFollow() {
-          await Axios.post(
+          const response = await Axios.post(
             `/addFollow/${state.startFollowing.username}`,
             { token: appState.user.token },
             {
@@ -166,11 +174,16 @@ function FollowTemplate({ history, type }) {
 
           followDispatch({ type: 'stopLoadingFollow', process: 'add' });
 
-          followDispatch({
-            type: 'updateFollowState',
-            value: state.startFollowing.id,
-            process: 'add',
-          });
+          if (response.data == true) {
+            followDispatch({
+              type: 'updateFollowState',
+              value: state.startFollowing.id,
+              process: 'add',
+            });
+          } else {
+            // SHOW ERROR
+            followDispatch({ type: 'error', value: response.data[0] });
+          }
         })();
       } catch (error) {
         // FAIL SILENTLY
@@ -250,7 +263,7 @@ function FollowTemplate({ history, type }) {
   return (
     <Page title={title}>
       <div className="w-full sm:max-w-lg lg:max-w-xl mx-auto">
-        <FollowPageHeader profileUser={state.profileUser} />
+        <FollowPageHeader error={state.error} profileUser={state.profileUser} loggedIn={state} />
         {state.follows.length > 0 &&
           state.follows.map((follow, index) => {
             return (
@@ -287,8 +300,7 @@ function FollowTemplate({ history, type }) {
                         </div>
                       </Link>
                       {/* FOLLOW BUTTON */}
-                      {appState.loggedIn &&
-                        appState.user.username != follow.author.username &&
+                      {appState.user.username != follow.author.username &&
                         !follow.loggedInUserFollowsVisited &&
                         follow.author.username != '' && (
                           <button
@@ -317,34 +329,32 @@ function FollowTemplate({ history, type }) {
                           </button>
                         )}
 
-                      {appState.loggedIn &&
-                        follow.loggedInUserFollowsVisited &&
-                        follow.author.username != '' && (
-                          <button
-                            className={stopFollowBtnCSS}
-                            type="button"
-                            style={{ transition: 'all .15s ease' }}
-                            onClick={() =>
-                              followDispatch({
-                                type: 'stopFollowing',
-                                value: {
-                                  id: follow._id,
-                                  username: follow.author.username,
-                                },
-                              })
-                            }
-                          >
-                            {state.stopFollowing.isLoading == follow.author.username ? (
-                              <div className="flex items-center justify-center">
-                                <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
-                              </div>
-                            ) : (
-                              <span>
-                                Stop Following <i className="fas fa-user-times"></i>
-                              </span>
-                            )}
-                          </button>
-                        )}
+                      {follow.loggedInUserFollowsVisited && follow.author.username != '' && (
+                        <button
+                          className={stopFollowBtnCSS}
+                          type="button"
+                          style={{ transition: 'all .15s ease' }}
+                          onClick={() =>
+                            followDispatch({
+                              type: 'stopFollowing',
+                              value: {
+                                id: follow._id,
+                                username: follow.author.username,
+                              },
+                            })
+                          }
+                        >
+                          {state.stopFollowing.isLoading == follow.author.username ? (
+                            <div className="flex items-center justify-center">
+                              <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
+                            </div>
+                          ) : (
+                            <span>
+                              Stop Following <i className="fas fa-user-times"></i>
+                            </span>
+                          )}
+                        </button>
+                      )}
                     </div>
                     <Link className={linkCSS} to={`/profile/${follow.author.username}`}>
                       <p>{follow.author.about.bio}</p>
