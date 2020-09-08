@@ -17,8 +17,8 @@ function DeleteAccount({ history }) {
     try {
       if (areYouSure) {
         await Axios.post('/delete-account', { token: appState.user.token });
-        // TO HP AND DELETE LS
-        appDispatch({ type: 'logout' }); // REMOVES LOCAL STORAGE OBJECT
+
+        appDispatch({ type: 'logout' }); // REMOVES LOCAL STORAGE OBJECTs
 
         history.push('/');
       }
@@ -40,7 +40,8 @@ function DeleteAccount({ history }) {
                 <div>
                   <p className="mt-3 text-sm leading-5 text-gray-700">
                     Are you sure you want to delete your account? All of your data will be
-                    permanently remove. This action cannot be undone.
+                    permanently remove e.g people you followed, people following you, comments and
+                    more. This action cannot be undone.
                   </p>
                 </div>
               </div>
