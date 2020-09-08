@@ -22,7 +22,10 @@ function DeleteAccount({ history }) {
 
         history.push('/');
 
-        appDispatch({ type: 'flashMsgSuccess', value: ['Account deletion success.'] });
+        appDispatch({
+          type: 'flashMsgSuccess',
+          value: ['Account deletion success. We are sorry to see you go. Please come back again.'],
+        });
       }
     } catch (error) {
       console.log(error);
