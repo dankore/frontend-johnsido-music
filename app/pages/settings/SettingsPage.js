@@ -3,6 +3,7 @@ import Page from '../../components/layouts/Page';
 import { Route, Switch, NavLink, Redirect } from 'react-router-dom';
 import ProfileInfoSettings from '../../components/settings/UpdateProfileInfo';
 import ChangePassword from '../../components/settings/ChangePassword';
+import DeleteAccount from '../../components/settings/DeleteAccount';
 
 function SettingsPage() {
   return (
@@ -36,6 +37,17 @@ function SettingsPage() {
                     </span>
                   </NavLink>
                 </li>
+                <li className="mr-3 flex-1">
+                  <NavLink
+                    to="/settings/delete-account"
+                    className="block py-1 lg:py-3 pl-1 align-middle  no-underline hover:text-pink-500 border-b-2 border-gray-800 lg:border-gray-900 hover:border-pink-500"
+                  >
+                    <i className="fas fa-link pr-0 lg:pr-3"></i>
+                    <span className="pb-1 lg:pb-0 text-xs lg:text-base block lg:inline-block">
+                      Delete Account
+                    </span>
+                  </NavLink>
+                </li>
               </ul>
             </div>
           </div>
@@ -49,7 +61,7 @@ function SettingsPage() {
                 <ChangePassword />
               </Route>
               <Route path="/settings/delete-account">
-                <div>delete account</div>
+                <DeleteAccount />
               </Route>
               <Route>
                 <Redirect to="/settings/info" />
