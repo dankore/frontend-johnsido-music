@@ -18,9 +18,11 @@ function DeleteAccount({ history }) {
       if (areYouSure) {
         await Axios.post('/delete-account', { token: appState.user.token });
 
-        appDispatch({ type: 'logout' }); // REMOVES LOCAL STORAGE OBJECTs
+        appDispatch({ type: 'logout' }); // REMOVES LOCAL STORAGE OBJECTS
 
         history.push('/');
+
+        appDispatch({ type: 'flashMsgSuccess', value: ['Account deletion success.'] });
       }
     } catch (error) {
       console.log(error);
