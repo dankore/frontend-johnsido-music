@@ -1,11 +1,36 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Page from '../layouts/Page';
+import Axios from 'axios';
+import StateContext from '../../contextsProviders/StateContext';
+import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import DispatchContext from '../../contextsProviders/DispatchContext';
 
-function Container() {
+function DeleteAccount({ history }) {
+  const appState = useContext(StateContext);
+  const appDispatch = useContext(DispatchContext);
+
+  async function handleDelete(e) {
+    e.preventDefault();
+    const areYouSure = window.confirm('Are you sure?');
+
+    try {
+      if (areYouSure) {
+        await Axios.post('/delete-account', { token: appState.user.token });
+        // TO HP AND DELETE LS
+        appDispatch({ type: 'logout' }); // REMOVES LOCAL STORAGE OBJECT
+
+        history.push('/');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <Page title="Delete Account">
       <div className="bg-gray-200 font-mono py-10">
-        <form className="mt-5">
+        <form onSubmit={handleDelete} className="mt-5">
           <h2 className="w-full sm:max-w-lg mx-auto text-2xl text-gray-900 mb-4 pl-3 sm:pl-0">
             Delete Account
           </h2>
@@ -35,4 +60,8 @@ function Container() {
   );
 }
 
-export default Container;
+DeleteAccount.propTypes = {
+  history: PropTypes.object.isRequired,
+};
+
+export default withRouter(DeleteAccount);
