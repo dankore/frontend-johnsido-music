@@ -38,6 +38,7 @@ function Main() {
       avatar: localStorage.getItem('johnsido-avatar'),
       verified: localStorage.getItem('johnsido-verified'),
       about: JSON.parse(localStorage.getItem('johnsido-about')),
+      scope: JSON.parse(localStorage.getItem('johnsido-scope')),
       userCreationDate: localStorage.getItem('johnsido-userCreationDate'),
     },
     logo: {
@@ -130,6 +131,7 @@ function Main() {
       localStorage.setItem('johnsido-lastname', state.user.lastName);
       localStorage.setItem('johnsido-avatar', state.user.avatar);
       localStorage.setItem('johnsido-verified', state.user.verified);
+      localStorage.setItem('johnsido-scope', JSON.stringify(state.user.scope));
       localStorage.setItem('johnsido-about', JSON.stringify(state.user.about));
       localStorage.setItem('johnsido-userCreationDate', state.user.userCreationDate);
     } else {
