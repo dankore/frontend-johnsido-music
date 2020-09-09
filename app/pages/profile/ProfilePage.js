@@ -13,9 +13,9 @@ function ProfilePage({ history }) {
   const { username } = useParams();
   const initialState = {
     user: {
-      profileUsername: '',
-      profileFirstName: '',
-      profileLastName: '',
+      profileUsername: '...',
+      profileFirstName: '...',
+      profileLastName: '...',
       profileAvatar: '',
       profileEmail: '',
       profileAbout: { bio: '', musicCategory: '', city: '' },
