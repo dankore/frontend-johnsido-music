@@ -1,25 +1,32 @@
 module.exports = {
   timeAgo: function (previous) {
-    var msPerMinute = 60 * 1000;
-    var msPerHour = msPerMinute * 60;
-    var msPerDay = msPerHour * 24;
-    var msPerMonth = msPerDay * 30;
-    var msPerYear = msPerDay * 365;
+    const msPerMinute = 60 * 1000;
+    const msPerHour = msPerMinute * 60;
+    const msPerDay = msPerHour * 24; //86,400,000
+    const msPerWeek = msPerDay * 7;
 
-    var elapsed = Date.now() - previous;
+    const elapsed = Date.now() - previous; // DATE.NOW() RETURNS NUMBER OF MILLISECONDS SINCE 1970.
 
-    if (elapsed < msPerMinute) {
-      return Math.round(elapsed / 1000) + ' seconds ago';
-    } else if (elapsed < msPerHour) {
-      return Math.round(elapsed / msPerMinute) + ' minutes ago';
-    } else if (elapsed < msPerDay) {
-      return Math.round(elapsed / msPerHour) + ' hours ago';
-    } else if (elapsed < msPerMonth) {
-      return 'approximately ' + Math.round(elapsed / msPerDay) + ' days ago';
-    } else if (elapsed < msPerYear) {
-      return 'approximately ' + Math.round(elapsed / msPerMonth) + ' months ago';
+    if (elapsed < msPerMinute - msPerMinute * 0.5) {
+      return Math.round(elapsed / 1000) <= 1
+        ? ' one second ago'
+        : Math.round(elapsed / 1000) + ' seconds ago';
+    } else if (elapsed < msPerHour - msPerHour * 0.5) {
+      return Math.round(elapsed / msPerMinute) == 1
+        ? ' one minute ago'
+        : Math.round(elapsed / msPerMinute) + ' minutes ago';
+    } else if (elapsed < msPerDay - msPerDay * 0.5) {
+      return Math.round(elapsed / msPerHour) == 1
+        ? ' one hour ago'
+        : Math.round(elapsed / msPerHour) + ' hours ago';
+    } else if (elapsed < msPerWeek - msPerWeek * 0.5) {
+      return Math.round(elapsed / msPerDay) == 1
+        ? ' one day ago'
+        : Math.round(elapsed / msPerDay) + ' days ago';
     } else {
-      return 'approximately ' + Math.round(elapsed / msPerYear) + ' years ago';
+      return Math.round(elapsed / msPerWeek) == 1
+        ? ' one week ago'
+        : Math.round(elapsed / msPerWeek) + ' weeks ago';
     }
   },
   formatTitleAndDescription: function (s) {
