@@ -309,14 +309,19 @@ function ProfilePage({ history }) {
                     {state.user.profileFirstName} {state.user.profileLastName}
                   </h3>
                   <p className="mb-2">@{state.user.profileUsername}</p>
-                  <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold uppercase">
-                    <i className="fas fa-map-marker-alt mr-2 text-lg text-gray-500"></i>
-                    {state.user.profileAbout.city}
-                  </div>
-                  <div className="mb-2 text-gray-700 mt-10">
-                    <i className="fas fa-music mr-2 text-lg text-gray-500"></i>
-                    {state.user.profileAbout.musicCategory}
-                  </div>
+                  {state.user.profileAbout.city && (
+                    <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold uppercase">
+                      <i className="fas fa-map-marker-alt mr-2 text-lg text-gray-500"></i>
+                      {state.user.profileAbout.city}
+                    </div>
+                  )}
+
+                  {state.user.profileAbout.musicCategory && (
+                    <div className="mb-2 text-gray-700 mt-10">
+                      <i className="fas fa-music mr-2 text-lg text-gray-500"></i>
+                      {state.user.profileAbout.musicCategory}
+                    </div>
+                  )}
                 </div>
                 <div className="mt-10 py-10 border-t border-gray-300 text-center">
                   <div className="flex flex-wrap justify-center">
