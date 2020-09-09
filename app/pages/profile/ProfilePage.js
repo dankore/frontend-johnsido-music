@@ -210,7 +210,7 @@ function ProfilePage({ history }) {
                   </div>
                   {/* FOLLOW BUTTON */}
                   <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
-                    <div className="flex justify-center lg:justify-end py-6 px-3 mt-32 sm:mt-0">
+                    <div className="flex justify-center lg:justify-end py-6 px-3 mt-32 lg:mt-0">
                       {appState.loggedIn &&
                         appState.user.username != state.user.profileUsername &&
                         !state.user.isFollowing &&
@@ -248,7 +248,7 @@ function ProfilePage({ history }) {
                               </div>
                             ) : (
                               <span>
-                                Stop Following <i className="fas fa-user-times"></i>
+                                Unfollow <i className="fas fa-user-times"></i>
                               </span>
                             )}
                           </button>
