@@ -47,8 +47,10 @@ function Footer() {
         <Link to="/">Home</Link> | <Link to="/about">About</Link> | <Link to="/terms">Terms</Link> |{' '}
         <Link to="/privacy">Privacy</Link> | <Link to="/cookies">Cookies</Link>
       </div>
-      Developed by {new Date().getFullYear()}{' '}
-      <a href="https://www.dankore.com/">Adamu M. Dankore.</a>
+      <p>&copy; {new Date().getFullYear()} Johnsido</p>
+      <p className="text-xs">
+        Developed by <a href="https://www.dankore.com/">Adamu M. Dankore.</a>
+      </p>
     </div>
   );
 }

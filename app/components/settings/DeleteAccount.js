@@ -39,13 +39,13 @@ function DeleteAccount({ history }) {
           <h2 className="w-full sm:max-w-lg mx-auto text-2xl text-gray-900 mb-4 pl-3 sm:pl-0">
             Delete Account
           </h2>
-          <div className="w-full sm:max-w-lg mx-auto p-3 bg-white">
+          <div className="w-full sm:max-w-lg mx-auto p-3 bg-white border border-red-600">
             <div>
               <div className="flex items-start">
                 <div>
                   <p className="mt-3 text-sm leading-5 text-gray-700">
                     Are you sure you want to delete your account? All of your data will be
-                    permanently remove e.g people you followed, people following you, comments and
+                    permanently removed e.g people you followed, people following you, comments and
                     more. This action cannot be undone.
                   </p>
                 </div>
