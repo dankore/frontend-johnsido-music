@@ -2,6 +2,7 @@ import React from 'react';
 import Page from '../../components/layouts/Page';
 import { NavLink, Route, Switch, Redirect } from 'react-router-dom';
 import Analytics from '../../components/admin/Analytics';
+import UploadSong from '../../components/admin/UploadSong';
 
 function AdminLandingPage() {
   return (
@@ -83,7 +84,7 @@ function AdminLandingPage() {
                 </span>
               </NavLink>
               <NavLink
-                to="/admin/add-song"
+                to="/admin/upload-song"
                 className="mr-3 flex-1 block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-purple-500"
               >
                 <i className="fa fa-envelope md:mr-3"></i>
@@ -98,9 +99,11 @@ function AdminLandingPage() {
           <Switch>
             <Route path="/admin/analytics">
               <Analytics />
-              {/* <div className="bg-red-400 w-full mt-64 tex-4xl">Adamu</div> */}
             </Route>
-            <Route path="/admin">
+            <Route path="/admin/upload-song">
+              <UploadSong />
+            </Route>
+            <Route>
               <Redirect to="/admin/analytics" />
             </Route>
           </Switch>
