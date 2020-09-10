@@ -30,12 +30,13 @@ function LandingPage() {
         className="relative min-h-screen lg:min-w-3xl xl:min-w-4xl lg:flex lg:items-center lg:justify-center lg:w-3/5 lg:py-12 lg:pl-8 lg:pr-8 bg-no-repeat"
         style={{
           backgroundImage: `url(https://res.cloudinary.com/my-nigerian-projects/image/upload/v1596699282/Others/angled-background.svg)`,
-          backgroundSize: 100 + '%',
-          backgroundposition: -5 + 'px' - 5 + 'px',
+          backgroundSize: '100% auto',
+          backgroundPositionX: -5 + 'px',
+          backgroundPositionY: -5 + 'px',
         }}
       >
         <div>
-          <div className="px-6 pt-8 pb-12 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-none lg:pt-0 lg:pb-16">
+          <div className="px-6 pt-8 pb-12 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-none lg:pt-0">
             <div className="flex items-center justify-between">
               <div>
                 <img
@@ -191,8 +192,8 @@ function LandingPage() {
               }}
             ></div>
           </div>
-          <div className="px-6 py-8 sm:pt-12 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-full">
-            <p className="text-sm font-semibold text-gray-300 uppercase tracking-wider">Artist</p>
+          <div className="px-6 pt-6 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-full">
+            <p className="text-sm font-semibold text-gray-300 uppercase tracking-wider">Artiste</p>
             <div className="mt-4 sm:flex">
               <Link to="/about" className="flex items-center no-underline">
                 <div className="flex-shrink-0">
