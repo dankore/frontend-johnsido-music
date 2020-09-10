@@ -25,6 +25,7 @@ import Comments from './components/profile/Comments';
 import Footer from './components/shared/Footer';
 import Followers from './components/profile/Followers';
 import Following from './components/profile/Following';
+import AdminLandingPage from './pages/admin/AdminLandingPage';
 
 function Main() {
   const initialState = {
@@ -177,6 +178,13 @@ function Main() {
             </Route>
             <Route exact path="/profile/:username/following">
               <Following />
+            </Route>
+            <Route path="/profile/:username/admin">
+              {state.loggedIn ? (
+                <AdminLandingPage />
+              ) : (
+                <div>Please login or register to view this page.</div>
+              )}
             </Route>
             <Route path="/register">
               <Register />
