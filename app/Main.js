@@ -179,7 +179,7 @@ function Main() {
             <Route exact path="/profile/:username/following">
               <Following />
             </Route>
-            <Route path="/admin">
+            <Route path="/admin/:username">
               {state.loggedIn ? (
                 <AdminLandingPage />
               ) : (

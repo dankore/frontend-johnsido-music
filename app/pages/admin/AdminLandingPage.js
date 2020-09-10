@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Page from '../../components/layouts/Page';
 import { NavLink, Route, Switch, Redirect } from 'react-router-dom';
 import Analytics from '../../components/admin/Analytics';
 import UploadSong from '../../components/admin/UploadSong';
+import StateContext from '../../contextsProviders/StateContext';
 
 function AdminLandingPage() {
+  const appState = useContext(StateContext);
   return (
     <Page title="Admin Landing Page">
       <nav className="bg-gray-900 fixed w-full flex justify-end z-20 top-0">
@@ -75,7 +77,7 @@ function AdminLandingPage() {
           <div className="md:mt-12 md:w-48 md:fixed md:left-0 md:top-0 content-center md:content-start text-left justify-between">
             <ul className="flex flex-row md:flex-col py-0 md:py-3 px-1 md:px-2 text-center md:text-left">
               <NavLink
-                to="/admin/analytics"
+                to={`/admin/${appState.user.username}/analytics`}
                 className="mr-3 flex-1 block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-pink-500"
               >
                 <i className="fas fa-tasks md:mr-3"></i>
@@ -84,7 +86,7 @@ function AdminLandingPage() {
                 </span>
               </NavLink>
               <NavLink
-                to="/admin/upload-song"
+                to={`/admin/${appState.user.username}/upload-song`}
                 className="mr-3 flex-1 block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-purple-500"
               >
                 <i className="fa fa-envelope md:mr-3"></i>
@@ -97,14 +99,14 @@ function AdminLandingPage() {
         </div>
         <div className="main-content flex-1 bg-gray-100 mt-10 pb-24 md:pb-5">
           <Switch>
-            <Route path="/admin/analytics">
+            <Route path="/admin/:username/analytics">
               <Analytics />
             </Route>
-            <Route path="/admin/upload-song">
+            <Route path="/admin/:username/upload-song">
               <UploadSong />
             </Route>
             <Route>
-              <Redirect to="/admin/analytics" />
+              <Redirect to={`/admin/${appState.user.username}/analytics`} />
             </Route>
           </Switch>
         </div>
