@@ -1,16 +1,25 @@
 import React, { useContext } from 'react';
 import Page from '../../components/layouts/Page';
-import { NavLink, Route, Switch, Redirect } from 'react-router-dom';
+import { NavLink, Route, Switch, Redirect, Link, withRouter } from 'react-router-dom';
 import Analytics from '../../components/admin/Analytics';
 import UploadSong from '../../components/admin/UploadSong';
 import StateContext from '../../contextsProviders/StateContext';
+import DispatchContext from '../../contextsProviders/DispatchContext';
+import PropTypes from 'prop-types';
 
-function AdminLandingPage() {
+function AdminLandingPage({ history }) {
   const appState = useContext(StateContext);
+  const appDispatch = useContext(DispatchContext);
+
+  function handleLogout() {
+    appDispatch({ type: 'logout' });
+    history.push('/');
+  }
+
   return (
     <Page title="Admin Landing Page">
       <nav className="bg-gray-900 fixed w-full flex justify-end z-20 top-0">
-        <ul className="flex justify-between flex-1 md:flex-none items-center w-full md:max-w-sm bg-red-500">
+        <ul className="flex justify-between flex-1 md:flex-none items-center w-full md:max-w-sm">
           <li className="flex-1 md:flex-none md:mr-3">
             <a className="inline-block py-2 px-4 text-white no-underline" href="#">
               Active
@@ -27,14 +36,13 @@ function AdminLandingPage() {
           <li className="flex-1 md:flex-none md:mr-3">
             <div className="relative inline-block">
               <button
-                // onClick="toggleDD('myDropdown')"
-                className="drop-button text-white focus:outline-none"
+                onClick={() => appDispatch({ type: 'toggleAdminLandingPageMenu' })}
+                className="text-white focus:outline-none"
               >
-                {' '}
                 <span className="pr-2">
                   <i className="em em-robot_face"></i>
-                </span>{' '}
-                Hi, User{' '}
+                </span>
+                {appState.user.firstName}
                 <svg
                   className="h-3 fill-current inline"
                   xmlns="http://www.w3.org/2000/svg"
@@ -43,30 +51,29 @@ function AdminLandingPage() {
                   <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                 </svg>
               </button>
-              <div
-                id="myDropdown"
-                className="dropdownlist absolute bg-gray-900 text-white right-0 mt-3 p-3 overflow-auto z-30 invisible"
-              >
-                <a
-                  href="#"
-                  className="p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block"
-                >
-                  <i className="fa fa-user fa-fw"></i> Profile
-                </a>
-                <a
-                  href="#"
-                  className="p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block"
-                >
-                  <i className="fa fa-cog fa-fw"></i> Settings
-                </a>
-                <div className="border border-gray-800"></div>
-                <a
-                  href="#"
-                  className="p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block"
-                >
-                  <i className="fas fa-sign-out-alt fa-fw"></i> Log Out
-                </a>
-              </div>
+              {appState.toggleAdminLandingPageMenu && (
+                <div className="absolute bg-gray-900 text-white right-0 p-3 overflow-auto z-30">
+                  <Link
+                    to={`/profile/${appState.user.username}`}
+                    className="p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block"
+                  >
+                    <i className="fa fa-user fa-fw"></i> Profile
+                  </Link>
+                  <Link
+                    to="/settings"
+                    className="p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block"
+                  >
+                    <i className="fa fa-cog fa-fw"></i> Settings
+                  </Link>
+                  <div className="border border-gray-800"></div>
+                  <button
+                    onClick={handleLogout}
+                    className="p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block"
+                  >
+                    <i className="fas fa-sign-out-alt fa-fw"></i> Log Out
+                  </button>
+                </div>
+              )}
             </div>
           </li>
         </ul>
@@ -115,4 +122,8 @@ function AdminLandingPage() {
   );
 }
 
-export default AdminLandingPage;
+AdminLandingPage.propTypes = {
+  history: PropTypes.object.isRequired,
+};
+
+export default withRouter(AdminLandingPage);

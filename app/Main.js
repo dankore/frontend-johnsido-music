@@ -57,6 +57,7 @@ function Main() {
     },
     isOpenProfileDropdown: false,
     toggleLandingPageMenu: false,
+    toggleAdminLandingPageMenu: false,
     editComment: false,
     commentHistory: false,
   };
@@ -78,6 +79,9 @@ function Main() {
         return;
       case 'toggleLandingPageMenu':
         draft.toggleLandingPageMenu = !draft.toggleLandingPageMenu;
+        return;
+      case 'toggleAdminLandingPageMenu':
+        draft.toggleAdminLandingPageMenu = !draft.toggleAdminLandingPageMenu;
         return;
       case 'flashMsgError':
         draft.flashMsgErrors.value = action.value;
