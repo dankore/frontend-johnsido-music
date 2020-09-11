@@ -19,19 +19,14 @@ function AdminLandingPage({ history }) {
   return (
     <Page title="Admin Landing Page">
       <nav className="bg-gray-900 fixed w-full flex justify-end z-20 top-0">
-        <ul className="flex justify-between flex-1 md:flex-none items-center w-full md:max-w-sm">
+        <ul className="flex justify-between flex-1 md:flex-none items-center w-full md:max-w-xs">
           <li className="flex-1 md:flex-none md:mr-3">
-            <a className="inline-block py-2 px-4 text-white no-underline" href="#">
-              Active
-            </a>
-          </li>
-          <li className="flex-1 md:flex-none md:mr-3">
-            <a
+            <Link
               className="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4"
-              href="#"
+              to="/"
             >
-              link
-            </a>
+              Home
+            </Link>
           </li>
           <li className="flex-1 md:flex-none md:mr-3">
             <div className="relative inline-block">
@@ -52,25 +47,28 @@ function AdminLandingPage({ history }) {
                 </svg>
               </button>
               {appState.toggleAdminLandingPageMenu && (
-                <div className="absolute bg-gray-900 text-white right-0 p-3 overflow-auto z-30">
+                <div className="absolute bg-gray-900 text-white right-0 overflow-auto z-30">
                   <Link
                     to={`/profile/${appState.user.username}`}
-                    className="p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block"
+                    className="p-2 flex items-center hover:bg-gray-800 text-white text-sm no-underline hover:no-underline"
                   >
-                    <i className="fa fa-user fa-fw"></i> Profile
+                    <i className="mr-2 fa fa-user fa-fw"></i>
+                    <span>Profile</span>
                   </Link>
                   <Link
                     to="/settings"
-                    className="p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block"
+                    className="p-2 flex items-center hover:bg-gray-800 text-white text-sm no-underline hover:no-underline"
                   >
-                    <i className="fa fa-cog fa-fw"></i> Settings
+                    <i className="mr-2 fa fa-cog fa-fw"></i>
+                    <span>Settings</span>
                   </Link>
                   <div className="border border-gray-800"></div>
                   <button
                     onClick={handleLogout}
-                    className="p-2 hover:bg-gray-800 text-white text-sm no-underline hover:no-underline block"
+                    className="p-2 flex items-center hover:bg-gray-800 text-white text-sm no-underline hover:no-underline"
                   >
-                    <i className="fas fa-sign-out-alt fa-fw"></i> Log Out
+                    <i className="mr-2 fas fa-sign-out-alt fa-fw"></i>
+                    <span>Log Out</span>
                   </button>
                 </div>
               )}
