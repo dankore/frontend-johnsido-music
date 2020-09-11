@@ -1,6 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 
-function Analytics() {
+function Analytics({ isFetching, adminStats }) {
+  console.log(adminStats);
+
+  if (isFetching) {
+    return <LoadingDotsAnimation />;
+  }
+
   return (
     <div>
       <div className="bg-blue-800 px-2 pt-6 pb-4 shadow text-xl text-white">
@@ -39,7 +47,7 @@ function Analytics() {
               <div className="flex-1 text-right md:text-center">
                 <h5 className="font-bold uppercase text-gray-600">Total Users</h5>
                 <h3 className="font-bold text-3xl">
-                  249{' '}
+                  {adminStats.totalUsers}{' '}
                   <span className="text-orange-500">
                     <i className="fas fa-exchange-alt"></i>
                   </span>
@@ -122,5 +130,10 @@ function Analytics() {
     </div>
   );
 }
+
+Analytics.propTypes = {
+  isFetching: PropTypes.bool.isRequired,
+  adminStats: PropTypes.object.isRequired,
+};
 
 export default Analytics;

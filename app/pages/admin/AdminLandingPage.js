@@ -1,15 +1,69 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Page from '../../components/layouts/Page';
-import { NavLink, Route, Switch, Redirect, Link, withRouter } from 'react-router-dom';
+import { NavLink, Route, Switch, Redirect, Link, withRouter, useParams } from 'react-router-dom';
 import Analytics from '../../components/admin/Analytics';
 import UploadSong from '../../components/admin/UploadSong';
 import StateContext from '../../contextsProviders/StateContext';
 import DispatchContext from '../../contextsProviders/DispatchContext';
 import PropTypes from 'prop-types';
+import { useImmerReducer } from 'use-immer';
+import Axios from 'axios';
 
 function AdminLandingPage({ history }) {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
+  const { username } = useParams();
+  const initialState = {
+    adminStats: {
+      totalUsers: 0,
+    },
+    isFetching: false,
+  };
+
+  function adminReducer(draft, action) {
+    switch (action.type) {
+      case 'fetchAdminStatsComplete':
+        draft.adminStats = action.value;
+        return;
+      case 'isFetchingStarts':
+        draft.isFetching = true;
+        return;
+      case 'isFetchingEnds':
+        draft.isFetching = false;
+        return;
+    }
+  }
+
+  const [state, adminDispatch] = useImmerReducer(adminReducer, initialState);
+
+  useEffect(() => {
+    const request = Axios.CancelToken.source();
+    adminDispatch({ type: 'isFetchingStarts' });
+
+    (async function getAdminStats() {
+      try {
+        const response = await Axios.post(
+          `/admin-stats/${username}`,
+          { token: appState.user.token },
+          { cancelToken: request.token }
+        );
+
+        adminDispatch({ type: 'isFetchingEnds' });
+
+        if (response.data.adminStats) {
+          adminDispatch({ type: 'fetchAdminStatsComplete', value: response.data.adminStats });
+        } else {
+          // NOT AN ADMIN
+          console.log(response.data);
+        }
+      } catch (error) {
+        // FAIL SILENTLY
+        console.log(error);
+      }
+    })();
+
+    return () => request.cancel();
+  }, [username]);
 
   function handleLogout() {
     appDispatch({ type: 'logout' });
@@ -105,7 +159,7 @@ function AdminLandingPage({ history }) {
         <div className="main-content flex-1 bg-gray-100 mt-10 pb-24 md:pb-5">
           <Switch>
             <Route path="/admin/:username/analytics">
-              <Analytics />
+              <Analytics isFetching={state.isFetching} adminStats={state.adminStats} />
             </Route>
             <Route path="/admin/:username/upload-song">
               <UploadSong />
