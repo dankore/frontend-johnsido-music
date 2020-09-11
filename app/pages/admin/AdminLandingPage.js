@@ -8,6 +8,7 @@ import DispatchContext from '../../contextsProviders/DispatchContext';
 import PropTypes from 'prop-types';
 import { useImmerReducer } from 'use-immer';
 import Axios from 'axios';
+import RoleAssignment from '../../components/admin/RoleAssignment';
 
 function AdminLandingPage({ history }) {
   const appState = useContext(StateContext);
@@ -73,20 +74,20 @@ function AdminLandingPage({ history }) {
   return (
     <Page title="Admin Landing Page">
       <nav className="bg-gray-900 fixed w-full flex justify-end z-20 top-0">
-        <ul className="flex justify-between flex-1 md:flex-none items-center w-full md:max-w-xs">
-          <li className="flex-1 md:flex-none md:mr-3">
+        <ul className="flex justify-between items-center text-white w-full md:max-w-xs px-3">
+          <li className="md:flex-none ">
             <Link
-              className="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4"
+              className="inline-block no-underline hover:text-gray-200 hover:text-underline py-2"
               to="/"
             >
               Home
             </Link>
           </li>
-          <li className="flex-1 md:flex-none md:mr-3">
+          <li className="flex md:flex-none">
             <div className="relative inline-block">
               <button
                 onClick={() => appDispatch({ type: 'toggleAdminLandingPageMenu' })}
-                className="text-white focus:outline-none"
+                className=" focus:outline-none"
               >
                 <span className="pr-2">
                   <i className="em em-robot_face"></i>
@@ -153,6 +154,15 @@ function AdminLandingPage({ history }) {
                   Add song
                 </span>
               </NavLink>
+              <NavLink
+                to={`/admin/${appState.user.username}/role-assignment`}
+                className="mr-3 flex-1 block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-purple-500"
+              >
+                <i className="fas fa-users-cog md:mr-3"></i>
+                <span className="pb-1 md:pb-0 text-xs md:text-base text-gray-600 md:text-gray-400 block md:inline-block">
+                  Roles
+                </span>
+              </NavLink>
             </ul>
           </div>
         </div>
@@ -163,6 +173,9 @@ function AdminLandingPage({ history }) {
             </Route>
             <Route path="/admin/:username/upload-song">
               <UploadSong />
+            </Route>
+            <Route path="/admin/:username/role-assignment">
+              <RoleAssignment />
             </Route>
             <Route>
               <Redirect to={`/admin/${appState.user.username}/analytics`} />

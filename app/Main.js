@@ -102,6 +102,7 @@ function Main() {
         draft.flashMsgSuccess.isDisplay = false;
         draft.isOpenProfileDropdown = false;
         draft.toggleLandingPageMenu = false;
+        draft.toggleAdminLandingPageMenu = false;
         return;
       case 'updateLocalStorage':
         // UPDATE LOCAL STORAGE
