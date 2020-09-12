@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import StateContext from '../contextsProviders/StateContext';
 import DispatchContext from '../contextsProviders/DispatchContext';
 import FlashMsgSuccess from '../components/shared/FlashMsgSuccess';
+import FlashMsgError from '../components/shared/FlashMsgError';
 
 function LandingPage() {
   const appState = useContext(StateContext);
@@ -159,6 +160,9 @@ function LandingPage() {
           </div>
           {appState.flashMsgSuccess.isDisplay && (
             <FlashMsgSuccess errors={appState.flashMsgSuccess.value} />
+          )}
+          {appState.flashMsgErrors.isDisplay && (
+            <FlashMsgError errors={appState.flashMsgErrors.value} />
           )}
           <div className="px-6 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-none">
             <h1 className="mt-3 text-3xl leading-9 font-semibold font-display text-white sm:mt-6 sm:text-4xl sm:leading-10 xl:text-5xl xl:leading-none">

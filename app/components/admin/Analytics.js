@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 
 function Analytics({ isFetching, adminStats }) {
-  console.log(adminStats);
-
   if (isFetching) {
     return <LoadingDotsAnimation />;
   }

@@ -55,7 +55,8 @@ function AdminLandingPage({ history }) {
           adminDispatch({ type: 'fetchAdminStatsComplete', value: response.data.adminStats });
         } else {
           // NOT AN ADMIN
-          console.log(response.data);
+          history.push('/');
+          appDispatch({ type: 'flashMsgError', value: response.data });
         }
       } catch (error) {
         // FAIL SILENTLY
