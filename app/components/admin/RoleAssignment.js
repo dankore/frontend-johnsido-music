@@ -47,7 +47,7 @@ function RoleAssignment({ allUserDocs }) {
           {allUserDocs.map((user, index) => {
             return (
               <div key={index} className="mb-2">
-                <RoleUserTemplate />
+                <RoleUserTemplate user={user} />
               </div>
             );
           })}{' '}
