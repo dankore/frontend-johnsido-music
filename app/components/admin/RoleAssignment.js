@@ -44,13 +44,14 @@ function RoleAssignment({ allUserDocs }) {
           <p>Click to edit roles</p>
         </div>
         <div className="overflow-y-auto" style={{ maxHeight: 500 + 'px' }}>
-          {allUserDocs.map((user, index) => {
+          {/* {allUserDocs.map((user, index) => {
             return (
               <div key={index} className="mb-2">
                 <RoleUserTemplate user={user} />
               </div>
             );
-          })}{' '}
+          })} */}
+          <RoleUserTemplate allUserDocs={allUserDocs} />
         </div>
       </div>
     </div>
