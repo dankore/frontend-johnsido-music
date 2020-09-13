@@ -16,7 +16,7 @@ function AdminLandingPage({ history }) {
   const { username } = useParams();
   const initialState = {
     adminStats: {
-      totalUsers: 0,
+      allUserDocs: [],
     },
     isFetching: false,
   };
@@ -170,13 +170,16 @@ function AdminLandingPage({ history }) {
         <div className="main-content flex-1 bg-gray-100 mt-10 pb-24 md:pb-5">
           <Switch>
             <Route path="/admin/:username/analytics">
-              <Analytics isFetching={state.isFetching} adminStats={state.adminStats} />
+              <Analytics
+                isFetching={state.isFetching}
+                totalUsers={state.adminStats.allUserDocs.length}
+              />
             </Route>
             <Route path="/admin/:username/upload-song">
               <UploadSong />
             </Route>
             <Route path="/admin/:username/role-assignment">
-              <RoleAssignment />
+              <RoleAssignment allUserDocs={state.adminStats.allUserDocs} />
             </Route>
             <Route>
               <Redirect to={`/admin/${appState.user.username}/analytics`} />

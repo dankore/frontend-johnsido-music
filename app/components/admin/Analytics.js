@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 
-function Analytics({ isFetching, adminStats }) {
+function Analytics({ isFetching, totalUsers }) {
   if (isFetching) {
     return <LoadingDotsAnimation />;
   }
@@ -45,7 +45,7 @@ function Analytics({ isFetching, adminStats }) {
               <div className="flex-1 text-right md:text-center">
                 <h5 className="font-bold uppercase text-gray-600">Total Users</h5>
                 <h3 className="font-bold text-3xl">
-                  {adminStats.totalUsers}{' '}
+                  {totalUsers}{' '}
                   <span className="text-orange-500">
                     <i className="fas fa-exchange-alt"></i>
                   </span>
@@ -131,7 +131,7 @@ function Analytics({ isFetching, adminStats }) {
 
 Analytics.propTypes = {
   isFetching: PropTypes.bool.isRequired,
-  adminStats: PropTypes.object.isRequired,
+  totalUsers: PropTypes.number.isRequired,
 };
 
 export default Analytics;

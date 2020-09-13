@@ -1,8 +1,8 @@
 import React from 'react';
 import RoleUserTemplate from './RoleUserTemplate';
+import PropTypes from 'prop-types';
 
-function RoleAssignment() {
-  const array = [1, 2, 3, 4, 5, 6, 7];
+function RoleAssignment({ allUserDocs }) {
   return (
     <div className="">
       <div className="bg-blue-800 px-2 pt-6 pb-4 shadow text-xl text-white">
@@ -40,11 +40,11 @@ function RoleAssignment() {
       </div>{' '}
       {/* MAIN CONTENT */}
       <div className="flex flex-wrap justify-center">
-        <div className="px-3">
+        <div className="px-3 bg-gray-900 text-white">
           <p>Click to edit roles</p>
         </div>
-        <div className="bg-green-400 overflow-y-auto" style={{ maxHeight: 500 + 'px' }}>
-          {array.map((user, index) => {
+        <div className="overflow-y-auto" style={{ maxHeight: 500 + 'px' }}>
+          {allUserDocs.map((user, index) => {
             return (
               <div key={index} className="mb-2">
                 <RoleUserTemplate />
@@ -56,5 +56,8 @@ function RoleAssignment() {
     </div>
   );
 }
+RoleAssignment.propTypes = {
+  allUserDocs: PropTypes.array.isRequired,
+};
 
 export default RoleAssignment;
