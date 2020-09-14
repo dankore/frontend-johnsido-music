@@ -358,6 +358,7 @@ function RoleAssignment() {
                       <ReuseableModal
                         user={user}
                         type="downgrade"
+                        headerTitle={`Downgrade ${user.firstName} ${user.lastName}?`}
                         btnText="Yes downgrade to a USER"
                         warningText="Are you sure you want to do this?"
                         handleToggle={toggleAdminModal}

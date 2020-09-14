@@ -1,7 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function ReuseableModal({ user, type, btnText, warningText, handleToggle, handleSubmit }) {
+function ReuseableModal({
+  user,
+  type,
+  headerTitle,
+  btnText,
+  warningText,
+  handleToggle,
+  handleSubmit,
+}) {
   return (
     <div className="fixed z-10 inset-0 overflow-y-auto">
       <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -34,7 +42,7 @@ function ReuseableModal({ user, type, btnText, warningText, handleToggle, handle
               </div>
               <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                 <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-headline">
-                  Deactivate account
+                  {headerTitle}
                 </h3>
                 <div className="mt-2">
                   <p className="text-sm leading-5 text-gray-500">{warningText}</p>
@@ -74,6 +82,7 @@ function ReuseableModal({ user, type, btnText, warningText, handleToggle, handle
 ReuseableModal.propTypes = {
   btnText: PropTypes.string,
   type: PropTypes.string,
+  headerTitle: PropTypes.string,
   warningText: PropTypes.string,
   handleToggle: PropTypes.func,
   handleSubmit: PropTypes.func,
