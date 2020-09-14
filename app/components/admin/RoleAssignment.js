@@ -5,6 +5,7 @@ import Axios from 'axios';
 import { useImmerReducer } from 'use-immer';
 import { useParams } from 'react-router-dom';
 import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
+import ReuseableModal from './ReuseableModal';
 
 function RoleAssignment() {
   const appState = useContext(StateContext);
@@ -167,8 +168,16 @@ function RoleAssignment() {
     return <LoadingDotsAnimation />;
   }
 
+  function toggleAdminModal() {
+    roleAssignmentDispatch({ type: 'toggleAdminModal' });
+  }
+
+  function toggleActiveModal() {
+    roleAssignmentDispatch({ type: 'toggleActiveModal' });
+  }
+
   return (
-    <div className="">
+    <div className="relative">
       <div className="bg-blue-800 px-2 pt-6 pb-4 shadow text-xl text-white">
         <h3 className="font-bold pl-2"> Role Assignment </h3>
       </div>
@@ -208,7 +217,7 @@ function RoleAssignment() {
         <div className="overflow-y-auto" style={{ maxHeight: 500 + 'px' }}>
           {state.adminStats.allUserDocs.map((user, index) => {
             return (
-              <div key={index} className="relative flex flex-wrap bg-white justify-center">
+              <div key={index} className="flex flex-wrap bg-white justify-center">
                 <div className="px-6 py-4 whitespace-no-wrap">
                   <div className="flex items-center">
                     <div className="flex-shrink-0 h-10 w-10">
@@ -275,103 +284,52 @@ function RoleAssignment() {
                 {state.active.toggleModal && state.active.username == user.username && (
                   <>
                     {user.active ? (
-                      <div className="absolute bg-white border p-3 text-center">
-                        <p className="mb-3">
-                          In activate {user.firstName} {user.lastName}&apos;s account?
-                        </p>
-                        <div className="flex">
-                          <button
-                            onClick={handleBanUser}
-                            data-userid={user._id}
-                            data-username={user.username}
-                            data-type="inactivate"
-                            className="mr-5 text-red-600"
-                          >
-                            Yes inactivate account
-                          </button>
-                          <button
-                            onClick={() => roleAssignmentDispatch({ type: 'toggleActiveModal' })}
-                          >
-                            {' '}
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
+                      <ReuseableModal
+                        user={user}
+                        type="inactivate"
+                        headerTitle={`In activate ${user.firstName} ${user.lastName}'s account?`}
+                        btnText="Yes inactivate account"
+                        warningText="Are you sure you want to do this?"
+                        handleToggle={toggleActiveModal}
+                        handleSubmit={handleBanUser}
+                      />
                     ) : (
-                      <div className="absolute bg-white border p-3 text-center">
-                        <p className="mb-3">
-                          Activate {user.firstName} {user.lastName}&apos;s account?
-                        </p>
-                        <div className="flex">
-                          <button
-                            onClick={handleBanUser}
-                            data-userid={user._id}
-                            data-username={user.username}
-                            data-type="activate"
-                            className="mr-5 text-red-600"
-                          >
-                            Yes activate account
-                          </button>
-                          <button
-                            onClick={() => roleAssignmentDispatch({ type: 'toggleActiveModal' })}
-                          >
-                            {' '}
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
+                      <ReuseableModal
+                        user={user}
+                        type="activate"
+                        headerTitle={`Activate ${user.firstName} ${user.lastName}'s account?`}
+                        btnText="Yes activate account"
+                        warningText="Are you sure you want to do this?"
+                        handleToggle={toggleActiveModal}
+                        handleSubmit={handleBanUser}
+                      />
                     )}
                   </>
                 )}
+
                 {/* ADMIN MODAL */}
                 {state.admin.toggleModal && state.admin.username == user.username && (
                   <>
                     {user.scope.indexOf('admin') > -1 ? (
-                      <div className="absolute bg-white border p-3 text-center">
-                        <p className="mb-3">
-                          Downgrade {user.firstName} {user.lastName}?
-                        </p>
-                        <div className="flex">
-                          <button
-                            onClick={handleDowngradeUpgrade}
-                            data-userid={user._id}
-                            data-username={user.username}
-                            data-type="downgrade"
-                            className="mr-5 text-red-600"
-                          >
-                            Yes downgrade to a USER
-                          </button>
-                          <button
-                            onClick={() => roleAssignmentDispatch({ type: 'toggleAdminModal' })}
-                          >
-                            {' '}
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
+                      <ReuseableModal
+                        user={user}
+                        type="downgrade"
+                        headerTitle={`Downgrade ${user.firstName} ${user.lastName}?`}
+                        btnText="Yes downgrade to a USER"
+                        warningText="Are you sure you want to do this?"
+                        handleToggle={toggleAdminModal}
+                        handleSubmit={handleDowngradeUpgrade}
+                      />
                     ) : (
-                      <div className="absolute bg-white border p-3 text-center">
-                        <p className="mb-3">
-                          Upgrade {user.firstName} {user.lastName} to admin?
-                        </p>
-                        <div className="flex">
-                          <button
-                            onClick={handleDowngradeUpgrade}
-                            data-userid={user._id}
-                            data-username={user.username}
-                            data-type="upgrade"
-                            className="mr-5 text-red-600"
-                          >
-                            Yes upgrade to an ADMIN
-                          </button>
-                          <button
-                            onClick={() => roleAssignmentDispatch({ type: 'toggleAdminModal' })}
-                          >
-                            {' '}
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
+                      <ReuseableModal
+                        user={user}
+                        type="upgrade"
+                        headerTitle={`Upgrade ${user.firstName} ${user.lastName} to admin?`}
+                        btnText="Yes upgrade to an ADMIN"
+                        warningText="Are you sure you want to do this?"
+                        handleToggle={toggleAdminModal}
+                        handleSubmit={handleDowngradeUpgrade}
+                      />
                     )}
                   </>
                 )}
