@@ -179,7 +179,7 @@ function AdminLandingPage({ history }) {
               <UploadSong />
             </Route>
             <Route path="/admin/:username/role-assignment">
-              <RoleAssignment allUserDocs={state.adminStats.allUserDocs} />
+              <RoleAssignment />
             </Route>
             <Route>
               <Redirect to={`/admin/${appState.user.username}/analytics`} />
