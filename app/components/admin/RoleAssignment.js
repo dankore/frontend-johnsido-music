@@ -113,22 +113,20 @@ function RoleAssignment() {
       const userId = e.target.getAttribute('data-userid');
       const username = e.target.getAttribute('data-username');
       const type = e.target.getAttribute('data-type');
-      const confirm = window.confirm('Are you sure?');
 
-      if (confirm) {
-        const response = await Axios.post(`/admin/${appState.user.username}/handleBanUser`, {
-          userId,
-          type,
-          token: appState.user.token,
-        });
-        if (response.data == 'Success') {
-          // SUCCESS
-          roleAssignmentDispatch({ type: 'toggleActiveModal' });
-          roleAssignmentDispatch({ type: 'updateRole', value: username, process: type });
-        } else {
-          // FAILURE
-          console.log(response.data);
-        }
+      const response = await Axios.post(`/admin/${appState.user.username}/handleBanUser`, {
+        userId,
+        type,
+        token: appState.user.token,
+      });
+
+      if (response.data == 'Success') {
+        // SUCCESS
+        roleAssignmentDispatch({ type: 'toggleActiveModal' });
+        roleAssignmentDispatch({ type: 'updateRole', value: username, process: type });
+      } else {
+        // FAILURE
+        console.log(response.data);
       }
     } catch (error) {
       console.log(error);
@@ -141,23 +139,20 @@ function RoleAssignment() {
       const userId = e.target.getAttribute('data-userid');
       const username = e.target.getAttribute('data-username');
       const type = e.target.getAttribute('data-type');
-      const confirm = window.confirm('Are you sure?');
 
-      if (confirm) {
-        const response = await Axios.post(`/admin/${appState.user.username}/handleRoleAssignment`, {
-          userId,
-          type,
-          token: appState.user.token,
-        });
+      const response = await Axios.post(`/admin/${appState.user.username}/handleRoleAssignment`, {
+        userId,
+        type,
+        token: appState.user.token,
+      });
 
-        if (response.data == 'Success') {
-          // SUCCESS
-          roleAssignmentDispatch({ type: 'toggleAdminModal' });
-          roleAssignmentDispatch({ type: 'updateRole', value: username, process: type });
-        } else {
-          // FAILURE
-          console.log(response.data);
-        }
+      if (response.data == 'Success') {
+        // SUCCESS
+        roleAssignmentDispatch({ type: 'toggleAdminModal' });
+        roleAssignmentDispatch({ type: 'updateRole', value: username, process: type });
+      } else {
+        // FAILURE
+        console.log(response.data);
       }
     } catch (error) {
       console.log(error);
