@@ -107,21 +107,23 @@ function RoleAssignment() {
   }, [username]);
 
   // BAN USERS
-  async function handleIntivation(e) {
+  async function handleBanUser(e) {
     try {
       const userId = e.target.getAttribute('data-userid');
       const username = e.target.getAttribute('data-username');
+      const type = e.target.getAttribute('data-type');
       const confirm = window.confirm('Are you sure?');
 
       if (confirm) {
-        const response = await Axios.post(`/admin/${appState.user.username}/inactivateAccount`, {
+        const response = await Axios.post(`/admin/${appState.user.username}/handleBanUser`, {
           userId,
+          type,
           token: appState.user.token,
         });
         if (response.data == 'Success') {
           // SUCCESS
           roleAssignmentDispatch({ type: 'toggleActiveModal' });
-          roleAssignmentDispatch({ type: 'updateRole', value: username, process: 'inactivate' });
+          roleAssignmentDispatch({ type: 'updateRole', value: username, process: type });
         } else {
           // FAILURE
           console.log(response.data);
@@ -237,7 +239,12 @@ function RoleAssignment() {
                       Active
                     </button>
                   ) : (
-                    <button className="underline px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                    <button
+                      onClick={() =>
+                        roleAssignmentDispatch({ type: 'toggleActiveModal', value: user.username })
+                      }
+                      className="underline px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"
+                    >
                       Inactive
                     </button>
                   )}
@@ -274,7 +281,7 @@ function RoleAssignment() {
                         </p>
                         <div className="flex">
                           <button
-                            onClick={handleIntivation}
+                            onClick={handleBanUser}
                             data-userid={user._id}
                             data-username={user.username}
                             data-type="inactivate"
@@ -297,7 +304,7 @@ function RoleAssignment() {
                         </p>
                         <div className="flex">
                           <button
-                            onClick={handleIntivation}
+                            onClick={handleBanUser}
                             data-userid={user._id}
                             data-username={user.username}
                             data-type="activate"
