@@ -55,8 +55,15 @@ function RoleAssignment() {
           draft.adminStats.allUserDocs[indexInDocs].scope.splice(indexOfAdmin, 1);
         }
 
+        if (action.process == 'upgrade') {
+          draft.adminStats.allUserDocs[indexInDocs].scope.push('admin');
+        }
+
         if (action.process == 'inactivate') {
           draft.adminStats.allUserDocs[indexInDocs].active = false;
+        }
+        if (action.process == 'activate') {
+          draft.adminStats.allUserDocs[indexInDocs].active = true;
         }
         return;
       }
@@ -126,22 +133,24 @@ function RoleAssignment() {
   }
 
   // FROM ADMIN TO USER
-  async function handleDowngrade(e) {
+  async function handleDowngradeUpgrade(e) {
     try {
       const userId = e.target.getAttribute('data-userid');
       const username = e.target.getAttribute('data-username');
+      const type = e.target.getAttribute('data-type');
       const confirm = window.confirm('Are you sure?');
 
       if (confirm) {
-        const response = await Axios.post(`/admin/${appState.user.username}/downgradeAdminToUser`, {
+        const response = await Axios.post(`/admin/${appState.user.username}/handleRoleAssignment`, {
           userId,
+          type,
           token: appState.user.token,
         });
 
         if (response.data == 'Success') {
           // SUCCESS
           roleAssignmentDispatch({ type: 'toggleAdminModal' });
-          roleAssignmentDispatch({ type: 'updateRole', value: username, process: 'downgrade' });
+          roleAssignmentDispatch({ type: 'updateRole', value: username, process: type });
         } else {
           // FAILURE
           console.log(response.data);
@@ -245,54 +254,119 @@ function RoleAssignment() {
                       Admin
                     </button>
                   ) : (
-                    <button className="underline px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                    <button
+                      onClick={() =>
+                        roleAssignmentDispatch({ type: 'toggleAdminModal', value: user.username })
+                      }
+                      className="underline px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"
+                    >
                       User
                     </button>
                   )}
                 </div>
                 {/* ACTIVE MODAL */}
                 {state.active.toggleModal && state.active.username == user.username && (
-                  <div className="absolute bg-white border p-3 text-center">
-                    <p className="mb-3">
-                      In activate {user.firstName} {user.lastName}&apos;s account?
-                    </p>
-                    <div className="flex">
-                      <button
-                        onClick={handleIntivation}
-                        data-userid={user._id}
-                        data-username={user.username}
-                        className="mr-5 text-red-600"
-                      >
-                        Yes inactivate account
-                      </button>
-                      <button onClick={() => roleAssignmentDispatch({ type: 'toggleActiveModal' })}>
-                        {' '}
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
+                  <>
+                    {user.active ? (
+                      <div className="absolute bg-white border p-3 text-center">
+                        <p className="mb-3">
+                          In activate {user.firstName} {user.lastName}&apos;s account?
+                        </p>
+                        <div className="flex">
+                          <button
+                            onClick={handleIntivation}
+                            data-userid={user._id}
+                            data-username={user.username}
+                            data-type="inactivate"
+                            className="mr-5 text-red-600"
+                          >
+                            Yes inactivate account
+                          </button>
+                          <button
+                            onClick={() => roleAssignmentDispatch({ type: 'toggleActiveModal' })}
+                          >
+                            {' '}
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="absolute bg-white border p-3 text-center">
+                        <p className="mb-3">
+                          Activate {user.firstName} {user.lastName}&apos;s account?
+                        </p>
+                        <div className="flex">
+                          <button
+                            onClick={handleIntivation}
+                            data-userid={user._id}
+                            data-username={user.username}
+                            data-type="activate"
+                            className="mr-5 text-red-600"
+                          >
+                            Yes activate account
+                          </button>
+                          <button
+                            onClick={() => roleAssignmentDispatch({ type: 'toggleActiveModal' })}
+                          >
+                            {' '}
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </>
                 )}
                 {/* ADMIN MODAL */}
                 {state.admin.toggleModal && state.admin.username == user.username && (
-                  <div className="absolute bg-white border p-3 text-center">
-                    <p className="mb-3">
-                      Downgrade {user.firstName} {user.lastName}?
-                    </p>
-                    <div className="flex">
-                      <button
-                        onClick={handleDowngrade}
-                        data-userid={user._id}
-                        data-username={user.username}
-                        className="mr-5 text-red-600"
-                      >
-                        Yes downgrade to a USER
-                      </button>
-                      <button onClick={() => roleAssignmentDispatch({ type: 'toggleAdminModal' })}>
-                        {' '}
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
+                  <>
+                    {user.scope.indexOf('admin') > -1 ? (
+                      <div className="absolute bg-white border p-3 text-center">
+                        <p className="mb-3">
+                          Downgrade {user.firstName} {user.lastName}?
+                        </p>
+                        <div className="flex">
+                          <button
+                            onClick={handleDowngradeUpgrade}
+                            data-userid={user._id}
+                            data-username={user.username}
+                            data-type="downgrade"
+                            className="mr-5 text-red-600"
+                          >
+                            Yes downgrade to a USER
+                          </button>
+                          <button
+                            onClick={() => roleAssignmentDispatch({ type: 'toggleAdminModal' })}
+                          >
+                            {' '}
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="absolute bg-white border p-3 text-center">
+                        <p className="mb-3">
+                          Upgrade {user.firstName} {user.lastName} to admin?
+                        </p>
+                        <div className="flex">
+                          <button
+                            onClick={handleDowngradeUpgrade}
+                            data-userid={user._id}
+                            data-username={user.username}
+                            data-type="upgrade"
+                            className="mr-5 text-red-600"
+                          >
+                            Yes upgrade to an ADMIN
+                          </button>
+                          <button
+                            onClick={() => roleAssignmentDispatch({ type: 'toggleAdminModal' })}
+                          >
+                            {' '}
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             );
