@@ -283,7 +283,7 @@ function RoleAssignment() {
                         user={user}
                         type="inactivate"
                         headerTitle={`In activate ${user.firstName} ${user.lastName}'s account?`}
-                        btnText="Yes inactivate account"
+                        btnText="Inactivate account"
                         warningText="Are you sure you want to do this?"
                         handleToggle={toggleActiveModal}
                         handleSubmit={handleBanUser}
@@ -293,7 +293,7 @@ function RoleAssignment() {
                         user={user}
                         type="activate"
                         headerTitle={`Activate ${user.firstName} ${user.lastName}'s account?`}
-                        btnText="Yes activate account"
+                        btnText="Activate account"
                         warningText="Are you sure you want to do this?"
                         handleToggle={toggleActiveModal}
                         handleSubmit={handleBanUser}
@@ -310,7 +310,7 @@ function RoleAssignment() {
                         user={user}
                         type="downgrade"
                         headerTitle={`Downgrade ${user.firstName} ${user.lastName}?`}
-                        btnText="Yes downgrade to a USER"
+                        btnText="Downgrade to a USER"
                         warningText="Are you sure you want to do this?"
                         handleToggle={toggleAdminModal}
                         handleSubmit={handleDowngradeUpgrade}
@@ -320,7 +320,7 @@ function RoleAssignment() {
                         user={user}
                         type="upgrade"
                         headerTitle={`Upgrade ${user.firstName} ${user.lastName} to admin?`}
-                        btnText="Yes upgrade to an ADMIN"
+                        btnText="Upgrade to an ADMIN"
                         warningText="Are you sure you want to do this?"
                         handleToggle={toggleAdminModal}
                         handleSubmit={handleDowngradeUpgrade}
