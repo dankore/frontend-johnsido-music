@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useImmerReducer } from 'use-immer';
 import Axios from 'axios';
@@ -12,6 +12,7 @@ function RoleUserTemplate({ allUserDocs }) {
       toggleModal: false,
     },
     admin: {
+      username: '',
       toggleModal: false,
     },
   };
@@ -22,7 +23,12 @@ function RoleUserTemplate({ allUserDocs }) {
         draft.active.toggleModal = !draft.active.toggleModal;
         return;
       case 'toggleAdminModal':
+        console.log(action.value);
+        draft.admin.username = action.value;
         draft.admin.toggleModal = !draft.admin.toggleModal;
+        return;
+      case 'toState':
+        draft.allUserDocs = action.value;
         return;
       case 'updateRole':
         // if(action.process == 'downgrade'){
@@ -34,12 +40,16 @@ function RoleUserTemplate({ allUserDocs }) {
 
   const [state, roleTemplateDispatch] = useImmerReducer(roleTemplateReducer, initialState);
 
+  useEffect(() => {
+    roleTemplateDispatch({ type: 'toState', value: allUserDocs });
+  });
+
   async function handleIntivation(e) {
     try {
       const userId = e.target.getAttribute('data-userid');
       const username = e.target.getAttribute('data-username');
       const confirm = window.confirm('Are you sure?');
-      const parent = e.target.parentElement.parentElement.parentElement;
+
       if (confirm) {
         const response = await Axios.post(`/admin/${username}/inactivateAccount`, {
           userId,
@@ -49,7 +59,6 @@ function RoleUserTemplate({ allUserDocs }) {
           // SUCCESS
           roleTemplateDispatch({ type: 'toggleActiveModal' });
           roleTemplateDispatch({ type: 'updateRole', process: 'downgrade' });
-          console.log(parent);
         } else {
           // FAILURE
         }
@@ -64,7 +73,6 @@ function RoleUserTemplate({ allUserDocs }) {
       const userId = e.target.getAttribute('data-userid');
       const username = e.target.getAttribute('data-username');
       const confirm = window.confirm('Are you sure?');
-      const parent = e.target.parentElement.parentElement.parentElement.children[2].innerText;
 
       if (confirm) {
         const response = await Axios.post(`/admin/${username}/downgradeAdminToUser`, {
@@ -76,7 +84,6 @@ function RoleUserTemplate({ allUserDocs }) {
           // SUCCESS
           roleTemplateDispatch({ type: 'toggleAdminModal' });
           roleTemplateDispatch({ type: 'updateRole', process: 'downgrade' });
-          console.log(parent);
         } else {
           // FAILURE
         }
@@ -88,7 +95,7 @@ function RoleUserTemplate({ allUserDocs }) {
 
   return (
     <div>
-      {allUserDocs.map((user, index) => {
+      {state.allUserDocs.map((user, index) => {
         return (
           <div key={index} className="relative flex flex-wrap bg-white justify-center">
             <div className="px-6 py-4 whitespace-no-wrap">
@@ -128,7 +135,9 @@ function RoleUserTemplate({ allUserDocs }) {
             <div className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
               {user.scope.indexOf('admin') > -1 ? (
                 <button
-                  onClick={() => roleTemplateDispatch({ type: 'toggleAdminModal' })}
+                  onClick={() =>
+                    roleTemplateDispatch({ type: 'toggleAdminModal', value: user.username })
+                  }
                   className="underline px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
                 >
                   Admin
@@ -162,7 +171,7 @@ function RoleUserTemplate({ allUserDocs }) {
               </div>
             )}
             {/* ADMIN MODAL */}
-            {state.admin.toggleModal && (
+            {state.admin.toggleModal && state.admin.username == user.username && (
               <div className="absolute bg-white border p-3 text-center">
                 <p className="mb-3">
                   Downgrade {user.firstName} {user.lastName}?
