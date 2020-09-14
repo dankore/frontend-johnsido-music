@@ -16,6 +16,7 @@ function RoleAssignment() {
     },
     isFetching: false,
     active: {
+      username: '',
       toggleModal: false,
     },
     admin: {
@@ -36,23 +37,29 @@ function RoleAssignment() {
         draft.isFetching = false;
         return;
       case 'toggleActiveModal':
+        draft.active.username = action.value;
         draft.active.toggleModal = !draft.active.toggleModal;
         return;
       case 'toggleAdminModal':
         draft.admin.username = action.value;
         draft.admin.toggleModal = !draft.admin.toggleModal;
         return;
-      case 'updateRole':
-        if (action.process == 'downgrade') {
-          const indexInDocs = draft.adminStats.allUserDocs
-            .map(userDoc => userDoc.username)
-            .indexOf(action.value);
+      case 'updateRole': {
+        const indexInDocs = draft.adminStats.allUserDocs
+          .map(userDoc => userDoc.username)
+          .indexOf(action.value);
 
+        if (action.process == 'downgrade') {
           const indexOfAdmin = draft.adminStats.allUserDocs[indexInDocs].scope.indexOf('admin');
 
           draft.adminStats.allUserDocs[indexInDocs].scope.splice(indexOfAdmin, 1);
         }
+
+        if (action.process == 'inactivate') {
+          draft.adminStats.allUserDocs[indexInDocs].active = false;
+        }
         return;
+      }
     }
   }
 
@@ -92,6 +99,7 @@ function RoleAssignment() {
     return () => request.cancel();
   }, [username]);
 
+  // BAN USERS
   async function handleIntivation(e) {
     try {
       const userId = e.target.getAttribute('data-userid');
@@ -99,16 +107,17 @@ function RoleAssignment() {
       const confirm = window.confirm('Are you sure?');
 
       if (confirm) {
-        const response = await Axios.post(`/admin/${username}/inactivateAccount`, {
+        const response = await Axios.post(`/admin/${appState.user.username}/inactivateAccount`, {
           userId,
           token: appState.user.token,
         });
         if (response.data == 'Success') {
           // SUCCESS
           roleAssignmentDispatch({ type: 'toggleActiveModal' });
-          roleAssignmentDispatch({ type: 'updateRole', process: 'downgrade' });
+          roleAssignmentDispatch({ type: 'updateRole', value: username, process: 'inactivate' });
         } else {
           // FAILURE
+          console.log(response.data);
         }
       }
     } catch (error) {
@@ -116,6 +125,7 @@ function RoleAssignment() {
     }
   }
 
+  // FROM ADMIN TO USER
   async function handleDowngrade(e) {
     try {
       const userId = e.target.getAttribute('data-userid');
@@ -123,7 +133,7 @@ function RoleAssignment() {
       const confirm = window.confirm('Are you sure?');
 
       if (confirm) {
-        const response = await Axios.post(`/admin/${username}/downgradeAdminToUser`, {
+        const response = await Axios.post(`/admin/${appState.user.username}/downgradeAdminToUser`, {
           userId,
           token: appState.user.token,
         });
@@ -134,6 +144,7 @@ function RoleAssignment() {
           roleAssignmentDispatch({ type: 'updateRole', value: username, process: 'downgrade' });
         } else {
           // FAILURE
+          console.log(response.data);
         }
       }
     } catch (error) {
@@ -209,7 +220,9 @@ function RoleAssignment() {
                 <div className="px-6 py-4 whitespace-no-wrap">
                   {user.active ? (
                     <button
-                      onClick={() => roleAssignmentDispatch({ type: 'toggleActiveModal' })}
+                      onClick={() =>
+                        roleAssignmentDispatch({ type: 'toggleActiveModal', value: user.username })
+                      }
                       className="underline px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
                     >
                       Active
@@ -238,7 +251,7 @@ function RoleAssignment() {
                   )}
                 </div>
                 {/* ACTIVE MODAL */}
-                {state.active.toggleModal && (
+                {state.active.toggleModal && state.active.username == user.username && (
                   <div className="absolute bg-white border p-3 text-center">
                     <p className="mb-3">
                       In activate {user.firstName} {user.lastName}&apos;s account?
