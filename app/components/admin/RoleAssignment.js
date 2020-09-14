@@ -172,6 +172,10 @@ function RoleAssignment() {
     roleAssignmentDispatch({ type: 'toggleAdminModal' });
   }
 
+  function toggleActiveModal() {
+    roleAssignmentDispatch({ type: 'toggleActiveModal' });
+  }
+
   return (
     <div className="relative">
       <div className="bg-blue-800 px-2 pt-6 pb-4 shadow text-xl text-white">
@@ -280,51 +284,25 @@ function RoleAssignment() {
                 {state.active.toggleModal && state.active.username == user.username && (
                   <>
                     {user.active ? (
-                      <div className="absolute bg-white border p-3 text-center">
-                        <p className="mb-3">
-                          In activate {user.firstName} {user.lastName}&apos;s account?
-                        </p>
-                        <div className="flex">
-                          <button
-                            onClick={handleBanUser}
-                            data-userid={user._id}
-                            data-username={user.username}
-                            data-type="inactivate"
-                            className="mr-5 text-red-600"
-                          >
-                            Yes inactivate account
-                          </button>
-                          <button
-                            onClick={() => roleAssignmentDispatch({ type: 'toggleActiveModal' })}
-                          >
-                            {' '}
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
+                      <ReuseableModal
+                        user={user}
+                        type="inactivate"
+                        headerTitle={`In activate ${user.firstName} ${user.lastName}'s account?`}
+                        btnText="Yes inactivate account"
+                        warningText="Are you sure you want to do this?"
+                        handleToggle={toggleActiveModal}
+                        handleSubmit={handleBanUser}
+                      />
                     ) : (
-                      <div className="absolute bg-white border p-3 text-center">
-                        <p className="mb-3">
-                          Activate {user.firstName} {user.lastName}&apos;s account?
-                        </p>
-                        <div className="flex">
-                          <button
-                            onClick={handleBanUser}
-                            data-userid={user._id}
-                            data-username={user.username}
-                            data-type="activate"
-                            className="mr-5 text-red-600"
-                          >
-                            Yes activate account
-                          </button>
-                          <button
-                            onClick={() => roleAssignmentDispatch({ type: 'toggleActiveModal' })}
-                          >
-                            {' '}
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
+                      <ReuseableModal
+                        user={user}
+                        type="activate"
+                        headerTitle={`Activate ${user.firstName} ${user.lastName}'s account?`}
+                        btnText="Yes activate account"
+                        warningText="Are you sure you want to do this?"
+                        handleToggle={toggleActiveModal}
+                        handleSubmit={handleBanUser}
+                      />
                     )}
                   </>
                 )}
