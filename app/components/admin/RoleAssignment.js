@@ -333,28 +333,6 @@ function RoleAssignment() {
                 {state.admin.toggleModal && state.admin.username == user.username && (
                   <>
                     {user.scope.indexOf('admin') > -1 ? (
-                      // <div className="absolute bg-white border p-3 text-center">
-                      //   <p className="mb-3">
-                      //     Downgrade {user.firstName} {user.lastName}?
-                      //   </p>
-                      //   <div className="flex">
-                      //     <button
-                      //       onClick={handleDowngradeUpgrade}
-                      //       data-userid={user._id}
-                      //       data-username={user.username}
-                      //       data-type="downgrade"
-                      //       className="mr-5 text-red-600"
-                      //     >
-                      //       Yes downgrade to a USER
-                      //     </button>
-                      //     <button
-                      //       onClick={() => roleAssignmentDispatch({ type: 'toggleAdminModal' })}
-                      //     >
-                      //       {' '}
-                      //       Cancel
-                      //     </button>
-                      //   </div>
-                      // </div>
                       <ReuseableModal
                         user={user}
                         type="downgrade"
@@ -365,28 +343,15 @@ function RoleAssignment() {
                         handleSubmit={handleDowngradeUpgrade}
                       />
                     ) : (
-                      <div className="absolute bg-white border p-3 text-center">
-                        <p className="mb-3">
-                          Upgrade {user.firstName} {user.lastName} to admin?
-                        </p>
-                        <div className="flex">
-                          <button
-                            onClick={handleDowngradeUpgrade}
-                            data-userid={user._id}
-                            data-username={user.username}
-                            data-type="upgrade"
-                            className="mr-5 text-red-600"
-                          >
-                            Yes upgrade to an ADMIN
-                          </button>
-                          <button
-                            onClick={() => roleAssignmentDispatch({ type: 'toggleAdminModal' })}
-                          >
-                            {' '}
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
+                      <ReuseableModal
+                        user={user}
+                        type="upgrade"
+                        headerTitle={`Upgrade ${user.firstName} ${user.lastName} to admin?`}
+                        btnText="Yes upgrade to an ADMIN"
+                        warningText="Are you sure you want to do this?"
+                        handleToggle={toggleAdminModal}
+                        handleSubmit={handleDowngradeUpgrade}
+                      />
                     )}
                   </>
                 )}
