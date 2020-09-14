@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import StateContext from '../contextsProviders/StateContext';
 import DispatchContext from '../contextsProviders/DispatchContext';
 import FlashMsgSuccess from '../components/shared/FlashMsgSuccess';
+import FlashMsgError from '../components/shared/FlashMsgError';
 
 function LandingPage() {
   const appState = useContext(StateContext);
@@ -30,12 +31,13 @@ function LandingPage() {
         className="relative min-h-screen lg:min-w-3xl xl:min-w-4xl lg:flex lg:items-center lg:justify-center lg:w-3/5 lg:py-12 lg:pl-8 lg:pr-8 bg-no-repeat"
         style={{
           backgroundImage: `url(https://res.cloudinary.com/my-nigerian-projects/image/upload/v1596699282/Others/angled-background.svg)`,
-          backgroundSize: 100 + '%',
-          backgroundposition: -5 + 'px' - 5 + 'px',
+          backgroundSize: '100% auto',
+          backgroundPositionX: -5 + 'px',
+          backgroundPositionY: -5 + 'px',
         }}
       >
         <div>
-          <div className="px-6 pt-8 pb-12 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-none lg:pt-0 lg:pb-16">
+          <div className="px-6 pt-8 pb-12 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-none lg:pt-0">
             <div className="flex items-center justify-between">
               <div>
                 <img
@@ -89,6 +91,15 @@ function LandingPage() {
                                 />
                                 <p>Your Profile</p>
                               </Link>
+                              {appState.user.scope.indexOf('admin') > -1 && (
+                                <Link
+                                  to={`/admin/${appState.user.username}`}
+                                  className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                                  role="menuitem"
+                                >
+                                  Admin Area
+                                </Link>
+                              )}
                               <Link
                                 to="/about"
                                 className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
@@ -150,6 +161,9 @@ function LandingPage() {
           {appState.flashMsgSuccess.isDisplay && (
             <FlashMsgSuccess errors={appState.flashMsgSuccess.value} />
           )}
+          {appState.flashMsgErrors.isDisplay && (
+            <FlashMsgError errors={appState.flashMsgErrors.value} />
+          )}
           <div className="px-6 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-none">
             <h1 className="mt-3 text-3xl leading-9 font-semibold font-display text-white sm:mt-6 sm:text-4xl sm:leading-10 xl:text-5xl xl:leading-none">
               Be bold, be musical
@@ -191,8 +205,8 @@ function LandingPage() {
               }}
             ></div>
           </div>
-          <div className="px-6 py-8 sm:pt-12 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-full">
-            <p className="text-sm font-semibold text-gray-300 uppercase tracking-wider">Artist</p>
+          <div className="px-6 pt-6 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-full">
+            <p className="text-sm font-semibold text-gray-300 uppercase tracking-wider">Artiste</p>
             <div className="mt-4 sm:flex">
               <Link to="/about" className="flex items-center no-underline">
                 <div className="flex-shrink-0">

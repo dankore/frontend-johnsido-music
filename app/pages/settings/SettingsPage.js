@@ -18,9 +18,9 @@ function SettingsPage() {
                 <li className="mr-3 flex-1">
                   <NavLink
                     to="/settings/info"
-                    className="block py-1 lg:py-3 pl-1 align-middle  no-underline hover:text-pink-500 border-b-2 border-gray-800 lg:border-gray-900 hover:border-pink-500"
+                    className="block py-1 lg:py-3 pl-1 align-middle no-underline hover:text-pink-500 border-b-2 border-gray-800 lg:border-gray-900 hover:border-pink-500"
                   >
-                    <i className="fas fa-link pr-0 lg:pr-3"></i>
+                    <i className="mr-3 fas fa-link"></i>
                     <span className="pb-1 lg:pb-0 text-xs lg:text-base block lg:inline-block">
                       Profile Information
                     </span>
@@ -29,9 +29,9 @@ function SettingsPage() {
                 <li className="mr-3 flex-1">
                   <NavLink
                     to="/settings/change-password"
-                    className="block py-1 lg:py-3 pl-1 align-middle  no-underline hover:text-pink-500 border-b-2 border-gray-800 lg:border-gray-900 hover:border-pink-500"
+                    className="block py-1 lg:py-3 pl-1 align-middle no-underline hover:text-pink-500 border-b-2 border-gray-800 lg:border-gray-900 hover:border-pink-500"
                   >
-                    <i className="fas fa-link pr-0 lg:pr-3"></i>
+                    <i className="mr-3 fas fa-link"></i>
                     <span className="pb-1 lg:pb-0 text-xs lg:text-base block lg:inline-block">
                       Change Password
                     </span>
@@ -40,9 +40,9 @@ function SettingsPage() {
                 <li className="mr-3 flex-1">
                   <NavLink
                     to="/settings/delete-account"
-                    className="block py-1 lg:py-3 pl-1 align-middle  no-underline hover:text-pink-500 border-b-2 border-gray-800 lg:border-gray-900 hover:border-pink-500"
+                    className="block py-1 lg:py-3 pl-1 align-middle no-underline hover:text-pink-500 border-b-2 border-gray-800 lg:border-gray-900 hover:border-pink-500"
                   >
-                    <i className="fas fa-link pr-0 lg:pr-3"></i>
+                    <i className="mr-3 fas fa-link"></i>
                     <span className="pb-1 lg:pb-0 text-xs lg:text-base block lg:inline-block">
                       Delete Account
                     </span>

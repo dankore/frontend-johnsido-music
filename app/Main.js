@@ -25,6 +25,7 @@ import Comments from './components/profile/Comments';
 import Footer from './components/shared/Footer';
 import Followers from './components/profile/Followers';
 import Following from './components/profile/Following';
+import AdminLandingPage from './pages/admin/AdminLandingPage';
 
 function Main() {
   const initialState = {
@@ -38,6 +39,7 @@ function Main() {
       avatar: localStorage.getItem('johnsido-avatar'),
       verified: localStorage.getItem('johnsido-verified'),
       about: JSON.parse(localStorage.getItem('johnsido-about')),
+      scope: JSON.parse(localStorage.getItem('johnsido-scope')),
       userCreationDate: localStorage.getItem('johnsido-userCreationDate'),
     },
     logo: {
@@ -55,6 +57,7 @@ function Main() {
     },
     isOpenProfileDropdown: false,
     toggleLandingPageMenu: false,
+    toggleAdminLandingPageMenu: false,
     editComment: false,
     commentHistory: false,
   };
@@ -77,6 +80,9 @@ function Main() {
       case 'toggleLandingPageMenu':
         draft.toggleLandingPageMenu = !draft.toggleLandingPageMenu;
         return;
+      case 'toggleAdminLandingPageMenu':
+        draft.toggleAdminLandingPageMenu = !draft.toggleAdminLandingPageMenu;
+        return;
       case 'flashMsgError':
         draft.flashMsgErrors.value = action.value;
         draft.flashMsgErrors.isDisplay = true;
@@ -96,6 +102,7 @@ function Main() {
         draft.flashMsgSuccess.isDisplay = false;
         draft.isOpenProfileDropdown = false;
         draft.toggleLandingPageMenu = false;
+        draft.toggleAdminLandingPageMenu = false;
         return;
       case 'updateLocalStorage':
         // UPDATE LOCAL STORAGE
@@ -130,6 +137,7 @@ function Main() {
       localStorage.setItem('johnsido-lastname', state.user.lastName);
       localStorage.setItem('johnsido-avatar', state.user.avatar);
       localStorage.setItem('johnsido-verified', state.user.verified);
+      localStorage.setItem('johnsido-scope', JSON.stringify(state.user.scope));
       localStorage.setItem('johnsido-about', JSON.stringify(state.user.about));
       localStorage.setItem('johnsido-userCreationDate', state.user.userCreationDate);
     } else {
@@ -175,6 +183,13 @@ function Main() {
             </Route>
             <Route exact path="/profile/:username/following">
               <Following />
+            </Route>
+            <Route path="/admin/:username">
+              {state.loggedIn ? (
+                <AdminLandingPage />
+              ) : (
+                <div>Please login or register to view this page.</div>
+              )}
             </Route>
             <Route path="/register">
               <Register />
