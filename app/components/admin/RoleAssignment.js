@@ -6,6 +6,7 @@ import { useImmerReducer } from 'use-immer';
 import { useParams } from 'react-router-dom';
 import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 import ReuseableModal from './ReuseableModal';
+import Page from '../layouts/Page';
 
 function RoleAssignment() {
   const appState = useContext(StateContext);
@@ -172,170 +173,178 @@ function RoleAssignment() {
   }
 
   return (
-    <div className="relative">
-      <div className="bg-blue-800 px-2 pt-6 pb-4 shadow text-xl text-white">
-        <h3 className="font-bold pl-2"> Role Assignment </h3>
-      </div>
-      <div>
-        {/* SEARCH */}
-        <div className="flex flex-1 mx-auto md:w-1/3 justify-center text-white mt-5">
-          <span className="relative w-full">
-            <input
-              type="search"
-              placeholder="Search"
-              className="w-full bg-gray-900 text-sm text-white transition border border-transparent focus:outline-none focus:border-gray-700 py-1 px-2 pl-10 appearance-none leading-normal"
-            />
-            <div
-              className="absolute"
-              style={{
-                top: 0.5 + 'rem',
-                left: 0.8 + 'rem',
-              }}
-            >
-              <svg
-                className="fill-current pointer-events-none text-white w-4 h-4"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
+    <Page title="Role Assignment">
+      <div className="relative">
+        <div className="bg-blue-800 px-2 pt-6 pb-4 shadow text-xl text-white">
+          <h3 className="font-bold pl-2"> Role Assignment </h3>
+        </div>
+        <div>
+          {/* SEARCH */}
+          <div className="flex flex-1 mx-auto md:w-1/3 justify-center text-white mt-5">
+            <span className="relative w-full">
+              <input
+                type="search"
+                placeholder="Search"
+                className="w-full bg-gray-900 text-sm text-white transition border border-transparent focus:outline-none focus:border-gray-700 py-1 px-2 pl-10 appearance-none leading-normal"
+              />
+              <div
+                className="absolute"
+                style={{
+                  top: 0.5 + 'rem',
+                  left: 0.8 + 'rem',
+                }}
               >
-                <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
-              </svg>
-            </div>
-          </span>
-        </div>
-      </div>
-      {/* MAIN CONTENT */}
-      <div className="flex flex-wrap justify-center mt-5">
-        <div className="px-3 text-center w-full md:w-auto mb-5">
-          <p className="text-2xl">Click to edit roles</p>
-        </div>
-        {/* ROLES */}
-        <div className="overflow-y-auto w-full md:max-w-md" style={{ maxHeight: 500 + 'px' }}>
-          {state.adminStats.allUserDocs.map((user, index) => {
-            return (
-              <div key={index} className=" bg-white  mb-2 border">
-                <div className="px-6 py-4 whitespace-no-wrap">
-                  <div className="flex items-center justify-center">
-                    <div className="flex-shrink-0 h-10 w-10">
-                      <img className="h-10 w-10 rounded-full" src={user.avatar} alt="" />
-                    </div>
-                    <div className="ml-4">
-                      <div className="text-sm leading-5 font-medium text-gray-900">
-                        {user.firstName} {user.lastName}
-                      </div>
-                      <div className="text-sm leading-5 text-gray-500">@{user.username}</div>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex justify-between">
-                  <div className="px-6 py-4 whitespace-no-wrap">
-                    {user.active ? (
-                      <button
-                        onClick={() =>
-                          roleAssignmentDispatch({
-                            type: 'toggleActiveModal',
-                            value: user.username,
-                          })
-                        }
-                        className="underline px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-                      >
-                        Active
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() =>
-                          roleAssignmentDispatch({
-                            type: 'toggleActiveModal',
-                            value: user.username,
-                          })
-                        }
-                        className="underline px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"
-                      >
-                        Inactive
-                      </button>
-                    )}
-                  </div>
-
-                  <div className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                    {user.scope.indexOf('admin') > -1 ? (
-                      <button
-                        onClick={() =>
-                          roleAssignmentDispatch({ type: 'toggleAdminModal', value: user.username })
-                        }
-                        className="underline px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-                      >
-                        Admin
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() =>
-                          roleAssignmentDispatch({ type: 'toggleAdminModal', value: user.username })
-                        }
-                        className="underline px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"
-                      >
-                        User
-                      </button>
-                    )}
-                  </div>
-                </div>
-                {/* ACTIVE MODAL */}
-                {state.active.toggleModal && state.active.username == user.username && (
-                  <>
-                    {user.active ? (
-                      <ReuseableModal
-                        user={user}
-                        type="inactivate"
-                        headerTitle={`In activate ${user.firstName} ${user.lastName}'s account?`}
-                        btnText="Inactivate account"
-                        warningText="Are you sure you want to do this?"
-                        handleToggle={toggleActiveModal}
-                        handleSubmit={handleBanUser}
-                      />
-                    ) : (
-                      <ReuseableModal
-                        user={user}
-                        type="activate"
-                        headerTitle={`Activate ${user.firstName} ${user.lastName}'s account?`}
-                        btnText="Activate account"
-                        warningText="Are you sure you want to do this?"
-                        handleToggle={toggleActiveModal}
-                        handleSubmit={handleBanUser}
-                      />
-                    )}
-                  </>
-                )}
-
-                {/* ADMIN MODAL */}
-                {state.admin.toggleModal && state.admin.username == user.username && (
-                  <>
-                    {user.scope.indexOf('admin') > -1 ? (
-                      <ReuseableModal
-                        user={user}
-                        type="downgrade"
-                        headerTitle={`Downgrade ${user.firstName} ${user.lastName}?`}
-                        btnText="Downgrade to a USER"
-                        warningText="Are you sure you want to do this?"
-                        handleToggle={toggleAdminModal}
-                        handleSubmit={handleDowngradeUpgrade}
-                      />
-                    ) : (
-                      <ReuseableModal
-                        user={user}
-                        type="upgrade"
-                        headerTitle={`Upgrade ${user.firstName} ${user.lastName} to admin?`}
-                        btnText="Upgrade to an ADMIN"
-                        warningText="Are you sure you want to do this?"
-                        handleToggle={toggleAdminModal}
-                        handleSubmit={handleDowngradeUpgrade}
-                      />
-                    )}
-                  </>
-                )}
+                <svg
+                  className="fill-current pointer-events-none text-white w-4 h-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
+                </svg>
               </div>
-            );
-          })}
+            </span>
+          </div>
+        </div>
+        {/* MAIN CONTENT */}
+        <div className="flex flex-wrap justify-center mt-5">
+          <div className="px-3 text-center w-full md:w-auto mb-5">
+            <p className="text-2xl">Click to edit roles</p>
+          </div>
+          {/* ROLES */}
+          <div className="overflow-y-auto w-full md:max-w-md" style={{ maxHeight: 500 + 'px' }}>
+            {state.adminStats.allUserDocs.map((user, index) => {
+              return (
+                <div key={index} className=" bg-white  mb-2 border">
+                  <div className="px-6 py-4 whitespace-no-wrap">
+                    <div className="flex items-center justify-center">
+                      <div className="flex-shrink-0 h-10 w-10">
+                        <img className="h-10 w-10 rounded-full" src={user.avatar} alt="" />
+                      </div>
+                      <div className="ml-4">
+                        <div className="text-sm leading-5 font-medium text-gray-900">
+                          {user.firstName} {user.lastName}
+                        </div>
+                        <div className="text-sm leading-5 text-gray-500">@{user.username}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex justify-between bg-gray-100">
+                    <div className="px-6 py-4 whitespace-no-wrap">
+                      {user.active ? (
+                        <button
+                          onClick={() =>
+                            roleAssignmentDispatch({
+                              type: 'toggleActiveModal',
+                              value: user.username,
+                            })
+                          }
+                          className="underline px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
+                        >
+                          Active
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() =>
+                            roleAssignmentDispatch({
+                              type: 'toggleActiveModal',
+                              value: user.username,
+                            })
+                          }
+                          className="underline px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"
+                        >
+                          Inactive
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                      {user.scope.indexOf('admin') > -1 ? (
+                        <button
+                          onClick={() =>
+                            roleAssignmentDispatch({
+                              type: 'toggleAdminModal',
+                              value: user.username,
+                            })
+                          }
+                          className="underline px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
+                        >
+                          Admin
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() =>
+                            roleAssignmentDispatch({
+                              type: 'toggleAdminModal',
+                              value: user.username,
+                            })
+                          }
+                          className="underline px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800"
+                        >
+                          User
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  {/* ACTIVE MODAL */}
+                  {state.active.toggleModal && state.active.username == user.username && (
+                    <>
+                      {user.active ? (
+                        <ReuseableModal
+                          user={user}
+                          type="inactivate"
+                          headerTitle={`In activate ${user.firstName} ${user.lastName}'s account?`}
+                          btnText="Inactivate account"
+                          warningText="Are you sure you want to do this?"
+                          handleToggle={toggleActiveModal}
+                          handleSubmit={handleBanUser}
+                        />
+                      ) : (
+                        <ReuseableModal
+                          user={user}
+                          type="activate"
+                          headerTitle={`Activate ${user.firstName} ${user.lastName}'s account?`}
+                          btnText="Activate account"
+                          warningText="Are you sure you want to do this?"
+                          handleToggle={toggleActiveModal}
+                          handleSubmit={handleBanUser}
+                        />
+                      )}
+                    </>
+                  )}
+
+                  {/* ADMIN MODAL */}
+                  {state.admin.toggleModal && state.admin.username == user.username && (
+                    <>
+                      {user.scope.indexOf('admin') > -1 ? (
+                        <ReuseableModal
+                          user={user}
+                          type="downgrade"
+                          headerTitle={`Downgrade ${user.firstName} ${user.lastName}?`}
+                          btnText="Downgrade to a USER"
+                          warningText="Are you sure you want to do this?"
+                          handleToggle={toggleAdminModal}
+                          handleSubmit={handleDowngradeUpgrade}
+                        />
+                      ) : (
+                        <ReuseableModal
+                          user={user}
+                          type="upgrade"
+                          headerTitle={`Upgrade ${user.firstName} ${user.lastName} to admin?`}
+                          btnText="Upgrade to an ADMIN"
+                          warningText="Are you sure you want to do this?"
+                          handleToggle={toggleAdminModal}
+                          handleSubmit={handleDowngradeUpgrade}
+                        />
+                      )}
+                    </>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
-    </div>
+    </Page>
   );
 }
 
