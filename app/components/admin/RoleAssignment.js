@@ -179,8 +179,6 @@ function RoleAssignment() {
             { cancelToken: request.token }
           );
 
-          console.log(response.data.adminStats);
-
           roleAssignmentDispatch({
             type: 'fetchAdminStatsComplete',
             value: response.data.adminStats,
