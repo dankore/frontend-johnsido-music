@@ -88,7 +88,6 @@ function ProfilePage({ history }) {
         );
 
         profileDispatch({ type: 'isFetchingEnds' });
-        console.log(response.data);
 
         if (response.data) {
           profileDispatch({ type: 'addProfileUserInfo', value: response.data });

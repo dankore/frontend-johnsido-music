@@ -41,15 +41,15 @@ function RoleAssignment() {
         return;
       case 'search':
         draft.search.text = action.value;
+        if (draft.search.text == '') {
+          draft.search.fetchUsers++;
+        }
         return;
       case 'isSearching':
         action.process == 'starts' ? (draft.search.loading = true) : (draft.search.loading = false);
         return;
       case 'searchCount':
         draft.search.sendCount++;
-        return;
-      case 'fetchUsers':
-        draft.search.fetchUsers++;
         return;
       case 'isFetchingStarts':
         draft.isFetching = true;
@@ -179,6 +179,7 @@ function RoleAssignment() {
     }
   }
 
+  // DELAY FOR SEARCH
   useEffect(() => {
     if (state.search.text.trim()) {
       roleAssignmentDispatch({ type: 'isSearching', process: 'starts' });
@@ -187,15 +188,13 @@ function RoleAssignment() {
 
       return () => clearTimeout(delay);
     } else {
-      console.log(state.search.text);
-      roleAssignmentDispatch({ type: 'fetchUsers' });
       roleAssignmentDispatch({ type: 'isSearching', process: 'ends' });
     }
   }, [state.search.text]);
 
   // SEARCH
   useEffect(() => {
-    if (state.search.sendCount) {
+    if (state.search.sendCount && state.search.text != '') {
       const request = Axios.CancelToken.source();
       (async function adminUserSearch() {
         try {
