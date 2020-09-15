@@ -18,7 +18,7 @@ function RoleAssignment() {
       allUserDocs: [],
     },
     search: {
-      value: '',
+      text: '',
     },
     isFetching: false,
     active: {
@@ -37,7 +37,7 @@ function RoleAssignment() {
         draft.adminStats = action.value;
         return;
       case 'search':
-        draft.search.value = action.value;
+        draft.search.text = action.value;
         return;
       case 'isFetchingStarts':
         draft.isFetching = true;
@@ -80,7 +80,6 @@ function RoleAssignment() {
   }
 
   const [state, roleAssignmentDispatch] = useImmerReducer(roleAssignmentReducer, initialState);
-  console.log(state.search.value);
 
   // FETCH
   useEffect(() => {
@@ -167,6 +166,33 @@ function RoleAssignment() {
       console.log(error);
     }
   }
+
+  // SEARCH
+  useEffect(() => {
+    if (state.search.text.trim()) {
+      const request = Axios.CancelToken.source();
+      (async function adminUserSearch() {
+        try {
+          const response = await Axios.post(
+            `/admin/${appState.user.username}/${state.search.text}`,
+            { token: appState.user.token },
+            { cancelToken: request.token }
+          );
+
+          console.log(response.data.adminStats);
+
+          roleAssignmentDispatch({
+            type: 'fetchAdminStatsComplete',
+            value: response.data.adminStats,
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+
+      return () => request.cancel();
+    }
+  }, [state.search.text]);
 
   if (state.isFetching) {
     return <LoadingDotsAnimation />;
