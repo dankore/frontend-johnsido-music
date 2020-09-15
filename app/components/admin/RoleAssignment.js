@@ -17,6 +17,9 @@ function RoleAssignment() {
     adminStats: {
       allUserDocs: [],
     },
+    search: {
+      value: '',
+    },
     isFetching: false,
     active: {
       username: '',
@@ -32,6 +35,9 @@ function RoleAssignment() {
     switch (action.type) {
       case 'fetchAdminStatsComplete':
         draft.adminStats = action.value;
+        return;
+      case 'search':
+        draft.search.value = action.value;
         return;
       case 'isFetchingStarts':
         draft.isFetching = true;
@@ -74,6 +80,7 @@ function RoleAssignment() {
   }
 
   const [state, roleAssignmentDispatch] = useImmerReducer(roleAssignmentReducer, initialState);
+  console.log(state.search.value);
 
   // FETCH
   useEffect(() => {
@@ -182,147 +189,151 @@ function RoleAssignment() {
           <h3 className="font-bold pl-2"> Role Assignment </h3>
         </div>
         <div>
-          {/* SEARCH */}
-          <div className="flex flex-1 mx-auto md:w-1/3 justify-center text-white mt-5">
-            <span className="relative w-full">
-              <input
-                type="search"
-                placeholder="Search"
-                className="w-full bg-gray-900 text-sm text-white transition border border-transparent focus:outline-none focus:border-gray-700 py-1 px-2 pl-10 appearance-none leading-normal"
-              />
-              <div
-                className="absolute"
-                style={{
-                  top: 0.5 + 'rem',
-                  left: 0.8 + 'rem',
-                }}
-              >
-                <svg
-                  className="fill-current pointer-events-none text-white w-4 h-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
-                </svg>
-              </div>
-            </span>
-          </div>
-        </div>
-        {/* MAIN CONTENT */}
-        <div className="flex flex-wrap justify-center mt-5">
-          <div className="px-3 text-center w-full md:w-auto mb-5">
-            <p className="text-2xl">Click to edit roles</p>
-          </div>
-          {/* ROLES */}
-          <div className="overflow-y-auto w-full md:max-w-md" style={{ maxHeight: 500 + 'px' }}>
-            {state.adminStats.allUserDocs.map((user, index) => {
-              return (
-                <div key={index} className=" bg-white mb-2 border">
-                  <Link
-                    to={`/profile/${user.username}`}
-                    className="focus:outline-none active:outline-none px-6 py-4 whitespace-no-wrap block"
+          {/* MAIN CONTENT */}
+          <div className="flex flex-wrap justify-center mt-5">
+            <div className="text-center w-full md:max-w-md mb-5 md:mx-3">
+              <p className="text-2xl">Click to edit roles</p>
+              {/* SEARCH */}
+              <div className="flex flex-1 justify-center text-white mt-5">
+                <span className="relative w-full">
+                  <input
+                    onChange={e =>
+                      roleAssignmentDispatch({ type: 'search', value: e.target.value })
+                    }
+                    type="search"
+                    placeholder="Search"
+                    className="w-full bg-gray-900 text-sm text-white transition border border-transparent focus:outline-none focus:border-gray-700 py-1 px-2 pl-10 appearance-none leading-normal"
+                  />
+                  <div
+                    className="absolute"
+                    style={{
+                      top: 0.5 + 'rem',
+                      left: 0.8 + 'rem',
+                    }}
                   >
-                    <div className="flex items-center justify-center">
-                      <div className="flex-shrink-0 h-10 w-10">
-                        <img className="h-10 w-10 rounded-full" src={user.avatar} alt="" />
-                      </div>
-                      <div className="ml-4">
-                        <div className="text-sm leading-5 font-medium text-gray-900">
-                          {user.firstName} {user.lastName}
-                        </div>
-                        <div className="text-sm leading-5 text-gray-500">@{user.username}</div>
-                      </div>
-                    </div>
-                  </Link>
-                  <div className="flex justify-between bg-gray-200">
-                    <div className="px-6 py-4 whitespace-no-wrap">
-                      {user.active ? (
-                        <ReuseableButton
-                          handleToggle={toggleActiveModal}
-                          btnText="Active"
-                          username={user.username}
-                        />
-                      ) : (
-                        <ReuseableButton
-                          handleToggle={toggleActiveModal}
-                          btnText="Inactive"
-                          username={user.username}
-                        />
-                      )}
-                    </div>
-
-                    <div className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                      {user.scope.indexOf('admin') > -1 ? (
-                        <ReuseableButton
-                          handleToggle={toggleAdminModal}
-                          btnText="Admin"
-                          username={user.username}
-                        />
-                      ) : (
-                        <ReuseableButton
-                          handleToggle={toggleAdminModal}
-                          btnText="User"
-                          username={user.username}
-                        />
-                      )}
-                    </div>
+                    <svg
+                      className="fill-current pointer-events-none text-white w-4 h-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
+                    </svg>
                   </div>
-                  {/* ACTIVE MODAL */}
-                  {state.active.toggleModal && state.active.username == user.username && (
-                    <>
-                      {user.active ? (
-                        <ReuseableModal
-                          user={user}
-                          type="inactivate"
-                          headerTitle={`In activate ${user.firstName} ${user.lastName}'s account?`}
-                          btnText="Inactivate account"
-                          warningText="Are you sure you want to do this?"
-                          handleToggle={toggleActiveModal}
-                          handleSubmit={handleBanUser}
-                        />
-                      ) : (
-                        <ReuseableModal
-                          user={user}
-                          type="activate"
-                          headerTitle={`Activate ${user.firstName} ${user.lastName}'s account?`}
-                          btnText="Activate account"
-                          warningText="Are you sure you want to do this?"
-                          handleToggle={toggleActiveModal}
-                          handleSubmit={handleBanUser}
-                        />
-                      )}
-                    </>
-                  )}
+                </span>
+              </div>
+            </div>
 
-                  {/* ADMIN MODAL */}
-                  {state.admin.toggleModal && state.admin.username == user.username && (
-                    <>
-                      {user.scope.indexOf('admin') > -1 ? (
-                        <ReuseableModal
-                          user={user}
-                          type="downgrade"
-                          headerTitle={`Downgrade ${user.firstName} ${user.lastName}?`}
-                          btnText="Downgrade to a USER"
-                          warningText="Are you sure you want to do this?"
-                          handleToggle={toggleAdminModal}
-                          handleSubmit={handleDowngradeUpgrade}
-                        />
-                      ) : (
-                        <ReuseableModal
-                          user={user}
-                          type="upgrade"
-                          headerTitle={`Upgrade ${user.firstName} ${user.lastName} to admin?`}
-                          btnText="Upgrade to an ADMIN"
-                          warningText="Are you sure you want to do this?"
-                          handleToggle={toggleAdminModal}
-                          handleSubmit={handleDowngradeUpgrade}
-                        />
-                      )}
-                    </>
-                  )}
-                </div>
-              );
-            })}
+            {/* ROLES */}
+            <div className="overflow-y-auto w-full md:max-w-md" style={{ maxHeight: 500 + 'px' }}>
+              {state.adminStats.allUserDocs.map((user, index) => {
+                return (
+                  <div key={index} className=" bg-white mb-2 border">
+                    <Link
+                      to={`/profile/${user.username}`}
+                      className="focus:outline-none active:outline-none px-6 py-4 whitespace-no-wrap block"
+                    >
+                      <div className="flex items-center justify-center">
+                        <div className="flex-shrink-0 h-10 w-10">
+                          <img className="h-10 w-10 rounded-full" src={user.avatar} alt="" />
+                        </div>
+                        <div className="ml-4">
+                          <div className="text-sm leading-5 font-medium text-gray-900">
+                            {user.firstName} {user.lastName}
+                          </div>
+                          <div className="text-sm leading-5 text-gray-500">@{user.username}</div>
+                        </div>
+                      </div>
+                    </Link>
+                    <div className="flex justify-between bg-gray-200">
+                      <div className="px-6 py-4 whitespace-no-wrap">
+                        {user.active ? (
+                          <ReuseableButton
+                            handleToggle={toggleActiveModal}
+                            btnText="Active"
+                            username={user.username}
+                          />
+                        ) : (
+                          <ReuseableButton
+                            handleToggle={toggleActiveModal}
+                            btnText="Inactive"
+                            username={user.username}
+                          />
+                        )}
+                      </div>
+
+                      <div className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                        {user.scope.indexOf('admin') > -1 ? (
+                          <ReuseableButton
+                            handleToggle={toggleAdminModal}
+                            btnText="Admin"
+                            username={user.username}
+                          />
+                        ) : (
+                          <ReuseableButton
+                            handleToggle={toggleAdminModal}
+                            btnText="User"
+                            username={user.username}
+                          />
+                        )}
+                      </div>
+                    </div>
+                    {/* ACTIVE MODAL */}
+                    {state.active.toggleModal && state.active.username == user.username && (
+                      <>
+                        {user.active ? (
+                          <ReuseableModal
+                            user={user}
+                            type="inactivate"
+                            headerTitle={`In activate ${user.firstName} ${user.lastName}'s account?`}
+                            btnText="Inactivate account"
+                            warningText="Are you sure you want to do this?"
+                            handleToggle={toggleActiveModal}
+                            handleSubmit={handleBanUser}
+                          />
+                        ) : (
+                          <ReuseableModal
+                            user={user}
+                            type="activate"
+                            headerTitle={`Activate ${user.firstName} ${user.lastName}'s account?`}
+                            btnText="Activate account"
+                            warningText="Are you sure you want to do this?"
+                            handleToggle={toggleActiveModal}
+                            handleSubmit={handleBanUser}
+                          />
+                        )}
+                      </>
+                    )}
+
+                    {/* ADMIN MODAL */}
+                    {state.admin.toggleModal && state.admin.username == user.username && (
+                      <>
+                        {user.scope.indexOf('admin') > -1 ? (
+                          <ReuseableModal
+                            user={user}
+                            type="downgrade"
+                            headerTitle={`Downgrade ${user.firstName} ${user.lastName}?`}
+                            btnText="Downgrade to a USER"
+                            warningText="Are you sure you want to do this?"
+                            handleToggle={toggleAdminModal}
+                            handleSubmit={handleDowngradeUpgrade}
+                          />
+                        ) : (
+                          <ReuseableModal
+                            user={user}
+                            type="upgrade"
+                            headerTitle={`Upgrade ${user.firstName} ${user.lastName} to admin?`}
+                            btnText="Upgrade to an ADMIN"
+                            warningText="Are you sure you want to do this?"
+                            handleToggle={toggleAdminModal}
+                            handleSubmit={handleDowngradeUpgrade}
+                          />
+                        )}
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
