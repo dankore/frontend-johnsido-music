@@ -3,10 +3,11 @@ import StateContext from '../../contextsProviders/StateContext';
 import DispatchContext from '../../contextsProviders/DispatchContext';
 import Axios from 'axios';
 import { useImmerReducer } from 'use-immer';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 import ReuseableModal from './ReuseableModal';
 import Page from '../layouts/Page';
+import ReuseableButton from './ReuseableButton';
 
 function RoleAssignment() {
   const appState = useContext(StateContext);
@@ -164,12 +165,14 @@ function RoleAssignment() {
     return <LoadingDotsAnimation />;
   }
 
-  function toggleAdminModal() {
-    roleAssignmentDispatch({ type: 'toggleAdminModal' });
+  function toggleAdminModal(e) {
+    const username = e.target.getAttribute('data-username');
+    roleAssignmentDispatch({ type: 'toggleAdminModal', value: username });
   }
 
-  function toggleActiveModal() {
-    roleAssignmentDispatch({ type: 'toggleActiveModal' });
+  function toggleActiveModal(e) {
+    const username = e.target.getAttribute('data-username');
+    roleAssignmentDispatch({ type: 'toggleActiveModal', value: username });
   }
 
   return (
@@ -214,8 +217,11 @@ function RoleAssignment() {
           <div className="overflow-y-auto w-full md:max-w-md" style={{ maxHeight: 500 + 'px' }}>
             {state.adminStats.allUserDocs.map((user, index) => {
               return (
-                <div key={index} className=" bg-white  mb-2 border">
-                  <div className="px-6 py-4 whitespace-no-wrap">
+                <div key={index} className=" bg-white mb-2 border">
+                  <Link
+                    to={`/profile/${user.username}`}
+                    className="focus:outline-none active:outline-none px-6 py-4 whitespace-no-wrap block"
+                  >
                     <div className="flex items-center justify-center">
                       <div className="flex-shrink-0 h-10 w-10">
                         <img className="h-10 w-10 rounded-full" src={user.avatar} alt="" />
@@ -227,61 +233,37 @@ function RoleAssignment() {
                         <div className="text-sm leading-5 text-gray-500">@{user.username}</div>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex justify-between bg-gray-100">
+                  </Link>
+                  <div className="flex justify-between bg-gray-200">
                     <div className="px-6 py-4 whitespace-no-wrap">
                       {user.active ? (
-                        <button
-                          onClick={() =>
-                            roleAssignmentDispatch({
-                              type: 'toggleActiveModal',
-                              value: user.username,
-                            })
-                          }
-                          className="underline px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-                        >
-                          Active
-                        </button>
+                        <ReuseableButton
+                          handleToggle={toggleActiveModal}
+                          btnText="Active"
+                          username={user.username}
+                        />
                       ) : (
-                        <button
-                          onClick={() =>
-                            roleAssignmentDispatch({
-                              type: 'toggleActiveModal',
-                              value: user.username,
-                            })
-                          }
-                          className="underline px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"
-                        >
-                          Inactive
-                        </button>
+                        <ReuseableButton
+                          handleToggle={toggleActiveModal}
+                          btnText="Inactive"
+                          username={user.username}
+                        />
                       )}
                     </div>
 
                     <div className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
                       {user.scope.indexOf('admin') > -1 ? (
-                        <button
-                          onClick={() =>
-                            roleAssignmentDispatch({
-                              type: 'toggleAdminModal',
-                              value: user.username,
-                            })
-                          }
-                          className="underline px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-                        >
-                          Admin
-                        </button>
+                        <ReuseableButton
+                          handleToggle={toggleAdminModal}
+                          btnText="Admin"
+                          username={user.username}
+                        />
                       ) : (
-                        <button
-                          onClick={() =>
-                            roleAssignmentDispatch({
-                              type: 'toggleAdminModal',
-                              value: user.username,
-                            })
-                          }
-                          className="underline px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800"
-                        >
-                          User
-                        </button>
+                        <ReuseableButton
+                          handleToggle={toggleAdminModal}
+                          btnText="User"
+                          username={user.username}
+                        />
                       )}
                     </div>
                   </div>
