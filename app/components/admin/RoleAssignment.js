@@ -21,6 +21,7 @@ function RoleAssignment() {
       text: '',
       loading: false,
       sendCount: 0,
+      fetchUsers: 0,
     },
     isFetching: false,
     active: {
@@ -46,6 +47,9 @@ function RoleAssignment() {
         return;
       case 'searchCount':
         draft.search.sendCount++;
+        return;
+      case 'fetchUsers':
+        draft.search.fetchUsers++;
         return;
       case 'isFetchingStarts':
         draft.isFetching = true;
@@ -121,7 +125,7 @@ function RoleAssignment() {
     })();
 
     return () => request.cancel();
-  }, [username]);
+  }, [username, state.search.fetchUsers]);
 
   //   BAN USERS
   async function handleBanUser(e) {
@@ -183,7 +187,8 @@ function RoleAssignment() {
 
       return () => clearTimeout(delay);
     } else {
-      console.log(state.search.text); // REFETCH
+      console.log(state.search.text);
+      roleAssignmentDispatch({ type: 'fetchUsers' });
       roleAssignmentDispatch({ type: 'isSearching', process: 'ends' });
     }
   }, [state.search.text]);
@@ -232,9 +237,6 @@ function RoleAssignment() {
   return (
     <Page title="Role Assignment">
       <div className="relative">
-        <div className="bg-blue-800 px-2 pt-6 pb-4 shadow text-xl text-white">
-          <h3 className="font-bold pl-2"> Role Assignment </h3>
-        </div>
         <div>
           {/* MAIN CONTENT */}
           <div className="flex flex-wrap justify-center mt-5">
