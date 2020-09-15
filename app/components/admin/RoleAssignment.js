@@ -19,6 +19,8 @@ function RoleAssignment() {
     },
     search: {
       text: '',
+      loading: false,
+      sendCount: 0,
     },
     isFetching: false,
     active: {
@@ -38,6 +40,12 @@ function RoleAssignment() {
         return;
       case 'search':
         draft.search.text = action.value;
+        return;
+      case 'isSearching':
+        action.process == 'starts' ? (draft.search.loading = true) : (draft.search.loading = false);
+        return;
+      case 'searchCount':
+        draft.search.sendCount++;
         return;
       case 'isFetchingStarts':
         draft.isFetching = true;
@@ -115,7 +123,7 @@ function RoleAssignment() {
     return () => request.cancel();
   }, [username]);
 
-  // BAN USERS
+  //   BAN USERS
   async function handleBanUser(e) {
     try {
       const userId = e.target.getAttribute('data-userid');
@@ -167,9 +175,22 @@ function RoleAssignment() {
     }
   }
 
-  // SEARCH
   useEffect(() => {
     if (state.search.text.trim()) {
+      roleAssignmentDispatch({ type: 'isSearching', process: 'starts' });
+
+      const delay = setTimeout(() => roleAssignmentDispatch({ type: 'searchCount' }), 750);
+
+      return () => clearTimeout(delay);
+    } else {
+      console.log(state.search.text); // REFETCH
+      roleAssignmentDispatch({ type: 'isSearching', process: 'ends' });
+    }
+  }, [state.search.text]);
+
+  // SEARCH
+  useEffect(() => {
+    if (state.search.sendCount) {
       const request = Axios.CancelToken.source();
       (async function adminUserSearch() {
         try {
@@ -178,6 +199,8 @@ function RoleAssignment() {
             { token: appState.user.token },
             { cancelToken: request.token }
           );
+
+          roleAssignmentDispatch({ type: 'isSearching', process: 'ends' });
 
           roleAssignmentDispatch({
             type: 'fetchAdminStatsComplete',
@@ -190,7 +213,7 @@ function RoleAssignment() {
 
       return () => request.cancel();
     }
-  }, [state.search.text]);
+  }, [state.search.sendCount]);
 
   if (state.isFetching) {
     return <LoadingDotsAnimation />;
@@ -224,6 +247,8 @@ function RoleAssignment() {
                     onChange={e =>
                       roleAssignmentDispatch({ type: 'search', value: e.target.value })
                     }
+                    autoFocus
+                    autoComplete="off"
                     type="search"
                     placeholder="Search"
                     className="w-full bg-gray-900 text-sm text-white transition border border-transparent focus:outline-none focus:border-gray-700 py-1 px-2 pl-10 appearance-none leading-normal"
@@ -245,6 +270,7 @@ function RoleAssignment() {
                   </div>
                 </span>
               </div>
+              {state.search.loading && <div>Searching...</div>}
             </div>
 
             {/* ROLES */}
