@@ -170,15 +170,24 @@ function AdminLandingPage({ history }) {
         <div className="main-content flex-1 bg-gray-100 mt-10 pb-24 md:pb-5">
           <Switch>
             <Route path="/admin/:username/analytics">
+              <div className="bg-blue-800 px-2 pt-6 pb-4 shadow text-xl text-white">
+                <h3 className="font-bold pl-2">Analytics</h3>
+              </div>
               <Analytics
                 isFetching={state.isFetching}
                 totalUsers={state.adminStats.allUserDocs.length}
               />
             </Route>
             <Route path="/admin/:username/upload-song">
+              <div className="bg-blue-800 px-2 pt-6 pb-4 shadow text-xl text-white">
+                <h3 className="font-bold pl-2">Upload a Song</h3>
+              </div>
               <UploadSong />
             </Route>
             <Route path="/admin/:username/role-assignment">
+              <div className="bg-blue-800 px-2 pt-6 pb-4 shadow text-xl text-white">
+                <h3 className="font-bold pl-2"> Role Assignment </h3>
+              </div>
               <RoleAssignment />
             </Route>
             <Route>

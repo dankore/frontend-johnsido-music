@@ -9,10 +9,6 @@ function Analytics({ isFetching, totalUsers }) {
 
   return (
     <div>
-      <div className="bg-blue-800 px-2 pt-6 pb-4 shadow text-xl text-white">
-        <h3 className="font-bold pl-2">Analytics</h3>
-      </div>
-
       <div className="flex flex-wrap">
         <div className="w-full md:w-1/2 xl:w-1/3 p-3">
           <div className="bg-green-100 border-b-4 border-green-600 rounded-lg shadow-lg p-5">
