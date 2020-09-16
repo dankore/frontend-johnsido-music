@@ -242,7 +242,7 @@ function RoleAssignment() {
       <div className="relative">
         <div>
           {/* MAIN CONTENT */}
-          <div className="flex flex-wrap justify-center mt-5">
+          <div className="flex flex-wrap justify-center my-5">
             <div className="text-center w-full md:max-w-md mb-5 md:mx-3">
               <p className="text-2xl">Click to edit roles</p>
               {/* SEARCH */}
