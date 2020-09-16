@@ -42,7 +42,7 @@ function RoleAssignment() {
           ? (draft.triggeredDuringSearch = true)
           : (draft.triggeredDuringSearch = false);
 
-        draft.adminStats.allUserDocs = [];
+        draft.adminStats = action.value;
         return;
       case 'search':
         draft.search.text = action.value;
@@ -100,10 +100,9 @@ function RoleAssignment() {
 
   // FETCH
   useEffect(() => {
-    const request = Axios.CancelToken.source();
-    roleAssignmentDispatch({ type: 'isFetchingStarts' });
-
     (async function getAdminStats() {
+      const request = Axios.CancelToken.source();
+      roleAssignmentDispatch({ type: 'isFetchingStarts' });
       try {
         const response = await Axios.post(
           `/admin-stats/${username}`,
@@ -127,9 +126,8 @@ function RoleAssignment() {
         // FAIL SILENTLY
         console.log(error);
       }
+      return () => request.cancel();
     })();
-
-    return () => request.cancel();
   }, [username, state.search.fetchUsers]);
 
   //   BAN/UNBAN USERS
