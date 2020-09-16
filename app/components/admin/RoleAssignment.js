@@ -339,8 +339,8 @@ function RoleAssignment() {
                           <ReuseableModal
                             user={user}
                             type="inactivate"
-                            headerTitle={`In activate ${user.firstName} ${user.lastName}'s account?`}
-                            btnText="Inactivate account"
+                            headerTitle={`Deactivate ${user.firstName} ${user.lastName}'s account?`}
+                            btnText="Deactivate account"
                             warningText="Are you sure you want to do this?"
                             handleToggle={toggleActiveModal}
                             handleSubmit={handleBanUser}

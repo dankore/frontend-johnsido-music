@@ -10,12 +10,13 @@ function ReuseableModal({
   handleToggle,
   handleSubmit,
 }) {
-  let themeColor;
-  if (type == 'activate' || type == 'inactivate') {
-    themeColor = type == 'activate' ? 'green' : 'red';
-  }
-  if (type == 'upgrade' || type == 'downgrade') {
-    themeColor = type == 'upgrade' ? 'green' : 'indigo';
+  function themeColor() {
+    if (type == 'activate' || type == 'inactivate') {
+      return type == 'activate' ? 'green' : 'red';
+    }
+    if (type == 'upgrade' || type == 'downgrade') {
+      return type == 'upgrade' ? 'green' : 'indigo';
+    }
   }
 
   return (
@@ -34,10 +35,10 @@ function ReuseableModal({
           <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div className="sm:flex sm:items-start">
               <div
-                className={`mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-${themeColor}-100 sm:mx-0 sm:h-10 sm:w-10`}
+                className={`mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-${themeColor()}-100 sm:mx-0 sm:h-10 sm:w-10`}
               >
                 <svg
-                  className={`h-6 w-6 text-${themeColor}-600`}
+                  className={`h-6 w-6 text-${themeColor()}-600`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -68,7 +69,7 @@ function ReuseableModal({
                 data-username={user.username}
                 data-type={type}
                 type="button"
-                className={`inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-${themeColor}-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-${themeColor}-500 focus:outline-none focus:border-${themeColor}-700 focus:shadow-outline-${themeColor} transition ease-in-out duration-150 sm:text-sm sm:leading-5`}
+                className={`inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-${themeColor()}-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-${themeColor()}-500 focus:outline-none focus:border-${themeColor()}-700 focus:shadow-outline-${themeColor()} transition ease-in-out duration-150 sm:text-sm sm:leading-5`}
               >
                 {btnText}
               </button>
