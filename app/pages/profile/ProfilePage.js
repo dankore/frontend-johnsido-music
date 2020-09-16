@@ -7,6 +7,7 @@ import Page from '../../components/layouts/Page';
 import LoadingDotsAnimation from '../../components/shared/LoadingDotsAnimation';
 import StateContext from '../../contextsProviders/StateContext';
 import { followBtnCSS, stopFollowBtnCSS, linkCSS } from '../../helpers/CSSHelpers';
+import UserNotActive from '../../components/shared/UserNotActive';
 
 function ProfilePage({ history }) {
   const appState = useContext(StateContext);
@@ -88,7 +89,6 @@ function ProfilePage({ history }) {
         );
 
         profileDispatch({ type: 'isFetchingEnds' });
-        console.log(response.data);
 
         if (response.data) {
           profileDispatch({ type: 'addProfileUserInfo', value: response.data });
@@ -109,8 +109,8 @@ function ProfilePage({ history }) {
       profileDispatch({ type: 'isLoadingFollow', value: true });
       const request = Axios.CancelToken.source();
 
-      try {
-        (async function addFollow() {
+      (async function addFollow() {
+        try {
           await Axios.post(
             `/addFollow/${state.user.profileUsername}`,
             { token: appState.user.token },
@@ -120,11 +120,11 @@ function ProfilePage({ history }) {
           );
           profileDispatch({ type: 'isLoadingFollow', value: false });
           profileDispatch({ type: 'addFollow' });
-        })();
-      } catch (error) {
-        // FAIL SILENTLY
-        console.log(error);
-      }
+        } catch (error) {
+          // FAIL SILENTLY
+          console.log(error);
+        }
+      })();
 
       return () => request.cancel();
     }
@@ -195,149 +195,156 @@ function ProfilePage({ history }) {
           </div>
         </section>
         <section className="relative py-16 bg-gray-300">
-          <div className="container mx-auto px-4">
-            <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
-              <div className="px-6">
-                <div className="flex flex-wrap justify-center">
-                  <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
-                    <div className="relative">
-                      <img
-                        alt="Profile avatar"
-                        src={state.user.profileAvatar}
-                        className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16"
-                        style={{ maxWidth: '150px' }}
-                      />
-                    </div>
-                  </div>
-                  {/* FOLLOW BUTTON */}
-                  <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
-                    <div className="flex justify-center lg:justify-end py-6 px-3 mt-32 lg:mt-0">
-                      {appState.loggedIn &&
-                        appState.user.username != state.user.profileUsername &&
-                        !state.user.isFollowing &&
-                        state.user.profileUsername != '' && (
-                          <button
-                            className={followBtnCSS}
-                            type="button"
-                            style={{ transition: 'all .15s ease' }}
-                            onClick={() => profileDispatch({ type: 'startFollowing' })}
-                          >
-                            {state.isLoadingFollow ? (
-                              <div className="flex items-center justify-center">
-                                <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
-                              </div>
-                            ) : (
-                              <span>
-                                Follow <i className="fas fa-user-plus"></i>
-                              </span>
-                            )}
-                          </button>
-                        )}
-                      {appState.loggedIn &&
-                        appState.user.username != state.user.profileusername &&
-                        state.user.isFollowing &&
-                        state.user.profileusername != '' && (
-                          <button
-                            className={stopFollowBtnCSS}
-                            type="button"
-                            style={{ transition: 'all .15s ease' }}
-                            onClick={() => profileDispatch({ type: 'stopFollowing' })}
-                          >
-                            {state.isLoadingFollow ? (
-                              <div className="flex items-center justify-center">
-                                <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
-                              </div>
-                            ) : (
-                              <span>
-                                Unfollow <i className="fas fa-user-times"></i>
-                              </span>
-                            )}
-                          </button>
-                        )}
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-4/12 px-4 lg:order-1">
-                    <div className="flex justify-center py-4 lg:pt-4 pt-8">
-                      <div className="mr-4 p-3 text-center">
-                        <Link
-                          to={`/profile/${state.user.profileUsername}/followers`}
-                          className={`text-sm text-gray-500 ${linkCSS}`}
-                        >
-                          <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
-                            {state.user.counts.followerCount}
-                          </span>
-                          {state.user.counts.followerCount > 1 ? 'Followers' : 'Follower'}
-                        </Link>
-                      </div>
-                      <div className="mr-4 p-3 text-center">
-                        <Link
-                          to={`/profile/${state.user.profileUsername}/following`}
-                          className={`text-sm text-gray-500 ${linkCSS}`}
-                        >
-                          <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
-                            {state.user.counts.followingCount}
-                          </span>
-                          Following
-                        </Link>
-                      </div>
-                      <div className="lg:mr-4 p-3 text-center">
-                        <Link
-                          to={`/profile/${state.user.profileUsername}/songs`}
-                          className={`text-sm text-gray-500 ${linkCSS}`}
-                        >
-                          <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
-                            89
-                          </span>
-                          Songs
-                        </Link>
-                      </div>
-                      <div className="lg:mr-4 p-3 text-center">
-                        <Link
-                          to={`/profile/${state.user.profileUsername}/comments`}
-                          className={`text-sm text-gray-500 ${linkCSS}`}
-                        >
-                          <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
-                            {state.user.counts.commentsCount}
-                          </span>
-                          Comments
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="text-center mt-12">
-                  <h3 className="text-4xl font-semibold leading-normal text-gray-800">
-                    {state.user.profileFirstName} {state.user.profileLastName}
-                  </h3>
-                  <p className="mb-2">@{state.user.profileUsername}</p>
-                  <div className="flex justify-center items-center text-sm leading-normal text-gray-500 font-bold uppercase">
-                    {state.user.profileAbout.city && (
-                      <div className="mr-5">
-                        <i className="fas fa-map-marker-alt mr-2 text-lg text-gray-500"></i>
-                        {state.user.profileAbout.city}
-                      </div>
-                    )}
-
-                    {state.user.profileAbout.musicCategory && (
-                      <div className="">
-                        <i className="fas fa-music mr-2 text-lg text-gray-500"></i>
-                        {state.user.profileAbout.musicCategory}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="mt-10 py-10 border-t border-gray-300 text-center">
+          {/* USER IS ACTIVE */}
+          {state.user.profileActive && (
+            <div className="container mx-auto px-4">
+              <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
+                <div className="px-6">
                   <div className="flex flex-wrap justify-center">
-                    <div className="w-full lg:w-9/12 px-4">
-                      <p className="mb-4 text-lg leading-relaxed text-gray-800">
-                        {state.user.profileAbout.bio}
-                      </p>
+                    {/* IMAGE */}
+                    <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
+                      <div className="relative">
+                        <img
+                          alt="Profile avatar"
+                          src={state.user.profileAvatar}
+                          className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16"
+                          style={{ maxWidth: '150px' }}
+                        />
+                      </div>
+                    </div>
+                    {/* FOLLOW BUTTON */}
+                    <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
+                      <div className="flex justify-center lg:justify-end py-6 px-3 mt-32 lg:mt-0">
+                        {appState.loggedIn &&
+                          appState.user.username != state.user.profileUsername &&
+                          !state.user.isFollowing &&
+                          state.user.profileUsername != '' && (
+                            <button
+                              className={followBtnCSS}
+                              type="button"
+                              style={{ transition: 'all .15s ease' }}
+                              onClick={() => profileDispatch({ type: 'startFollowing' })}
+                            >
+                              {state.isLoadingFollow ? (
+                                <div className="flex items-center justify-center">
+                                  <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
+                                </div>
+                              ) : (
+                                <span>
+                                  Follow <i className="fas fa-user-plus"></i>
+                                </span>
+                              )}
+                            </button>
+                          )}
+                        {appState.loggedIn &&
+                          appState.user.username != state.user.profileusername &&
+                          state.user.isFollowing &&
+                          state.user.profileusername != '' && (
+                            <button
+                              className={stopFollowBtnCSS}
+                              type="button"
+                              style={{ transition: 'all .15s ease' }}
+                              onClick={() => profileDispatch({ type: 'stopFollowing' })}
+                            >
+                              {state.isLoadingFollow ? (
+                                <div className="flex items-center justify-center">
+                                  <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
+                                </div>
+                              ) : (
+                                <span>
+                                  Unfollow <i className="fas fa-user-times"></i>
+                                </span>
+                              )}
+                            </button>
+                          )}
+                      </div>
+                    </div>
+                    {/* LINKS */}
+                    <div className="w-full lg:w-4/12 px-4 lg:order-1">
+                      <div className="flex justify-center py-4 lg:pt-4 pt-8">
+                        <div className="mr-4 p-3 text-center">
+                          <Link
+                            to={`/profile/${state.user.profileUsername}/followers`}
+                            className={`text-sm text-gray-500 ${linkCSS}`}
+                          >
+                            <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
+                              {state.user.counts.followerCount}
+                            </span>
+                            {state.user.counts.followerCount > 1 ? 'Followers' : 'Follower'}
+                          </Link>
+                        </div>
+                        <div className="mr-4 p-3 text-center">
+                          <Link
+                            to={`/profile/${state.user.profileUsername}/following`}
+                            className={`text-sm text-gray-500 ${linkCSS}`}
+                          >
+                            <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
+                              {state.user.counts.followingCount}
+                            </span>
+                            Following
+                          </Link>
+                        </div>
+                        <div className="lg:mr-4 p-3 text-center">
+                          <Link
+                            to={`/profile/${state.user.profileUsername}/songs`}
+                            className={`text-sm text-gray-500 ${linkCSS}`}
+                          >
+                            <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
+                              89
+                            </span>
+                            Songs
+                          </Link>
+                        </div>
+                        <div className="lg:mr-4 p-3 text-center">
+                          <Link
+                            to={`/profile/${state.user.profileUsername}/comments`}
+                            className={`text-sm text-gray-500 ${linkCSS}`}
+                          >
+                            <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
+                              {state.user.counts.commentsCount}
+                            </span>
+                            Comments
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-center mt-12">
+                    <h3 className="text-4xl font-semibold leading-normal text-gray-800">
+                      {state.user.profileFirstName} {state.user.profileLastName}
+                    </h3>
+                    <p className="mb-2">@{state.user.profileUsername}</p>
+                    <div className="flex justify-center items-center text-sm leading-normal text-gray-500 font-bold uppercase">
+                      {state.user.profileAbout.city && (
+                        <div className="mr-5">
+                          <i className="fas fa-map-marker-alt mr-2 text-lg text-gray-500"></i>
+                          {state.user.profileAbout.city}
+                        </div>
+                      )}
+
+                      {state.user.profileAbout.musicCategory && (
+                        <div className="">
+                          <i className="fas fa-music mr-2 text-lg text-gray-500"></i>
+                          {state.user.profileAbout.musicCategory}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="mt-10 py-10 border-t border-gray-300 text-center">
+                    <div className="flex flex-wrap justify-center">
+                      <div className="w-full lg:w-9/12 px-4">
+                        <p className="mb-4 text-lg leading-relaxed text-gray-800">
+                          {state.user.profileAbout.bio}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
+          {/* USER IS NOT ACTIVE */}
+          {!state.user.profileActive && <UserNotActive user={state.user} />}
         </section>
       </main>
     </Page>
