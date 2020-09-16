@@ -252,7 +252,6 @@ function RoleAssignment() {
                     onChange={e =>
                       roleAssignmentDispatch({ type: 'search', value: e.target.value })
                     }
-                    autoFocus
                     autoComplete="off"
                     type="search"
                     placeholder="Search"
