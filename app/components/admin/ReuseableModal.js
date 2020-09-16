@@ -10,6 +10,15 @@ function ReuseableModal({
   handleToggle,
   handleSubmit,
 }) {
+  function themeColor() {
+    if (type == 'activate' || type == 'inactivate') {
+      return type == 'activate' ? 'green' : 'red';
+    }
+    if (type == 'upgrade' || type == 'downgrade') {
+      return type == 'upgrade' ? 'green' : 'indigo';
+    }
+  }
+
   return (
     <div className="fixed z-10 inset-0 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -25,9 +34,11 @@ function ReuseableModal({
         >
           <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div className="sm:flex sm:items-start">
-              <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+              <div
+                className={`mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-${themeColor()}-100 sm:mx-0 sm:h-10 sm:w-10`}
+              >
                 <svg
-                  className="h-6 w-6 text-red-600"
+                  className={`h-6 w-6 text-${themeColor()}-600`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -58,7 +69,7 @@ function ReuseableModal({
                 data-username={user.username}
                 data-type={type}
                 type="button"
-                className="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-red-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                className={`inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-${themeColor()}-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-${themeColor()}-500 focus:outline-none focus:border-${themeColor()}-700 focus:shadow-outline-${themeColor()} transition ease-in-out duration-150 sm:text-sm sm:leading-5`}
               >
                 {btnText}
               </button>

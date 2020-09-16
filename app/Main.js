@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Axios from 'axios';
 import { useImmerReducer } from 'use-immer';
 
-// AXIOS COMMENT URL
+// AXIOS BASE URL
 console.log(process.env.BACKENDURL);
 Axios.defaults.baseURL = process.env.BACKENDURL || 'https://backend-johnsido-music.herokuapp.com';
 // STATE MANAGEMENT

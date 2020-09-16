@@ -23,6 +23,7 @@ function RoleAssignment() {
       sendCount: 0,
       fetchUsers: 0,
     },
+    triggeredDuringSearch: false,
     isFetching: false,
     active: {
       username: '',
@@ -37,6 +38,10 @@ function RoleAssignment() {
   function roleAssignmentReducer(draft, action) {
     switch (action.type) {
       case 'fetchAdminStatsComplete':
+        action.process == 'search'
+          ? (draft.triggeredDuringSearch = true)
+          : (draft.triggeredDuringSearch = false);
+
         draft.adminStats = action.value;
         return;
       case 'search':
@@ -95,10 +100,9 @@ function RoleAssignment() {
 
   // FETCH
   useEffect(() => {
-    const request = Axios.CancelToken.source();
-    roleAssignmentDispatch({ type: 'isFetchingStarts' });
-
     (async function getAdminStats() {
+      const request = Axios.CancelToken.source();
+      roleAssignmentDispatch({ type: 'isFetchingStarts' });
       try {
         const response = await Axios.post(
           `/admin-stats/${username}`,
@@ -122,12 +126,11 @@ function RoleAssignment() {
         // FAIL SILENTLY
         console.log(error);
       }
+      return () => request.cancel();
     })();
-
-    return () => request.cancel();
   }, [username, state.search.fetchUsers]);
 
-  //   BAN USERS
+  //   BAN/UNBAN USERS
   async function handleBanUser(e) {
     try {
       const userId = e.target.getAttribute('data-userid');
@@ -153,7 +156,7 @@ function RoleAssignment() {
     }
   }
 
-  // FROM ADMIN TO USER
+  // FROM ADMIN TO USER, USER TO ADMIN
   async function handleDowngradeUpgrade(e) {
     try {
       const userId = e.target.getAttribute('data-userid');
@@ -188,6 +191,7 @@ function RoleAssignment() {
 
       return () => clearTimeout(delay);
     } else {
+      roleAssignmentDispatch({ type: 'fetchUsers' });
       roleAssignmentDispatch({ type: 'isSearching', process: 'ends' });
     }
   }, [state.search.text]);
@@ -209,6 +213,7 @@ function RoleAssignment() {
           roleAssignmentDispatch({
             type: 'fetchAdminStatsComplete',
             value: response.data.adminStats,
+            process: 'search',
           });
         } catch (error) {
           console.log(error);
@@ -238,7 +243,7 @@ function RoleAssignment() {
       <div className="relative">
         <div>
           {/* MAIN CONTENT */}
-          <div className="flex flex-wrap justify-center mt-5">
+          <div className="flex flex-wrap justify-center my-5">
             <div className="text-center w-full md:max-w-md mb-5 md:mx-3">
               <p className="text-2xl">Click to edit roles</p>
               {/* SEARCH */}
@@ -248,7 +253,6 @@ function RoleAssignment() {
                     onChange={e =>
                       roleAssignmentDispatch({ type: 'search', value: e.target.value })
                     }
-                    autoFocus
                     autoComplete="off"
                     type="search"
                     placeholder="Search"
@@ -271,14 +275,14 @@ function RoleAssignment() {
                   </div>
                 </span>
               </div>
-              {state.search.loading && <div>Searching...</div>}
+              {state.search.loading && <div className="absolute">Searching...</div>}
             </div>
 
             {/* ROLES */}
             <div className="overflow-y-auto w-full md:max-w-md" style={{ maxHeight: 500 + 'px' }}>
               {state.adminStats.allUserDocs.map((user, index) => {
                 return (
-                  <div key={index} className=" bg-white mb-2 border">
+                  <div key={index} className="bg-white mb-2 border">
                     <Link
                       to={`/profile/${user.username}`}
                       className="focus:outline-none active:outline-none px-6 py-4 whitespace-no-wrap block"
@@ -335,8 +339,8 @@ function RoleAssignment() {
                           <ReuseableModal
                             user={user}
                             type="inactivate"
-                            headerTitle={`In activate ${user.firstName} ${user.lastName}'s account?`}
-                            btnText="Inactivate account"
+                            headerTitle={`Deactivate ${user.firstName} ${user.lastName}'s account?`}
+                            btnText="Deactivate account"
                             warningText="Are you sure you want to do this?"
                             handleToggle={toggleActiveModal}
                             handleSubmit={handleBanUser}
@@ -384,6 +388,18 @@ function RoleAssignment() {
                   </div>
                 );
               })}
+              {/* EMPTY SEARCH RESULTS */}
+              {state.adminStats.allUserDocs.length == 0 && state.triggeredDuringSearch && (
+                <div className="h-full text-center flex items-center justify-center text-2xl">
+                  <span className="px-2">No results found for</span> <em> {state.search.text}</em>
+                </div>
+              )}
+              {/* EMPTY SEARCH RESULTS */}
+              {state.adminStats.allUserDocs.length == 0 && !state.triggeredDuringSearch && (
+                <div className="h-full text-center flex items-center justify-center text-2xl">
+                  <span className="px-2">No registered users.</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
