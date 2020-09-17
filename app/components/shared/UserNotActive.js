@@ -3,17 +3,17 @@ import PropTypes from 'prop-types';
 
 function UserNotActive({ user }) {
   return (
-    <div className="w-full">
-      <div className="flex justify-center relative break-words w-full mb-6 rounded-lg -mt-24">
+    <div className="relative absolute break-words w-full mb-6 -mt-48">
+      <div className="flex justify-center  w-full">
         <img
           alt="Profile avatar"
           src={user.profileAvatar}
-          className="shadow-xl rounded-full h-auto align-middle absolute border-none -mt-12"
+          className="shadow-xl rounded-full h-auto align-middle border-none"
           style={{ maxWidth: '150px' }}
         />
       </div>
 
-      <div className="text-center mt-24">
+      <div className="text-center mt-5">
         <h3 className="text-4xl font-semibold leading-normal text-gray-800">
           {user.profileFirstName} {user.profileLastName}
         </h3>
