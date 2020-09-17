@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 function UserNotActive({ user }) {
   return (
     <div className="w-full">
-      <div className="flex justify-center relative break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-24">
+      <div className="flex justify-center relative break-words w-full mb-6 rounded-lg -mt-24">
         <img
           alt="Profile avatar"
           src={user.profileAvatar}
-          className="shadow-xl rounded-full h-auto align-middle border-none absolute -mt-20 lg:-mt-16"
+          className="shadow-xl rounded-full h-auto align-middle border-none -mt-12"
           style={{ maxWidth: '150px' }}
         />
       </div>
