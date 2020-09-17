@@ -8,7 +8,7 @@ function UserNotActive({ user }) {
         <img
           alt="Profile avatar"
           src={user.profileAvatar}
-          className="shadow-xl rounded-full h-auto align-middle border-none -mt-12"
+          className="shadow-xl rounded-full h-auto align-middle absolute border-none -mt-12"
           style={{ maxWidth: '150px' }}
         />
       </div>
