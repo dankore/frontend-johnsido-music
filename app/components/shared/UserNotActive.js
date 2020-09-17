@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 function UserNotActive({ user }) {
   return (
-    <div className="relative absolute break-words w-full mb-6 -mt-48">
+    <div className="relative absolute break-words w-full mb-6 lg:-mt-48">
       <div className="flex justify-center  w-full">
         <img
           alt="Profile avatar"
