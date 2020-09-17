@@ -274,7 +274,11 @@ function ProfileInfoSettings({ history }) {
             if (response.data.token) {
               // SUCCESS
               userData.token = response.data.token;
-              appDispatch({ type: 'updateLocalStorage', value: userData });
+              appDispatch({
+                type: 'updateLocalStorage',
+                value: userData,
+                process: 'profileUpdate',
+              });
               // TURN OFF ANY FLASH ERROR MESSAGE
               appDispatch({ type: 'turnOff' });
               appDispatch({

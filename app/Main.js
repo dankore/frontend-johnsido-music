@@ -105,23 +105,48 @@ function Main() {
         draft.toggleAdminLandingPageMenu = false;
         return;
       case 'updateLocalStorage':
-        // UPDATE LOCAL STORAGE
-        localStorage.setItem('johnsido-token', action.value.token);
-        localStorage.setItem('johnsido-username', action.value.username);
-        localStorage.setItem('johnsido-firstname', action.value.firstName);
-        localStorage.setItem('johnsido-lastname', action.value.lastName);
-        localStorage.setItem('johnsido-about', JSON.stringify(action.value.about));
+        if (action.process == 'profileUpdate') {
+          // UPDATE LOCAL STORAGE
+          localStorage.setItem('johnsido-token', action.value.token);
+          localStorage.setItem('johnsido-username', action.value.username);
+          localStorage.setItem('johnsido-firstname', action.value.firstName);
+          localStorage.setItem('johnsido-lastname', action.value.lastName);
+          localStorage.setItem('johnsido-about', JSON.stringify(action.value.about));
 
-        // UPDATE STATE
-        draft.user.username = action.value.token;
-        draft.user.username = action.value.username;
-        draft.user.firstName = action.value.firstName;
-        draft.user.lastName = action.value.lastName;
-        draft.user.about = {
-          bio: action.value.about.bio,
-          city: action.value.about.city,
-          musicCategory: action.value.about.musicCategory,
-        };
+          // UPDATE STATE
+          draft.user.username = action.value.token;
+          draft.user.username = action.value.username;
+          draft.user.firstName = action.value.firstName;
+          draft.user.lastName = action.value.lastName;
+          draft.user.about = {
+            bio: action.value.about.bio,
+            city: action.value.about.city,
+            musicCategory: action.value.about.musicCategory,
+          };
+        }
+
+        if (action.process == 'adminToUser_userToAdmin') {
+          console.log(action.kind);
+          if (action.kind == 'upgrade') {
+            const scope = JSON.parse(localStorage.getItem('johnsido-scope'));
+            scope.push('admin');
+            localStorage.setItem('johnsido-scope', JSON.stringify(scope));
+
+            state.user.scope.push('admin');
+          }
+
+          if (action.kind == 'downgrade') {
+            const scope = JSON.parse(localStorage.getItem('johnsido-scope'));
+            const indexOfAdminLocalStorage = scope.indexOf('admin');
+            scope.splice(indexOfAdminLocalStorage, 1);
+            console.log(JSON.stringify(scope), indexOfAdminLocalStorage);
+            localStorage.setItem('johnsido-scope', JSON.stringify(scope));
+
+            const indexOfAdminState = draft.user.scope.indexOf('admin');
+            draft.user.scope.splice(indexOfAdminState, 1);
+          }
+        }
+
         return;
     }
   }

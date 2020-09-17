@@ -173,6 +173,7 @@ function RoleAssignment() {
         // SUCCESS
         roleAssignmentDispatch({ type: 'toggleAdminModal' });
         roleAssignmentDispatch({ type: 'updateRole', value: username, process: type });
+        appDispatch({ type: 'updateLocalStorage', process: 'adminToUser_userToAdmin', kind: type });
       } else {
         // FAILURE
         console.log(response.data);
@@ -306,12 +307,14 @@ function RoleAssignment() {
                             handleToggle={toggleActiveModal}
                             btnText="Active"
                             username={user.username}
+                            isAdmin={appState.user.scope.indexOf('admin') > -1}
                           />
                         ) : (
                           <ReuseableButton
                             handleToggle={toggleActiveModal}
                             btnText="Inactive"
                             username={user.username}
+                            isAdmin={appState.user.scope.indexOf('admin') > -1}
                           />
                         )}
                       </div>
@@ -322,12 +325,14 @@ function RoleAssignment() {
                             handleToggle={toggleAdminModal}
                             btnText="Admin"
                             username={user.username}
+                            isAdmin={appState.user.scope.indexOf('admin') > -1}
                           />
                         ) : (
                           <ReuseableButton
                             handleToggle={toggleAdminModal}
                             btnText="User"
                             username={user.username}
+                            isAdmin={appState.user.scope.indexOf('admin') > -1}
                           />
                         )}
                       </div>
