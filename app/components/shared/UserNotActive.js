@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 function UserNotActive({ user }) {
   return (
@@ -18,10 +19,13 @@ function UserNotActive({ user }) {
         </h3>
         <p className="mb-2">@{user.profileUsername}</p>
       </div>
-      <h2 className="text-center text-2xl px-3">Deactivated Account</h2>
-      <h2 className="mt-2 px-3 max-w-lg mx-auto leading-8 font-semibold font-display text-gray-600 sm:leading-9 lg:leading-10 text-center">
-        {user.profileFirstName} {user.profileLastName}&apos;s account has been deactivated by this
-        website&apos;s admin.
+      <h2 className="text-center text-2xl px-3 font-semibold">Account suspended</h2>
+      <h2 className="mt-2 px-3 max-w-xl text-lg mx-auto leading-8 font-semibold font-display text-gray-600 sm:leading-9 lg:leading-10 text-center">
+        {user.profileFirstName} {user.profileLastName}&apos;s is suspended due to violations of our
+        <Link className="js-brown focus:outline-none hover:underline ml-2" to="#">
+          Policies
+        </Link>
+        .
       </h2>
     </div>
   );
