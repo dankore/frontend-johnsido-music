@@ -20,7 +20,7 @@ function UserNotActive({ user }) {
         <p className="mb-2">@{user.profileUsername}</p>
       </div>
       <h2 className="text-center text-2xl px-3 font-semibold">Account suspended</h2>
-      <h2 className="mt-2 px-3 max-w-xl text-lg mx-auto leading-8 font-semibold font-display text-gray-600 sm:leading-9 lg:leading-10 text-center">
+      <h2 className="mt-2 px-3 max-w-xl text-lg mx-auto leading-8 font-display text-gray-900 sm:leading-9 lg:leading-10 text-center">
         {user.profileFirstName} {user.profileLastName}&apos;s is suspended due to violations of our
         <Link className="js-brown focus:outline-none hover:underline ml-2" to="#">
           Policies

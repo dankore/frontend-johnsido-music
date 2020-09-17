@@ -341,7 +341,6 @@ function RoleAssignment() {
                             type="inactivate"
                             headerTitle={`Deactivate ${user.firstName} ${user.lastName}'s account?`}
                             btnText="Deactivate account"
-                            warningText="Are you sure you want to do this?"
                             handleToggle={toggleActiveModal}
                             handleSubmit={handleBanUser}
                           />
@@ -351,7 +350,6 @@ function RoleAssignment() {
                             type="activate"
                             headerTitle={`Activate ${user.firstName} ${user.lastName}'s account?`}
                             btnText="Activate account"
-                            warningText="Are you sure you want to do this?"
                             handleToggle={toggleActiveModal}
                             handleSubmit={handleBanUser}
                           />
@@ -368,7 +366,6 @@ function RoleAssignment() {
                             type="downgrade"
                             headerTitle={`Downgrade ${user.firstName} ${user.lastName}?`}
                             btnText="Downgrade to a USER"
-                            warningText="Are you sure you want to do this?"
                             handleToggle={toggleAdminModal}
                             handleSubmit={handleDowngradeUpgrade}
                           />
@@ -378,7 +375,6 @@ function RoleAssignment() {
                             type="upgrade"
                             headerTitle={`Upgrade ${user.firstName} ${user.lastName} to admin?`}
                             btnText="Upgrade to an ADMIN"
-                            warningText="Are you sure you want to do this?"
                             handleToggle={toggleAdminModal}
                             handleSubmit={handleDowngradeUpgrade}
                           />
