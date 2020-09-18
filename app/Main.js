@@ -126,20 +126,11 @@ function Main() {
         }
 
         if (action.process == 'adminToUser_userToAdmin') {
-          console.log(action.kind);
-          if (action.kind == 'upgrade') {
-            const scope = JSON.parse(localStorage.getItem('johnsido-scope'));
-            scope.push('admin');
-            localStorage.setItem('johnsido-scope', JSON.stringify(scope));
+          const scope = JSON.parse(localStorage.getItem('johnsido-scope'));
+          const indexOfAdminLocalStorage = scope.indexOf('admin');
 
-            state.user.scope.push('admin');
-          }
-
-          if (action.kind == 'downgrade') {
-            const scope = JSON.parse(localStorage.getItem('johnsido-scope'));
-            const indexOfAdminLocalStorage = scope.indexOf('admin');
+          if (action.kind == 'downgrade' && indexOfAdminLocalStorage > -1) {
             scope.splice(indexOfAdminLocalStorage, 1);
-            console.log(JSON.stringify(scope), indexOfAdminLocalStorage);
             localStorage.setItem('johnsido-scope', JSON.stringify(scope));
 
             const indexOfAdminState = draft.user.scope.indexOf('admin');
@@ -174,6 +165,7 @@ function Main() {
       localStorage.removeItem('johnsido-avatar');
       localStorage.removeItem('johnsido-verified');
       localStorage.removeItem('johnsido-about');
+      localStorage.removeItem('johnsido-scope');
       localStorage.removeItem('johnsido-userCreationDate');
     }
   }, [state.loggedIn]);

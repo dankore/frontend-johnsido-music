@@ -3,13 +3,14 @@ import StateContext from '../../contextsProviders/StateContext';
 import DispatchContext from '../../contextsProviders/DispatchContext';
 import Axios from 'axios';
 import { useImmerReducer } from 'use-immer';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, withRouter } from 'react-router-dom';
 import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 import ReuseableModal from './ReuseableModal';
 import Page from '../layouts/Page';
 import ReuseableButton from './ReuseableButton';
+import PropTypes from 'prop-types';
 
-function RoleAssignment() {
+function RoleAssignment({ history }) {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
   const { username } = useParams();
@@ -173,7 +174,24 @@ function RoleAssignment() {
         // SUCCESS
         roleAssignmentDispatch({ type: 'toggleAdminModal' });
         roleAssignmentDispatch({ type: 'updateRole', value: username, process: type });
-        appDispatch({ type: 'updateLocalStorage', process: 'adminToUser_userToAdmin', kind: type });
+
+        /*
+          IF AN ADMIN DOWNGRADE THEMSELVES TO A USER, NAVIGATE THEM TO LANDING PAGE
+         */
+        if (appState.user.username == username) {
+          // REMOVE ADMIN FROM LOCAL STORAGE
+          appDispatch({
+            type: 'updateLocalStorage',
+            process: 'adminToUser_userToAdmin',
+            kind: type,
+          });
+          // NAVIGATE TO LANDING PAGE AND THROW AN ERROR
+          history.push('/');
+          appDispatch({
+            type: 'flashMsgError',
+            value: ['You must be an admin to view or edit this page.'],
+          });
+        }
       } else {
         // FAILURE
         console.log(response.data);
@@ -307,14 +325,12 @@ function RoleAssignment() {
                             handleToggle={toggleActiveModal}
                             btnText="Active"
                             username={user.username}
-                            isAdmin={appState.user.scope.indexOf('admin') > -1}
                           />
                         ) : (
                           <ReuseableButton
                             handleToggle={toggleActiveModal}
                             btnText="Inactive"
                             username={user.username}
-                            isAdmin={appState.user.scope.indexOf('admin') > -1}
                           />
                         )}
                       </div>
@@ -325,14 +341,12 @@ function RoleAssignment() {
                             handleToggle={toggleAdminModal}
                             btnText="Admin"
                             username={user.username}
-                            isAdmin={appState.user.scope.indexOf('admin') > -1}
                           />
                         ) : (
                           <ReuseableButton
                             handleToggle={toggleAdminModal}
                             btnText="User"
                             username={user.username}
-                            isAdmin={appState.user.scope.indexOf('admin') > -1}
                           />
                         )}
                       </div>
@@ -409,4 +423,8 @@ function RoleAssignment() {
   );
 }
 
-export default RoleAssignment;
+RoleAssignment.propTypes = {
+  history: PropTypes.object.isRequired,
+};
+
+export default withRouter(RoleAssignment);
