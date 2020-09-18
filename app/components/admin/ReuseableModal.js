@@ -14,6 +14,23 @@ function ReuseableModal({ user, type, headerTitle, btnText, handleToggle, handle
     }
   }
 
+  function loggedInAdminBtnText() {
+    switch (type) {
+      case 'downgrade':
+        return (
+          <div>
+            <span className="text-red-700 mr-2">WAIT!</span>
+            <p className="my-3">Are you sure you want to downgrade yourself?</p>{' '}
+            <p>You cannot be able to access this page again.</p>
+          </div>
+        );
+      case 'activate':
+        return <p>Activate your account?</p>;
+      case 'inactivate':
+        return <p>Deactivate your account?</p>;
+    }
+  }
+
   return (
     <div className="fixed z-10 inset-0 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -49,12 +66,8 @@ function ReuseableModal({ user, type, headerTitle, btnText, handleToggle, handle
               <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                 <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-headline">
                   {appState.user.username !== user.username && headerTitle}
-                  {appState.user.username === user.username && type == 'downgrade' && (
-                    <div>
-                      <span className="text-red-700 mr-2">WAIT!</span>Are you sure you want to
-                      downgrade yourself? You cannot be able to access this page again.
-                    </div>
-                  )}
+
+                  {appState.user.username === user.username && loggedInAdminBtnText()}
                 </h3>
               </div>
             </div>
