@@ -41,6 +41,7 @@ function Main() {
       about: JSON.parse(localStorage.getItem('johnsido-about')),
       scope: JSON.parse(localStorage.getItem('johnsido-scope')),
       userCreationDate: localStorage.getItem('johnsido-userCreationDate'),
+      reRenderCount: 0,
     },
     logo: {
       url:
@@ -105,28 +106,42 @@ function Main() {
         draft.toggleAdminLandingPageMenu = false;
         return;
       case 'updateLocalStorage':
-        // UPDATE LOCAL STORAGE
-        localStorage.setItem('johnsido-token', action.value.token);
-        localStorage.setItem('johnsido-username', action.value.username);
-        localStorage.setItem('johnsido-firstname', action.value.firstName);
-        localStorage.setItem('johnsido-lastname', action.value.lastName);
-        localStorage.setItem('johnsido-about', JSON.stringify(action.value.about));
+        if (action.process == 'profileUpdate') {
+          // UPDATE LOCAL STORAGE
+          localStorage.setItem('johnsido-token', action.value.token);
+          localStorage.setItem('johnsido-username', action.value.username);
+          localStorage.setItem('johnsido-firstname', action.value.firstName);
+          localStorage.setItem('johnsido-lastname', action.value.lastName);
+          localStorage.setItem('johnsido-about', JSON.stringify(action.value.about));
 
-        // UPDATE STATE
-        draft.user.username = action.value.token;
-        draft.user.username = action.value.username;
-        draft.user.firstName = action.value.firstName;
-        draft.user.lastName = action.value.lastName;
-        draft.user.about = {
-          bio: action.value.about.bio,
-          city: action.value.about.city,
-          musicCategory: action.value.about.musicCategory,
-        };
+          // UPDATE STATE
+          draft.user.username = action.value.token;
+          draft.user.username = action.value.username;
+          draft.user.firstName = action.value.firstName;
+          draft.user.lastName = action.value.lastName;
+          draft.user.about = {
+            bio: action.value.about.bio,
+            city: action.value.about.city,
+            musicCategory: action.value.about.musicCategory,
+          };
+        }
+
+        if (action.process == 'adminToUser_userToAdmin') {
+          const scope = JSON.parse(localStorage.getItem('johnsido-scope'));
+          const indexOfAdminLocalStorage = scope.indexOf('admin');
+
+          if (action.kind == 'downgrade' && indexOfAdminLocalStorage > -1) {
+            scope.splice(indexOfAdminLocalStorage, 1);
+            localStorage.setItem('johnsido-scope', JSON.stringify(scope));
+          }
+        }
+
         return;
     }
   }
 
   const [state, dispatch] = useImmerReducer(appReducer, initialState);
+  console.log(state.user.reRenderCount);
 
   useEffect(() => {
     if (state.loggedIn) {
@@ -149,6 +164,7 @@ function Main() {
       localStorage.removeItem('johnsido-avatar');
       localStorage.removeItem('johnsido-verified');
       localStorage.removeItem('johnsido-about');
+      localStorage.removeItem('johnsido-scope');
       localStorage.removeItem('johnsido-userCreationDate');
     }
   }, [state.loggedIn]);

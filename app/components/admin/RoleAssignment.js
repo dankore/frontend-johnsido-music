@@ -3,13 +3,14 @@ import StateContext from '../../contextsProviders/StateContext';
 import DispatchContext from '../../contextsProviders/DispatchContext';
 import Axios from 'axios';
 import { useImmerReducer } from 'use-immer';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, withRouter } from 'react-router-dom';
 import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 import ReuseableModal from './ReuseableModal';
 import Page from '../layouts/Page';
 import ReuseableButton from './ReuseableButton';
+import PropTypes from 'prop-types';
 
-function RoleAssignment() {
+function RoleAssignment({ history }) {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
   const { username } = useParams();
@@ -173,6 +174,24 @@ function RoleAssignment() {
         // SUCCESS
         roleAssignmentDispatch({ type: 'toggleAdminModal' });
         roleAssignmentDispatch({ type: 'updateRole', value: username, process: type });
+
+        /*
+          IF AN ADMIN DOWNGRADE THEMSELVES TO A USER, NAVIGATE THEM TO LANDING PAGE
+         */
+        if (appState.user.username == username) {
+          // REMOVE ADMIN FROM LOCAL STORAGE
+          appDispatch({
+            type: 'updateLocalStorage',
+            process: 'adminToUser_userToAdmin',
+            kind: type,
+          });
+          // NAVIGATE TO LANDING PAGE AND THROW AN ERROR MESSAGE
+          history.push('/');
+          appDispatch({
+            type: 'flashMsgError',
+            value: ['You must be an admin to view or edit this page.'],
+          });
+        }
       } else {
         // FAILURE
         console.log(response.data);
@@ -341,7 +360,6 @@ function RoleAssignment() {
                             type="inactivate"
                             headerTitle={`Deactivate ${user.firstName} ${user.lastName}'s account?`}
                             btnText="Deactivate account"
-                            warningText="Are you sure you want to do this?"
                             handleToggle={toggleActiveModal}
                             handleSubmit={handleBanUser}
                           />
@@ -351,7 +369,6 @@ function RoleAssignment() {
                             type="activate"
                             headerTitle={`Activate ${user.firstName} ${user.lastName}'s account?`}
                             btnText="Activate account"
-                            warningText="Are you sure you want to do this?"
                             handleToggle={toggleActiveModal}
                             handleSubmit={handleBanUser}
                           />
@@ -368,7 +385,6 @@ function RoleAssignment() {
                             type="downgrade"
                             headerTitle={`Downgrade ${user.firstName} ${user.lastName}?`}
                             btnText="Downgrade to a USER"
-                            warningText="Are you sure you want to do this?"
                             handleToggle={toggleAdminModal}
                             handleSubmit={handleDowngradeUpgrade}
                           />
@@ -378,7 +394,6 @@ function RoleAssignment() {
                             type="upgrade"
                             headerTitle={`Upgrade ${user.firstName} ${user.lastName} to admin?`}
                             btnText="Upgrade to an ADMIN"
-                            warningText="Are you sure you want to do this?"
                             handleToggle={toggleAdminModal}
                             handleSubmit={handleDowngradeUpgrade}
                           />
@@ -408,4 +423,8 @@ function RoleAssignment() {
   );
 }
 
-export default RoleAssignment;
+RoleAssignment.propTypes = {
+  history: PropTypes.object.isRequired,
+};
+
+export default withRouter(RoleAssignment);

@@ -1,15 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import StateContext from '../../contextsProviders/StateContext';
 
-function ReuseableModal({
-  user,
-  type,
-  headerTitle,
-  btnText,
-  warningText,
-  handleToggle,
-  handleSubmit,
-}) {
+function ReuseableModal({ user, type, headerTitle, btnText, handleToggle, handleSubmit }) {
+  const appState = useContext(StateContext);
+
   function themeColor() {
     if (type == 'activate' || type == 'inactivate') {
       return type == 'activate' ? 'green' : 'red';
@@ -33,7 +28,7 @@ function ReuseableModal({
           aria-labelledby="modal-headline"
         >
           <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div className="sm:flex sm:items-start">
+            <div className="sm:flex sm:items-center">
               <div
                 className={`mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-${themeColor()}-100 sm:mx-0 sm:h-10 sm:w-10`}
               >
@@ -53,11 +48,14 @@ function ReuseableModal({
               </div>
               <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                 <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-headline">
-                  {headerTitle}
+                  {appState.user.username !== user.username && headerTitle}
+                  {appState.user.username === user.username && type == 'downgrade' && (
+                    <div>
+                      <span className="text-red-700 mr-2">WAIT!</span>Are you sure you want to
+                      downgrade yourself? You cannot be able to access this page again.
+                    </div>
+                  )}
                 </h3>
-                <div className="mt-2">
-                  <p className="text-sm leading-5 text-gray-500">{warningText}</p>
-                </div>
               </div>
             </div>
           </div>
@@ -94,7 +92,6 @@ ReuseableModal.propTypes = {
   btnText: PropTypes.string,
   type: PropTypes.string,
   headerTitle: PropTypes.string,
-  warningText: PropTypes.string,
   handleToggle: PropTypes.func,
   handleSubmit: PropTypes.func,
   user: PropTypes.object,
