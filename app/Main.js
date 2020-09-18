@@ -41,6 +41,7 @@ function Main() {
       about: JSON.parse(localStorage.getItem('johnsido-about')),
       scope: JSON.parse(localStorage.getItem('johnsido-scope')),
       userCreationDate: localStorage.getItem('johnsido-userCreationDate'),
+      reRenderCount: 0,
     },
     logo: {
       url:
@@ -132,9 +133,6 @@ function Main() {
           if (action.kind == 'downgrade' && indexOfAdminLocalStorage > -1) {
             scope.splice(indexOfAdminLocalStorage, 1);
             localStorage.setItem('johnsido-scope', JSON.stringify(scope));
-
-            const indexOfAdminState = draft.user.scope.indexOf('admin');
-            draft.user.scope.splice(indexOfAdminState, 1);
           }
         }
 
@@ -143,6 +141,7 @@ function Main() {
   }
 
   const [state, dispatch] = useImmerReducer(appReducer, initialState);
+  console.log(state.user.reRenderCount);
 
   useEffect(() => {
     if (state.loggedIn) {

@@ -185,7 +185,7 @@ function RoleAssignment({ history }) {
             process: 'adminToUser_userToAdmin',
             kind: type,
           });
-          // NAVIGATE TO LANDING PAGE AND THROW AN ERROR
+          // NAVIGATE TO LANDING PAGE AND THROW AN ERROR MESSAGE
           history.push('/');
           appDispatch({
             type: 'flashMsgError',
