@@ -277,7 +277,7 @@ function RoleAssignment({ history }) {
             </div>
 
             {/* ROLES */}
-            <div className="overflow-y-auto w-full md:max-w-md" style={{ maxHeight: 500 + 'px' }}>
+            <div className="w-full md:max-w-md" style={{ maxHeight: 500 + 'px' }}>
               {state.adminStats.allUserDocs.map((user, index) => {
                 return (
                   <div key={index} className="bg-white mb-2 border">
