@@ -405,7 +405,10 @@ function RoleAssignment({ history }) {
               })}
               {/* EMPTY SEARCH RESULTS */}
               {state.adminStats.allUserDocs.length == 0 && state.triggeredDuringSearch && (
-                <div className="h-full text-center flex items-center justify-center text-2xl">
+                <div
+                  style={{ overflowWrap: 'anywhere', minWidth: 0 + 'px' }}
+                  className="h-full text-center flex items-center justify-center pb-5 px-3 text-2xl c-modal"
+                >
                   <span className="px-2">No results found for</span> <em> {state.search.text}</em>
                 </div>
               )}

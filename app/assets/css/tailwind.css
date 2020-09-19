@@ -6,7 +6,19 @@
 
 /* NON-TAILWIND CSS
    ========================================================================== */
-
+.c-modal {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 10px 3px;
+  display: block;
+  /* position: absolute; */
+  right: 0.75rem;
+  top: 0.25rem;
+  transform: translate(0px, 0px) perspective(1000px) rotateX(-35deg);
+  transform-origin: center top;
+  z-index: 1000;
+  animation: 0.5s ease 0s 1 normal forwards running listEntry;
+  border-radius: 8px;
+  outline: none;
+}
  .custom-box-shadow {
    box-shadow: 0 -6px 4px -7px rgba(0,0,0,0.1) inset
  }

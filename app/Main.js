@@ -41,7 +41,6 @@ function Main() {
       about: JSON.parse(localStorage.getItem('johnsido-about')),
       scope: JSON.parse(localStorage.getItem('johnsido-scope')),
       userCreationDate: localStorage.getItem('johnsido-userCreationDate'),
-      reRenderCount: 0,
     },
     logo: {
       url:
@@ -141,7 +140,6 @@ function Main() {
   }
 
   const [state, dispatch] = useImmerReducer(appReducer, initialState);
-  console.log(state.user.reRenderCount);
 
   useEffect(() => {
     if (state.loggedIn) {
