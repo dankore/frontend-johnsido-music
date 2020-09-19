@@ -263,7 +263,7 @@ function RoleAssignment({ history }) {
         <div>
           {/* MAIN CONTENT */}
           <div className="flex flex-wrap justify-center my-5">
-            <div className="text-center w-full md:max-w-md mb-5 md:mx-3">
+            <div className="mb-5">
               <p className="text-2xl">Click to edit roles</p>
               {/* SEARCH */}
               <input
