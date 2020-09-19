@@ -259,7 +259,7 @@ function RoleAssignment({ history }) {
 
   return (
     <Page title="Role Assignment">
-      <div className="relative">
+      <div className="preventAutoZoom relative">
         <div>
           {/* MAIN CONTENT */}
           <div className="grid md:grid-cols-2 py-5 md:max-w-4xl mx-2 md:mx-auto">
