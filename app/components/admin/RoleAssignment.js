@@ -266,7 +266,7 @@ function RoleAssignment({ history }) {
             <div className="text-center w-full md:max-w-md mb-5 md:mx-3">
               <p className="text-2xl">Click to edit roles</p>
               {/* SEARCH */}
-              <div className="flex flex-1 justify-center text-white mt-5">
+              <div className="flex flex-1 justify-center text-white mt-5 preventAutoZoom">
                 <span className="relative w-full">
                   <input
                     onChange={e =>
