@@ -262,7 +262,7 @@ function RoleAssignment({ history }) {
       <div className="relative">
         <div>
           {/* MAIN CONTENT */}
-          <div className="grid md:grid-cols-2 py-5 md:max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 py-5 md:max-w-4xl mx-2 md:mx-auto">
             <div className="mb-5">
               <p className="text-2xl">Click to edit roles</p>
               {/* SEARCH */}
@@ -280,7 +280,7 @@ function RoleAssignment({ history }) {
             <div className="overflow-y-auto" style={{ maxHeight: 500 + 'px' }}>
               {state.adminStats.allUserDocs.map((user, index) => {
                 return (
-                  <div key={index} className="bg-white mx-2 mb-2 border">
+                  <div key={index} className="bg-white mb-2 border">
                     <Link
                       to={`/profile/${user.username}`}
                       className="focus:outline-none active:outline-none px-3 py-2"
