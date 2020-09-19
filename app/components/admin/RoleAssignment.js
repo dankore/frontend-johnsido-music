@@ -280,10 +280,10 @@ function RoleAssignment({ history }) {
             <div className="overflow-y-auto" style={{ maxHeight: 500 + 'px' }}>
               {state.adminStats.allUserDocs.map((user, index) => {
                 return (
-                  <div key={index} className="bg-white mb-2 border">
+                  <div key={index} className="bg-white mx-2 mb-2 border">
                     <Link
                       to={`/profile/${user.username}`}
-                      className="focus:outline-none active:outline-none px-6 py-4 whitespace-no-wrap block"
+                      className="focus:outline-none active:outline-none px-3 py-2"
                     >
                       <div className="flex items-center justify-center">
                         <div className="flex-shrink-0 h-10 w-10">
