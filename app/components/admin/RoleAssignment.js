@@ -259,31 +259,52 @@ function RoleAssignment({ history }) {
 
   return (
     <Page title="Role Assignment">
-      <div className="preventAutoZoom relative">
+      <div className="relative">
         <div>
           {/* MAIN CONTENT */}
-          <div className="grid md:grid-cols-2 py-5 md:max-w-4xl mx-2 md:mx-auto">
-            <div className="mb-5">
+          <div className="flex flex-wrap justify-center my-5">
+            <div className="text-center w-full md:max-w-md mb-5 md:mx-3">
               <p className="text-2xl">Click to edit roles</p>
               {/* SEARCH */}
-              <input
-                onChange={e => roleAssignmentDispatch({ type: 'search', value: e.target.value })}
-                autoComplete="off"
-                type="text"
-                placeholder="Search"
-                className="w-full mt-5 preventAutoZoom bg-gray-900 text-lg text-white focus:outline-none py-1 px-2 appearance-none leading-normal"
-              />
+              <div className="flex flex-1 justify-center text-white mt-5">
+                <span className="relative w-full">
+                  <input
+                    onChange={e =>
+                      roleAssignmentDispatch({ type: 'search', value: e.target.value })
+                    }
+                    autoComplete="off"
+                    type="search"
+                    placeholder="Search"
+                    className="w-full text-lg bg-gray-900 text-white transition border border-transparent focus:outline-none focus:border-gray-700 py-1 px-2 pl-10 appearance-none leading-normal"
+                  />
+                  <div
+                    className="absolute"
+                    style={{
+                      top: 0.8 + 'rem',
+                      left: 0.8 + 'rem',
+                    }}
+                  >
+                    <svg
+                      className="fill-current pointer-events-none text-white w-4 h-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
+                    </svg>
+                  </div>
+                </span>
+              </div>
               {state.search.loading && <div className="absolute">Searching...</div>}
             </div>
 
             {/* ROLES */}
-            <div className="overflow-y-auto" style={{ maxHeight: 500 + 'px' }}>
+            <div className="overflow-y-auto w-full md:max-w-md" style={{ maxHeight: 500 + 'px' }}>
               {state.adminStats.allUserDocs.map((user, index) => {
                 return (
                   <div key={index} className="bg-white mb-2 border">
                     <Link
                       to={`/profile/${user.username}`}
-                      className="focus:outline-none active:outline-none px-3 py-2"
+                      className="focus:outline-none active:outline-none px-6 py-4 whitespace-no-wrap block"
                     >
                       <div className="flex items-center justify-center">
                         <div className="flex-shrink-0 h-10 w-10">
