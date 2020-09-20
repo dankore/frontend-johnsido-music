@@ -269,7 +269,7 @@ function RoleAssignment({ history }) {
               <input
                 onChange={e => roleAssignmentDispatch({ type: 'search', value: e.target.value })}
                 autoComplete="off"
-                type="search"
+                type="text"
                 placeholder="Search"
                 className="w-full mt-5 preventAutoZoom bg-gray-900 text-sm text-white focus:outline-none py-1 px-2 appearance-none leading-normal"
               />
