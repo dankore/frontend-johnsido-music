@@ -266,7 +266,7 @@ function RoleAssignment({ history }) {
             <div className="text-center w-full md:max-w-md mb-5 md:mx-3">
               <p className="text-2xl px-2 md:px-0">
                 Click on the &apos;Active&apos; or &apos;Admin&apos; button to deactivate or manage
-                respectively.
+                users roles respectively.
               </p>
               {/* SEARCH */}
               <div className="flex flex-1 justify-center text-white mt-5">
