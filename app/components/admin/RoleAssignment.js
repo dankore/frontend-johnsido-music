@@ -264,7 +264,7 @@ function RoleAssignment({ history }) {
           {/* MAIN CONTENT */}
           <div className="flex flex-wrap justify-center my-5">
             <div className="text-center w-full md:max-w-md mb-5 md:mx-3">
-              <p className="text-2xl">
+              <p className="text-2xl px-2 md:px-0">
                 Click on the &apos;Active&apos; or &apos;Admin&apos; button to deactivate or manage
                 respectively.
               </p>
