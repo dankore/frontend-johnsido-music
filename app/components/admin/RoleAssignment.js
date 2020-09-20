@@ -264,7 +264,10 @@ function RoleAssignment({ history }) {
           {/* MAIN CONTENT */}
           <div className="flex flex-wrap justify-center my-5">
             <div className="text-center w-full md:max-w-md mb-5 md:mx-3">
-              <p className="text-2xl">Click to edit roles</p>
+              <p className="text-2xl">
+                Click on the &apos;Active&apos; or &apos;Admin&apos; button to deactivate or manage
+                respectively.
+              </p>
               {/* SEARCH */}
               <div className="flex flex-1 justify-center text-white mt-5">
                 <span className="relative w-full">
@@ -407,9 +410,11 @@ function RoleAssignment({ history }) {
               {state.adminStats.allUserDocs.length == 0 && state.triggeredDuringSearch && (
                 <div
                   style={{ overflowWrap: 'anywhere', minWidth: 0 + 'px' }}
-                  className="h-full text-center flex items-center justify-center pb-5 px-3 text-2xl c-modal"
+                  className="h-full text-center flex items-center justify-center pb-5 px-3 text-2xl c-modal overflow-y-auto"
                 >
-                  <span className="px-2">No results found for</span> <em> {state.search.text}</em>
+                  <p className="px-2">
+                    <span>No results found for:</span> <em> {state.search.text}</em>
+                  </p>
                 </div>
               )}
               {/* EMPTY SEARCH RESULTS */}
