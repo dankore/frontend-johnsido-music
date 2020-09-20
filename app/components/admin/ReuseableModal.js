@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import StateContext from '../../contextsProviders/StateContext';
 
-function ReuseableModal({ user, type, headerTitle, btnText, handleToggle, handleSubmit }) {
+function ReuseableModal({ user, type, headerTitle, btnText, handleToggle, handleSubmit, loading }) {
   const appState = useContext(StateContext);
 
   function themeColor() {
@@ -80,9 +80,15 @@ function ReuseableModal({ user, type, headerTitle, btnText, handleToggle, handle
                 data-username={user.username}
                 data-type={type}
                 type="button"
-                className={`inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-${themeColor()}-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-${themeColor()}-500 focus:outline-none focus:border-${themeColor()}-700 focus:shadow-outline-${themeColor()} transition ease-in-out duration-150 sm:text-sm sm:leading-5`}
+                className={`inline-flex items-center justify-center w-full rounded-md border border-transparent px-4 py-2 bg-${themeColor()}-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-${themeColor()}-500 focus:outline-none focus:border-${themeColor()}-700 focus:shadow-outline-${themeColor()} transition ease-in-out duration-150 sm:text-sm sm:leading-5`}
               >
-                {btnText}
+                {loading ? (
+                  <span>
+                    <i className="fa text-sm fa-spinner fa-spin"></i>
+                  </span>
+                ) : (
+                  <>{btnText}</>
+                )}
               </button>
             </span>
             <span className="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
@@ -108,6 +114,7 @@ ReuseableModal.propTypes = {
   handleToggle: PropTypes.func,
   handleSubmit: PropTypes.func,
   user: PropTypes.object,
+  loading: PropTypes.bool,
 };
 
 export default ReuseableModal;
