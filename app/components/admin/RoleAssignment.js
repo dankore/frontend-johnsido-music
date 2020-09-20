@@ -271,7 +271,7 @@ function RoleAssignment({ history }) {
                 autoComplete="off"
                 type="text"
                 placeholder="Search"
-                className="w-full mt-5 preventAutoZoom bg-gray-900 text-sm text-white focus:outline-none py-1 px-2 appearance-none leading-normal"
+                className="w-full mt-5 preventAutoZoom bg-gray-900 text-lg text-white focus:outline-none py-1 px-2 appearance-none leading-normal"
               />
               {state.search.loading && <div className="absolute">Searching...</div>}
             </div>
