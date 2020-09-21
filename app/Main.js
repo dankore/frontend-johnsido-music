@@ -11,7 +11,6 @@ Axios.defaults.baseURL = process.env.BACKENDURL || 'https://backend-johnsido-mus
 import StateContext from './contextsProviders/StateContext';
 import DispatchContext from './contextsProviders/DispatchContext';
 //COMPONENTS
-import UploadMusic from './pages/uploadMusic';
 import ProfilePage from './pages/profile/ProfilePage';
 import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
@@ -180,9 +179,6 @@ function Main() {
           </Route>
 
           <Switch>
-            <Route path="/upload-song">
-              <UploadMusic />
-            </Route>
             <Route exact path="/">
               <LandingPage />
             </Route>
