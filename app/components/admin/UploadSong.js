@@ -68,7 +68,7 @@ function UploadSong() {
           </svg>
         </div>
         <p className="text-xl font-semibold text-center leading-tight mb-8 mt-3">Upload New Song</p>
-        <form className="shadow bg-white p-3">
+        <form className="c-shadow bg-white p-3">
           <div className="">
             <div className="mb-4 relative">
               <label
@@ -89,24 +89,59 @@ function UploadSong() {
                 placeholder="Song owner's username"
               />
             </div>
+            <fieldset className="border rounded p-2 mb-4">
+              <legend className=""></legend>
+              <div className="w-full py-3 mb-4">
+                <label
+                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1"
+                  htmlFor="nickname"
+                >
+                  Upload Song <span className="text-red-600">*</span>
+                </label>
+                <input
+                  onChange={handleGetUserAudio}
+                  name="file"
+                  placeholder="Upload an image"
+                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  id="photo"
+                  type="file"
+                  accept="audio/*"
+                />
+              </div>
 
-            <div className="w-full py-3 mb-4">
-              <label
-                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1"
-                htmlFor="nickname"
-              >
-                Upload New Song <span className="text-gray-500 text-xs">Optional</span>
-              </label>
-              <input
-                onChange={handleGetUserAudio}
-                name="file"
-                placeholder="Upload an image"
-                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="photo"
-                type="file"
-                accept="audio/*"
-              />
-            </div>
+              <div className="lg:w-auto lg:flex justify-between">
+                <div className="mb-4 lg:mb-0 relative">
+                  <label
+                    htmlFor="song-title"
+                    className="w-full text-xs font-bold block mb-1 uppercase tracking-wide text-gray-700 "
+                  >
+                    Song Title <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    id="song-title"
+                    type="text"
+                    autoComplete="off"
+                    className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full lg:w-auto"
+                    value=""
+                  />{' '}
+                </div>
+                <div className="relative">
+                  <label
+                    htmlFor="tags"
+                    className="w-full text-xs font-bold block mb-1 uppercase tracking-wide text-gray-700 "
+                  >
+                    Tags <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    id="tags"
+                    type="text"
+                    autoComplete="off"
+                    className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full lg:w-auto"
+                  />{' '}
+                </div>
+              </div>
+            </fieldset>
+            {/* SUBMIT BUTTON */}
             <div className="flex justify-end">
               <button
                 type="submit"
