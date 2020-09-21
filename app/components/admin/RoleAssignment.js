@@ -281,7 +281,7 @@ function RoleAssignment({ history }) {
 
   return (
     <Page title="Role Assignment">
-      <div className="relative">
+      <div className="relative py-5">
         <div>
           {/* MAIN CONTENT */}
           <div className="flex flex-wrap justify-center my-5">
