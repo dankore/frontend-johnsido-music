@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Homepage() {
+function UploadSong() {
   async function handleGetUserAudio(e) {
     try {
       const data = new FormData();
@@ -34,4 +34,4 @@ function Homepage() {
   );
 }
 
-export default Homepage;
+export default UploadSong;
