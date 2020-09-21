@@ -29,10 +29,12 @@ function RoleAssignment({ history }) {
     active: {
       username: '',
       toggleModal: false,
+      loading: false,
     },
     admin: {
       username: '',
       toggleModal: false,
+      loading: false,
     },
   };
 
@@ -62,6 +64,20 @@ function RoleAssignment({ history }) {
         return;
       case 'isFetchingEnds':
         draft.isFetching = false;
+        return;
+      case 'loading':
+        if (action.process == 'active-starts') {
+          draft.active.loading = true;
+        }
+        if (action.process == 'active-ends') {
+          draft.active.loading = false;
+        }
+        if (action.process == 'admin-starts') {
+          draft.admin.loading = true;
+        }
+        if (action.process == 'admin-ends') {
+          draft.admin.loading = false;
+        }
         return;
       case 'toggleActiveModal':
         draft.active.username = action.value;
@@ -134,6 +150,7 @@ function RoleAssignment({ history }) {
   //   BAN/UNBAN USERS
   async function handleBanUser(e) {
     try {
+      roleAssignmentDispatch({ type: 'loading', process: 'active-starts' });
       const userId = e.target.getAttribute('data-userid');
       const username = e.target.getAttribute('data-username');
       const type = e.target.getAttribute('data-type');
@@ -143,6 +160,8 @@ function RoleAssignment({ history }) {
         type,
         token: appState.user.token,
       });
+
+      roleAssignmentDispatch({ type: 'loading', process: 'active-ends' });
 
       if (response.data == 'Success') {
         // SUCCESS
@@ -160,6 +179,7 @@ function RoleAssignment({ history }) {
   // FROM ADMIN TO USER, USER TO ADMIN
   async function handleDowngradeUpgrade(e) {
     try {
+      roleAssignmentDispatch({ type: 'loading', process: 'admin-starts' });
       const userId = e.target.getAttribute('data-userid');
       const username = e.target.getAttribute('data-username');
       const type = e.target.getAttribute('data-type');
@@ -169,6 +189,8 @@ function RoleAssignment({ history }) {
         type,
         token: appState.user.token,
       });
+
+      roleAssignmentDispatch({ type: 'loading', process: 'admin-ends' });
 
       if (response.data == 'Success') {
         // SUCCESS
@@ -264,7 +286,7 @@ function RoleAssignment({ history }) {
           {/* MAIN CONTENT */}
           <div className="flex flex-wrap justify-center my-5">
             <div className="text-center w-full md:max-w-md mb-5 md:mx-3">
-              <p className="text-2xl px-2 md:px-0">
+              <p className="text-lg px-2 md:px-0">
                 Click on the &apos;Active&apos; or &apos;Admin&apos; button to deactivate or manage
                 users roles respectively.
               </p>
@@ -276,6 +298,8 @@ function RoleAssignment({ history }) {
                       roleAssignmentDispatch({ type: 'search', value: e.target.value })
                     }
                     autoComplete="off"
+                    autoCorrect="off"
+                    autoFocus
                     type="search"
                     placeholder="Search"
                     className="w-full text-lg bg-gray-900 text-white transition border border-transparent focus:outline-none focus:border-gray-700 py-1 px-2 pl-10 appearance-none leading-normal"
@@ -365,6 +389,7 @@ function RoleAssignment({ history }) {
                             btnText="Deactivate account"
                             handleToggle={toggleActiveModal}
                             handleSubmit={handleBanUser}
+                            loading={state.active.loading}
                           />
                         ) : (
                           <ReuseableModal
@@ -374,6 +399,7 @@ function RoleAssignment({ history }) {
                             btnText="Activate account"
                             handleToggle={toggleActiveModal}
                             handleSubmit={handleBanUser}
+                            loading={state.active.loading}
                           />
                         )}
                       </>
@@ -390,6 +416,7 @@ function RoleAssignment({ history }) {
                             btnText="Downgrade to a USER"
                             handleToggle={toggleAdminModal}
                             handleSubmit={handleDowngradeUpgrade}
+                            loading={state.admin.loading}
                           />
                         ) : (
                           <ReuseableModal
@@ -399,6 +426,7 @@ function RoleAssignment({ history }) {
                             btnText="Upgrade to an ADMIN"
                             handleToggle={toggleAdminModal}
                             handleSubmit={handleDowngradeUpgrade}
+                            loading={state.admin.loading}
                           />
                         )}
                       </>
