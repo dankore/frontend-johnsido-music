@@ -123,7 +123,7 @@ function UploadSong() {
                     autoComplete="off"
                     className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full lg:w-auto"
                     value=""
-                  />{' '}
+                  />
                 </div>
                 <div className="relative">
                   <label
