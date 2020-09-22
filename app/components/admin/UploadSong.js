@@ -132,7 +132,7 @@ function UploadSong() {
 
   return (
     <Page title="Upload Song">
-      <div className="max-w-3xl mx-auto py-5">
+      <div className="relative max-w-lg mx-auto py-5">
         <div className="flex justify-center text-blue-600">
           <svg
             className="w-12"
@@ -151,14 +151,54 @@ function UploadSong() {
           </svg>
         </div>
         <p className="text-xl font-semibold text-center leading-tight mb-8 mt-3">Upload New Song</p>
-        <form onSubmit={initiateFormSubmission} className="relative c-shadow bg-white p-3">
-          {/* DISPLAY SOME USER DETAILS */}
-          {state.username.userDetailsFromDB.display && (
-            <div className="normal-case absolute text-blue-600 top-0">
-              {state.username.userDetailsFromDB.value.firstName}{' '}
-              {state.username.userDetailsFromDB.value.lastName}
+
+        {/* POP UP: DISPLAY SOME USER DETAILS */}
+        {state.username.userDetailsFromDB.display && (
+          <div className="w-full flex items-center justify-between absolute -mt-32 text-white bg-gray-600 transition ease-out p-2">
+            {/* IMAGE */}
+            <div className="flex items-center">
+              <img
+                className="rounded-full w-24 h-24"
+                src={state.username.userDetailsFromDB.value.avatar}
+              />
+              <div>
+                <p className="normal-case ml-4">
+                  {state.username.userDetailsFromDB.value.firstName}{' '}
+                  {state.username.userDetailsFromDB.value.lastName}
+                </p>
+                <span className="normal-case ml-4">
+                  {state.username.userDetailsFromDB.value.about.musicCategory}
+                </span>
+                <span className="normal-case ml-4">
+                  {state.username.userDetailsFromDB.value.about.city}
+                </span>
+              </div>
             </div>
-          )}
+            {/* SVG */}
+            <div className="ml-4">
+              <div className="flex justify-center w-full">
+                <svg
+                  className="w-12"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </div>
+              <p className="text-center leading-tight mb-8 mt-3">Upload New Song</p>
+            </div>
+          </div>
+        )}
+
+        <form onSubmit={initiateFormSubmission} className="relative c-shadow bg-white p-3">
           {/* ERROR */}
           {state.username.userDetailsFromDB.error && (
             <div className="normal-case absolute text-red-600 top-0">
@@ -181,14 +221,14 @@ function UploadSong() {
                 id="username"
                 type="text"
                 autoComplete="off"
-                className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full text-3xlw-full lg:w-auto"
+                className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
                 placeholder="Song owner's username"
               />
             </div>
 
             <fieldset className="border rounded p-2 mb-4">
               <legend className=""></legend>
-              <div className="w-full py-3 mb-4">
+              <div className="mb-5">
                 <label
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1"
                   htmlFor="nickname"
@@ -205,37 +245,34 @@ function UploadSong() {
                   accept="audio/*"
                 />
               </div>
-
-              <div className="lg:w-auto lg:flex justify-between">
-                <div className="mb-4 lg:mb-0 relative">
-                  <label
-                    htmlFor="song-title"
-                    className="w-full text-xs font-bold block mb-1 uppercase tracking-wide text-gray-700 "
-                  >
-                    Song Title <span className="text-red-600">*</span>
-                  </label>
-                  <input
-                    onChange={e =>
-                      uploadSongDispatch({ type: 'titleImmediately', value: e.target.value })
-                    }
-                    id="song-title"
-                    type="text"
-                    placeholder="Write song title here"
-                    autoComplete="off"
-                    className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full lg:w-auto"
-                    value={state.songTitle.value}
-                  />
-                  <CSSTransition
-                    in={state.songTitle.errors.hasErrors}
-                    timeout={330}
-                    classNames="liveValidateMessage"
-                    unmountOnExit
-                  >
-                    <div style={CSSTransitionStyleModified} className="liveValidateMessage">
-                      {state.songTitle.errors.errorMsg}
-                    </div>
-                  </CSSTransition>
-                </div>
+              <div className="relative">
+                <label
+                  htmlFor="song-title"
+                  className="w-full text-xs font-bold block mb-1 uppercase tracking-wide text-gray-700 "
+                >
+                  Song Title <span className="text-red-600">*</span>
+                </label>
+                <input
+                  onChange={e =>
+                    uploadSongDispatch({ type: 'titleImmediately', value: e.target.value })
+                  }
+                  id="song-title"
+                  type="text"
+                  placeholder="Write song title here"
+                  autoComplete="off"
+                  className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+                  value={state.songTitle.value}
+                />
+                <CSSTransition
+                  in={state.songTitle.errors.hasErrors}
+                  timeout={330}
+                  classNames="liveValidateMessage"
+                  unmountOnExit
+                >
+                  <div style={CSSTransitionStyleModified} className="liveValidateMessage">
+                    {state.songTitle.errors.errorMsg}
+                  </div>
+                </CSSTransition>
               </div>
             </fieldset>
             {/* SUBMIT BUTTON */}
