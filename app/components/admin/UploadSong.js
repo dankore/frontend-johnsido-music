@@ -2,9 +2,12 @@ import React, { useEffect } from 'react';
 import { useImmerReducer } from 'use-immer';
 import Page from '../layouts/Page';
 import { getAudioFileURL } from '../../helpers/JSHelpers';
+import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
+import { CSSTransition } from 'react-transition-group';
 import Axios from 'axios';
 
 function UploadSong() {
+  const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: -0.2 + 'rem' };
   const initialState = {
     username: {
       value: '',
@@ -13,57 +16,92 @@ function UploadSong() {
         message: '',
       },
       checkCount: 0,
-      display: false,
-      userDetailsFromDB: {},
+      userDetailsFromDB: {
+        display: false,
+        value: '',
+        error: false,
+        errorMsg: '',
+      },
+    },
+    songTitle: {
+      value: '',
+      errors: {
+        hasErrors: false,
+        message: '',
+      },
     },
   };
 
   function uploadSongReducer(draft, action) {
     switch (action.type) {
       case 'usernameImmediately':
+        draft.username.errors.hasErrors = false;
+        draft.username.userDetailsFromDB.error = false;
+        draft.username.userDetailsFromDB.display = false;
+        draft.username.value = action.value;
         return;
-      case 'fetchUserDetails':
+      case 'isRegisteredUser':
+        draft.username.userDetailsFromDB.error = false;
+        draft.username.userDetailsFromDB.display = false;
+
         if (action.value) {
-          draft.username.userDetailsFromDB = action.value;
-          draft.username.display = true;
+          draft.username.userDetailsFromDB.value = action.value;
+          draft.username.userDetailsFromDB.display = true;
         } else {
-          draft.username.errors.hasErrors = true;
-          draft.username.errors.message =
-            'Username does not exists. Please check your spelling and try again.';
+          draft.username.userDetailsFromDB.error = true;
+          draft.username.userDetailsFromDB.errorMsg = 'Username does not exists.';
         }
         return;
       case 'usernameAfterDelay':
         draft.username.checkCount++;
+        return;
+      case 'titleImmediately':
+        draft.songTitle.errors.hasErrors = false;
+        draft.songTitle.value = action.value;
+
+        if (draft.songTitle.value == '') {
+          draft.songTitle.errors.hasErrors = true;
+          draft.songTitle.errors.errorMsg = 'Song title field is empty.';
+        }
+
+        if (draft.songTitle.value.length > 150) {
+          draft.songTitle.errors.hasErrors = true;
+          draft.songTitle.errors.errorMsg = 'Song title cannot exceed 150 characters.';
+        }
+        return;
+      case 'songTitleAfterDelay':
+        if (draft.songTitle.value.length < 3) {
+          draft.songTitle.errors.hasErrors = true;
+          draft.songTitle.errors.errorMsg = 'Song title cannot be lower than 3 characters.';
+        }
         return;
     }
   }
 
   const [state, uploadSongDispatch] = useImmerReducer(uploadSongReducer, initialState);
 
-  // DELAY
+  // USERNAME AFTER DELAY INITIATOR
   useEffect(() => {
     if (state.username.value) {
       const delay = setTimeout(() => uploadSongDispatch({ type: 'usernameAfterDelay' }), 800);
 
       return () => clearTimeout(delay);
     }
-  });
+  }, [state.username.value]);
 
+  // USERNAME AFTER DELAY
   useEffect(() => {
     if (state.username.checkCount) {
       const request = Axios.CancelToken.source();
       (async function checkUsername() {
         try {
-          const response = Axios.post(
+          const response = await Axios.post(
             '/doesUsernameExists',
             { username: state.username.value },
             { cancelToken: request.token }
           );
-          if (response.data) {
-            uploadSongDispatch({ type: 'fetchUserDetails', value: response.data });
-          } else {
-            // DISPLAY ERROR
-          }
+          console.log(response.data);
+          uploadSongDispatch({ type: 'isRegisteredUser', value: response.data });
         } catch (error) {
           console.log(error);
         }
@@ -72,6 +110,17 @@ function UploadSong() {
       return () => request.cancel();
     }
   }, [state.username.checkCount]);
+
+  // SONG TITLE DELAY
+  useEffect(() => {
+    if (state.songTitle.value) {
+      const delay = setTimeout(() => uploadSongDispatch({ type: 'songTitleAfterDelay' }), 800);
+
+      return () => clearTimeout(delay);
+    }
+  }, [state.songTitle.value]);
+
+  // SUBMIT: AUTHOR, DATE POSTED,
 
   return (
     <Page title="Upload Song">
@@ -94,19 +143,32 @@ function UploadSong() {
           </svg>
         </div>
         <p className="text-xl font-semibold text-center leading-tight mb-8 mt-3">Upload New Song</p>
-        <form className="c-shadow bg-white p-3">
+        <form className="relative c-shadow bg-white p-3">
+          {/* DISPLAY SOME USER DETAILS */}
+          {state.username.userDetailsFromDB.display && (
+            <div className="normal-case absolute text-blue-600 top-0">
+              {state.username.userDetailsFromDB.value.firstName}{' '}
+              {state.username.userDetailsFromDB.value.lastName}
+            </div>
+          )}
+          {/* ERROR */}
+          {state.username.userDetailsFromDB.error && (
+            <div className="normal-case absolute text-red-600 top-0">
+              {state.username.userDetailsFromDB.errorMsg}
+            </div>
+          )}
           <div className="">
             <div className="mb-4 relative">
               <label
                 htmlFor="username"
-                className="w-full text-xs font-bold block mb-1 uppercase tracking-wide text-gray-700 "
+                className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700"
               >
                 Username <span className="text-red-600">*</span>
               </label>
               <input
-                onKeyUp={e => uploadSongDispatch({ type: 'usernameRules', value: e.target.value })}
+                value={state.username.value}
                 onChange={e =>
-                  uploadSongDispatch({ type: 'usernameUpdate', value: e.target.value })
+                  uploadSongDispatch({ type: 'usernameImmediately', value: e.target.value })
                 }
                 id="username"
                 type="text"
@@ -115,6 +177,7 @@ function UploadSong() {
                 placeholder="Song owner's username"
               />
             </div>
+
             <fieldset className="border rounded p-2 mb-4">
               <legend className=""></legend>
               <div className="w-full py-3 mb-4">
@@ -144,26 +207,26 @@ function UploadSong() {
                     Song Title <span className="text-red-600">*</span>
                   </label>
                   <input
+                    onChange={e =>
+                      uploadSongDispatch({ type: 'titleImmediately', value: e.target.value })
+                    }
                     id="song-title"
                     type="text"
+                    placeholder="Write song title here"
                     autoComplete="off"
                     className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full lg:w-auto"
-                    value=""
+                    value={state.songTitle.value}
                   />
-                </div>
-                <div className="relative">
-                  <label
-                    htmlFor="tags"
-                    className="w-full text-xs font-bold block mb-1 uppercase tracking-wide text-gray-700 "
+                  <CSSTransition
+                    in={state.songTitle.errors.hasErrors}
+                    timeout={330}
+                    classNames="liveValidateMessage"
+                    unmountOnExit
                   >
-                    Tags <span className="text-red-600">*</span>
-                  </label>
-                  <input
-                    id="tags"
-                    type="text"
-                    autoComplete="off"
-                    className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full lg:w-auto"
-                  />{' '}
+                    <div style={CSSTransitionStyleModified} className="liveValidateMessage">
+                      {state.songTitle.errors.errorMsg}
+                    </div>
+                  </CSSTransition>
                 </div>
               </div>
             </fieldset>
