@@ -21,6 +21,7 @@ function UploadSong() {
         value: '',
         error: false,
         errorMsg: '',
+        isRegistered: false,
       },
     },
     songTitle: {
@@ -47,8 +48,10 @@ function UploadSong() {
         if (action.value) {
           draft.username.userDetailsFromDB.value = action.value;
           draft.username.userDetailsFromDB.display = true;
+          draft.username.userDetailsFromDB.isRegistered = true;
         } else {
           draft.username.userDetailsFromDB.error = true;
+          draft.username.userDetailsFromDB.isRegistered = false;
           draft.username.userDetailsFromDB.errorMsg = 'Username does not exists.';
         }
         return;
@@ -120,6 +123,11 @@ function UploadSong() {
     }
   }, [state.songTitle.value]);
 
+  function initiateFormSubmission() {
+    uploadSongDispatch({ type: 'songTitleAfterDelay' });
+    // FILE
+  }
+
   // SUBMIT: AUTHOR, DATE POSTED,
 
   return (
@@ -143,7 +151,7 @@ function UploadSong() {
           </svg>
         </div>
         <p className="text-xl font-semibold text-center leading-tight mb-8 mt-3">Upload New Song</p>
-        <form className="relative c-shadow bg-white p-3">
+        <form onSubmit={initiateFormSubmission} className="relative c-shadow bg-white p-3">
           {/* DISPLAY SOME USER DETAILS */}
           {state.username.userDetailsFromDB.display && (
             <div className="normal-case absolute text-blue-600 top-0">
