@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useImmerReducer } from 'use-immer';
 import Page from '../layouts/Page';
+import { getAudioFileURL } from '../../helpers/JSHelpers';
+import Axios from 'axios';
 
 function UploadSong() {
   const initialState = {
     username: {
       value: '',
-      hasErrors: false,
-      message: '',
+      errors: {
+        hasErrors: false,
+        message: '',
+      },
+      checkCount: 0,
+      display: false,
+      userDetailsFromDB: {},
     },
   };
 
@@ -15,38 +22,57 @@ function UploadSong() {
     switch (action.type) {
       case 'usernameImmediately':
         return;
+      case 'fetchUserDetails':
+        if (action.value) {
+          draft.username.userDetailsFromDB = action.value;
+          draft.username.display = true;
+        } else {
+          draft.username.errors.hasErrors = true;
+          draft.username.errors.message =
+            'Username does not exists. Please check your spelling and try again.';
+        }
+        return;
+      case 'usernameAfterDelay':
+        draft.username.checkCount++;
+        return;
     }
   }
 
   const [state, uploadSongDispatch] = useImmerReducer(uploadSongReducer, initialState);
 
-  console.log(state);
+  // DELAY
+  useEffect(() => {
+    if (state.username.value) {
+      const delay = setTimeout(() => uploadSongDispatch({ type: 'usernameAfterDelay' }), 800);
 
-  // UPLOAD SONG
-  async function handleGetUserAudio(e) {
-    try {
-      const data = new FormData();
-      data.append('file', e.target.files[0]);
-
-      data.append('upload_preset', 'audio-uploads');
-      data.append('resource_type', 'video');
-
-      const res = await fetch(`https://api.cloudinary.com/v1_1/my-nigerian-projects/upload`, {
-        method: 'POST',
-        body: data,
-      });
-
-      const file = await res.json();
-
-      if (!file.error) {
-        console.log(file.secure_url);
-      } else {
-        console.log(file.error.message);
-      }
-    } catch (error) {
-      console.log(error);
+      return () => clearTimeout(delay);
     }
-  }
+  });
+
+  useEffect(() => {
+    if (state.username.checkCount) {
+      const request = Axios.CancelToken.source();
+      (async function checkUsername() {
+        try {
+          const response = Axios.post(
+            '/doesUsernameExists',
+            { username: state.username.value },
+            { cancelToken: request.token }
+          );
+          if (response.data) {
+            uploadSongDispatch({ type: 'fetchUserDetails', value: response.data });
+          } else {
+            // DISPLAY ERROR
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+
+      return () => request.cancel();
+    }
+  }, [state.username.checkCount]);
+
   return (
     <Page title="Upload Song">
       <div className="max-w-3xl mx-auto py-5">
@@ -99,7 +125,7 @@ function UploadSong() {
                   Upload Song <span className="text-red-600">*</span>
                 </label>
                 <input
-                  onChange={handleGetUserAudio}
+                  onChange={getAudioFileURL}
                   name="file"
                   placeholder="Upload an image"
                   className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
