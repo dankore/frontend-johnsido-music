@@ -103,7 +103,6 @@ function UploadSong() {
             { username: state.username.value },
             { cancelToken: request.token }
           );
-          console.log(response.data);
           uploadSongDispatch({ type: 'isRegisteredUser', value: response.data });
         } catch (error) {
           console.log(error);
@@ -153,12 +152,17 @@ function UploadSong() {
         <p className="text-xl font-semibold text-center leading-tight mb-8 mt-3">Upload New Song</p>
 
         {/* POP UP: DISPLAY SOME USER DETAILS */}
-        {state.username.userDetailsFromDB.display && (
-          <div className="w-full flex items-center justify-between absolute -mt-32 text-white bg-gray-600 transition ease-out p-2">
+        <CSSTransition
+          in={state.username.userDetailsFromDB.display}
+          timeout={330}
+          classNames="liveValidateMessage"
+          unmountOnExit
+        >
+          <div className="w-full flex items-center justify-between absolute text-sm md:text-base -mt-24 text-white bg-gray-600 transition ease-out p-2">
             {/* IMAGE */}
             <div className="flex items-center">
               <img
-                className="rounded-full w-24 h-24"
+                className="rounded-full w-16 h:16 md:w-24 md:h-24"
                 src={state.username.userDetailsFromDB.value.avatar}
               />
               <div>
@@ -166,17 +170,21 @@ function UploadSong() {
                   {state.username.userDetailsFromDB.value.firstName}{' '}
                   {state.username.userDetailsFromDB.value.lastName}
                 </p>
-                <span className="normal-case ml-4">
-                  {state.username.userDetailsFromDB.value.about.musicCategory}
-                </span>
-                <span className="normal-case ml-4">
-                  {state.username.userDetailsFromDB.value.about.city}
-                </span>
+                {state.username.userDetailsFromDB.value.about && (
+                  <>
+                    <span className="normal-case ml-4">
+                      {state.username.userDetailsFromDB.value.about.musicCategory}
+                    </span>
+                    <span className="normal-case ml-4">
+                      {state.username.userDetailsFromDB.value.about.city}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
             {/* SVG */}
             <div className="ml-4">
-              <div className="flex justify-center w-full">
+              <div className="flex justify-center items-center w-full">
                 <svg
                   className="w-12"
                   xmlns="http://www.w3.org/2000/svg"
@@ -196,7 +204,7 @@ function UploadSong() {
               <p className="text-center leading-tight mb-8 mt-3">Upload New Song</p>
             </div>
           </div>
-        )}
+        </CSSTransition>
 
         <form onSubmit={initiateFormSubmission} className="relative c-shadow bg-white p-3">
           {/* ERROR */}
