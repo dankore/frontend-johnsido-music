@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useImmerReducer } from 'use-immer';
 import Page from '../layouts/Page';
 import { getAudioFileURL } from '../../helpers/JSHelpers';
 import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
 import { CSSTransition } from 'react-transition-group';
 import Axios from 'axios';
+import StateContext from '../../contextsProviders/StateContext';
 
 function UploadSong() {
+  const appState = useContext(StateContext);
   const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: -0.2 + 'rem' };
   const initialState = {
     username: {
@@ -31,6 +33,14 @@ function UploadSong() {
         message: '',
       },
     },
+    audio: {
+      value: '',
+      errors: {
+        hasErrors: false,
+        errorMsg: '',
+      },
+    },
+    submitCount: 0,
   };
 
   function uploadSongReducer(draft, action) {
@@ -40,6 +50,12 @@ function UploadSong() {
         draft.username.userDetailsFromDB.error = false;
         draft.username.userDetailsFromDB.display = false;
         draft.username.value = action.value;
+
+        if (draft.username.value == '') {
+          draft.username.errors.hasErrors = true;
+          draft.username.errors.errorMsg = 'Username field is empty.';
+        }
+
         return;
       case 'isRegisteredUser':
         draft.username.userDetailsFromDB.error = false;
@@ -58,7 +74,7 @@ function UploadSong() {
       case 'usernameAfterDelay':
         draft.username.checkCount++;
         return;
-      case 'titleImmediately':
+      case 'songTitleImmediately':
         draft.songTitle.errors.hasErrors = false;
         draft.songTitle.value = action.value;
 
@@ -76,6 +92,24 @@ function UploadSong() {
         if (draft.songTitle.value.length < 3) {
           draft.songTitle.errors.hasErrors = true;
           draft.songTitle.errors.errorMsg = 'Song title cannot be lower than 3 characters.';
+        }
+        return;
+      case 'audioImmediately':
+        draft.audio.errors.hasErrors = false;
+        draft.audio.value = action.value;
+
+        if (draft.audio.value == '') {
+          draft.audio.errors.hasErrors = true;
+          draft.audio.errors.errorMsg = 'Please upload audio.';
+        }
+        return;
+      case 'submitForm':
+        if (
+          !draft.username.errors.hasErrors &&
+          !draft.audio.errors.hasErrors &&
+          !draft.songTitle.errors.hasErrors
+        ) {
+          draft.submitCount++;
         }
         return;
     }
@@ -122,12 +156,53 @@ function UploadSong() {
     }
   }, [state.songTitle.value]);
 
-  function initiateFormSubmission() {
-    uploadSongDispatch({ type: 'songTitleAfterDelay' });
-    // FILE
+  // FORM SUBMISSION PART 1
+  function initiateFormSubmission(e) {
+    e.preventDefault();
+    uploadSongDispatch({ type: 'usernameImmediately', value: state.username.value });
+    uploadSongDispatch({ type: 'songTitleImmediately', value: state.songTitle.value });
+    uploadSongDispatch({ type: 'songTitleAfterDelay', value: state.songTitle.value });
+    uploadSongDispatch({ type: 'audioImmediately', value: state.audio.value });
+    uploadSongDispatch({ type: 'submitForm' });
   }
 
   // SUBMIT: AUTHOR, DATE POSTED,
+
+  // FORM SUBMISSION PART 2
+  useEffect(() => {
+    if (state.submitCount) {
+      const request = Axios.CancelToken.source();
+      let songUrl;
+      console.log('inside send func');
+
+      (async function submitForm() {
+        try {
+          // GET AUDIO URL
+          songUrl = await getAudioFileURL(state.audio.value);
+          console.log({ songUrl });
+          console.log(appState.user.username);
+
+          const response = await Axios.post(
+            `/admin/${appState.user.username}/uploadSong`,
+            {
+              songOwnerUsername: state.username.value,
+              songTitle: state.songTitle.value,
+              datePosted: new Date(),
+              songUrl,
+              token: appState.user.token,
+            },
+            { cancelToken: request.token }
+          );
+
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+
+      return () => request.cancel();
+    }
+  }, [state.submitCount]);
 
   return (
     <Page title="Upload Song">
@@ -232,11 +307,21 @@ function UploadSong() {
                 className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
                 placeholder="Song owner's username"
               />
+              <CSSTransition
+                in={state.username.errors.hasErrors}
+                timeout={330}
+                classNames="liveValidateMessage"
+                unmountOnExit
+              >
+                <div style={CSSTransitionStyleModified} className="liveValidateMessage">
+                  {state.username.errors.errorMsg}
+                </div>
+              </CSSTransition>
             </div>
 
             <fieldset className="border rounded p-2 mb-4">
               <legend className=""></legend>
-              <div className="mb-5">
+              <div className="relative mb-5">
                 <label
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1"
                   htmlFor="nickname"
@@ -244,7 +329,9 @@ function UploadSong() {
                   Upload Song <span className="text-red-600">*</span>
                 </label>
                 <input
-                  onChange={getAudioFileURL}
+                  onChange={e =>
+                    uploadSongDispatch({ type: 'audioImmediately', value: e.target.files[0] })
+                  }
                   name="file"
                   placeholder="Upload an image"
                   className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -252,6 +339,16 @@ function UploadSong() {
                   type="file"
                   accept="audio/*"
                 />
+                <CSSTransition
+                  in={state.audio.errors.hasErrors}
+                  timeout={330}
+                  classNames="liveValidateMessage"
+                  unmountOnExit
+                >
+                  <div style={CSSTransitionStyleModified} className="liveValidateMessage">
+                    {state.audio.errors.errorMsg}
+                  </div>
+                </CSSTransition>
               </div>
               <div className="relative">
                 <label
@@ -262,7 +359,7 @@ function UploadSong() {
                 </label>
                 <input
                   onChange={e =>
-                    uploadSongDispatch({ type: 'titleImmediately', value: e.target.value })
+                    uploadSongDispatch({ type: 'songTitleImmediately', value: e.target.value })
                   }
                   id="song-title"
                   type="text"
@@ -300,7 +397,7 @@ function UploadSong() {
                 >
                   <path d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                 </svg>
-                {'Save Updates'}
+                Save Updates
               </button>
             </div>
           </div>
