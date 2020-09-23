@@ -120,6 +120,7 @@ function RoleAssignment({ history }) {
     (async function getAdminStats() {
       const request = Axios.CancelToken.source();
       roleAssignmentDispatch({ type: 'isFetchingStarts' });
+
       try {
         const response = await Axios.post(
           `/admin-stats/${username}`,

@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { useImmerReducer } from 'use-immer';
 import Page from '../layouts/Page';
-import { getAudioFileURL } from '../../helpers/JSHelpers';
+// import { getAudioFileURL } from '../../helpers/JSHelpers';
 import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
 import { CSSTransition } from 'react-transition-group';
 import Axios from 'axios';
@@ -172,14 +172,14 @@ function UploadSong() {
   useEffect(() => {
     if (state.submitCount) {
       const request = Axios.CancelToken.source();
-      let songUrl;
+      // let songUrl;
       console.log('inside send func');
 
-      (async function submitForm() {
+      (async function uploadSongSubmit() {
         try {
           // GET AUDIO URL
-          songUrl = await getAudioFileURL(state.audio.value);
-          console.log({ songUrl });
+          // songUrl = await getAudioFileURL(state.audio.value);
+          // console.log({ songUrl });
           console.log(appState.user.username);
 
           const response = await Axios.post(
@@ -187,8 +187,8 @@ function UploadSong() {
             {
               songOwnerUsername: state.username.value,
               songTitle: state.songTitle.value,
-              datePosted: new Date(),
-              songUrl,
+              datePosted: '',
+              songUrl: '',
               token: appState.user.token,
             },
             { cancelToken: request.token }

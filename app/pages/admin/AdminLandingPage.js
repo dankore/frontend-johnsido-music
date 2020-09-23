@@ -39,9 +39,9 @@ function AdminLandingPage({ history }) {
 
   useEffect(() => {
     const request = Axios.CancelToken.source();
-    adminDispatch({ type: 'isFetchingStarts' });
-
     (async function getAdminStats() {
+      adminDispatch({ type: 'isFetchingStarts' });
+
       try {
         const response = await Axios.post(
           `/admin-stats/${username}`,
