@@ -7,17 +7,17 @@ module.exports = {
     data.append('upload_preset', 'audio-uploads');
     data.append('resource_type', 'video');
 
-    const res = await fetch(`https://api.cloudinary.com/v1_1/my-nigerian-projects/upload`, {
+    const response = await fetch(`https://api.cloudinary.com/v1_1/my-nigerian-projects/upload`, {
       method: 'POST',
       body: data,
     });
 
-    const audio = await res.json();
+    const audio = await response.json();
 
     if (!audio.error) {
       return audio.secure_url;
     } else {
-      console.log(audio.error.message);
+      return 'Failure';
     }
   },
   timeAgo: function (previous) {

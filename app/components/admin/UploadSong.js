@@ -1,11 +1,12 @@
 import React, { useEffect, useContext } from 'react';
 import { useImmerReducer } from 'use-immer';
 import Page from '../layouts/Page';
-// import { getAudioFileURL } from '../../helpers/JSHelpers';
+import { getAudioFileURL } from '../../helpers/JSHelpers';
 import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
 import { CSSTransition } from 'react-transition-group';
 import Axios from 'axios';
 import StateContext from '../../contextsProviders/StateContext';
+import moment from 'moment-timezone';
 
 function UploadSong() {
   const appState = useContext(StateContext);
@@ -46,9 +47,12 @@ function UploadSong() {
   function uploadSongReducer(draft, action) {
     switch (action.type) {
       case 'usernameImmediately':
-        draft.username.errors.hasErrors = false;
-        draft.username.userDetailsFromDB.error = false;
-        draft.username.userDetailsFromDB.display = false;
+        if (!action.keepDisplayingError) {
+          draft.username.errors.hasErrors = false;
+          draft.username.userDetailsFromDB.error = false;
+          draft.username.userDetailsFromDB.display = false;
+        }
+
         draft.username.value = action.value;
 
         if (draft.username.value == '') {
@@ -107,7 +111,8 @@ function UploadSong() {
         if (
           !draft.username.errors.hasErrors &&
           !draft.audio.errors.hasErrors &&
-          !draft.songTitle.errors.hasErrors
+          !draft.songTitle.errors.hasErrors &&
+          draft.username.userDetailsFromDB.isRegistered
         ) {
           draft.submitCount++;
         }
@@ -159,42 +164,47 @@ function UploadSong() {
   // FORM SUBMISSION PART 1
   function initiateFormSubmission(e) {
     e.preventDefault();
-    uploadSongDispatch({ type: 'usernameImmediately', value: state.username.value });
+    uploadSongDispatch({
+      type: 'usernameImmediately',
+      value: state.username.value,
+      keepDisplayingError: true,
+    });
     uploadSongDispatch({ type: 'songTitleImmediately', value: state.songTitle.value });
     uploadSongDispatch({ type: 'songTitleAfterDelay', value: state.songTitle.value });
     uploadSongDispatch({ type: 'audioImmediately', value: state.audio.value });
     uploadSongDispatch({ type: 'submitForm' });
   }
 
-  // SUBMIT: AUTHOR, DATE POSTED,
-
   // FORM SUBMISSION PART 2
   useEffect(() => {
     if (state.submitCount) {
       const request = Axios.CancelToken.source();
-      // let songUrl;
-      console.log('inside send func');
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const currentTime = moment().tz(timezone).format();
 
       (async function uploadSongSubmit() {
         try {
           // GET AUDIO URL
-          // songUrl = await getAudioFileURL(state.audio.value);
-          // console.log({ songUrl });
-          console.log(appState.user.username);
+          const songUrl = await getAudioFileURL(state.audio.value); // RETURNS URL OR THE WORD 'Failure'
 
-          const response = await Axios.post(
-            `/admin/${appState.user.username}/uploadSong`,
-            {
-              songOwnerUsername: state.username.value,
-              songTitle: state.songTitle.value,
-              datePosted: '',
-              songUrl: '',
-              token: appState.user.token,
-            },
-            { cancelToken: request.token }
-          );
+          if (songUrl != 'Failure') {
+            const response = await Axios.post(
+              `/admin/${appState.user.username}/uploadSong`,
+              {
+                songOwnerUsername: state.username.value,
+                songTitle: state.songTitle.value,
+                datePosted: currentTime,
+                songUrl,
+                token: appState.user.token,
+              },
+              { cancelToken: request.token }
+            );
 
-          console.log(response.data);
+            console.log(response.data);
+          } else {
+            // AUDIO UPLOAD FAILRE
+            console.log({ songUrl });
+          }
         } catch (error) {
           console.log(error);
         }

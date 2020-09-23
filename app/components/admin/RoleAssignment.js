@@ -245,8 +245,8 @@ function RoleAssignment({ history }) {
       (async function adminUserSearch() {
         try {
           const response = await Axios.post(
-            `/admin/${appState.user.username}/${state.search.text}`,
-            { token: appState.user.token },
+            `/admin/${appState.user.username}/search`,
+            { searchText: state.search.text, token: appState.user.token },
             { cancelToken: request.token }
           );
 
