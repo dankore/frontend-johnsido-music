@@ -47,7 +47,7 @@ function UploadSong() {
   function uploadSongReducer(draft, action) {
     switch (action.type) {
       case 'usernameImmediately':
-        if (!action.keepDisplayingError) {
+        if (!action.keepError) {
           draft.username.errors.hasErrors = false;
           draft.username.userDetailsFromDB.error = false;
           draft.username.userDetailsFromDB.display = false;
@@ -167,7 +167,7 @@ function UploadSong() {
     uploadSongDispatch({
       type: 'usernameImmediately',
       value: state.username.value,
-      keepDisplayingError: true,
+      keepError: true,
     });
     uploadSongDispatch({ type: 'songTitleImmediately', value: state.songTitle.value });
     uploadSongDispatch({ type: 'songTitleAfterDelay', value: state.songTitle.value });
