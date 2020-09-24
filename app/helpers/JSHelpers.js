@@ -1,4 +1,25 @@
 module.exports = {
+  // UPLOAD SONG
+  getAudioFileURL: async function (file) {
+    const data = new FormData();
+    data.append('file', file);
+
+    data.append('upload_preset', 'audio-uploads');
+    data.append('resource_type', 'video');
+
+    const response = await fetch(`https://api.cloudinary.com/v1_1/my-nigerian-projects/upload`, {
+      method: 'POST',
+      body: data,
+    });
+
+    const audio = await response.json();
+
+    if (!audio.error) {
+      return audio.secure_url;
+    } else {
+      return 'Failure';
+    }
+  },
   timeAgo: function (previous) {
     const msPerMinute = 60 * 1000;
     const msPerHour = msPerMinute * 60;
