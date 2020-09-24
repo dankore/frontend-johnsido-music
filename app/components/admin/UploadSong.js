@@ -213,8 +213,8 @@ function UploadSong() {
       (async function uploadSongSubmit() {
         try {
           // GET AUDIO URL
-          const songUrl =
-            'https://res.cloudinary.com/my-nigerian-projects/video/upload/v1600907663/audio/g2k6ydj5lmkakuyohvgw.mp3'; //await getAudioFileURL(state.audio.value); // RETURNS URL OR THE WORD 'Failure'
+          const songUrl = //wait getAudioFileURL(state.audio.value);
+            'https://res.cloudinary.com/my-nigerian-projects/video/upload/v1600907663/audio/g2k6ydj5lmkakuyohvgw.mp3'; // RETURNS URL OR THE WORD 'Failure'
 
           if (songUrl != 'Failure') {
             const response = await Axios.post(
@@ -232,12 +232,22 @@ function UploadSong() {
             uploadSongDispatch({ type: 'isSaving' });
 
             console.log(response.data);
-            uploadSongDispatch({ type: 'songSuccessfullyUploaded', value: response.data });
+
+            if (response.data.status == 'Success') {
+              uploadSongDispatch({
+                type: 'songSuccessfullyUploaded',
+                value: response.data.songDetails,
+              });
+            } else {
+              // DATA WAS NOT SAVED IN DB DUE TO ERRORS E.G VALIDATION
+              console.log(response.data);
+            }
           } else {
             // AUDIO UPLOAD FAILRE
             console.log({ songUrl });
           }
         } catch (error) {
+          uploadSongDispatch({ type: 'isSaving' });
           console.log(error);
         }
       })();
@@ -462,7 +472,7 @@ function UploadSong() {
         </div>
       )}
       {state.songSuccessfullyUploaded.display && (
-        <div className="c-shadow bg-white max-w-lg mx-auto">
+        <div className="c-shadow bg-white max-w-lg mx-auto mt-12">
           <h3 className="text-xl pt-5 px-3">
             Congratulations! {state.username.userDetailsFromDB.value.firstName}{' '}
             {state.username.userDetailsFromDB.value.lastName}&apos;s song,{' '}
@@ -472,11 +482,11 @@ function UploadSong() {
             , was uploaded successfully.
           </h3>
 
-          <div className="flex items-center justify-between bg-gray-100 w-full mt-12 p-3">
+          <div className="flex items-center justify-between bg-gray-200 w-full mt-12 p-3">
             <button onClick={handleUploadAnotherSong} className="px-2 py-1 bg-blue-600 text-white">
               Upload another song
             </button>
-            <div className="flex items-center">
+            <div className="flex items-center hover:text-blue-600">
               <i className="fas fa-headphones-alt mr-2"></i>
               <Link className="block" to={`/songs/${state.songSuccessfullyUploaded.song._id}`}>
                 Listen here...
