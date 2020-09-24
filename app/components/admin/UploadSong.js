@@ -474,7 +474,7 @@ function UploadSong() {
       {state.songSuccessfullyUploaded.display && (
         <div className="c-shadow max-w-lg bg-white my-12 mx-auto">
           <div className="p-3">
-            <h3 className="text-xl pt-5 ">Congratulations!</h3>
+            <h3 className="text-xl pt-3 mb-5">Congratulations!</h3>
             <p>
               {state.username.userDetailsFromDB.value.firstName}{' '}
               {state.username.userDetailsFromDB.value.lastName}&apos;s song,{' '}
