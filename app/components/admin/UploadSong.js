@@ -213,8 +213,8 @@ function UploadSong() {
       (async function uploadSongSubmit() {
         try {
           // GET AUDIO URL
-          const songUrl = //wait getAudioFileURL(state.audio.value);
-            'https://res.cloudinary.com/my-nigerian-projects/video/upload/v1600907663/audio/g2k6ydj5lmkakuyohvgw.mp3'; // RETURNS URL OR THE WORD 'Failure'
+          const songUrl =
+            'https://res.cloudinary.com/my-nigerian-projects/video/upload/v1600933936/audio/kcklmu2umeuw4luxz3nx.mp3'; //wait getAudioFileURL(state.audio.value); // RETURNS URL OR THE WORD 'Failure'
 
           if (songUrl != 'Failure') {
             const response = await Axios.post(
@@ -472,15 +472,18 @@ function UploadSong() {
         </div>
       )}
       {state.songSuccessfullyUploaded.display && (
-        <div className="c-shadow bg-white max-w-lg mx-auto mt-12">
-          <h3 className="text-xl pt-5 px-3">
-            Congratulations! {state.username.userDetailsFromDB.value.firstName}{' '}
-            {state.username.userDetailsFromDB.value.lastName}&apos;s song,{' '}
-            <em className="underline text-blue-600">
-              {state.songSuccessfullyUploaded.song.songTitle}
-            </em>
-            , was uploaded successfully.
-          </h3>
+        <div className="c-shadow max-w-lg bg-white my-12 mx-auto">
+          <div className="p-3">
+            <h3 className="text-xl pt-5 ">Congratulations!</h3>
+            <p>
+              {state.username.userDetailsFromDB.value.firstName}{' '}
+              {state.username.userDetailsFromDB.value.lastName}&apos;s song,{' '}
+              <em className="underline text-blue-600">
+                {state.songSuccessfullyUploaded.song.songTitle}
+              </em>
+              , was uploaded successfully.
+            </p>
+          </div>
 
           <div className="flex items-center justify-between bg-gray-200 w-full mt-12 p-3">
             <button onClick={handleUploadAnotherSong} className="px-2 py-1 bg-blue-600 text-white">

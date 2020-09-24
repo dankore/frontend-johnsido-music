@@ -37,6 +37,7 @@ function AdminLandingPage({ history }) {
 
   const [state, adminDispatch] = useImmerReducer(adminReducer, initialState);
 
+  // FETCH ADMIN STARTS
   useEffect(() => {
     const request = Axios.CancelToken.source();
     (async function getAdminStats() {
@@ -90,9 +91,6 @@ function AdminLandingPage({ history }) {
                 onClick={() => appDispatch({ type: 'toggleAdminLandingPageMenu' })}
                 className=" focus:outline-none"
               >
-                <span className="pr-2">
-                  <i className="em em-robot_face"></i>
-                </span>
                 {appState.user.firstName}
                 <svg
                   className="h-3 fill-current inline"
