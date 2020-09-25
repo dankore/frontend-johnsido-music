@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { useImmerReducer } from 'use-immer';
 import Page from '../layouts/Page';
-// import { getAudioFileURL } from '../../helpers/JSHelpers';
+import { getAudioFileURL } from '../../helpers/JSHelpers';
 import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
 import { CSSTransition } from 'react-transition-group';
 import Axios from 'axios';
@@ -213,8 +213,7 @@ function UploadSong() {
       (async function uploadSongSubmit() {
         try {
           // GET AUDIO URL
-          const songUrl =
-            'https://res.cloudinary.com/my-nigerian-projects/video/upload/v1600933936/audio/kcklmu2umeuw4luxz3nx.mp3'; //wait getAudioFileURL(state.audio.value); // RETURNS URL OR THE WORD 'Failure'
+          const songUrl = await getAudioFileURL(state.audio.value); // RETURNS URL OR THE WORD 'Failure'
 
           if (songUrl != 'Failure') {
             const response = await Axios.post(
@@ -445,7 +444,7 @@ function UploadSong() {
                 <button
                   disabled={state.isSaving}
                   type="submit"
-                  className="relative inline-flex items-center justify-center px-4 py-2 w-32 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
+                  className="relative inline-flex items-center justify-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
                 >
                   <svg
                     className="h-5 w-5 text-blue-300 mr-1 transition ease-in-out duration-150"
