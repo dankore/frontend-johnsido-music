@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function Container(props) {
-  return <div className="bg-white">{props.children}</div>;
+  return <div className="">{props.children}</div>;
 }
 
 Container.propTypes = {
