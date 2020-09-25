@@ -230,8 +230,6 @@ function UploadSong() {
 
             uploadSongDispatch({ type: 'isSaving' });
 
-            console.log(response.data);
-
             if (response.data.status == 'Success') {
               uploadSongDispatch({
                 type: 'songSuccessfullyUploaded',
@@ -284,6 +282,13 @@ function UploadSong() {
           <p className="text-xl font-semibold text-center leading-tight mb-8 mt-3">
             Upload New Song
           </p>
+
+          {/* <video controls>
+            <source
+              src="https://res.cloudinary.com/my-nigerian-projects/video/upload/v1601025917/audio/xq4i80xg6xgaswlmdvxs.mov"
+              type="video/mp4"
+            />
+          </video> */}
 
           {/* POP UP: DISPLAY SOME USER DETAILS */}
           <CSSTransition
