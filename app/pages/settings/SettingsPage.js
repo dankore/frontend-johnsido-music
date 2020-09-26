@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import Page from '../../components/layouts/Page';
-import { Route, Switch, NavLink, Redirect, Link } from 'react-router-dom';
+import { Route, Switch, NavLink, Redirect, Link, withRouter } from 'react-router-dom';
 import ProfileInfoSettings from '../../components/settings/UpdateProfileInfo';
 import ChangePassword from '../../components/settings/ChangePassword';
 import DeleteAccount from '../../components/settings/DeleteAccount';
@@ -152,4 +152,4 @@ SettingsPage.propTypes = {
   history: PropTypes.object,
 };
 
-export default SettingsPage;
+export default withRouter(SettingsPage);
