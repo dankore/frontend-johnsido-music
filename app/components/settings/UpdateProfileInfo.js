@@ -173,7 +173,10 @@ function ProfileInfoSettings({ history }) {
           !draft.username.hasError &&
           !draft.firstName.hasError &&
           !draft.lastName.hasError &&
-          !draft.email.hasError
+          !draft.email.hasError &&
+          !draft.city.hasError &&
+          !draft.bio.hasError &&
+          !draft.musicCategory.hasError
         ) {
           draft.submitCount++;
         }
@@ -239,7 +242,7 @@ function ProfileInfoSettings({ history }) {
     profileInfoDispatch({ type: 'lastNameImmediately', value: state.lastName.value });
     profileInfoDispatch({ type: 'usernameImmediately', value: state.username.value });
     profileInfoDispatch({ type: 'emailImmediately', value: state.email.value });
-    profileInfoDispatch({ type: 'emailAfterDelay', value: state.email.value });
+    profileInfoDispatch({ type: 'emailImmediately', value: state.email.value });
 
     profileInfoDispatch({ type: 'submitForm' });
   }
