@@ -12,6 +12,9 @@ function ReuseableModal({ user, type, headerTitle, btnText, handleToggle, handle
     if (type == 'upgrade' || type == 'downgrade') {
       return type == 'upgrade' ? 'green' : 'indigo';
     }
+    if (type == 'delete') {
+      return 'red';
+    }
   }
 
   function loggedInAdminBtnText() {
@@ -28,6 +31,8 @@ function ReuseableModal({ user, type, headerTitle, btnText, handleToggle, handle
         return <p>Activate your account?</p>;
       case 'inactivate':
         return <p>Deactivate your account?</p>;
+      case 'delete':
+        return <p>Delete your account?</p>;
     }
   }
 
