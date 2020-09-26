@@ -175,7 +175,6 @@ function ChangePassword() {
       <div className="bg-gray-200 font-mono">
         <div className="w-full max-w-2xl p-6 mx-auto">
           <form onSubmit={handleSubmit} className="mt-6">
-            <h2 className="pl-3 text-2xl text-gray-900 mb-4">Change Password</h2>
             <div className="relative w-full lg:w-1/2 px-3 mb-6">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 Current Password

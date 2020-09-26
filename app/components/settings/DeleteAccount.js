@@ -36,9 +36,6 @@ function DeleteAccount({ history }) {
     <Page title="Delete Account">
       <div className="bg-gray-200 font-mono py-10">
         <form onSubmit={handleDelete} className="mt-5">
-          <h2 className="w-full sm:max-w-lg mx-auto text-2xl text-gray-900 mb-4 pl-3 sm:pl-0">
-            Delete Account
-          </h2>
           <div className="w-full sm:max-w-lg mx-auto p-3 bg-white border c-shadow">
             <div>
               <div className="flex items-start">

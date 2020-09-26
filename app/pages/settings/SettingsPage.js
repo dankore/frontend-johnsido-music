@@ -85,7 +85,7 @@ function SettingsPage({ history }) {
             <div className="md:mt-12 md:w-56 md:fixed md:left-0 md:top-0 content-center md:content-start text-left justify-between">
               <ul className="flex flex-row md:flex-col py-0 md:py-3 px-1 md:px-2 text-center md:text-left">
                 <NavLink
-                  activeStyle={{ borderColor: '#3182ce' }}
+                  activeStyle={{ borderColor: '#ed64a6' }}
                   to="/settings/info"
                   className="mr-3 flex-1 block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-pink-500"
                 >
@@ -95,7 +95,7 @@ function SettingsPage({ history }) {
                   </span>
                 </NavLink>
                 <NavLink
-                  activeStyle={{ borderColor: '#ed64a6' }}
+                  activeStyle={{ borderColor: '#3182ce' }}
                   to="/settings/change-password"
                   className="mr-3 flex-1 block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-blue-500"
                 >
@@ -121,12 +121,21 @@ function SettingsPage({ history }) {
           <div className="w-full bg-gray-200">
             <Switch>
               <Route path="/settings/info">
+                <div className="bg-blue-800 px-2 pt-16 pb-4 shadow text-xl text-white">
+                  <h3 className="font-bold pl-2"> Profile Information </h3>
+                </div>
                 <ProfileInfoSettings />
               </Route>
               <Route path="/settings/change-password">
+                <div className="bg-blue-800 px-2 pt-16 pb-4 shadow text-xl text-white">
+                  <h3 className="font-bold pl-2"> Change Password </h3>
+                </div>
                 <ChangePassword />
               </Route>
               <Route path="/settings/delete-account">
+                <div className="bg-blue-800 px-2 pt-16 pb-4 shadow text-xl text-white">
+                  <h3 className="font-bold pl-2"> Delete Account </h3>
+                </div>
                 <DeleteAccount />
               </Route>
               <Route>

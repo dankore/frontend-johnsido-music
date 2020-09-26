@@ -314,7 +314,6 @@ function ProfileInfoSettings({ history }) {
         <div className="container mx-auto">
           <div className="inputs w-full max-w-2xl p-6 mx-auto">
             <form onSubmit={handleSubmit} className="mt-6">
-              <h2 className="pl-3 text-2xl text-gray-900">Profile information</h2>
               <div className="flex flex-wrap items-center justify-between mt-4">
                 <div className="relative w-full md:w-1/2 px-3 mb-6">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
