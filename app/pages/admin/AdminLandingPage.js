@@ -75,7 +75,8 @@ function AdminLandingPage({ history }) {
 
   return (
     <Page title="Admin Landing Page">
-      <nav className="bg-gray-900 fixed w-full flex justify-end z-20 top-0">
+      {/* TOP NAV */}
+      <nav className="bg-gray-900 c-shadow2 fixed w-full flex justify-end z-20 top-0">
         <ul className="flex justify-between items-center text-white w-full md:max-w-xs px-3">
           <li className="md:flex-none ">
             <Link
@@ -131,7 +132,8 @@ function AdminLandingPage({ history }) {
         </ul>
       </nav>
 
-      <div className="flex flex-col md:flex-row bg-gray-900">
+      <div className="flex flex-col c-shadow2 md:flex-row bg-gray-900">
+        {/* <!--Sidebar--> */}
         <div className="bg-gray-900 shadow-lg h-16 fixed bottom-0 md:relative md:h-screen z-10 w-full md:w-56">
           <div className="md:mt-12 md:w-56 md:fixed md:left-0 md:top-0 content-center md:content-start text-left justify-between">
             <ul className="flex flex-row md:flex-col py-0 md:py-3 px-1 md:px-2 text-center md:text-left">
@@ -171,7 +173,7 @@ function AdminLandingPage({ history }) {
         <div className="flex-1 bg-gray-100 mt-10 pb-24 md:pb-5">
           <Switch>
             <Route path="/admin/:username/analytics">
-              <div className="bg-blue-800 px-2 pt-6 pb-4 shadow text-xl text-white">
+              <div className="bg-blue-800 c-shadow px-2 pt-6 pb-4 shadow text-xl text-white">
                 <h3 className="font-bold pl-2">Analytics</h3>
               </div>
               <Analytics
@@ -180,13 +182,13 @@ function AdminLandingPage({ history }) {
               />
             </Route>
             <Route path="/admin/:username/upload-song">
-              <div className="bg-blue-800 px-2 pt-6 pb-4 shadow text-xl text-white">
+              <div className="bg-blue-800 c-shadow px-2 pt-6 pb-4 shadow text-xl text-white">
                 <h3 className="font-bold pl-2">Upload a Song</h3>
               </div>
               <UploadSong />
             </Route>
             <Route path="/admin/:username/role-assignment">
-              <div className="bg-blue-800 px-2 pt-6 pb-4 shadow text-xl text-white">
+              <div className="bg-blue-800 c-shadow px-2 pt-6 pb-4 shadow text-xl text-white">
                 <h3 className="font-bold pl-2"> Role Assignment </h3>
               </div>
               <RoleAssignment />

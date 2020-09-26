@@ -6,6 +6,8 @@ import StateContext from '../../contextsProviders/StateContext';
 import DispatchContext from '../../contextsProviders/DispatchContext';
 import { CSSTransition } from 'react-transition-group';
 import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
+import FlashMsgError from '../../components/shared/FlashMsgError';
+import FlashMsgSuccess from '../../components/shared/FlashMsgSuccess';
 
 function ChangePassword() {
   const appState = useContext(StateContext);
@@ -26,6 +28,7 @@ function ChangePassword() {
       hasError: false,
       message: '',
     },
+    isSaving: false,
     submitCount: 0,
   };
 
@@ -73,6 +76,13 @@ function ChangePassword() {
         if (draft.newPassword.value.length !== draft.reEnteredNewPassword.value.length) {
           draft.reEnteredNewPassword.hasError = true;
           draft.reEnteredNewPassword.message = 'Passwords do not match.';
+        }
+        return;
+      case 'isSaving':
+        if (action.process == 'starts') {
+          draft.isSaving = true;
+        } else {
+          draft.isSaving = false;
         }
         return;
       case 'sendForm':
@@ -134,6 +144,7 @@ function ChangePassword() {
   useEffect(() => {
     if (state.submitCount) {
       const request = Axios.CancelToken.source();
+      changePasswordDispatch({ type: 'isSaving', process: 'starts' });
       appDispatch({ type: 'turnOff' }); // CLOSE FLASH MESSAGING MODAL IF OPENED
       try {
         (async function saveChangedPassword() {
@@ -149,6 +160,9 @@ function ChangePassword() {
               cancelToken: request.token,
             }
           );
+
+          changePasswordDispatch({ type: 'isSaving' });
+
           if (response.data == 'Success') {
             //SUCCESS
             appDispatch({
@@ -174,7 +188,7 @@ function ChangePassword() {
     <Page title="Settings - Profile Info">
       <form
         onSubmit={handleSubmit}
-        className="mt-6 c-shadow bg-white w-full md:max-w-md md:mx-auto p-3"
+        className="mt-12 c-shadow bg-white w-full md:max-w-md md:mx-auto p-3"
       >
         <div className="mb-4 relative">
           <label className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700">
@@ -262,17 +276,7 @@ function ChangePassword() {
             type="submit"
             className="relative inline-flex items-center justify-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
           >
-            <svg
-              className="h-5 w-5 text-blue-300 mr-1 transition ease-in-out duration-150"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-            </svg>
+            <i className="fas fa-exchange-alt mr-3"></i>
             {state.isSaving ? (
               <span>
                 <i className="fa text-sm fa-spinner fa-spin"></i>
@@ -283,6 +287,12 @@ function ChangePassword() {
           </button>
         </div>
       </form>
+      <div className="relative mt-px">
+        {appState.flashMsgErrors.isDisplay && (
+          <FlashMsgError errors={appState.flashMsgErrors.value} />
+        )}
+        {appState.flashMsgSuccess.isDisplay && <FlashMsgSuccess />}
+      </div>
     </Page>
   );
 }

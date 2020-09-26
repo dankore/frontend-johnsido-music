@@ -100,8 +100,6 @@ function Login({ history }) {
     return () => request.cancel();
   }, [state.submitCount]);
 
-  // TO BE CONTINUED!
-
   return (
     <Page title="Login">
       <div className="w-full flex flex-wrap">
