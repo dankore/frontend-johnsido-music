@@ -118,22 +118,22 @@ function SettingsPage({ history }) {
             </div>
           </div>
           {/* CONTENTS */}
-          <div className="w-full bg-gray-200">
+          <div className="flex-1 bg-gray-100 mt-10 pb-24 md:pb-5">
             <Switch>
               <Route path="/settings/info">
-                <div className="bg-blue-800 px-2 pt-16 pb-4 shadow text-xl text-white">
+                <div className="bg-blue-800 px-2 pt-6 pb-4 shadow text-xl text-white">
                   <h3 className="font-bold pl-2"> Profile Information </h3>
                 </div>
                 <ProfileInfoSettings />
               </Route>
               <Route path="/settings/change-password">
-                <div className="bg-blue-800 px-2 pt-16 pb-4 shadow text-xl text-white">
+                <div className="bg-blue-800 px-2 pt-6 pb-4 shadow text-xl text-white">
                   <h3 className="font-bold pl-2"> Change Password </h3>
                 </div>
                 <ChangePassword />
               </Route>
               <Route path="/settings/delete-account">
-                <div className="bg-blue-800 px-2 pt-16 pb-4 shadow text-xl text-white">
+                <div className="bg-blue-800 px-2 pt-6 pb-4 shadow text-xl text-white">
                   <h3 className="font-bold pl-2"> Delete Account </h3>
                 </div>
                 <DeleteAccount />

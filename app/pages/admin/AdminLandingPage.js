@@ -168,7 +168,7 @@ function AdminLandingPage({ history }) {
             </ul>
           </div>
         </div>
-        <div className="main-content flex-1 bg-gray-100 mt-10 pb-24 md:pb-5">
+        <div className="flex-1 bg-gray-100 mt-10 pb-24 md:pb-5">
           <Switch>
             <Route path="/admin/:username/analytics">
               <div className="bg-blue-800 px-2 pt-6 pb-4 shadow text-xl text-white">
