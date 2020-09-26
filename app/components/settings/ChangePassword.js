@@ -6,6 +6,8 @@ import StateContext from '../../contextsProviders/StateContext';
 import DispatchContext from '../../contextsProviders/DispatchContext';
 import { CSSTransition } from 'react-transition-group';
 import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
+import FlashMsgError from '../../components/shared/FlashMsgError';
+import FlashMsgSuccess from '../../components/shared/FlashMsgSuccess';
 
 function ChangePassword() {
   const appState = useContext(StateContext);
@@ -26,6 +28,7 @@ function ChangePassword() {
       hasError: false,
       message: '',
     },
+    isSaving: false,
     submitCount: 0,
   };
 
@@ -73,6 +76,13 @@ function ChangePassword() {
         if (draft.newPassword.value.length !== draft.reEnteredNewPassword.value.length) {
           draft.reEnteredNewPassword.hasError = true;
           draft.reEnteredNewPassword.message = 'Passwords do not match.';
+        }
+        return;
+      case 'isSaving':
+        if (action.process == 'starts') {
+          draft.isSaving = true;
+        } else {
+          draft.isSaving = false;
         }
         return;
       case 'sendForm':
@@ -134,6 +144,7 @@ function ChangePassword() {
   useEffect(() => {
     if (state.submitCount) {
       const request = Axios.CancelToken.source();
+      changePasswordDispatch({ type: 'isSaving', process: 'starts' });
       appDispatch({ type: 'turnOff' }); // CLOSE FLASH MESSAGING MODAL IF OPENED
       try {
         (async function saveChangedPassword() {
@@ -149,6 +160,9 @@ function ChangePassword() {
               cancelToken: request.token,
             }
           );
+
+          changePasswordDispatch({ type: 'isSaving' });
+
           if (response.data == 'Success') {
             //SUCCESS
             appDispatch({
@@ -172,99 +186,112 @@ function ChangePassword() {
 
   return (
     <Page title="Settings - Profile Info">
-      <div className="bg-gray-200 font-mono">
-        <div className="w-full max-w-2xl p-6 mx-auto">
-          <form onSubmit={handleSubmit} className="mt-6">
-            <h2 className="pl-3 text-2xl text-gray-900 mb-4">Change Password</h2>
-            <div className="relative w-full lg:w-1/2 px-3 mb-6">
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                Current Password
-              </label>
-              <input
-                placeholder="Enter current password"
-                value={state.currentPassword.value}
-                onChange={e =>
-                  changePasswordDispatch({
-                    type: 'currentPasswordImmediately',
-                    value: e.target.value,
-                  })
-                }
-                className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
-                type="password"
-              />
-              <CSSTransition
-                in={state.currentPassword.hasError}
-                timeout={330}
-                classNames="liveValidateMessage"
-                unmountOnExit
-              >
-                <div style={CSSTransitionStyle} className="liveValidateMessage">
-                  {state.currentPassword.message}
-                </div>
-              </CSSTransition>
+      <form
+        onSubmit={handleSubmit}
+        className="mt-12 c-shadow bg-white w-full md:max-w-md md:mx-auto p-3"
+      >
+        <div className="mb-4 relative">
+          <label className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700">
+            Current Password
+          </label>
+          <input
+            placeholder="Enter current password"
+            value={state.currentPassword.value}
+            onChange={e =>
+              changePasswordDispatch({
+                type: 'currentPasswordImmediately',
+                value: e.target.value,
+              })
+            }
+            className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+            type="password"
+          />
+          <CSSTransition
+            in={state.currentPassword.hasError}
+            timeout={330}
+            classNames="liveValidateMessage"
+            unmountOnExit
+          >
+            <div style={CSSTransitionStyle} className="liveValidateMessage">
+              {state.currentPassword.message}
             </div>
-            <div className="relative w-full lg:w-1/2 px-3 mb-6">
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                New Password
-              </label>
-              <input
-                placeholder="Enter New Password"
-                value={state.newPassword.value}
-                onChange={e =>
-                  changePasswordDispatch({ type: 'newPasswordImmediately', value: e.target.value })
-                }
-                className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
-                type="password"
-              />
-              <CSSTransition
-                in={state.newPassword.hasError}
-                timeout={330}
-                classNames="liveValidateMessage"
-                unmountOnExit
-              >
-                <div style={CSSTransitionStyle} className="liveValidateMessage">
-                  {state.newPassword.message}
-                </div>
-              </CSSTransition>
-            </div>
-            <div className="relative w-full lg:w-1/2 px-3 mb-6">
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                Re-enter new password
-              </label>
-              <input
-                placeholder="Enter Re-enter new password"
-                value={state.reEnteredNewPassword.value}
-                onChange={e =>
-                  changePasswordDispatch({
-                    type: 'reEnteredNewPasswordImmediately',
-                    value: e.target.value,
-                  })
-                }
-                className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
-                type="password"
-              />
-              <CSSTransition
-                in={state.reEnteredNewPassword.hasError}
-                timeout={330}
-                classNames="liveValidateMessage"
-                unmountOnExit
-              >
-                <div style={CSSTransitionStyle} className="liveValidateMessage">
-                  {state.reEnteredNewPassword.message}
-                </div>
-              </CSSTransition>
-            </div>
-
-            <div className="w-full lg:w-1/2 flex justify-end px-3">
-              <button
-                className="px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md bg-white hover:bg-gray-100 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
-                type="submit"
-              >
-                save changes
-              </button>
-            </div>
-          </form>
+          </CSSTransition>
         </div>
+        <div className="mb-4 relative">
+          <label className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700">
+            New Password
+          </label>
+          <input
+            placeholder="Enter New Password"
+            value={state.newPassword.value}
+            onChange={e =>
+              changePasswordDispatch({ type: 'newPasswordImmediately', value: e.target.value })
+            }
+            className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+            type="password"
+          />
+          <CSSTransition
+            in={state.newPassword.hasError}
+            timeout={330}
+            classNames="liveValidateMessage"
+            unmountOnExit
+          >
+            <div style={CSSTransitionStyle} className="liveValidateMessage">
+              {state.newPassword.message}
+            </div>
+          </CSSTransition>
+        </div>
+        <div className="mb-4 relative">
+          <label className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700">
+            Re-enter new password
+          </label>
+          <input
+            placeholder="Enter Re-enter new password"
+            value={state.reEnteredNewPassword.value}
+            onChange={e =>
+              changePasswordDispatch({
+                type: 'reEnteredNewPasswordImmediately',
+                value: e.target.value,
+              })
+            }
+            className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+            type="password"
+          />
+          <CSSTransition
+            in={state.reEnteredNewPassword.hasError}
+            timeout={330}
+            classNames="liveValidateMessage"
+            unmountOnExit
+          >
+            <div style={CSSTransitionStyle} className="liveValidateMessage">
+              {state.reEnteredNewPassword.message}
+            </div>
+          </CSSTransition>
+        </div>
+
+        {/* SUBMIT BUTTON */}
+        <div className="flex justify-end">
+          <button
+            disabled={state.isSaving}
+            type="submit"
+            className="relative inline-flex items-center justify-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
+          >
+            <i className="fas fa-exchange-alt mr-3"></i>
+            {state.isSaving ? (
+              <span>
+                <i className="fa text-sm fa-spinner fa-spin"></i>
+              </span>
+            ) : (
+              <>Change Password</>
+            )}
+          </button>
+        </div>
+      </form>
+      <div className="relative mt-px">
+        {appState.flashMsgErrors.isDisplay && (
+          <FlashMsgError errors={appState.flashMsgErrors.value} />
+        )}
+        {appState.flashMsgSuccess.isDisplay && <FlashMsgSuccess />}
       </div>
     </Page>
   );

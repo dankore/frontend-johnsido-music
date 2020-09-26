@@ -4,7 +4,11 @@ module.exports = {
     content: ['./app/**/*.js', './app/**/*.jsx'],
   },
   theme: {
-    extend: {},
+    extend: {
+      spacing: {
+        '72': '18.75rem',
+      },
+    },
   },
   variants: {},
   plugins: [],

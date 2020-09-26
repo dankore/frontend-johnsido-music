@@ -9,6 +9,8 @@ import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 import DispatchContext from '../../contextsProviders/DispatchContext';
 import { CSSTransition } from 'react-transition-group';
 import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
+import FlashMsgError from '../../components/shared/FlashMsgError';
+import FlashMsgSuccess from '../../components/shared/FlashMsgSuccess';
 
 function ProfileInfoSettings({ history }) {
   const appState = useContext(StateContext);
@@ -168,6 +170,13 @@ function ProfileInfoSettings({ history }) {
       case 'isFetchingEnds':
         draft.isFetching = false;
         return;
+      case 'isSaving':
+        if (action.process == 'starts') {
+          draft.isSaving = true;
+        } else {
+          draft.isSaving = false;
+        }
+        return;
       case 'submitForm':
         if (
           !draft.username.hasError &&
@@ -251,6 +260,7 @@ function ProfileInfoSettings({ history }) {
   useEffect(() => {
     if (state.submitCount) {
       const request = Axios.CancelToken.source();
+      profileInfoDispatch({ type: 'isSaving', process: 'starts' });
       appDispatch({ type: 'turnOff' }); // CLOSE FLASH MESSAGING MODAL IF OPENED
 
       (async function saveUpdateProfileInfo() {
@@ -273,6 +283,8 @@ function ProfileInfoSettings({ history }) {
               userData,
               token: appState.user.token,
             });
+
+            profileInfoDispatch({ type: 'isSaving' });
 
             if (response.data.token) {
               // SUCCESS
@@ -310,208 +322,218 @@ function ProfileInfoSettings({ history }) {
 
   return (
     <Page title="Settings - Profile Info">
-      <div className="bg-gray-200 font-mono">
-        <div className="container mx-auto">
-          <div className="inputs w-full max-w-2xl p-6 mx-auto">
-            <form onSubmit={handleSubmit} className="mt-6">
-              <h2 className="pl-3 text-2xl text-gray-900">Profile information</h2>
-              <div className="flex flex-wrap items-center justify-between mt-4">
-                <div className="relative w-full md:w-1/2 px-3 mb-6">
-                  <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                    first name
-                  </label>
-                  <input
-                    autoComplete="off"
-                    placeholder="Enter first name"
-                    value={state.firstName.value}
-                    onChange={e =>
-                      profileInfoDispatch({ type: 'firstNameImmediately', value: e.target.value })
-                    }
-                    className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
-                    type="text"
-                  />
-                  <CSSTransition
-                    in={state.firstName.hasError}
-                    timeout={330}
-                    classNames="liveValidateMessage"
-                    unmountOnExit
-                  >
-                    <div style={CSSTransitionStyle} className="liveValidateMessage">
-                      {state.firstName.message}
-                    </div>
-                  </CSSTransition>
+      <div className="mb-20">
+        <form
+          onSubmit={handleSubmit}
+          className="mt-6 c-shadow p-3 bg-white w-full max-w-2xl  mx-auto"
+        >
+          <div className="flex flex-wrap items-center justify-between mt-4">
+            <div className="relative w-full md:w-1/2 px-3 mb-6">
+              <label className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700">
+                first name
+              </label>
+              <input
+                autoComplete="off"
+                placeholder="Enter first name"
+                value={state.firstName.value}
+                onChange={e =>
+                  profileInfoDispatch({ type: 'firstNameImmediately', value: e.target.value })
+                }
+                className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+                type="text"
+              />
+              <CSSTransition
+                in={state.firstName.hasError}
+                timeout={330}
+                classNames="liveValidateMessage"
+                unmountOnExit
+              >
+                <div style={CSSTransitionStyle} className="liveValidateMessage">
+                  {state.firstName.message}
                 </div>
-                <div className="relative w-full md:w-1/2 px-3 mb-6">
-                  <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                    last name
-                  </label>
-                  <input
-                    autoComplete="off"
-                    placeholder="Enter last name"
-                    value={state.lastName.value}
-                    onChange={e =>
-                      profileInfoDispatch({ type: 'lastNameImmediately', value: e.target.value })
-                    }
-                    className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
-                    type="text"
-                  />
-                  <CSSTransition
-                    in={state.lastName.hasError}
-                    timeout={330}
-                    classNames="liveValidateMessage"
-                    unmountOnExit
-                  >
-                    <div style={CSSTransitionStyle} className="liveValidateMessage">
-                      {state.lastName.message}
-                    </div>
-                  </CSSTransition>
+              </CSSTransition>
+            </div>
+            <div className="relative w-full md:w-1/2 px-3 mb-6">
+              <label className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700">
+                last name
+              </label>
+              <input
+                autoComplete="off"
+                placeholder="Enter last name"
+                value={state.lastName.value}
+                onChange={e =>
+                  profileInfoDispatch({ type: 'lastNameImmediately', value: e.target.value })
+                }
+                className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+                type="text"
+              />
+              <CSSTransition
+                in={state.lastName.hasError}
+                timeout={330}
+                classNames="liveValidateMessage"
+                unmountOnExit
+              >
+                <div style={CSSTransitionStyle} className="liveValidateMessage">
+                  {state.lastName.message}
                 </div>
-              </div>
-
-              <div className="flex flex-wrap items-center justify-between mb-6">
-                <div className="relative w-full md:w-1/2 px-3 mb-6">
-                  <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                    username
-                  </label>
-                  <input
-                    autoComplete="off"
-                    placeholder="Enter username"
-                    value={state.username.value}
-                    onChange={e =>
-                      profileInfoDispatch({ type: 'usernameImmediately', value: e.target.value })
-                    }
-                    className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
-                    type="text"
-                  />
-                  <CSSTransition
-                    in={state.username.hasError}
-                    timeout={330}
-                    classNames="liveValidateMessage"
-                    unmountOnExit
-                  >
-                    <div style={CSSTransitionStyle} className="liveValidateMessage">
-                      {state.username.message}
-                    </div>
-                  </CSSTransition>
-                </div>
-                <div className="relative w-full md:w-1/2 px-3 mb-6">
-                  <label
-                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-text-1"
-                  >
-                    email address
-                  </label>
-                  <input
-                    autoComplete="off"
-                    placeholder="Enter email"
-                    value={state.email.value}
-                    onChange={e =>
-                      profileInfoDispatch({ type: 'emailImmediately', value: e.target.value })
-                    }
-                    className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
-                    id="grid-text-1"
-                    type="text"
-                  />
-                  <CSSTransition
-                    in={state.email.hasError}
-                    timeout={330}
-                    classNames="liveValidateMessage"
-                    unmountOnExit
-                  >
-                    <div style={CSSTransitionStyle} className="liveValidateMessage">
-                      {state.email.message}
-                    </div>
-                  </CSSTransition>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center justify-between mb-6">
-                <div className="relative w-full md:w-1/2 px-3 mb-6">
-                  <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                    City of Residence
-                  </label>
-                  <input
-                    autoComplete="off"
-                    placeholder="Enter city/town"
-                    value={state.city.value}
-                    onChange={e =>
-                      profileInfoDispatch({ type: 'cityImmediately', value: e.target.value })
-                    }
-                    className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
-                    type="text"
-                  />
-                  <CSSTransition
-                    in={state.city.hasError}
-                    timeout={330}
-                    classNames="liveValidateMessage"
-                    unmountOnExit
-                  >
-                    <div style={CSSTransitionStyle} className="liveValidateMessage">
-                      {state.city.message}
-                    </div>
-                  </CSSTransition>
-                </div>
-                <div className="relative w-full md:w-1/2 px-3 mb-6">
-                  <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                    Music Genre
-                  </label>
-                  <input
-                    autoComplete="off"
-                    placeholder="E.g Gospel"
-                    value={state.musicCategory.value}
-                    onChange={e =>
-                      profileInfoDispatch({ type: 'musicImmediately', value: e.target.value })
-                    }
-                    className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
-                    type="text"
-                  />
-                  <CSSTransition
-                    in={state.musicCategory.hasError}
-                    timeout={330}
-                    classNames="liveValidateMessage"
-                    unmountOnExit
-                  >
-                    <div style={CSSTransitionStyle} className="liveValidateMessage">
-                      {state.musicCategory.message}
-                    </div>
-                  </CSSTransition>
-                </div>
-              </div>
-
-              <div className="relative w-full px-3 mb-6">
-                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                  Bio
-                </label>
-                <textarea
-                  placeholder="About you"
-                  value={state.bio.value}
-                  rows="5"
-                  onChange={e =>
-                    profileInfoDispatch({ type: 'bioImmediately', value: e.target.value })
-                  }
-                  className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 shadow-inner rounded-md py-3 px-4 leading-tight focus:outline-none  focus:border-gray-500"
-                ></textarea>
-                <CSSTransition
-                  in={state.bio.hasError}
-                  timeout={330}
-                  classNames="liveValidateMessage"
-                  unmountOnExit
-                >
-                  <div style={CSSTransitionStyle} className="liveValidateMessage">
-                    {state.bio.message}
-                  </div>
-                </CSSTransition>
-              </div>
-              <div className="flex justify-end">
-                <button
-                  className="px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md bg-white hover:bg-gray-100 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
-                  type="submit"
-                >
-                  save changes
-                </button>
-              </div>
-            </form>
+              </CSSTransition>
+            </div>
           </div>
+
+          <div className="flex flex-wrap items-center justify-between mb-6">
+            <div className="relative w-full md:w-1/2 px-3 mb-6">
+              <label className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700">
+                username
+              </label>
+              <input
+                autoComplete="off"
+                placeholder="Enter username"
+                value={state.username.value}
+                onChange={e =>
+                  profileInfoDispatch({ type: 'usernameImmediately', value: e.target.value })
+                }
+                className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+                type="text"
+              />
+              <CSSTransition
+                in={state.username.hasError}
+                timeout={330}
+                classNames="liveValidateMessage"
+                unmountOnExit
+              >
+                <div style={CSSTransitionStyle} className="liveValidateMessage">
+                  {state.username.message}
+                </div>
+              </CSSTransition>
+            </div>
+            <div className="relative w-full md:w-1/2 px-3 mb-6">
+              <label
+                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                htmlFor="grid-text-1"
+              >
+                email address
+              </label>
+              <input
+                autoComplete="off"
+                placeholder="Enter email"
+                value={state.email.value}
+                onChange={e =>
+                  profileInfoDispatch({ type: 'emailImmediately', value: e.target.value })
+                }
+                className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+                id="grid-text-1"
+                type="text"
+              />
+              <CSSTransition
+                in={state.email.hasError}
+                timeout={330}
+                classNames="liveValidateMessage"
+                unmountOnExit
+              >
+                <div style={CSSTransitionStyle} className="liveValidateMessage">
+                  {state.email.message}
+                </div>
+              </CSSTransition>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-between mb-6">
+            <div className="relative w-full md:w-1/2 px-3 mb-6">
+              <label className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700">
+                City of Residence
+              </label>
+              <input
+                autoComplete="off"
+                placeholder="Enter city/town"
+                value={state.city.value}
+                onChange={e =>
+                  profileInfoDispatch({ type: 'cityImmediately', value: e.target.value })
+                }
+                className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+                type="text"
+              />
+              <CSSTransition
+                in={state.city.hasError}
+                timeout={330}
+                classNames="liveValidateMessage"
+                unmountOnExit
+              >
+                <div style={CSSTransitionStyle} className="liveValidateMessage">
+                  {state.city.message}
+                </div>
+              </CSSTransition>
+            </div>
+            <div className="relative w-full md:w-1/2 px-3 mb-6">
+              <label className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700">
+                Music Genre
+              </label>
+              <input
+                autoComplete="off"
+                placeholder="E.g Gospel"
+                value={state.musicCategory.value}
+                onChange={e =>
+                  profileInfoDispatch({ type: 'musicImmediately', value: e.target.value })
+                }
+                className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+                type="text"
+              />
+              <CSSTransition
+                in={state.musicCategory.hasError}
+                timeout={330}
+                classNames="liveValidateMessage"
+                unmountOnExit
+              >
+                <div style={CSSTransitionStyle} className="liveValidateMessage">
+                  {state.musicCategory.message}
+                </div>
+              </CSSTransition>
+            </div>
+          </div>
+
+          <div className="relative w-full px-3 mb-6">
+            <label className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700">
+              Bio
+            </label>
+            <textarea
+              placeholder="About you"
+              value={state.bio.value}
+              rows="5"
+              onChange={e => profileInfoDispatch({ type: 'bioImmediately', value: e.target.value })}
+              className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+            ></textarea>
+            <CSSTransition
+              in={state.bio.hasError}
+              timeout={330}
+              classNames="liveValidateMessage"
+              unmountOnExit
+            >
+              <div style={CSSTransitionStyle} className="liveValidateMessage">
+                {state.bio.message}
+              </div>
+            </CSSTransition>
+          </div>
+          <div className="flex justify-end">
+            <button
+              disabled={state.isSaving}
+              type="submit"
+              className="relative inline-flex items-center justify-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
+            >
+              <i className="fas fa-exchange-alt mr-3"></i>
+              {state.isSaving ? (
+                <span>
+                  <i className="fa text-sm fa-spinner fa-spin"></i>
+                </span>
+              ) : (
+                <>Save Changes</>
+              )}
+            </button>
+          </div>
+        </form>
+        <div className="relative mt-px">
+          {appState.flashMsgErrors.isDisplay && (
+            <FlashMsgError errors={appState.flashMsgErrors.value} />
+          )}
+          {appState.flashMsgSuccess.isDisplay && <FlashMsgSuccess />}
         </div>
       </div>
     </Page>

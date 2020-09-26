@@ -34,34 +34,27 @@ function DeleteAccount({ history }) {
 
   return (
     <Page title="Delete Account">
-      <div className="bg-gray-200 font-mono py-10">
-        <form onSubmit={handleDelete} className="mt-5">
-          <h2 className="w-full sm:max-w-lg mx-auto text-2xl text-gray-900 mb-4 pl-3 sm:pl-0">
-            Delete Account
-          </h2>
-          <div className="w-full sm:max-w-lg mx-auto p-3 bg-white border border-red-600">
+      <form onSubmit={handleDelete} className="mt-24">
+        <div className="w-full sm:max-w-lg mx-auto bg-white border c-shadow">
+          <h3 className="p-3 text-2xl">Are you sure?</h3>
+          <div className="flex items-start p-3">
             <div>
-              <div className="flex items-start">
-                <div>
-                  <p className="mt-3 text-sm leading-5 text-gray-700">
-                    Are you sure you want to delete your account? All of your data will be
-                    permanently removed e.g people you followed, people following you, comments and
-                    more. This action cannot be undone.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-end">
-              <button
-                className="px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md bg-red-600 text-white hover:bg-red-800 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
-                type="submit"
-              >
-                Delete
-              </button>
+              <p className="text-sm leading-5 text-gray-700">
+                All of your data will be permanently removed e.g people you followed, people
+                following you, comments and more. This action cannot be undone.
+              </p>
             </div>
           </div>
-        </form>
-      </div>
+          <div className="flex justify-end mt-5 bg-gray-200 px-3 py-2">
+            <button
+              className="px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md bg-red-600 text-white hover:bg-red-800 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
+              type="submit"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </form>
     </Page>
   );
 }
