@@ -50,7 +50,7 @@ function DeleteAccount({ history }) {
               className="px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md bg-red-600 text-white hover:bg-red-800 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
               type="submit"
             >
-              Delete
+              Delete my Account
             </button>
           </div>
         </div>
