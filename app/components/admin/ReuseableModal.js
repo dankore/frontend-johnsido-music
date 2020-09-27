@@ -2,7 +2,16 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import StateContext from '../../contextsProviders/StateContext';
 
-function ReuseableModal({ user, type, headerTitle, btnText, handleToggle, handleSubmit, loading }) {
+function ReuseableModal({
+  user,
+  type,
+  headerTitle,
+  btnText,
+  handleToggle,
+  handleSubmit,
+  loading,
+  commentId,
+}) {
   const appState = useContext(StateContext);
 
   function themeColor() {
@@ -11,6 +20,9 @@ function ReuseableModal({ user, type, headerTitle, btnText, handleToggle, handle
     }
     if (type == 'upgrade' || type == 'downgrade') {
       return type == 'upgrade' ? 'green' : 'indigo';
+    }
+    if (type == 'delete' || type == 'delete-comment') {
+      return 'red';
     }
   }
 
@@ -28,6 +40,10 @@ function ReuseableModal({ user, type, headerTitle, btnText, handleToggle, handle
         return <p>Activate your account?</p>;
       case 'inactivate':
         return <p>Deactivate your account?</p>;
+      case 'delete':
+        return <p>Delete your account?</p>;
+      case 'delete-comment':
+        return <p>Delete comment?</p>;
     }
   }
 
@@ -78,6 +94,7 @@ function ReuseableModal({ user, type, headerTitle, btnText, handleToggle, handle
                 onClick={handleSubmit}
                 data-userid={user._id}
                 data-username={user.username}
+                data-commentid={commentId}
                 data-type={type}
                 type="button"
                 className={`inline-flex items-center justify-center w-full rounded-md border border-transparent px-4 py-2 bg-${themeColor()}-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-${themeColor()}-500 focus:outline-none focus:border-${themeColor()}-700 focus:shadow-outline-${themeColor()} transition ease-in-out duration-150 sm:text-sm sm:leading-5`}
@@ -115,6 +132,7 @@ ReuseableModal.propTypes = {
   handleSubmit: PropTypes.func,
   user: PropTypes.object,
   loading: PropTypes.bool,
+  commentId: PropTypes.string,
 };
 
 export default ReuseableModal;

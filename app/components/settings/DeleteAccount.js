@@ -1,32 +1,38 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Page from '../layouts/Page';
 import Axios from 'axios';
 import StateContext from '../../contextsProviders/StateContext';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import DispatchContext from '../../contextsProviders/DispatchContext';
+import ReuseableModal from '../admin/ReuseableModal';
 
 function DeleteAccount({ history }) {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-  async function handleDelete(e) {
-    e.preventDefault();
-    const areYouSure = window.confirm('Are you sure?');
+  function toggleModal() {
+    setIsOpen(prev => (prev = !prev));
+  }
 
+  async function handleDelete() {
     try {
-      if (areYouSure) {
-        await Axios.post('/delete-account', { token: appState.user.token });
+      setIsDeleting(true);
 
-        appDispatch({ type: 'logout' }); // REMOVES LOCAL STORAGE OBJECTS
+      await Axios.post('/delete-account', { token: appState.user.token });
 
-        history.push('/');
+      setIsDeleting(false);
 
-        appDispatch({
-          type: 'flashMsgSuccess',
-          value: ['Account deletion success. We are sorry to see you go. Please come back again.'],
-        });
-      }
+      appDispatch({ type: 'logout' }); // REMOVES LOCAL STORAGE OBJECTS
+
+      history.push('/');
+
+      appDispatch({
+        type: 'flashMsgSuccess',
+        value: ['Account deletion success. We are sorry to see you go. Please come back again.'],
+      });
     } catch (error) {
       console.log(error);
     }
@@ -34,7 +40,7 @@ function DeleteAccount({ history }) {
 
   return (
     <Page title="Delete Account">
-      <form onSubmit={handleDelete} className="mt-24">
+      <div className="mt-24">
         <div className="w-full sm:max-w-lg mx-auto bg-white border c-shadow">
           <h3 className="p-3 text-2xl">Are you sure?</h3>
           <div className="flex items-start p-3">
@@ -47,6 +53,7 @@ function DeleteAccount({ history }) {
           </div>
           <div className="flex justify-end mt-5 bg-gray-200 px-3 py-2">
             <button
+              onClick={toggleModal}
               className="px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md bg-red-600 text-white hover:bg-red-800 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
               type="submit"
             >
@@ -54,7 +61,17 @@ function DeleteAccount({ history }) {
             </button>
           </div>
         </div>
-      </form>
+      </div>
+      {isOpen && (
+        <ReuseableModal
+          user={appState.user}
+          type="delete"
+          btnText="Yes, Delete my Account"
+          handleToggle={toggleModal}
+          handleSubmit={handleDelete}
+          loading={isDeleting}
+        />
+      )}
     </Page>
   );
 }
