@@ -10,6 +10,7 @@ import { timeAgo } from '../../helpers/JSHelpers';
 import StateContext from '../../contextsProviders/StateContext';
 import PropTypes from 'prop-types';
 import DispatchContext from '../../contextsProviders/DispatchContext';
+import ReuseableModal from '../admin/ReuseableModal';
 
 function Comments({ history }) {
   const appState = useContext(StateContext);
@@ -44,6 +45,11 @@ function Comments({ history }) {
       },
     },
     isFetching: false,
+    deleteComment: {
+      commentId: '',
+      toggleDeleteModal: false,
+      isDeleting: false,
+    },
     commentHistory: [],
     sendCountAdd: 0,
     sendCountEdit: 0,
@@ -106,8 +112,20 @@ function Comments({ history }) {
         return;
       }
       case 'deleteComment': {
-        const index = draft.comments.map(item => item._id).indexOf(action.value);
-        draft.comments.splice(index, 1);
+        if (action.process == 'delete') {
+          const index = draft.comments.map(item => item._id).indexOf(action.value);
+          draft.comments.splice(index, 1);
+        }
+        if (action.process == 'starts') {
+          draft.isDeleting = true;
+        }
+        if (action.process == 'ends') {
+          draft.isDeleting = false;
+        }
+        if (action.process == 'toggle') {
+          draft.deleteComment.commentId = action.value;
+          draft.deleteComment.toggleDeleteModal = !draft.deleteComment.toggleDeleteModal;
+        }
         return;
       }
       case 'sendCommentForm':
@@ -270,28 +288,28 @@ function Comments({ history }) {
   }, [state.sendCountEdit]);
 
   async function handleDelete(e) {
-    const confirm = window.confirm('Are you sure?');
+    try {
+      commentsDispatch({ type: 'deleteComment', process: 'starts' });
+      const request = Axios.CancelToken.source();
+      const commentId = e.target.getAttribute('data-commentid');
+      const response = await Axios.post(
+        '/delete-comment',
+        { commentId, apiUser: appState.user.username, token: appState.user.token },
+        { cancelToken: request.token }
+      );
 
-    if (confirm) {
-      try {
-        const request = Axios.CancelToken.source();
-        const commentId = e.target.getAttribute('data-id');
-        const response = await Axios.post(
-          '/delete-comment',
-          { commentId, apiUser: appState.user.username, token: appState.user.token },
-          { cancelToken: request.token }
-        );
+      commentsDispatch({ type: 'deleteComment', process: 'ends' });
+      commentsDispatch({ type: 'deleteComment', process: 'toggle' });
 
-        if (response.data == 'Success') {
-          commentsDispatch({ type: 'deleteComment', value: commentId });
-        } else {
-          // DELETE FAILED
-          console.log(response.data);
-        }
-      } catch (error) {
-        // NETWORK ERROR
-        console.log(error);
+      if (response.data == 'Success') {
+        commentsDispatch({ type: 'deleteComment', value: commentId, process: 'delete' });
+      } else {
+        // DELETE FAILED
+        console.log(response.data);
       }
+    } catch (error) {
+      // NETWORK ERROR
+      console.log(error);
     }
   }
 
@@ -354,6 +372,12 @@ function Comments({ history }) {
 
     commentsDispatch({ type: 'commentHistory', value: JSON.parse(comments) });
     appDispatch({ type: 'commentHistory' });
+  }
+
+  function handleDeleteModalToggle(e) {
+    const commentId = e.target.getAttribute('data-commentid');
+
+    commentsDispatch({ type: 'deleteComment', value: commentId, process: 'toggle' });
   }
 
   if (state.isFetching) {
@@ -506,10 +530,10 @@ function Comments({ history }) {
                         />
 
                         <input
-                          onClick={handleDelete}
+                          onClick={handleDeleteModalToggle}
                           type="button"
                           value="Delete"
-                          data-id={`${comment._id}`}
+                          data-commentid={comment._id}
                           className="flex items-center text-red-600 bg-white cursor-pointer ml-3"
                         />
                       </div>
@@ -586,6 +610,19 @@ function Comments({ history }) {
               </form>
             )}
             {/* EDIT COMMENT ENDS */}
+            {/* DELETE COMMENT */}
+            {state.deleteComment.toggleDeleteModal && (
+              <ReuseableModal
+                user={appState.user}
+                type="delete-comment"
+                btnText="Yes, Delete Comment"
+                commentId={state.deleteComment.commentId}
+                handleToggle={() => commentsDispatch({ type: 'deleteComment', process: 'toggle' })}
+                handleSubmit={handleDelete}
+                loading={state.isDeleting}
+              />
+            )}
+            {/* DELETE COMMENT ENDS */}
           </ul>
         </div>
       </div>
