@@ -402,14 +402,18 @@ function Comments({ history }) {
                 {state.user.profileFirstName} {state.user.profileLastName}
               </p>
               <div className="flex justify-center mt-3">
-                <div className="text-gray-700 mr-5">
-                  <i className="fas fa-music mr-2 text-lg"></i>
-                  {state.user.profileAbout.musicCategory}
-                </div>
-                <div className="text-gray-700">
-                  <i className="fas fa-map-marker-alt mr-2 text-lg"></i>
-                  {state.user.profileAbout.city}
-                </div>
+                {state.user.profileAbout.musicCategory && (
+                  <div className="text-gray-700 mr-5">
+                    <i className="fas fa-music mr-2 text-lg"></i>
+                    {state.user.profileAbout.musicCategory}
+                  </div>
+                )}
+                {state.user.profileAbout.city && (
+                  <div className="text-gray-700">
+                    <i className="fas fa-map-marker-alt mr-2 text-lg"></i>
+                    {state.user.profileAbout.city}
+                  </div>
+                )}
               </div>
             </div>
           </div>
