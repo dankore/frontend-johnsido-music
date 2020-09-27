@@ -15,7 +15,7 @@ import ReuseableModal from '../admin/ReuseableModal';
 function Comments({ history }) {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
-  const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: -1.57 + 'rem' };
+  const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: -1 + 'rem' };
   const initialState = {
     username: useParams().username,
     comments: [],
@@ -105,7 +105,7 @@ function Comments({ history }) {
         return;
       case 'editComment':
         draft.editComment.hasError = false;
-        draft.editComment.value = action.value;
+        draft.editComment.value = action.value.trim();
 
         if (action.updateCommentId) {
           draft.editComment.commentId = action.commentId;
@@ -549,21 +549,26 @@ function Comments({ history }) {
               {appState.commentHistory && (
                 <div
                   style={{
-                    height: 500 + 'px',
+                    height: 300 + 'px',
                   }}
-                  className="w-full modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500"
+                  className="w-full modal"
                 >
                   <div
-                    className="bg-white"
+                    className="bg-gray-200 c-shadow2"
                     style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}
                   >
-                    <div className="pr-4 flex text-2xl w-full justify-between bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+                    <div className="flex text-xl w-full justify-between p-3 bg-gray-200 text-gray-700 c-shadow2">
                       <h2 className="font-semibold">Comment Edit History</h2>
-                      <button onClick={() => appDispatch({ type: 'commentHistory' })}>Close</button>
+                      <button
+                        className="hover:text-gray-900"
+                        onClick={() => appDispatch({ type: 'commentHistory' })}
+                      >
+                        Close
+                      </button>
                     </div>
                     {state.commentHistory.map((item, index) => {
                       return (
-                        <div className="border-b p-3 bg-gray-100" key={index}>
+                        <div className="border-b p-3 bg-white mb-2 c-shadow" key={index}>
                           <p className="text-gray-700">{timeAgo(item.createdDate)}</p>
                           <p className="">{item.text}</p>
                         </div>
@@ -575,39 +580,46 @@ function Comments({ history }) {
               {/* EDIT COMMENT */}
               {appState.editComment && (
                 <form onSubmit={e => handleSubmit(e, 'edit')}>
-                  <div className="w-full modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
-                    <div className="flex text-2xl justify-between">
-                      <h2 className="font-semibold">Edit Comment</h2>
-                      <button onClick={() => appDispatch({ type: 'editComment' })}>Close</button>
-                    </div>
-                    <textarea
-                      value={state.editComment.value}
-                      onChange={e =>
-                        commentsDispatch({ type: 'editComment', value: e.target.value })
-                      }
-                      className="focus:bg-gray-100 w-full p-2"
-                      placeholder="What's on your mind?"
-                      style={{
-                        backgroundColor: '#F2F3F5',
-                        whiteSpace: 'pre-wrap',
-                        overflow: 'hidden',
-                      }}
-                    >
-                      {state.editComment.value}
-                    </textarea>
-                    <CSSTransition
-                      in={state.editComment.hasError}
-                      timeout={330}
-                      classNames="liveValidateMessage"
-                      unmountOnExit
-                    >
-                      <div style={CSSTransitionStyleModified} className="liveValidateMessage">
-                        {state.editComment.message}
+                  <div className="w-full modal">
+                    <div className="c-shadow">
+                      <div className="flex text-xl w-full justify-between p-3 bg-gray-200 text-gray-700 c-shadow2">
+                        <h2 className="font-semibold">Edit Comment</h2>
+                        <button
+                          className="hover:text-gray-900"
+                          onClick={() => appDispatch({ type: 'editComment' })}
+                        >
+                          Close
+                        </button>
                       </div>
-                    </CSSTransition>
-                    <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
-                      Update Comment
-                    </button>
+                      <textarea
+                        value={state.editComment.value}
+                        onChange={e =>
+                          commentsDispatch({ type: 'editComment', value: e.target.value })
+                        }
+                        className="focus:bg-gray-100 w-full p-2 c-shadow"
+                        placeholder="What's on your mind?"
+                        style={{
+                          backgroundColor: '#F2F3F5',
+                          whiteSpace: 'pre-wrap',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        {/* {state.editComment.value} */}
+                      </textarea>
+                      <CSSTransition
+                        in={state.editComment.hasError}
+                        timeout={330}
+                        classNames="liveValidateMessage"
+                        unmountOnExit
+                      >
+                        <div style={CSSTransitionStyleModified} className="liveValidateMessage">
+                          {state.editComment.message}
+                        </div>
+                      </CSSTransition>
+                      <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
+                        Update Comment
+                      </button>
+                    </div>
                   </div>
                 </form>
               )}
