@@ -398,15 +398,15 @@ function Comments({ history }) {
               src={state.user.profileAvatar}
             />
             <div className="mx-auto max-w-sm">
-              <p className="text-center text-2xl bg-clip-text text-transparent bg-gradient-to-r  from-orange-400 via-red-500 to-pink-500">
+              <p className="text-center text-2xl text-blue-600">
                 {state.user.profileFirstName} {state.user.profileLastName}
               </p>
               <div className="flex justify-center mt-3">
-                <div className="mr-5">
+                <div className="text-gray-700 mr-5">
                   <i className="fas fa-music mr-2 text-lg"></i>
                   {state.user.profileAbout.musicCategory}
                 </div>
-                <div className="">
+                <div className="text-gray-700">
                   <i className="fas fa-map-marker-alt mr-2 text-lg"></i>
                   {state.user.profileAbout.city}
                 </div>
@@ -415,7 +415,7 @@ function Comments({ history }) {
           </div>
           <div className=" c-shadow mt-5">
             <form onSubmit={e => handleSubmit(e, 'add')}>
-              <h2 className="border-b bg-gray-200 p-3 text-xl">Add a Comment</h2>
+              <h2 className="border-b bg-gray-200 p-3 text-gray-700 text-xl">Add a Comment</h2>
               <div className="relative flex p-2">
                 <div className="mr-1">
                   <Link to={`/profile/${state.user.profileUsername}`}>
@@ -469,7 +469,7 @@ function Comments({ history }) {
           }}
         >
           {/* IF THERE'S COMMENT */}
-          {state.comments.length > 1 && (
+          {state.comments.length > 0 && (
             <ul
               className="relative"
               style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}
@@ -621,7 +621,11 @@ function Comments({ history }) {
           )}
 
           {/* NO COMMENT */}
-          {state.comments.length > 1 && <div className="text-2xl">No comment yets</div>}
+          {state.comments.length < 1 && (
+            <div className="text-xl text-gray-700 flex items-center justify-center w-full h-full">
+              No comment yet. Be the first to comment!
+            </div>
+          )}
         </div>
       </div>
     </Page>
