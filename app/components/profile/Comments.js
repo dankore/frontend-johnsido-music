@@ -473,13 +473,14 @@ function Comments({ history }) {
           <div
             className="c-shadow bg-gray-200"
             style={{
-              maxHeight: 400 + 'px',
+              maxHeight: 500 + 'px',
               flexDirection: 'column-reverse',
+              display: 'flex',
             }}
           >
             <ul
               className="relative"
-              style={{ flexShrink: 'auto', height: 100 + '%', overflow: 'auto' }}
+              style={{ flexShrink: '10', height: 100 + '%', overflow: 'auto' }}
             >
               {state.comments.map((comment, index) => {
                 const lastComment = comment.comment[comment.comment.length - 1]; // LAST COMMENT IS THE CURRENT COMMENT BECAUSE IT IS CONTAINED IN AN ARRAY WHICH INCLUDES PREVIOUS EDITED VERSIONS
