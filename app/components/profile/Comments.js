@@ -94,7 +94,12 @@ function Comments({ history }) {
         draft.isFetching = false;
         return;
       case 'addNewComment':
-        draft.comments.unshift(action.value);
+        if (action.value.comment[0].text.trim() != '') {
+          draft.comments.unshift(action.value);
+        } else {
+          draft.comment.hasError = true;
+          draft.comment.message = 'Comment field is empty.';
+        }
         // CLEAR INPUT FIELD
         draft.comment.value = '';
         return;
@@ -463,20 +468,18 @@ function Comments({ history }) {
             </form>
           </div>
         </div>
-
-        <div
-          className="c-shadow bg-gray-200"
-          style={{
-            height: 500 + 'px',
-            flexDirection: 'column-reverse',
-            display: 'flex',
-          }}
-        >
-          {/* IF THERE'S COMMENT */}
-          {state.comments.length > 0 && (
+        {/* IF THERE'S COMMENT */}
+        {state.comments.length > 0 && (
+          <div
+            className="c-shadow bg-gray-200"
+            style={{
+              maxHeight: 400 + 'px',
+              flexDirection: 'column-reverse',
+            }}
+          >
             <ul
               className="relative"
-              style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}
+              style={{ flexShrink: 'auto', height: 100 + '%', overflow: 'auto' }}
             >
               {state.comments.map((comment, index) => {
                 const lastComment = comment.comment[comment.comment.length - 1]; // LAST COMMENT IS THE CURRENT COMMENT BECAUSE IT IS CONTAINED IN AN ARRAY WHICH INCLUDES PREVIOUS EDITED VERSIONS
@@ -622,15 +625,14 @@ function Comments({ history }) {
                 />
               )}
             </ul>
-          )}
-
-          {/* NO COMMENT */}
-          {state.comments.length < 1 && (
-            <div className="text-xl text-gray-700 flex items-center justify-center w-full h-full">
-              No comment yet. Be the first to comment!
-            </div>
-          )}
-        </div>
+          </div>
+        )}
+        {/* NO COMMENT */}
+        {state.comments.length < 1 && (
+          <div className="text-xl text-gray-700 flex items-center justify-center w-full h-full">
+            No comment yet. Be the first to comment!
+          </div>
+        )}
       </div>
     </Page>
   );
