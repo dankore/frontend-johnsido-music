@@ -461,7 +461,7 @@ function Comments({ history }) {
         </div>
 
         <div
-          className="c-shadow"
+          className="c-shadow bg-gray-200"
           style={{
             height: 500 + 'px',
             flexDirection: 'column-reverse',
@@ -475,7 +475,7 @@ function Comments({ history }) {
               return (
                 <li
                   key={index}
-                  className="relative border bg-white p-2"
+                  className="relative shadow-md bg-white mb-1 p-2"
                   data-comments={JSON.stringify(comment.comment)}
                 >
                   <div className="flex">
