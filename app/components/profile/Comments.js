@@ -94,7 +94,12 @@ function Comments({ history }) {
         draft.isFetching = false;
         return;
       case 'addNewComment':
-        draft.comments.unshift(action.value);
+        if (action.value.comment[0].text.trim() != '') {
+          draft.comments.unshift(action.value);
+        } else {
+          draft.comment.hasError = true;
+          draft.comment.message = 'Comment field is empty.';
+        }
         // CLEAR INPUT FIELD
         draft.comment.value = '';
         return;
@@ -386,19 +391,9 @@ function Comments({ history }) {
     <Page
       title={`Comments on ${state.user.profileFirstName} ${state.user.profileLastName}'s profile`}
     >
-      <div className="p-3 w-full  bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
-        <p
-          style={{
-            backgroundImage: `url(https://res.cloudinary.com/my-nigerian-projects/image/upload/f_auto,g_auto/v1596725538/Others/layout-pattern.png)`,
-          }}
-          className="text-5xl sm:max-w-xl lg:max-w-6xl mx-auto"
-        >
-          Comments
-        </p>
-      </div>
-      <div className="w-full sm:max-w-xl lg:max-w-6xl mx-auto grid lg:grid-cols-2">
+      <div className="w-full sm:max-w-xl lg:max-w-6xl mx-auto grid lg:grid-cols-2 gap-2 pt-12">
         <div className="w-full">
-          <div className="mx-auto max-w-sm py-3">
+          <div className=" c-shadow py-3">
             <img
               className="mx-auto max-w-sm"
               style={{
@@ -408,27 +403,29 @@ function Comments({ history }) {
               src={state.user.profileAvatar}
             />
             <div className="mx-auto max-w-sm">
-              <p className="text-center text-2xl bg-clip-text text-transparent bg-gradient-to-r  from-orange-400 via-red-500 to-pink-500">
+              <p className="text-center text-2xl text-blue-600">
                 {state.user.profileFirstName} {state.user.profileLastName}
               </p>
               <div className="flex justify-center mt-3">
-                <div className="mr-5">
-                  <i className="fas fa-music mr-2 text-lg"></i>
-                  {state.user.profileAbout.musicCategory}
-                </div>
-                <div className="">
-                  <i className="fas fa-map-marker-alt mr-2 text-lg"></i>
-                  {state.user.profileAbout.city}
-                </div>
+                {state.user.profileAbout.musicCategory && (
+                  <div className="text-gray-700 mr-5">
+                    <i className="fas fa-music mr-2 text-lg"></i>
+                    {state.user.profileAbout.musicCategory}
+                  </div>
+                )}
+                {state.user.profileAbout.city && (
+                  <div className="text-gray-700">
+                    <i className="fas fa-map-marker-alt mr-2 text-lg"></i>
+                    {state.user.profileAbout.city}
+                  </div>
+                )}
               </div>
             </div>
           </div>
-          <div className="lg:pl-3">
+          <div className=" c-shadow mt-5">
             <form onSubmit={e => handleSubmit(e, 'add')}>
-              <h2 className="px-3 text-xl mb-3 bg-clip-text text-transparent bg-gradient-to-r  from-orange-400 via-red-500 to-pink-500">
-                Add a Comment
-              </h2>
-              <div className="relative flex p-2 border">
+              <h2 className="border-b bg-gray-200 p-3 text-gray-700 text-xl">Add a Comment</h2>
+              <div className="relative flex p-2">
                 <div className="mr-1">
                   <Link to={`/profile/${state.user.profileUsername}`}>
                     <img
@@ -471,156 +468,171 @@ function Comments({ history }) {
             </form>
           </div>
         </div>
+        {/* IF THERE'S COMMENT */}
+        {state.comments.length > 0 && (
+          <div
+            className="c-shadow bg-gray-200"
+            style={{
+              maxHeight: 400 + 'px',
+              flexDirection: 'column-reverse',
+            }}
+          >
+            <ul
+              className="relative"
+              style={{ flexShrink: 'auto', height: 100 + '%', overflow: 'auto' }}
+            >
+              {state.comments.map((comment, index) => {
+                const lastComment = comment.comment[comment.comment.length - 1]; // LAST COMMENT IS THE CURRENT COMMENT BECAUSE IT IS CONTAINED IN AN ARRAY WHICH INCLUDES PREVIOUS EDITED VERSIONS
 
-        <div
-          style={{
-            height: 500 + 'px',
-            flexDirection: 'column-reverse',
-            display: 'flex',
-          }}
-        >
-          <ul className="relative" style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}>
-            {state.comments.map((comment, index) => {
-              const lastComment = comment.comment[comment.comment.length - 1]; // LAST COMMENT IS THE CURRENT COMMENT BECAUSE IT IS CONTAINED IN AN ARRAY WHICH INCLUDES PREVIOUS EDITED VERSIONS
-
-              return (
-                <li
-                  key={index}
-                  className="relative border bg-white p-2"
-                  data-comments={JSON.stringify(comment.comment)}
-                >
-                  <div className="flex">
-                    <div className="flex mr-1">
-                      <Link to={`/profile/${comment.author.username}`}>
-                        <img
-                          src={comment.author.avatar}
-                          className="w-8 h-8 rounded-full"
-                          alt="profile pic"
-                        />
-                      </Link>
+                return (
+                  <li
+                    key={index}
+                    className="relative shadow-md bg-white mb-1 p-2"
+                    data-comments={JSON.stringify(comment.comment)}
+                  >
+                    <div className="flex">
+                      <div className="flex mr-1">
+                        <Link to={`/profile/${comment.author.username}`}>
+                          <img
+                            src={comment.author.avatar}
+                            className="w-8 h-8 rounded-full"
+                            alt="profile pic"
+                          />
+                        </Link>
+                      </div>
+                      <div
+                        className="w-full px-2"
+                        style={{
+                          overflowWrap: 'break-word',
+                          minWidth: 0 + 'px',
+                          backgroundColor: '#F2F3F5',
+                        }}
+                      >
+                        <Link to={`/profile/${comment.author.username}`} className="font-medium">
+                          {comment.author.firstName} {comment.author.lastName}
+                        </Link>
+                        <div>
+                          <p>{lastComment.text}</p>
+                        </div>
+                      </div>
                     </div>
-                    <div
-                      className="w-full px-2"
+                    {/* TIMESTAMP, EDIT, DELETE */}
+                    <div className="flex justify-between items-center mt-2 text-xs">
+                      {time(lastComment)}
+                      {appState.loggedIn && appState.user.username == comment.author.username && (
+                        <div className="flex">
+                          <input
+                            type="button"
+                            value="Edit"
+                            data-id={comment._id}
+                            data-comment={lastComment.text}
+                            onClick={handleEditClick}
+                            className="flex bg-white items-center cursor-pointer"
+                          />
+
+                          <input
+                            onClick={handleDeleteModalToggle}
+                            type="button"
+                            value="Delete"
+                            data-commentid={comment._id}
+                            className="flex items-center text-red-600 bg-white cursor-pointer ml-3"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </li>
+                );
+              })}
+
+              {/* VIEW COMMENT HISTORY */}
+              {appState.commentHistory && (
+                <div
+                  style={{
+                    height: 500 + 'px',
+                  }}
+                  className="w-full modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500"
+                >
+                  <div
+                    className="bg-white"
+                    style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}
+                  >
+                    <div className="pr-4 flex text-2xl w-full justify-between bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+                      <h2 className="font-semibold">Comment Edit History</h2>
+                      <button onClick={() => appDispatch({ type: 'commentHistory' })}>Close</button>
+                    </div>
+                    {state.commentHistory.map((item, index) => {
+                      return (
+                        <div className="border-b p-3 bg-gray-100" key={index}>
+                          <p className="text-gray-700">{timeAgo(item.createdDate)}</p>
+                          <p className="">{item.text}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+              {/* EDIT COMMENT */}
+              {appState.editComment && (
+                <form onSubmit={e => handleSubmit(e, 'edit')}>
+                  <div className="w-full modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+                    <div className="flex text-2xl justify-between">
+                      <h2 className="font-semibold">Edit Comment</h2>
+                      <button onClick={() => appDispatch({ type: 'editComment' })}>Close</button>
+                    </div>
+                    <textarea
+                      value={state.editComment.value}
+                      onChange={e =>
+                        commentsDispatch({ type: 'editComment', value: e.target.value })
+                      }
+                      className="focus:bg-gray-100 w-full p-2"
+                      placeholder="What's on your mind?"
                       style={{
-                        overflowWrap: 'break-word',
-                        minWidth: 0 + 'px',
                         backgroundColor: '#F2F3F5',
+                        whiteSpace: 'pre-wrap',
+                        overflow: 'hidden',
                       }}
                     >
-                      <Link to={`/profile/${comment.author.username}`} className="font-medium">
-                        {comment.author.firstName} {comment.author.lastName}
-                      </Link>
-                      <div>
-                        <p>{lastComment.text}</p>
+                      {state.editComment.value}
+                    </textarea>
+                    <CSSTransition
+                      in={state.editComment.hasError}
+                      timeout={330}
+                      classNames="liveValidateMessage"
+                      unmountOnExit
+                    >
+                      <div style={CSSTransitionStyleModified} className="liveValidateMessage">
+                        {state.editComment.message}
                       </div>
-                    </div>
+                    </CSSTransition>
+                    <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
+                      Update Comment
+                    </button>
                   </div>
-                  {/* TIMESTAMP, EDIT, DELETE */}
-                  <div className="flex justify-between items-center mt-2 text-xs">
-                    {time(lastComment)}
-                    {appState.loggedIn && appState.user.username == comment.author.username && (
-                      <div className="flex">
-                        <input
-                          type="button"
-                          value="Edit"
-                          data-id={comment._id}
-                          data-comment={lastComment.text}
-                          onClick={handleEditClick}
-                          className="flex bg-white items-center cursor-pointer"
-                        />
-
-                        <input
-                          onClick={handleDeleteModalToggle}
-                          type="button"
-                          value="Delete"
-                          data-commentid={comment._id}
-                          className="flex items-center text-red-600 bg-white cursor-pointer ml-3"
-                        />
-                      </div>
-                    )}
-                  </div>
-                </li>
-              );
-            })}
-
-            {/* VIEW COMMENT HISTORY */}
-            {appState.commentHistory && (
-              <div
-                style={{
-                  height: 500 + 'px',
-                }}
-                className="w-full modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500"
-              >
-                <div
-                  className="bg-white"
-                  style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}
-                >
-                  <div className="pr-4 flex text-2xl w-full justify-between bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
-                    <h2 className="font-semibold">Comment Edit History</h2>
-                    <button onClick={() => appDispatch({ type: 'commentHistory' })}>Close</button>
-                  </div>
-                  {state.commentHistory.map((item, index) => {
-                    return (
-                      <div className="border-b p-3 bg-gray-100" key={index}>
-                        <p className="text-gray-700">{timeAgo(item.createdDate)}</p>
-                        <p className="">{item.text}</p>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-            {/* EDIT COMMENT */}
-            {appState.editComment && (
-              <form onSubmit={e => handleSubmit(e, 'edit')}>
-                <div className="w-full modal border bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
-                  <div className="flex text-2xl justify-between">
-                    <h2 className="font-semibold">Edit Comment</h2>
-                    <button onClick={() => appDispatch({ type: 'editComment' })}>Close</button>
-                  </div>
-                  <textarea
-                    value={state.editComment.value}
-                    onChange={e => commentsDispatch({ type: 'editComment', value: e.target.value })}
-                    className="focus:bg-gray-100 w-full p-2"
-                    placeholder="What's on your mind?"
-                    style={{
-                      backgroundColor: '#F2F3F5',
-                      whiteSpace: 'pre-wrap',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    {state.editComment.value}
-                  </textarea>
-                  <CSSTransition
-                    in={state.editComment.hasError}
-                    timeout={330}
-                    classNames="liveValidateMessage"
-                    unmountOnExit
-                  >
-                    <div style={CSSTransitionStyleModified} className="liveValidateMessage">
-                      {state.editComment.message}
-                    </div>
-                  </CSSTransition>
-                  <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
-                    Update Comment
-                  </button>
-                </div>
-              </form>
-            )}
-            {/* DELETE COMMENT */}
-            {state.deleteComment.toggleDeleteModal && (
-              <ReuseableModal
-                user={appState.user}
-                type="delete-comment"
-                btnText="Yes, Delete Comment"
-                commentId={state.deleteComment.commentId}
-                handleToggle={() => commentsDispatch({ type: 'deleteComment', process: 'toggle' })}
-                handleSubmit={handleDelete}
-                loading={state.isDeleting}
-              />
-            )}
-          </ul>
-        </div>
+                </form>
+              )}
+              {/* DELETE COMMENT */}
+              {state.deleteComment.toggleDeleteModal && (
+                <ReuseableModal
+                  user={appState.user}
+                  type="delete-comment"
+                  btnText="Yes, Delete Comment"
+                  commentId={state.deleteComment.commentId}
+                  handleToggle={() =>
+                    commentsDispatch({ type: 'deleteComment', process: 'toggle' })
+                  }
+                  handleSubmit={handleDelete}
+                  loading={state.isDeleting}
+                />
+              )}
+            </ul>
+          </div>
+        )}
+        {/* NO COMMENT */}
+        {state.comments.length < 1 && (
+          <div className="text-xl text-gray-700 flex items-center justify-center w-full h-full">
+            No comment yet. Be the first to comment!
+          </div>
+        )}
       </div>
     </Page>
   );
