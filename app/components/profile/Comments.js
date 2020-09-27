@@ -314,9 +314,7 @@ function Comments({ history }) {
   }
 
   function handleEditClick(e) {
-    const currentText =
-      e.target.parentElement.parentElement.parentElement.childNodes[0].childNodes[1].childNodes[1]
-        .childNodes[0].innerText;
+    const currentText = e.target.getAttribute('data-comment');
     const commentId = e.target.getAttribute('data-id');
 
     commentsDispatch({ type: 'editComment', value: currentText, commentId, updateCommentId: true });
@@ -483,7 +481,7 @@ function Comments({ history }) {
         >
           <ul className="relative" style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}>
             {state.comments.map((comment, index) => {
-              const lastComment = comment.comment[comment.comment.length - 1];
+              const lastComment = comment.comment[comment.comment.length - 1]; // LAST COMMENT IS THE CURRENT COMMENT BECAUSE IT IS CONTAINED IN AN ARRAY WHICH INCLUDES PREVIOUS EDITED VERSIONS
 
               return (
                 <li
@@ -517,6 +515,7 @@ function Comments({ history }) {
                       </div>
                     </div>
                   </div>
+                  {/* TIMESTAMP, EDIT, DELETE */}
                   <div className="flex justify-between items-center mt-2 text-xs">
                     {time(lastComment)}
                     {appState.loggedIn && appState.user.username == comment.author.username && (
@@ -525,6 +524,7 @@ function Comments({ history }) {
                           type="button"
                           value="Edit"
                           data-id={comment._id}
+                          data-comment={lastComment.text}
                           onClick={handleEditClick}
                           className="flex bg-white items-center cursor-pointer"
                         />
@@ -570,8 +570,6 @@ function Comments({ history }) {
                 </div>
               </div>
             )}
-            {/* VIEW COMMENT HISTORY ENDS */}
-
             {/* EDIT COMMENT */}
             {appState.editComment && (
               <form onSubmit={e => handleSubmit(e, 'edit')}>
@@ -609,7 +607,6 @@ function Comments({ history }) {
                 </div>
               </form>
             )}
-            {/* EDIT COMMENT ENDS */}
             {/* DELETE COMMENT */}
             {state.deleteComment.toggleDeleteModal && (
               <ReuseableModal
@@ -622,7 +619,6 @@ function Comments({ history }) {
                 loading={state.isDeleting}
               />
             )}
-            {/* DELETE COMMENT ENDS */}
           </ul>
         </div>
       </div>
