@@ -170,7 +170,7 @@ function Main() {
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
         <BrowserRouter>
-          <Route path={['/profile/:username', '/upload-song', '/about']}>
+          <Route path={['/profile/:username', '/about']}>
             <Header />
             {state.flashMsgErrors.isDisplay && (
               <FlashMsgError errors={state.flashMsgErrors.value} />
@@ -224,7 +224,7 @@ function Main() {
               <div>Not found</div>
             </Route>
           </Switch>
-          <Route path={['/profile/:username', '/upload-song', '/about']}>
+          <Route path={['/profile/:username', '/about']}>
             <Footer />
           </Route>
         </BrowserRouter>

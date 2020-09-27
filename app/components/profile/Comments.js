@@ -386,19 +386,9 @@ function Comments({ history }) {
     <Page
       title={`Comments on ${state.user.profileFirstName} ${state.user.profileLastName}'s profile`}
     >
-      <div className="p-3 w-full  bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
-        <p
-          style={{
-            backgroundImage: `url(https://res.cloudinary.com/my-nigerian-projects/image/upload/f_auto,g_auto/v1596725538/Others/layout-pattern.png)`,
-          }}
-          className="text-5xl sm:max-w-xl lg:max-w-6xl mx-auto"
-        >
-          Comments
-        </p>
-      </div>
-      <div className="w-full sm:max-w-xl lg:max-w-6xl mx-auto grid lg:grid-cols-2">
+      <div className="w-full sm:max-w-xl lg:max-w-6xl mx-auto grid lg:grid-cols-2 gap-2 pt-12">
         <div className="w-full">
-          <div className="mx-auto max-w-sm py-3">
+          <div className=" c-shadow py-3">
             <img
               className="mx-auto max-w-sm"
               style={{
@@ -423,12 +413,10 @@ function Comments({ history }) {
               </div>
             </div>
           </div>
-          <div className="lg:pl-3">
+          <div className=" c-shadow mt-5">
             <form onSubmit={e => handleSubmit(e, 'add')}>
-              <h2 className="px-3 text-xl mb-3 bg-clip-text text-transparent bg-gradient-to-r  from-orange-400 via-red-500 to-pink-500">
-                Add a Comment
-              </h2>
-              <div className="relative flex p-2 border">
+              <h2 className="border-b bg-gray-200 p-3 text-xl">Add a Comment</h2>
+              <div className="relative flex p-2">
                 <div className="mr-1">
                   <Link to={`/profile/${state.user.profileUsername}`}>
                     <img
@@ -473,6 +461,7 @@ function Comments({ history }) {
         </div>
 
         <div
+          className="c-shadow"
           style={{
             height: 500 + 'px',
             flexDirection: 'column-reverse',

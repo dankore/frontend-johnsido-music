@@ -303,7 +303,7 @@ function ProfilePage({ history }) {
                             <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
                               {state.user.counts.commentsCount}
                             </span>
-                            Comments
+                            {state.user.counts.commentsCount > 1 ? 'Comments' : 'Comment'}
                           </Link>
                         </div>
                       </div>
