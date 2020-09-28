@@ -519,7 +519,7 @@ function Comments({ history }) {
                           {comment.author.firstName} {comment.author.lastName}
                         </Link>
                         <div>
-                          <p>{lastComment.text}</p>
+                          <p style={{ wordBreak: 'break-word' }}>{lastComment.text}</p>
                         </div>
                       </div>
                     </div>
