@@ -49,7 +49,7 @@ function HeaderLoggedIn({ history }) {
           </div>
           <div className="flex items-center justify-center">
             <div className="flex-shrink-0 ml-10">
-              <Link to="/">
+              <Link className="focus:outline-none" to="/">
                 <img
                   className="block lg:hidden h-12 w-auto"
                   src={appState.logo.url}
@@ -66,13 +66,13 @@ function HeaderLoggedIn({ history }) {
               <div className="flex">
                 <Link
                   to="my-songs"
-                  className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
+                  className="focus:outline-none ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
                 >
                   My Songs
                 </Link>
                 <Link
                   to="/explore"
-                  className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
+                  className="focus:outline-none ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
                 >
                   Explore Other Artistes Songs
                 </Link>
@@ -99,7 +99,7 @@ function HeaderLoggedIn({ history }) {
               <div>
                 <button
                   onClick={() => appDispatch({ type: 'isOpenProfileDropdown' })}
-                  className="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-white transition duration-150 ease-in-out"
+                  className="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-white focus:shadow-outline transition duration-150 ease-in-out"
                   id="user-menu"
                   aria-label="User menu"
                   aria-haspopup="true"
