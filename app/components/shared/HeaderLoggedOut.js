@@ -49,7 +49,6 @@ function HeaderLoggedIn() {
                   />
                 </svg>
               )}
-
             </button>
           </div>
           <div className="flex items-center justify-center">
