@@ -14,8 +14,14 @@ function FollowPage({ profileUser, error }) {
     >
       <div className="pt-5 px-5 mb-2">
         <div className="flex items-center">
-          <Link className={linkCSS} to={`/profile/${profileUser.profileUsername}`}>
-            <svg viewBox="0 0 24 24" className="w-8 h-8" stroke="#956503" strokeWidth="0.5">
+          <Link
+            className={
+              linkCSS +
+              ' transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110'
+            }
+            to={`/profile/${profileUser.profileUsername}`}
+          >
+            <svg viewBox="0 0 24 24" className="w-8 h-8" stroke="#956503" strokeWidth="">
               <g>
                 <path d="M20 11H7.414l4.293-4.293c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0l-6 6c-.39.39-.39 1.023 0 1.414l6 6c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L7.414 13H20c.553 0 1-.447 1-1s-.447-1-1-1z"></path>
               </g>
