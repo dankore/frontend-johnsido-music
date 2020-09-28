@@ -69,16 +69,18 @@ function Comments({ history }) {
         return;
       case 'checkCommentFieldForErrors':
         if (action.process == 'add') {
-          if (draft.comment.value == '') {
+          if (draft.comment.value.trim() == '') {
             draft.comment.hasError = true;
             draft.comment.message = 'Comment field is empty.';
+            draft.comment.value = '';
           }
         }
 
         if (action.process == 'edit') {
-          if (draft.editComment.value == '') {
+          if (draft.editComment.value.trim() == '') {
             draft.editComment.hasError = true;
             draft.editComment.message = 'Edit comment field is empty.';
+            draft.editComment.value = '';
           }
         }
 
@@ -94,18 +96,15 @@ function Comments({ history }) {
         draft.isFetching = false;
         return;
       case 'addNewComment':
-        if (action.value.comment[0].text.trim() != '') {
-          draft.comments.unshift(action.value);
-        } else {
-          draft.comment.hasError = true;
-          draft.comment.message = 'Comment field is empty.';
-        }
+        action.value.comment[0].text = action.value.comment[0].text.trim(); // TRIM TEXT
+        draft.comments.unshift(action.value);
+
         // CLEAR INPUT FIELD
         draft.comment.value = '';
         return;
       case 'editComment':
         draft.editComment.hasError = false;
-        draft.editComment.value = action.value.trim();
+        draft.editComment.value = action.value;
 
         if (action.updateCommentId) {
           draft.editComment.commentId = action.commentId;
@@ -581,7 +580,7 @@ function Comments({ history }) {
               {appState.editComment && (
                 <form onSubmit={e => handleSubmit(e, 'edit')}>
                   <div className="w-full modal">
-                    <div className="c-shadow">
+                    <div className="c-shadow bg-gray-200">
                       <div className="flex text-xl w-full justify-between p-3 bg-gray-200 text-gray-700 c-shadow2">
                         <h2 className="font-semibold">Edit Comment</h2>
                         <button
@@ -596,7 +595,7 @@ function Comments({ history }) {
                         onChange={e =>
                           commentsDispatch({ type: 'editComment', value: e.target.value })
                         }
-                        className="focus:bg-gray-100 w-full p-2 c-shadow"
+                        className="appearance-none border w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="What's on your mind?"
                         style={{
                           backgroundColor: '#F2F3F5',
