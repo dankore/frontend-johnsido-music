@@ -49,7 +49,7 @@ function LandingPage() {
               <div className="relative">
                 <button
                   onClick={() => appDispatch({ type: 'toggleLandingPageMenu' })}
-                  className="text-white flex text-center"
+                  className="text-white flex text-center focus:outline-none"
                 >
                   <svg
                     className="h-6 w-6"

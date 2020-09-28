@@ -527,7 +527,7 @@ function Comments({ history }) {
                             data-id={comment._id}
                             data-comment={lastComment.text}
                             onClick={handleEditClick}
-                            className="flex bg-white items-center cursor-pointer"
+                            className="flex bg-white items-center cursor-pointer focus:outline-none"
                           />
 
                           <input
@@ -535,7 +535,7 @@ function Comments({ history }) {
                             type="button"
                             value="Delete"
                             data-commentid={comment._id}
-                            className="flex items-center text-red-600 bg-white cursor-pointer ml-3"
+                            className="flex items-center text-red-600 bg-white cursor-pointer ml-3 focus:outline-none"
                           />
                         </div>
                       )}

@@ -119,7 +119,7 @@ function Login({ history }) {
         {/* <!-- Login Section --> */}
         <div className="w-full lg:w-1/3 flex flex-col">
           <div className="flex bg-gray-900 justify-center">
-            <Link to="/" className="text-white font-bold text-xl p-4">
+            <Link to="/" className="text-white font-bold text-xl p-4 focus:outline-none">
               <img className="w-32 h-32" src={appState.logo.url} alt={appState.logo.alt} />
             </Link>
           </div>
