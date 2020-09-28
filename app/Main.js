@@ -149,7 +149,6 @@ function Main() {
   }
 
   const [state, dispatch] = useImmerReducer(appReducer, initialState);
-  console.log(state.toggles.mobileHamburgerHeaderLoggedIn);
 
   useEffect(() => {
     if (state.loggedIn) {

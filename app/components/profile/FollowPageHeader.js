@@ -6,13 +6,13 @@ import { activeNavCSS, linkCSS, navLinkCSS } from '../../helpers/CSSHelpers';
 function FollowPage({ profileUser, error }) {
   return (
     <div
-      className="relative px-2 lg:px-0"
+      className="relative px-2 lg:px-0 c-shadow"
       style={{
         overflowWrap: 'break-word',
         minWidth: 0 + 'px',
       }}
     >
-      <div className="mt-2 mb-2">
+      <div className="pt-5 px-5 mb-2">
         <div className="flex items-center">
           <Link className={linkCSS} to={`/profile/${profileUser.profileUsername}`}>
             <svg viewBox="0 0 24 24" className="w-8 h-8" stroke="#956503" strokeWidth="0.5">
@@ -31,7 +31,7 @@ function FollowPage({ profileUser, error }) {
       {/* ERROR DISPLAY */}
       {error.hasErrors && <div className="liveValidateMessage w-full h-12">{error.message}</div>}
 
-      <div className="flex justify-between pb-2">
+      <div className="flex justify-between">
         <NavLink
           className={linkCSS + navLinkCSS + ' js-brown-bg-hover'}
           activeStyle={activeNavCSS}

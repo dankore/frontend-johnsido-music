@@ -221,24 +221,25 @@ function FollowTemplate({ history, type }) {
   }, [state.stopFollowing.count]);
 
   function noFollows() {
+    const commonCSS = 'block text-center c-shadow py-2';
     return (
       state.follows.length < 1 &&
       (type == 'followers' ? (
         appState.user.username == state.profileUser.profileUsername ? (
-          <span className="block text-center">You don&apos;t have followers yet.</span>
+          <span className={commonCSS}>You don&apos;t have followers yet.</span>
         ) : (
-          <span className="block text-center">
+          <span className={commonCSS}>
             {' '}
             {state.profileUser.profileFirstName} {state.profileUser.profileLastName} does not have
             followers yet.
           </span>
         )
       ) : appState.user.username == state.profileUser.profileUsername ? (
-        <span className="block text-center">You are not following anyone.</span>
+        <span className={commonCSS}>You are not following anyone.</span>
       ) : (
-        <span className="block text-center">
+        <span className={commonCSS}>
           {' '}
-          <span className="block text-center">
+          <span className={commonCSS}>
             {state.profileUser.profileFirstName} {state.profileUser.profileLastName} is not
             following anyone.
           </span>
@@ -262,7 +263,7 @@ function FollowTemplate({ history, type }) {
 
   return (
     <Page title={title}>
-      <div className="w-full sm:max-w-lg lg:max-w-xl mx-auto">
+      <div className="w-full sm:max-w-lg lg:max-w-xl mx-auto c-shadow">
         <FollowPageHeader error={state.error} profileUser={state.profileUser} loggedIn={state} />
         {state.follows.length > 0 &&
           state.follows.map((follow, index) => {
