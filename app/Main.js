@@ -54,6 +54,9 @@ function Main() {
       value: [],
       isDisplay: false,
     },
+    toggles: {
+      mobileHamburgerHeaderLoggedIn: false,
+    },
     isOpenProfileDropdown: false,
     toggleLandingPageMenu: false,
     toggleAdminLandingPageMenu: false,
@@ -82,6 +85,12 @@ function Main() {
       case 'toggleAdminLandingPageMenu':
         draft.toggleAdminLandingPageMenu = !draft.toggleAdminLandingPageMenu;
         return;
+      case 'toggles':
+        if (action.for == 'mobileHamburgerHeaderLoggedIn') {
+          draft.toggles.mobileHamburgerHeaderLoggedIn = !draft.toggles
+            .mobileHamburgerHeaderLoggedIn;
+        }
+        return;
       case 'flashMsgError':
         draft.flashMsgErrors.value = action.value;
         draft.flashMsgErrors.isDisplay = true;
@@ -102,6 +111,7 @@ function Main() {
         draft.isOpenProfileDropdown = false;
         draft.toggleLandingPageMenu = false;
         draft.toggleAdminLandingPageMenu = false;
+        draft.toggles.mobileHamburgerHeaderLoggedIn = false;
         return;
       case 'updateLocalStorage':
         if (action.process == 'profileUpdate') {
@@ -139,6 +149,7 @@ function Main() {
   }
 
   const [state, dispatch] = useImmerReducer(appReducer, initialState);
+  console.log(state.toggles.mobileHamburgerHeaderLoggedIn);
 
   useEffect(() => {
     if (state.loggedIn) {
@@ -202,10 +213,10 @@ function Main() {
               )}
             </Route>
             <Route path="/register">
-              <Register />
+              {!state.loggedIn ? <Register /> : <div>Please logout to view this page.</div>}
             </Route>
             <Route path="/login">
-              <Login />
+              {!state.loggedIn ? <Login /> : <div>Please logout to view this page.</div>}
             </Route>
             <Route path="/about">
               <AboutPage />

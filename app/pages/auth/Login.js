@@ -3,12 +3,12 @@ import Page from '../../components/layouts/Page';
 import StateContext from '../../contextsProviders/StateContext';
 import { Link, withRouter } from 'react-router-dom';
 import { useImmerReducer } from 'use-immer';
-import DispatchContext from '../../contextsProviders/DispatchContext';
 import Axios from 'axios';
 import PropTypes from 'prop-types';
 import FlashMsgError from '../../components/shared/FlashMsgError';
 import { CSSTransition } from 'react-transition-group';
 import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
+import DispatchContext from '../../contextsProviders/DispatchContext';
 
 function Login({ history }) {
   const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: '1.3rem' };
@@ -25,6 +25,7 @@ function Login({ history }) {
       hasError: false,
       message: '',
     },
+    isLoggingIn: false,
     submitCount: 0,
   };
 
@@ -48,6 +49,13 @@ function Login({ history }) {
           draft.password.message = 'Password field is empty.';
         }
         return;
+      case 'isLoggingIn':
+        if (action.process == 'starts') {
+          draft.isLoggingIn = true;
+        } else {
+          draft.isLoggingIn = false;
+        }
+        return;
       case 'submitForm':
         if (!draft.username.hasError && !draft.password.hasError) {
           draft.submitCount++;
@@ -56,21 +64,22 @@ function Login({ history }) {
     }
   }
 
-  const [state, dispatch] = useImmerReducer(reducer, initialState);
+  const [state, loggingDispatch] = useImmerReducer(reducer, initialState);
 
   // SUBMIT FORM: CHECK FOR ERRORS AND INITIATE SUBMISSION
   function handleSubmitForm(e) {
     e.preventDefault();
-    dispatch({ type: 'usernameImmediately', value: state.username.value });
-    dispatch({ type: 'passwordImmediately', value: state.password.value });
+    loggingDispatch({ type: 'usernameImmediately', value: state.username.value });
+    loggingDispatch({ type: 'passwordImmediately', value: state.password.value });
 
-    dispatch({ type: 'submitForm' });
+    loggingDispatch({ type: 'submitForm' });
   }
 
   // SUBMIT
   useEffect(() => {
-    const request = Axios.CancelToken.source();
     if (state.submitCount) {
+      const request = Axios.CancelToken.source();
+      loggingDispatch({ type: 'isLoggingIn', process: 'starts' });
       (async function sendLoginForm() {
         try {
           const response = await Axios.post(
@@ -81,6 +90,9 @@ function Login({ history }) {
             },
             { cancelToken: request.token }
           );
+
+          loggingDispatch({ type: 'isLoggingIn' });
+
           if (response.data.token) {
             // LOGIN
             appDispatch({ type: 'login', value: response.data });
@@ -95,9 +107,10 @@ function Login({ history }) {
           console.log(error.message);
         }
       })();
+
+      // CLEAN UP
+      return () => request.cancel();
     }
-    // CLEAN UP
-    return () => request.cancel();
   }, [state.submitCount]);
 
   return (
@@ -106,7 +119,7 @@ function Login({ history }) {
         {/* <!-- Login Section --> */}
         <div className="w-full lg:w-1/3 flex flex-col">
           <div className="flex bg-gray-900 justify-center">
-            <Link to="/" className="text-white font-bold text-xl p-4">
+            <Link to="/" className="text-white font-bold text-xl p-4 focus:outline-none">
               <img className="w-32 h-32" src={appState.logo.url} alt={appState.logo.alt} />
             </Link>
           </div>
@@ -125,7 +138,9 @@ function Login({ history }) {
                 </label>
                 <input
                   value={state.username.value}
-                  onChange={e => dispatch({ type: 'usernameImmediately', value: e.target.value })}
+                  onChange={e =>
+                    loggingDispatch({ type: 'usernameImmediately', value: e.target.value })
+                  }
                   type="username"
                   id="username"
                   placeholder="don"
@@ -149,7 +164,9 @@ function Login({ history }) {
                 </label>
                 <input
                   value={state.password.value}
-                  onChange={e => dispatch({ type: 'passwordImmediately', value: e.target.value })}
+                  onChange={e =>
+                    loggingDispatch({ type: 'passwordImmediately', value: e.target.value })
+                  }
                   type="password"
                   id="password"
                   placeholder="Password"
@@ -171,7 +188,13 @@ function Login({ history }) {
                 type="submit"
                 className="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8"
               >
-                Login In
+                {state.isLoggingIn ? (
+                  <span>
+                    <i className="fa text-sm fa-spinner fa-spin"></i>
+                  </span>
+                ) : (
+                  <>Login In</>
+                )}
               </button>
             </form>
             <div className="text-center pt-12 pb-12">

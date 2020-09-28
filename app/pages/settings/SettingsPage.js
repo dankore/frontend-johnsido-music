@@ -23,10 +23,7 @@ function SettingsPage({ history }) {
       <nav className="bg-gray-900 c-shadow2 fixed w-full flex justify-end z-20 top-0">
         <ul className="flex justify-between items-center text-white w-full md:max-w-xs px-3">
           <li className="md:flex-none ">
-            <Link
-              className="inline-block no-underline hover:text-gray-200 hover:text-underline py-2"
-              to="/"
-            >
+            <Link className="focus:outline-none inline-block hover:underline py-2" to="/">
               Home
             </Link>
           </li>
@@ -34,7 +31,7 @@ function SettingsPage({ history }) {
             <div className="relative inline-block">
               <button
                 onClick={() => appDispatch({ type: 'toggleAdminLandingPageMenu' })}
-                className=" focus:outline-none"
+                className="focus:outline-none inline-block hover:underline py-2"
               >
                 {appState.user.firstName}
                 <svg
@@ -87,7 +84,7 @@ function SettingsPage({ history }) {
               <NavLink
                 activeStyle={{ borderColor: '#ed64a6' }}
                 to="/settings/info"
-                className="mr-3 flex-1 block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-pink-500"
+                className="mr-3 flex-1 focus:outline-none block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-pink-500"
               >
                 <i className="md:mr-3 fas fa-user-edit"></i>
                 <span className="pb-1 md:pb-0 text-xs md:text-base text-gray-600 md:text-gray-400 block md:inline-block">
@@ -97,7 +94,7 @@ function SettingsPage({ history }) {
               <NavLink
                 activeStyle={{ borderColor: '#3182ce' }}
                 to="/settings/change-password"
-                className="mr-3 flex-1 block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-blue-500"
+                className="mr-3 flex-1 focus:outline-none block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-blue-500"
               >
                 <i className="md:mr-3 fas fa-lock"></i>
                 <span className="pb-1 md:pb-0 text-xs md:text-base text-gray-600 md:text-gray-400 block md:inline-block">
@@ -107,7 +104,7 @@ function SettingsPage({ history }) {
               <NavLink
                 activeStyle={{ borderColor: '#9f7aea' }}
                 to="/settings/delete-account"
-                className="mr-3 flex-1 block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-purple-500"
+                className="mr-3 flex-1 focus:outline-none block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-purple-500"
               >
                 <i className="md:mr-3 fas fa-user-minus"></i>
                 <span className="pb-1 md:pb-0 text-xs md:text-base text-gray-600 md:text-gray-400 block md:inline-block">

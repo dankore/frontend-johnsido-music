@@ -15,8 +15,8 @@ function HeaderLoggedIn({ history }) {
   }
 
   return (
-    <nav className="bg-gray-700">
-      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+    <nav className="relative bg-gray-700 c-shadow2">
+      <div className="relative max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="relative flex items-center justify-between h-16">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
             {/* <!-- Mobile menu button--> */}
@@ -24,32 +24,42 @@ function HeaderLoggedIn({ history }) {
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700 focus:text-white transition duration-150 ease-in-out"
               aria-label="Main menu"
               aria-expanded="false"
+              onClick={() => appDispatch({ type: 'toggles', for: 'mobileHamburgerHeaderLoggedIn' })}
             >
               {/* <!-- Icon when menu is closed. -->
           <!-- Menu open: "hidden", Menu closed: "block" --> */}
-              <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
+              {!appState.toggles.mobileHamburgerHeaderLoggedIn && (
+                <svg
+                  className="block h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              )}
               {/* <!-- Icon when menu is open. -->
           <!-- Menu open: "block", Menu closed: "hidden" --> */}
-              <svg className="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
+              {appState.toggles.mobileHamburgerHeaderLoggedIn && (
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              )}
             </button>
           </div>
           <div className="flex items-center justify-center">
             <div className="flex-shrink-0 ml-10">
-              <Link to="/">
+              <Link className="focus:outline-none" to="/">
                 <img
                   className="block lg:hidden h-12 w-auto"
                   src={appState.logo.url}
@@ -65,14 +75,14 @@ function HeaderLoggedIn({ history }) {
             <div className="hidden sm:block sm:ml-6">
               <div className="flex">
                 <Link
-                  to="my-songs"
-                  className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
+                  to="/my-songs"
+                  className="focus:outline-none ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
                 >
                   My Songs
                 </Link>
                 <Link
                   to="/explore"
-                  className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
+                  className="focus:outline-none ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
                 >
                   Explore Other Artistes Songs
                 </Link>
@@ -80,6 +90,7 @@ function HeaderLoggedIn({ history }) {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+            {/* NOTIFUCATION BUTTON */}
             <button
               className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-white focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
               aria-label="Notifications"
@@ -99,7 +110,7 @@ function HeaderLoggedIn({ history }) {
               <div>
                 <button
                   onClick={() => appDispatch({ type: 'isOpenProfileDropdown' })}
-                  className="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-white transition duration-150 ease-in-out"
+                  className="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-white focus:shadow-outline transition duration-150 ease-in-out"
                   id="user-menu"
                   aria-label="User menu"
                   aria-haspopup="true"
@@ -157,23 +168,24 @@ function HeaderLoggedIn({ history }) {
           </div>
         </div>
       </div>
-
-      <div className="hidden sm:hidden">
-        <div className="px-2 pt-2 pb-3">
-          <a
-            href="#"
-            className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
-          >
-            My Songs
-          </a>
-          <a
-            href="#"
-            className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
-          >
-            Other Artists Songs
-          </a>
+      {appState.toggles.mobileHamburgerHeaderLoggedIn && (
+        <div className="block sm:hidden absolute bg-gray-700 min-h-screen w-full z-10">
+          <div className="px-2 pt-2 pb-3">
+            <Link
+              to="/my-songs"
+              className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
+            >
+              My Songs
+            </Link>
+            <Link
+              to="/explore"
+              className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
+            >
+              Explore Other Artistes Songs
+            </Link>
+          </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 }
