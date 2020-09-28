@@ -14,7 +14,7 @@ import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
 function Register({ history }) {
   const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: '1.3rem' };
   const appState = useContext(StateContext);
-  const appsDispatch = useContext(DispatchContext);
+  const appDispatch = useContext(DispatchContext);
 
   const initialState = {
     username: {
@@ -51,10 +51,11 @@ function Register({ history }) {
       hasError: false,
       message: '',
     },
+    isRegistring: false,
     submitCount: 0,
   };
 
-  function reducer(draft, action) {
+  function registerReducer(draft, action) {
     switch (action.type) {
       case 'usernameImmediately':
         draft.username.hasError = false;
@@ -96,7 +97,7 @@ function Register({ history }) {
         draft.firstName.hasError = false;
         draft.firstName.value = action.value;
 
-        if (draft.firstName.value == '') {
+        if (draft.firstName.value.trim() == '') {
           draft.firstName.hasError = true;
           draft.firstName.message = 'First name cannot be empty.';
         }
@@ -115,7 +116,7 @@ function Register({ history }) {
         draft.lastName.hasError = false;
         draft.lastName.value = action.value;
 
-        if (draft.lastName.value == '') {
+        if (draft.lastName.value.trim() == '') {
           draft.lastName.hasError = true;
           draft.lastName.message = 'Last name cannot be empty.';
         }
@@ -190,6 +191,13 @@ function Register({ history }) {
           draft.confirmPassword.message = 'Passwords do not match.';
         }
         return;
+      case 'isRegistring':
+        if (action.process == 'starts') {
+          draft.isRegistring = true;
+        } else {
+          draft.isRegistring = false;
+        }
+        return;
       case 'submitForm':
         if (
           !draft.username.hasError &&
@@ -208,12 +216,12 @@ function Register({ history }) {
     }
   }
 
-  const [state, dispatch] = useImmerReducer(reducer, initialState);
+  const [state, registerDispatch] = useImmerReducer(registerReducer, initialState);
 
   // USERNAME AFTER DELAY
   useEffect(() => {
     if (state.username.value) {
-      const delay = setTimeout(() => dispatch({ type: 'usernameAfterDelay' }), 800);
+      const delay = setTimeout(() => registerDispatch({ type: 'usernameAfterDelay' }), 800);
       return () => clearTimeout(delay);
     }
   }, [state.username.value]);
@@ -227,7 +235,7 @@ function Register({ history }) {
           const response = await Axios.post('/doesUsernameExists', {
             username: state.username.value,
           });
-          dispatch({ type: 'usernameIsUnique', value: response.data });
+          registerDispatch({ type: 'usernameIsUnique', value: response.data });
         } catch (error) {
           console.log(error.message);
         }
@@ -239,7 +247,7 @@ function Register({ history }) {
   // EMAIL AFTER DELAY
   useEffect(() => {
     if (state.email.value) {
-      const delay = setTimeout(() => dispatch({ type: 'emailAfterDelay' }), 800);
+      const delay = setTimeout(() => registerDispatch({ type: 'emailAfterDelay' }), 800);
 
       return () => clearTimeout(delay);
     }
@@ -256,7 +264,7 @@ function Register({ history }) {
             { email: state.email.value },
             { cancelToken: request.token }
           );
-          dispatch({ type: 'emailIsUnique', value: response.data });
+          registerDispatch({ type: 'emailIsUnique', value: response.data });
         } catch (error) {
           console.log(error.message);
         }
@@ -269,7 +277,7 @@ function Register({ history }) {
   // PASSWORD AFTER DELAY
   useEffect(() => {
     if (state.password.value) {
-      const delay = setTimeout(() => dispatch({ type: 'passwordAfterDelay' }), 800);
+      const delay = setTimeout(() => registerDispatch({ type: 'passwordAfterDelay' }), 800);
 
       return () => clearTimeout(delay);
     }
@@ -278,7 +286,7 @@ function Register({ history }) {
   // PASSWORD AFTER DELAY
   useEffect(() => {
     if (state.confirmPassword.value) {
-      const delay = setTimeout(() => dispatch({ type: 'confirmPasswordAfterDelay' }), 800);
+      const delay = setTimeout(() => registerDispatch({ type: 'confirmPasswordAfterDelay' }), 800);
 
       return () => clearTimeout(delay);
     }
@@ -287,18 +295,27 @@ function Register({ history }) {
   // SUBMIT: DO SOME CHECKS BEFORE SUBMITTING FORM
   function handleFormSubmission(e) {
     e.preventDefault();
-    dispatch({ type: 'usernameImmediately', value: state.username.value });
-    dispatch({ type: 'usernameAfterDelay', value: state.email.value, dontSendReqToServer: true });
-    dispatch({ type: 'firstNameImmediately', value: state.firstName.value });
-    dispatch({ type: 'lastNameImmediately', value: state.lastName.value });
-    dispatch({ type: 'emailImmediately', value: state.email.value, dontSendReqToServer: true });
-    dispatch({ type: 'passwordImmediately', value: state.password.value });
-    dispatch({ type: 'confirmPasswordImmediately', value: state.confirmPassword.value });
-    dispatch({ type: 'submitForm' });
+    registerDispatch({ type: 'usernameImmediately', value: state.username.value });
+    registerDispatch({
+      type: 'usernameAfterDelay',
+      value: state.email.value,
+      dontSendReqToServer: true,
+    });
+    registerDispatch({ type: 'firstNameImmediately', value: state.firstName.value });
+    registerDispatch({ type: 'lastNameImmediately', value: state.lastName.value });
+    registerDispatch({
+      type: 'emailImmediately',
+      value: state.email.value,
+      dontSendReqToServer: true,
+    });
+    registerDispatch({ type: 'passwordImmediately', value: state.password.value });
+    registerDispatch({ type: 'confirmPasswordImmediately', value: state.confirmPassword.value });
+    registerDispatch({ type: 'submitForm' });
   }
 
   useEffect(() => {
     if (state.submitCount) {
+      registerDispatch({ type: 'isRegistring', process: 'starts' });
       const request = Axios.CancelToken.source();
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       const currentTime = moment().tz(timezone).format();
@@ -320,13 +337,16 @@ function Register({ history }) {
               cancelToken: request.token,
             }
           );
+
+          registerDispatch({ type: 'isRegistring' });
+
           if (response.data.token) {
             // LOGIN
-            appsDispatch({ type: 'login', value: response.data });
+            appDispatch({ type: 'login', value: response.data });
             history.push(`/profile/${response.data.username}`);
           } else {
             // DISPLAY ERROR
-            appsDispatch({ type: 'flashMsgError', value: response.data });
+            appDispatch({ type: 'flashMsgError', value: response.data });
           }
         } catch (error) {
           console.log(error.message);
@@ -359,7 +379,9 @@ function Register({ history }) {
                 </label>
                 <input
                   value={state.username.value}
-                  onChange={e => dispatch({ type: 'usernameImmediately', value: e.target.value })}
+                  onChange={e =>
+                    registerDispatch({ type: 'usernameImmediately', value: e.target.value })
+                  }
                   type="text"
                   id="username"
                   placeholder="don"
@@ -383,7 +405,9 @@ function Register({ history }) {
                 </label>
                 <input
                   value={state.firstName.value}
-                  onChange={e => dispatch({ type: 'firstNameImmediately', value: e.target.value })}
+                  onChange={e =>
+                    registerDispatch({ type: 'firstNameImmediately', value: e.target.value })
+                  }
                   type="text"
                   id="FirstName"
                   placeholder="John"
@@ -407,7 +431,9 @@ function Register({ history }) {
                 </label>
                 <input
                   value={state.lastName.value}
-                  onChange={e => dispatch({ type: 'lastNameImmediately', value: e.target.value })}
+                  onChange={e =>
+                    registerDispatch({ type: 'lastNameImmediately', value: e.target.value })
+                  }
                   type="text"
                   id="lastName"
                   placeholder="Sido"
@@ -431,7 +457,9 @@ function Register({ history }) {
                 </label>
                 <input
                   value={state.email.value}
-                  onChange={e => dispatch({ type: 'emailImmediately', value: e.target.value })}
+                  onChange={e =>
+                    registerDispatch({ type: 'emailImmediately', value: e.target.value })
+                  }
                   type="email"
                   id="email"
                   placeholder="your@email.com"
@@ -455,7 +483,9 @@ function Register({ history }) {
                 </label>
                 <input
                   value={state.password.value}
-                  onChange={e => dispatch({ type: 'passwordImmediately', value: e.target.value })}
+                  onChange={e =>
+                    registerDispatch({ type: 'passwordImmediately', value: e.target.value })
+                  }
                   type="password"
                   id="password"
                   placeholder="Password"
@@ -480,7 +510,7 @@ function Register({ history }) {
                 <input
                   value={state.confirmPassword.value}
                   onChange={e =>
-                    dispatch({ type: 'confirmPasswordImmediately', value: e.target.value })
+                    registerDispatch({ type: 'confirmPasswordImmediately', value: e.target.value })
                   }
                   type="password"
                   id="confirm-password"
@@ -498,12 +528,20 @@ function Register({ history }) {
                   </div>
                 </CSSTransition>
               </div>
-              {/* SUBMIT */}
-              <input
+              {/* SUBMIT BUTTON */}
+
+              <button
                 type="submit"
-                value="Register"
-                className="bg-black cursor-pointer text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8"
-              />
+                className="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8"
+              >
+                {state.isRegistring ? (
+                  <span>
+                    <i className="fa text-sm fa-spinner fa-spin"></i>
+                  </span>
+                ) : (
+                  <>Register</>
+                )}
+              </button>
             </form>
             <div className="text-center pt-12 pb-12">
               <p>
