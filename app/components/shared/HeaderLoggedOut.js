@@ -22,7 +22,7 @@ function HeaderLoggedIn() {
             >
               {/* <!-- Icon when menu is closed. -->
           <!-- Menu open: "hidden", Menu closed: "block" --> */}
-              {!appState && appState.toggles.mobileHamburgerHeaderLoggedIn && (
+              {!(appState && appState.toggles.mobileHamburgerHeaderLoggedIn) && (
                 <svg
                   className="block h-6 w-6"
                   fill="none"
