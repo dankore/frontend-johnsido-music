@@ -21478,6 +21478,16 @@ video {
 /* NON-TAILWIND CSS
    ========================================================================== */
 
+#wrapper .text {
+  position: relative;
+  bottom: 30px;
+  visibility: hidden;
+}
+
+#wrapper:hover .text {
+  visibility: visible;
+}
+
 .c-modal {
   box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 10px 3px;
   right: 0.75rem;
@@ -21491,7 +21501,7 @@ video {
 }
 
 .custom-box-shadow {
-  box-shadow: 0 -6px 4px -7px rgba(0,0,0,0.1) inset
+  box-shadow: 0 -6px 4px -7px rgba(0, 0, 0, 0.1) inset
 }
 
 .c-shadow {
@@ -21500,7 +21510,7 @@ video {
 }
 
 .c-shadow2 {
-  box-shadow:  0 8px 10px 1px rgba(0,0,0,0.14), 0 10px 14px 3px rgba(0,0,0,0.12), 0 4px 5px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 10px 14px 3px rgba(0, 0, 0, 0.12), 0 4px 5px 0 rgba(0, 0, 0, 0.2);
 }
 
 .js-brown {
