@@ -3,6 +3,7 @@ import StateContext from '../../contextsProviders/StateContext';
 import DispatchContext from '../../contextsProviders/DispatchContext';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import MobileMenus from './MobileMenus';
 
 function HeaderLoggedIn({ history }) {
   const appState = useContext(StateContext);
@@ -168,24 +169,7 @@ function HeaderLoggedIn({ history }) {
           </div>
         </div>
       </div>
-      {appState.toggles.mobileHamburgerHeaderLoggedIn && (
-        <div className="block sm:hidden absolute bg-gray-700 min-h-screen w-full z-10">
-          <div className="px-2 pt-2 pb-3">
-            <Link
-              to="/my-songs"
-              className="mt-1 block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-blue-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
-            >
-              My Songs
-            </Link>
-            <Link
-              to="/explore"
-              className="mt-1 block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-blue-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
-            >
-              Explore Other Artistes Songs
-            </Link>
-          </div>
-        </div>
-      )}
+      {appState.toggles.mobileHamburgerHeaderLoggedIn && <MobileMenus />}
     </nav>
   );
 }
