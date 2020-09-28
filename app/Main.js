@@ -202,10 +202,18 @@ function Main() {
               )}
             </Route>
             <Route path="/register">
-              <Register />
+              {!state.loggedIn ? (
+                <Register />
+              ) : (
+                <div>Please logout to view this page.</div>
+              )}
             </Route>
             <Route path="/login">
-              <Login />
+              {!state.loggedIn ? (
+                <Login />
+              ) : (
+                <div>Please logout to view this page.</div>
+              )}
             </Route>
             <Route path="/about">
               <AboutPage />

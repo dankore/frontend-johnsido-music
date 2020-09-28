@@ -132,6 +132,21 @@ function HeaderLoggedIn() {
           </a>
         </div>
       </div>
+      {/* SCREEN READERS ONLY */}
+      <Link
+        to="/register"
+        className="sr-only flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-white transition duration-150 ease-in-out px-1"
+        aria-label="register"
+      >
+        Register
+     </Link>
+     <Link
+        to="/register"
+        className="sr-only flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-white transition duration-150 ease-in-out px-1"
+        aria-label="register"
+     >
+        Register
+    </Link>
     </nav>
   );
 }
