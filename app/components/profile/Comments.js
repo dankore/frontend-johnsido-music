@@ -382,6 +382,13 @@ function Comments({ history }) {
     commentsDispatch({ type: 'deleteComment', value: commentId, process: 'toggle' });
   }
 
+  function handleCommentInput(e, process) {
+    process == 'add' && commentsDispatch({ type: 'updateComment', value: e.target.value });
+    process == 'edit' && commentsDispatch({ type: 'editComment', value: e.target.value });
+    e.target.style.height = '0.5px';
+    e.target.style.height = 25 + e.target.scrollHeight + 'px';
+  }
+
   if (state.isFetching) {
     return <LoadingDotsAnimation />;
   }
@@ -437,18 +444,18 @@ function Comments({ history }) {
                 <div className="w-full">
                   <textarea
                     value={state.comment.value}
-                    onChange={e =>
-                      commentsDispatch({ type: 'updateComment', value: e.target.value })
-                    }
+                    onChange={e => handleCommentInput(e, 'add')}
                     id="input-comment"
-                    className="focus:bg-gray-100 w-full p-2"
+                    className="focus:bg-gray-100 w-full p-2 resize-none"
                     placeholder="What's on your mind?"
                     style={{
                       backgroundColor: '#F2F3F5',
                       whiteSpace: 'pre-wrap',
+                      overflowWrap: 'break-word',
+                      wordBreak: 'break-word',
                       overflow: 'hidden',
                     }}
-                  ></textarea>
+                  />
                   <CSSTransition
                     in={state.comment.hasError}
                     timeout={330}
@@ -569,7 +576,7 @@ function Comments({ history }) {
                       return (
                         <div className="border-b p-3 bg-white mb-2 c-shadow" key={index}>
                           <p className="text-gray-700">{timeAgo(item.createdDate)}</p>
-                          <p className="">{item.text}</p>
+                          <p style={{ wordBreak: 'break-word' }}>{item.text}</p>
                         </div>
                       );
                     })}
@@ -592,19 +599,16 @@ function Comments({ history }) {
                       </div>
                       <textarea
                         value={state.editComment.value}
-                        onChange={e =>
-                          commentsDispatch({ type: 'editComment', value: e.target.value })
-                        }
-                        className="appearance-none border w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        onChange={e => handleCommentInput(e, 'edit')}
+                        className="resize-none appearance-none border w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="What's on your mind?"
                         style={{
                           backgroundColor: '#F2F3F5',
                           whiteSpace: 'pre-wrap',
                           overflow: 'hidden',
                         }}
-                      >
-                        {/* {state.editComment.value} */}
-                      </textarea>
+                      />
+
                       <CSSTransition
                         in={state.editComment.hasError}
                         timeout={330}
