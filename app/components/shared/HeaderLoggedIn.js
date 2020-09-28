@@ -124,7 +124,7 @@ function HeaderLoggedIn({ history }) {
               </div>
 
               {appState.isOpenProfileDropdown && (
-                <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg z-10">
+                <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg z-20">
                   <div
                     className="py-1 rounded-md bg-white shadow-xs"
                     role="menu"
@@ -173,13 +173,13 @@ function HeaderLoggedIn({ history }) {
           <div className="px-2 pt-2 pb-3">
             <Link
               to="/my-songs"
-              className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
+              className="mt-1 block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-blue-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
             >
               My Songs
             </Link>
             <Link
               to="/explore"
-              className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
+              className="mt-1 block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-blue-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
             >
               Explore Other Artistes Songs
             </Link>
