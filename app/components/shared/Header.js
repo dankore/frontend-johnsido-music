@@ -5,7 +5,7 @@ import StateContext from '../../contextsProviders/StateContext';
 
 function Header() {
   const appState = useContext(StateContext);
-  return <>{appState.loggedIn ? <HeaderLoggedIn /> : <HeaderLoggedOut />}</>;
+  return <>{appState && appState.loggedIn ? <HeaderLoggedIn /> : <HeaderLoggedOut />}</>;
 }
 
 export default Header;

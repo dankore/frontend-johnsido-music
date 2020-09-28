@@ -73,7 +73,7 @@ function HeaderLoggedIn() {
           <div className="absolute text-white inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             <Link
               to="/register"
-              className="p-1 border-2 border-transparent rounded-full hover:text-white focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
+              className="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-white transition duration-150 ease-in-out px-1"
               aria-label="register"
             >
               Register
@@ -84,7 +84,7 @@ function HeaderLoggedIn() {
               <div>
                 <Link
                   to="/login"
-                  className="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-white transition duration-150 ease-in-out"
+                  className="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-white transition duration-150 ease-in-out px-1"
                   id="user-menu"
                   aria-label="User menu"
                 >

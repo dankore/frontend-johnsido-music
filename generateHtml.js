@@ -1,19 +1,25 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import fs from 'fs';
-// import Footer from './app/components/shared/Footer';
-import HeaderLoggedOut from './app/components/shared/HeaderLoggedOut';
-// import LoadingDotsIcon from './app/components/shared/LoadingDotsAnimation';
+import Footer from './app/components/shared/Footer';
+import LoadingDotsIcon from './app/components/shared/LoadingDotsAnimation';
 import { StaticRouter as Router, Switch } from 'react-router-dom';
 import StateContext from './app/contextsProviders/StateContext';
+import Header from './app/components/shared/Header';
 
 function RENDER_THIS_HTML() {
   return (
     <StateContext.Provider>
-      <Router path={['/profile/:username', '/settings', '/upload-song', '/about']}>
+      <Router path={['/profile/:username', '/about']}>
+        <div className="animate-pulse">
+          <Header />
+        </div>
         <Switch>
-          <HeaderLoggedOut />
+          <LoadingDotsIcon />
         </Switch>
+      </Router>
+      <Router path={['/profile/:username', '/about']}>
+        <Footer />
       </Router>
     </StateContext.Provider>
   );
