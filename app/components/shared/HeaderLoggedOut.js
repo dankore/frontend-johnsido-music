@@ -22,7 +22,7 @@ function HeaderLoggedIn() {
             >
               {/* <!-- Icon when menu is closed. -->
           <!-- Menu open: "hidden", Menu closed: "block" --> */}
-              {!appState.toggles.mobileHamburgerHeaderLoggedIn && (
+              {!appState && appState.toggles.mobileHamburgerHeaderLoggedIn && (
                 <svg
                   className="block h-6 w-6"
                   fill="none"
@@ -39,7 +39,7 @@ function HeaderLoggedIn() {
               )}
               {/* <!-- Icon when menu is open. -->
           <!-- Menu open: "block", Menu closed: "hidden" --> */}
-              {appState.toggles.mobileHamburgerHeaderLoggedIn && (
+              {appState && appState.toggles.mobileHamburgerHeaderLoggedIn && (
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
@@ -112,7 +112,7 @@ function HeaderLoggedIn() {
         </div>
       </div>
 
-      {appState.toggles.mobileHamburgerHeaderLoggedIn && <MobileMenus />}
+      {appState && appState.toggles.mobileHamburgerHeaderLoggedIn && <MobileMenus />}
 
       {/* SCREEN READERS ONLY */}
       <Link
