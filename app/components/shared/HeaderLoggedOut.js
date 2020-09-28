@@ -16,8 +16,6 @@ function HeaderLoggedIn() {
               aria-label="Main menu"
               aria-expanded="false"
             >
-              {/* <!-- Icon when menu is closed. -->
-          <!-- Menu open: "hidden", Menu closed: "block" --> */}
               <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
@@ -26,8 +24,6 @@ function HeaderLoggedIn() {
                   d="M4 6h16M4 12h16M4 18h16"
                 />
               </svg>
-              {/* <!-- Icon when menu is open. -->
-          <!-- Menu open: "block", Menu closed: "hidden" --> */}
               <svg className="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
@@ -40,7 +36,7 @@ function HeaderLoggedIn() {
           </div>
           <div className="flex items-center justify-center">
             <div className="flex-shrink-0 ml-10">
-              <Link to="/">
+              <Link className="focus:outline-none" to="/">
                 <img
                   className="block lg:hidden h-12 w-auto"
                   src={appState?.logo.url}
@@ -99,39 +95,6 @@ function HeaderLoggedIn() {
         </div>
       </div>
 
-      {/* <!--
-    Mobile menu, toggle classes based on menu state.
-
-    Menu open: "block", Menu closed: "hidden"
-  --> */}
-      <div className="hidden sm:hidden">
-        <div className="px-2 pt-2 pb-3">
-          <a
-            href="#"
-            className="block px-3 py-2 rounded-md text-base font-medium text-white bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
-          >
-            Dashboard
-          </a>
-          <a
-            href="#"
-            className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
-          >
-            Team
-          </a>
-          <a
-            href="#"
-            className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
-          >
-            Projects
-          </a>
-          <a
-            href="#"
-            className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
-          >
-            Calendar
-          </a>
-        </div>
-      </div>
       {/* SCREEN READERS ONLY */}
       <Link
         to="/register"
@@ -139,14 +102,14 @@ function HeaderLoggedIn() {
         aria-label="register"
       >
         Register
-     </Link>
-     <Link
+      </Link>
+      <Link
         to="/register"
         className="sr-only flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-white transition duration-150 ease-in-out px-1"
         aria-label="register"
-     >
+      >
         Register
-    </Link>
+      </Link>
     </nav>
   );
 }

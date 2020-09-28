@@ -23,10 +23,7 @@ function SettingsPage({ history }) {
       <nav className="bg-gray-900 c-shadow2 fixed w-full flex justify-end z-20 top-0">
         <ul className="flex justify-between items-center text-white w-full md:max-w-xs px-3">
           <li className="md:flex-none ">
-            <Link
-              className="focus:outline-none inline-block hover:underline py-2"
-              to="/"
-            >
+            <Link className="focus:outline-none inline-block hover:underline py-2" to="/">
               Home
             </Link>
           </li>
