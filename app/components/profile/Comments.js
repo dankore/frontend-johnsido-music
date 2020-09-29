@@ -556,7 +556,7 @@ function Comments({ history }) {
                             data-id={comment._id}
                             data-comment={lastComment.text}
                             onClick={handleEditClick}
-                            className="flex bg-white items-center cursor-pointer focus:outline-none"
+                            className="flex bg-white hover:underline items-center cursor-pointer focus:outline-none"
                           />
 
                           <input
@@ -564,7 +564,7 @@ function Comments({ history }) {
                             type="button"
                             value="Delete"
                             data-commentid={comment._id}
-                            className="flex items-center text-red-600 bg-white cursor-pointer ml-3 focus:outline-none"
+                            className="flex items-center text-red-600 bg-white hover:underline cursor-pointer ml-3 focus:outline-none"
                           />
                         </div>
                       )}
@@ -588,7 +588,7 @@ function Comments({ history }) {
                     <div className="flex text-xl w-full justify-between p-3 bg-gray-200 text-gray-700 c-shadow2">
                       <h2 className="font-semibold">Comment Edit History</h2>
                       <button
-                        className="hover:text-gray-900"
+                        className="hover:underline focus:outline-none"
                         onClick={() => appDispatch({ type: 'commentHistory' })}
                       >
                         Close
@@ -613,7 +613,7 @@ function Comments({ history }) {
                       <div className="flex text-xl w-full justify-between p-3 bg-gray-200 text-gray-700 c-shadow2">
                         <h2 className="font-semibold">Edit Comment</h2>
                         <button
-                          className="hover:text-gray-900"
+                          className="hover:underline focus:outline-none"
                           onClick={() => appDispatch({ type: 'editComment' })}
                         >
                           Close
