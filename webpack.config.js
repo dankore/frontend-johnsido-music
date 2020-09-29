@@ -25,9 +25,7 @@ config = {
     filename: 'bundled.js',
   },
   plugins: [
-    new Dotenv({
-      path: path.resolve(__dirname, 'env'),
-    }),
+    new Dotenv(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'app/index-template.html',
