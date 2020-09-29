@@ -7,6 +7,3 @@
   for = "/*"
     [headers.values]
     Access-Control-Allow-Origin = "*"
-
-[context.production.environment]
-   TEST = "super secret"
