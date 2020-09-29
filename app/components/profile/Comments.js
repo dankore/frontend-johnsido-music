@@ -5,12 +5,13 @@ import { useImmerReducer } from 'use-immer';
 import Axios from 'axios';
 import LoadingDotsAnimation from '../shared/LoadingDotsAnimation';
 import { CSSTransition } from 'react-transition-group';
-import { CSSTransitionStyle, linkCSS } from '../../helpers/CSSHelpers';
+import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
 import { timeAgo } from '../../helpers/JSHelpers';
 import StateContext from '../../contextsProviders/StateContext';
 import PropTypes from 'prop-types';
 import DispatchContext from '../../contextsProviders/DispatchContext';
 import ReuseableModal from '../admin/ReuseableModal';
+import BackToProfileBtn from '../shared/BackToProfileBtn';
 
 function Comments({ history }) {
   const appState = useContext(StateContext);
@@ -397,17 +398,16 @@ function Comments({ history }) {
     <Page
       title={`Comments on ${state.user.profileFirstName} ${state.user.profileLastName}'s profile`}
     >
-      <div id="wrapper" className="w-full sm:max-w-xl lg:max-w-6xl mx-auto pl-3 lg:pl-0">
-        <div className="w-8 h-8 transition my-5 duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-          <Link className={linkCSS} to={`/profile/${state.user.profileUsername}`}>
-            <svg viewBox="0 0 24 24" className="w-8 h-8" stroke="#956503" strokeWidth="">
-              <g>
-                <path d="M20 11H7.414l4.293-4.293c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0l-6 6c-.39.39-.39 1.023 0 1.414l6 6c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L7.414 13H20c.553 0 1-.447 1-1s-.447-1-1-1z"></path>
-              </g>
-            </svg>
-          </Link>
+      {/* BACK TO PROFILE BTN */}
+      <div className="w-full sm:max-w-xl lg:max-w-6xl mx-auto pl-3 xl:pl-0 my-5">
+        <div className="inline-block h-8">
+          <BackToProfileBtn
+            username={state.user.profileUsername}
+            firstName={state.user.profileFirstName}
+            linkDomId={true}
+            linkChild={true}
+          />
         </div>
-        <span className="text ml-10">Back {state.user.profileFirstName}&apos;s profile</span>
       </div>
 
       <div className="w-full sm:max-w-xl lg:max-w-6xl mx-auto grid lg:grid-cols-2 gap-2">
@@ -446,10 +446,13 @@ function Comments({ history }) {
               <h2 className="border-b bg-gray-200 p-3 text-gray-700 text-xl">Add a Comment</h2>
               <div className="relative flex p-2">
                 <div className="mr-1">
-                  <Link to={`/profile/${state.user.profileUsername}`}>
+                  <Link
+                    className="focus:outline-none"
+                    to={`/profile/${state.user.profileUsername}`}
+                  >
                     <img
                       src={state.user.profileAvatar}
-                      className="w-8 h-8 rounded-full"
+                      className="w-8 h-8 rounded-full transition duration-500 ease-in-out transform hover:scale-105"
                       alt="profile pic"
                     />
                   </Link>
@@ -511,11 +514,14 @@ function Comments({ history }) {
                     data-comments={JSON.stringify(comment.comment)}
                   >
                     <div className="flex">
-                      <div className="flex mr-1">
-                        <Link to={`/profile/${comment.author.username}`}>
+                      <div className="mr-1">
+                        <Link
+                          className="focus:outline-none"
+                          to={`/profile/${comment.author.username}`}
+                        >
                           <img
                             src={comment.author.avatar}
-                            className="w-8 h-8 rounded-full"
+                            className="w-8 h-8 rounded-full transition duration-500 ease-in-out transform hover:scale-105"
                             alt="profile pic"
                           />
                         </Link>
@@ -528,7 +534,10 @@ function Comments({ history }) {
                           backgroundColor: '#F2F3F5',
                         }}
                       >
-                        <Link to={`/profile/${comment.author.username}`} className="font-medium">
+                        <Link
+                          to={`/profile/${comment.author.username}`}
+                          className="font-medium focus:outline-none hover:underline"
+                        >
                           {comment.author.firstName} {comment.author.lastName}
                         </Link>
                         <div>
@@ -547,7 +556,7 @@ function Comments({ history }) {
                             data-id={comment._id}
                             data-comment={lastComment.text}
                             onClick={handleEditClick}
-                            className="flex bg-white items-center cursor-pointer focus:outline-none"
+                            className="flex bg-white hover:underline items-center cursor-pointer focus:outline-none"
                           />
 
                           <input
@@ -555,7 +564,7 @@ function Comments({ history }) {
                             type="button"
                             value="Delete"
                             data-commentid={comment._id}
-                            className="flex items-center text-red-600 bg-white cursor-pointer ml-3 focus:outline-none"
+                            className="flex items-center text-red-600 bg-white hover:underline cursor-pointer ml-3 focus:outline-none"
                           />
                         </div>
                       )}
@@ -579,7 +588,7 @@ function Comments({ history }) {
                     <div className="flex text-xl w-full justify-between p-3 bg-gray-200 text-gray-700 c-shadow2">
                       <h2 className="font-semibold">Comment Edit History</h2>
                       <button
-                        className="hover:text-gray-900"
+                        className="hover:underline focus:outline-none"
                         onClick={() => appDispatch({ type: 'commentHistory' })}
                       >
                         Close
@@ -604,7 +613,7 @@ function Comments({ history }) {
                       <div className="flex text-xl w-full justify-between p-3 bg-gray-200 text-gray-700 c-shadow2">
                         <h2 className="font-semibold">Edit Comment</h2>
                         <button
-                          className="hover:text-gray-900"
+                          className="hover:underline focus:outline-none"
                           onClick={() => appDispatch({ type: 'editComment' })}
                         >
                           Close

@@ -5,12 +5,12 @@ import Axios from 'axios';
 import { useImmerReducer } from 'use-immer';
 
 // AXIOS BASE URL
-console.log(process.env.BACKENDURL, process.env.AUDIO_UPLOAD_URL);
-Axios.defaults.baseURL = process.env.BACKENDURL || 'https://backend-johnsido-music.herokuapp.com';
+console.log(process.env.BACKENDURL);
+Axios.defaults.baseURL = process.env.BACKENDURL;
 // STATE MANAGEMENT
 import StateContext from './contextsProviders/StateContext';
 import DispatchContext from './contextsProviders/DispatchContext';
-//COMPONENTS
+//COMPONENTS //recommended size limit (244 KiB)
 import ProfilePage from './pages/profile/ProfilePage';
 import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';

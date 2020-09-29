@@ -8,6 +8,7 @@ import Page from '../layouts/Page';
 import StateContext from '../../contextsProviders/StateContext';
 import PropTypes from 'prop-types';
 import { followBtnCSS, stopFollowBtnCSS, linkCSS } from '../../helpers/CSSHelpers';
+import BackToProfileBtn from '../shared/BackToProfileBtn';
 
 function FollowTemplate({ history, type }) {
   const appState = useContext(StateContext);
@@ -263,54 +264,93 @@ function FollowTemplate({ history, type }) {
 
   return (
     <Page title={title}>
-      <div className="w-full sm:max-w-lg lg:max-w-xl mx-auto c-shadow">
-        <FollowPageHeader error={state.error} profileUser={state.profileUser} loggedIn={state} />
-        {state.follows.length > 0 &&
-          state.follows.map((follow, index) => {
-            return (
-              <div key={index} className="block relative border bg-white p-2">
-                <div className="flex">
-                  <Link
-                    className={`flex mr-1 ${linkCSS}`}
-                    to={`/profile/${follow.author.username}`}
-                  >
-                    <img
-                      src={follow.author.avatar}
-                      className="w-8 h-8 rounded-full"
-                      alt="profile pic"
-                    />
-                  </Link>
-                  <div
-                    className="w-full px-2"
-                    style={{
-                      overflowWrap: 'break-word',
-                      minWidth: 0 + 'px',
-                      backgroundColor: '#fff',
-                    }}
-                  >
-                    <div className="flex justify-between items-center">
-                      <Link className={linkCSS} to={`/profile/${follow.author.username}`}>
-                        <p className="font-medium">
-                          {follow.author.firstName} {follow.author.lastName}
-                        </p>
-                        <div className="flex flex-wrap items-center text-sm">
-                          <p className="mr-2">@{follow.author.username}</p>
-                          {appState.loggedIn && follow.visitedUserFollowslogged && (
-                            <p className="text-green-600 bg-green-100 italic px-1">Follows you</p>
+      <div className="w-full sm:max-w-lg lg:max-w-xl mx-auto">
+        {/* BACK BUTTON */}
+        <div className="my-5 pl-3 xl:pl-0">
+          <div className="flex items-center">
+            <BackToProfileBtn username={state.profileUser.profileUsername} />
+            <p className="font-bold ml-4">
+              {state.profileUser.profileFirstName} {state.profileUser.profileLastName}{' '}
+            </p>
+          </div>
+          <p className="ml-12 -m-2 text-gray-700">@{state.profileUser.profileUsername}</p>
+        </div>
+
+        <div className="c-shadow">
+          <FollowPageHeader error={state.error} profileUser={state.profileUser} loggedIn={state} />
+          {state.follows.length > 0 &&
+            state.follows.map((follow, index) => {
+              return (
+                <div key={index} className="block relative border bg-white p-2">
+                  <div className="flex">
+                    <Link
+                      className={`flex mr-1 ${linkCSS}`}
+                      to={`/profile/${follow.author.username}`}
+                    >
+                      <img
+                        src={follow.author.avatar}
+                        className="w-8 h-8 rounded-full transition duration-500 ease-in-out transform hover:scale-105"
+                        alt="profile pic"
+                      />
+                    </Link>
+                    <div
+                      className="w-full px-2"
+                      style={{
+                        overflowWrap: 'break-word',
+                        minWidth: 0 + 'px',
+                        backgroundColor: '#fff',
+                      }}
+                    >
+                      <div className="flex justify-between items-center">
+                        <Link className={linkCSS} to={`/profile/${follow.author.username}`}>
+                          <p className="font-medium hover:underline">
+                            {follow.author.firstName} {follow.author.lastName}
+                          </p>
+                          <div className="flex flex-wrap items-center text-sm">
+                            <p className="mr-2">@{follow.author.username}</p>
+                            {appState.loggedIn && follow.visitedUserFollowslogged && (
+                              <p className="text-green-600 bg-green-100 italic px-1">Follows you</p>
+                            )}
+                          </div>
+                        </Link>
+                        {/* FOLLOW BUTTON */}
+                        {appState.user.username != follow.author.username &&
+                          !follow.loggedInUserFollowsVisited &&
+                          follow.author.username != '' && (
+                            <button
+                              className={followBtnCSS}
+                              type="button"
+                              style={{ transition: 'all .15s ease' }}
+                              onClick={() =>
+                                followDispatch({
+                                  type: 'startFollowing',
+                                  value: {
+                                    id: follow._id,
+                                    username: follow.author.username,
+                                  },
+                                })
+                              }
+                            >
+                              {state.startFollowing.isLoading == follow.author.username ? (
+                                <div className="flex items-center justify-center">
+                                  <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
+                                </div>
+                              ) : (
+                                <span>
+                                  Follow <i className="fas fa-user-plus"></i>
+                                </span>
+                              )}
+                            </button>
                           )}
-                        </div>
-                      </Link>
-                      {/* FOLLOW BUTTON */}
-                      {appState.user.username != follow.author.username &&
-                        !follow.loggedInUserFollowsVisited &&
-                        follow.author.username != '' && (
+
+                        {follow.loggedInUserFollowsVisited && follow.author.username != '' && (
                           <button
-                            className={followBtnCSS}
+                            className={stopFollowBtnCSS}
                             type="button"
                             style={{ transition: 'all .15s ease' }}
                             onClick={() =>
                               followDispatch({
-                                type: 'startFollowing',
+                                type: 'stopFollowing',
                                 value: {
                                   id: follow._id,
                                   username: follow.author.username,
@@ -318,55 +358,29 @@ function FollowTemplate({ history, type }) {
                               })
                             }
                           >
-                            {state.startFollowing.isLoading == follow.author.username ? (
+                            {state.stopFollowing.isLoading == follow.author.username ? (
                               <div className="flex items-center justify-center">
                                 <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
                               </div>
                             ) : (
                               <span>
-                                Follow <i className="fas fa-user-plus"></i>
+                                Unfollow <i className="fas fa-user-times"></i>
                               </span>
                             )}
                           </button>
                         )}
-
-                      {follow.loggedInUserFollowsVisited && follow.author.username != '' && (
-                        <button
-                          className={stopFollowBtnCSS}
-                          type="button"
-                          style={{ transition: 'all .15s ease' }}
-                          onClick={() =>
-                            followDispatch({
-                              type: 'stopFollowing',
-                              value: {
-                                id: follow._id,
-                                username: follow.author.username,
-                              },
-                            })
-                          }
-                        >
-                          {state.stopFollowing.isLoading == follow.author.username ? (
-                            <div className="flex items-center justify-center">
-                              <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
-                            </div>
-                          ) : (
-                            <span>
-                              Unfollow <i className="fas fa-user-times"></i>
-                            </span>
-                          )}
-                        </button>
-                      )}
+                      </div>
+                      <Link className={linkCSS} to={`/profile/${follow.author.username}`}>
+                        <p>{follow.author.about.bio}</p>
+                      </Link>
                     </div>
-                    <Link className={linkCSS} to={`/profile/${follow.author.username}`}>
-                      <p>{follow.author.about.bio}</p>
-                    </Link>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        {/* NO FOLLOWS */}
-        {noFollows()}
+              );
+            })}
+          {/* NO FOLLOWS */}
+          {noFollows()}
+        </div>
       </div>
     </Page>
   );
