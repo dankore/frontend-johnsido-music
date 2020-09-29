@@ -8,6 +8,7 @@ const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const fse = require('fs-extra');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const webpack = require('webpack');
 
 class RunAfterCompile {
   apply(compiler) {
@@ -27,6 +28,9 @@ config = {
   plugins: [
     new Dotenv({
       path: path.resolve(__dirname, './.env'),
+    }),
+    new webpack.DefinePlugin({
+      'process.env.TEST': JSON.stringify(process.env.TEST),
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
