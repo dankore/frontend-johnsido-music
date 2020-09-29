@@ -5,7 +5,7 @@ import Axios from 'axios';
 import { useImmerReducer } from 'use-immer';
 
 // AXIOS BASE URL
-console.log(process.env.BACKENDURL, process.env.TEST);
+console.log(process.env.BACKENDURL, process.env.AUDIO_UPLOAD_URL);
 Axios.defaults.baseURL = process.env.BACKENDURL || 'https://backend-johnsido-music.herokuapp.com';
 // STATE MANAGEMENT
 import StateContext from './contextsProviders/StateContext';

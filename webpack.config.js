@@ -26,11 +26,9 @@ config = {
     filename: 'bundled.js',
   },
   plugins: [
-    new Dotenv({
-      path: path.resolve(__dirname, './.env'),
-    }),
+    new Dotenv(),
     new DefinePlugin({
-      'process.env.TEST': JSON.stringify(process.env.TEST),
+      'process.env.AUDIO_UPLOAD_URL': JSON.stringify(process.env.AUDIO_UPLOAD_URL),
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
