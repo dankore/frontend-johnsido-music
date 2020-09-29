@@ -115,7 +115,6 @@ function FollowTemplate({ history, type }) {
         if (response.data) {
           followDispatch({ type: 'fetchVisistedProfileInfo', value: response.data });
         } else {
-          // FAIL SILENTLY
           history.push('/404');
         }
       })();
@@ -147,8 +146,7 @@ function FollowTemplate({ history, type }) {
         if (response.data.status) {
           followDispatch({ type: 'fetchVisistedProfileFollows', value: response.data.follows });
         } else {
-          // FAIL SILENTLY
-          console.log(response.data);
+          console.log(response.status);
         }
       })();
     } catch (error) {
@@ -222,7 +220,7 @@ function FollowTemplate({ history, type }) {
   }, [state.stopFollowing.count]);
 
   function noFollows() {
-    const commonCSS = 'block text-center c-shadow py-2';
+    const commonCSS = 'block text-center py-2';
     return (
       state.follows.length < 1 &&
       (type == 'followers' ? (
