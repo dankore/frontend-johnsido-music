@@ -399,8 +399,8 @@ function Comments({ history }) {
       title={`Comments on ${state.user.profileFirstName} ${state.user.profileLastName}'s profile`}
     >
       {/* BACK TO PROFILE BTN */}
-      <div className="w-full sm:max-w-xl lg:max-w-6xl mx-auto pl-3 xl:pl-0">
-        <div className="inline-block h-8 pt-5">
+      <div className="w-full sm:max-w-xl lg:max-w-6xl mx-auto pl-3 xl:pl-0 my-5">
+        <div className="inline-block h-8">
           <BackToProfileBtn
             username={state.user.profileUsername}
             firstName={state.user.profileFirstName}
