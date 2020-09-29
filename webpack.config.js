@@ -8,7 +8,7 @@ const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const fse = require('fs-extra');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const webpack = require('webpack');
+const { DefinePlugin } = require('webpack');
 
 class RunAfterCompile {
   apply(compiler) {
@@ -26,12 +26,10 @@ config = {
     filename: 'bundled.js',
   },
   plugins: [
-    new Dotenv({
-      path: path.resolve(__dirname, './.env'),
-    }),
-    new webpack.DefinePlugin({
-      'process.env.TEST': JSON.stringify(process.env.TEST),
-    }),
+    new Dotenv(),
+    new DefinePlugin({
+      'process.env.AUDIO_UPLOAD_URL': JSON.stringify(process.env.AUDIO_UPLOAD_URL),
+    }), // LAMBDA FUNCTION https://macarthur.me/posts/building-a-lambda-function-with-netlify
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'app/index-template.html',

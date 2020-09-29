@@ -7,7 +7,7 @@ module.exports = {
     data.append('upload_preset', 'audio-uploads');
     data.append('resource_type', 'video');
 
-    const response = await fetch(`https://api.cloudinary.com/v1_1/my-nigerian-projects/upload`, {
+    const response = await fetch(`${process.env.AUDIO_UPLOAD_URL}`, {
       method: 'POST',
       body: data,
     });
