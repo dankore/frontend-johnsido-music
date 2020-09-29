@@ -397,17 +397,18 @@ function Comments({ history }) {
     <Page
       title={`Comments on ${state.user.profileFirstName} ${state.user.profileLastName}'s profile`}
     >
-      <div id="wrapper" className="w-full sm:max-w-xl lg:max-w-6xl mx-auto pl-3 lg:pl-0">
-        <div className="w-8 h-8 transition my-5 duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-          <Link className={linkCSS} to={`/profile/${state.user.profileUsername}`}>
+      {/* BACK TO PROFILE BTN */}
+      <div className="w-full sm:max-w-xl lg:max-w-6xl mx-auto pl-3 xl:pl-0">
+        <div className="inline-block h-8 transition my-5 duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+          <Link id="wrapper" className={linkCSS} to={`/profile/${state.user.profileUsername}`}>
             <svg viewBox="0 0 24 24" className="w-8 h-8" stroke="#956503" strokeWidth="">
               <g>
                 <path d="M20 11H7.414l4.293-4.293c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0l-6 6c-.39.39-.39 1.023 0 1.414l6 6c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L7.414 13H20c.553 0 1-.447 1-1s-.447-1-1-1z"></path>
               </g>
             </svg>
+            <span className="text ml-10">Back {state.user.profileFirstName}&apos;s profile</span>
           </Link>
         </div>
-        <span className="text ml-10">Back {state.user.profileFirstName}&apos;s profile</span>
       </div>
 
       <div className="w-full sm:max-w-xl lg:max-w-6xl mx-auto grid lg:grid-cols-2 gap-2">
