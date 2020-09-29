@@ -32,6 +32,7 @@ function Comments({ history }) {
       hasError: false,
       message: '',
       isSaving: false,
+      commentBeforeEdit: '',
     },
     user: {
       profileUsername: '',
@@ -114,6 +115,7 @@ function Comments({ history }) {
         if (action.process == 'addToState' || action.process == 'typingToState') {
           draft.editComment.value = action.value;
           action.process == 'addToState' && (draft.editComment.commentId = action.commentId);
+          action.process == 'addToState' && (draft.editComment.commentBeforeEdit = action.value);
         }
 
         if (action.process == 'updateEditedComment') {
@@ -256,52 +258,56 @@ function Comments({ history }) {
   // SAVE EDITED COMMENT TO DB
   useEffect(() => {
     if (state.sendCountEdit) {
-      commentsDispatch({ type: 'editComment', process: 'starts' });
-      const request = Axios.CancelToken.source();
-      (async function sendForm() {
-        try {
-          const response = await Axios.post(
-            '/edit-comment',
-            {
-              commentId: state.editComment.commentId,
-              comment: state.editComment.value,
-              profileOwner: state.username, // USE THIS TO GET THE ID ON THE SERVER
-              apiUser: appState.user.username,
-              createdDate: Date.now(),
-              token: appState.user.token,
-            },
-            { cancelToken: request.token }
-          );
-
-          commentsDispatch({ type: 'editComment', process: 'ends' });
-
-          if (response.data.status) {
-            const newComment = response.data.comments[response.data.comments.length - 1];
-            commentsDispatch({
-              type: 'editComment',
-              process: 'updateEditedComment',
-              value: {
+      if (state.editComment.value != state.editComment.commentBeforeEdit) {
+        commentsDispatch({ type: 'editComment', process: 'starts' });
+        const request = Axios.CancelToken.source();
+        (async function sendForm() {
+          try {
+            const response = await Axios.post(
+              '/edit-comment',
+              {
                 commentId: state.editComment.commentId,
-                comment: {
-                  text: newComment.text,
-                  createdDate: newComment.createdDate,
-                  edited: true,
-                },
+                comment: state.editComment.value,
+                profileOwner: state.username, // USE THIS TO GET THE ID ON THE SERVER
+                apiUser: appState.user.username,
+                createdDate: Date.now(),
+                token: appState.user.token,
               },
-            });
+              { cancelToken: request.token }
+            );
 
-            appDispatch({ type: 'editComment' }); // CLOSE MODAL
-          } else {
-            // ERROR E.G COMMENT FIELD IS EMPTY CATCHED BY THE SERVER;
-            console.log(response.data);
+            commentsDispatch({ type: 'editComment', process: 'ends' });
+
+            if (response.data.status) {
+              const newComment = response.data.comments[response.data.comments.length - 1];
+              commentsDispatch({
+                type: 'editComment',
+                process: 'updateEditedComment',
+                value: {
+                  commentId: state.editComment.commentId,
+                  comment: {
+                    text: newComment.text,
+                    createdDate: newComment.createdDate,
+                    edited: true,
+                  },
+                },
+              });
+
+              appDispatch({ type: 'editComment' }); // CLOSE MODAL
+            } else {
+              // ERROR E.G COMMENT FIELD IS EMPTY CATCHED BY THE SERVER;
+              console.log(response.data);
+            }
+          } catch (error) {
+            // FAIL SILENTLY
+            console.log(error);
           }
-        } catch (error) {
-          // FAIL SILENTLY
-          console.log(error);
-        }
-      })();
+        })();
 
-      return () => request.cancel();
+        return () => request.cancel();
+      } else {
+        appDispatch({ type: 'editComment' }); // CLOSE MODAL
+      }
     }
   }, [state.sendCountEdit]);
 
@@ -691,7 +697,7 @@ function Comments({ history }) {
                     commentsDispatch({ type: 'deleteComment', process: 'toggle' })
                   }
                   handleSubmit={handleDelete}
-                  loading={state.isDeleting}
+                  loading={state.deleteComment.isDeleting}
                 />
               )}
             </ul>
