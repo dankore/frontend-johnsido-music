@@ -24,12 +24,14 @@ function Comments({ history }) {
       value: '',
       hasError: false,
       message: '',
+      isSaving: false,
     },
     editComment: {
       value: '',
       commentId: '',
       hasError: false,
       message: '',
+      isSaving: false,
     },
     user: {
       profileUsername: '',
@@ -97,35 +99,40 @@ function Comments({ history }) {
         draft.isFetching = false;
         return;
       case 'addNewComment':
-        action.value.comment[0].text = action.value.comment[0].text.trim(); // TRIM TEXT
-        draft.comments.unshift(action.value);
+        if (action.process == 'add') {
+          action.value.comment[0].text = action.value.comment[0].text.trim(); // TRIM TEXT
+          draft.comments.unshift(action.value);
 
-        // CLEAR INPUT FIELD
-        draft.comment.value = '';
+          // CLEAR INPUT FIELD
+          draft.comment.value = '';
+        }
+        action.process == 'starts' && (draft.comment.isSaving = true);
+        action.process == 'ends' && (draft.comment.isSaving = false);
         return;
       case 'editComment':
         draft.editComment.hasError = false;
-        draft.editComment.value = action.value;
-
-        if (action.updateCommentId) {
-          draft.editComment.commentId = action.commentId;
+        if (action.process == 'addToState' || action.process == 'typingToState') {
+          draft.editComment.value = action.value;
+          action.process == 'addToState' && (draft.editComment.commentId = action.commentId);
         }
+
+        if (action.process == 'updateEditedComment') {
+          const index = draft.comments.map(item => item._id).indexOf(action.value.commentId);
+          draft.comments[index].comment.push(action.value.comment);
+        }
+        action.process == 'starts' && (draft.editComment.isSaving = true);
+        action.process == 'ends' && (draft.editComment.isSaving = false);
         return;
-      case 'updateEditedComment': {
-        const index = draft.comments.map(item => item._id).indexOf(action.value.commentId);
-        draft.comments[index].comment.push(action.value.comment);
-        return;
-      }
       case 'deleteComment': {
         if (action.process == 'delete') {
           const index = draft.comments.map(item => item._id).indexOf(action.value);
           draft.comments.splice(index, 1);
         }
         if (action.process == 'starts') {
-          draft.isDeleting = true;
+          draft.deleteComment.isDeleting = true;
         }
         if (action.process == 'ends') {
-          draft.isDeleting = false;
+          draft.deleteComment.isDeleting = false;
         }
         if (action.process == 'toggle') {
           draft.deleteComment.commentId = action.value;
@@ -204,9 +211,10 @@ function Comments({ history }) {
     return () => request.cancel();
   }, []);
 
-  // ADD SUBMIT COMMENT
+  // SAVE COMMENT TO DB
   useEffect(() => {
     if (state.sendCountAdd) {
+      commentsDispatch({ type: 'addNewComment', process: 'starts' });
       const request = Axios.CancelToken.source();
       (async function sendForm() {
         try {
@@ -222,8 +230,10 @@ function Comments({ history }) {
             { cancelToken: request.token }
           );
 
+          commentsDispatch({ type: 'addNewComment', process: 'ends' });
+
           if (response.data._id) {
-            commentsDispatch({ type: 'addNewComment', value: response.data });
+            commentsDispatch({ type: 'addNewComment', value: response.data, process: 'add' });
           } else {
             // ERROR E.G COMMENT FIELD IS EMPTY/NOT LOGGED IN CATCHED BY THE SERVER;
             commentsDispatch({
@@ -243,9 +253,10 @@ function Comments({ history }) {
     }
   }, [state.sendCountAdd]);
 
-  // EDIT SUBMIT COMMENT
+  // SAVE EDITED COMMENT TO DB
   useEffect(() => {
     if (state.sendCountEdit) {
+      commentsDispatch({ type: 'editComment', process: 'starts' });
       const request = Axios.CancelToken.source();
       (async function sendForm() {
         try {
@@ -262,11 +273,13 @@ function Comments({ history }) {
             { cancelToken: request.token }
           );
 
+          commentsDispatch({ type: 'editComment', process: 'ends' });
+
           if (response.data.status) {
             const newComment = response.data.comments[response.data.comments.length - 1];
-
             commentsDispatch({
-              type: 'updateEditedComment',
+              type: 'editComment',
+              process: 'updateEditedComment',
               value: {
                 commentId: state.editComment.commentId,
                 comment: {
@@ -322,7 +335,12 @@ function Comments({ history }) {
     const currentText = e.target.getAttribute('data-comment');
     const commentId = e.target.getAttribute('data-id');
 
-    commentsDispatch({ type: 'editComment', value: currentText, commentId, updateCommentId: true });
+    commentsDispatch({
+      type: 'editComment',
+      value: currentText,
+      commentId,
+      process: 'addToState',
+    });
 
     appDispatch({ type: 'editComment' }); // MAKE MODAL TRUE
   }
@@ -385,7 +403,9 @@ function Comments({ history }) {
 
   function handleCommentInput(e, process) {
     process == 'add' && commentsDispatch({ type: 'updateComment', value: e.target.value });
-    process == 'edit' && commentsDispatch({ type: 'editComment', value: e.target.value });
+    process == 'edit' &&
+      commentsDispatch({ type: 'editComment', value: e.target.value, process: 'typingToState' });
+
     e.target.style.height = '0.5px';
     e.target.style.height = 25 + e.target.scrollHeight + 'px';
   }
@@ -483,7 +503,13 @@ function Comments({ history }) {
                     </div>
                   </CSSTransition>
                   <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
-                    Submit
+                    {state.comment.isSaving ? (
+                      <span>
+                        <i className="fa text-sm fa-spinner fa-spin"></i>
+                      </span>
+                    ) : (
+                      <>Submit</>
+                    )}
                   </button>
                 </div>
               </div>
@@ -642,7 +668,13 @@ function Comments({ history }) {
                         </div>
                       </CSSTransition>
                       <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
-                        Update Comment
+                        {state.editComment.isSaving ? (
+                          <span>
+                            <i className="fa text-sm fa-spinner fa-spin"></i>
+                          </span>
+                        ) : (
+                          <>Update Comment</>
+                        )}
                       </button>
                     </div>
                   </div>

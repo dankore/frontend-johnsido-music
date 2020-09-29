@@ -79,10 +79,7 @@ function AdminLandingPage({ history }) {
       <nav className="bg-gray-900 c-shadow2 fixed w-full flex justify-end z-20 top-0">
         <ul className="flex justify-between items-center text-white w-full md:max-w-xs px-3">
           <li className="md:flex-none ">
-            <Link
-              className="inline-block no-underline hover:text-gray-200 hover:text-underline py-2"
-              to="/"
-            >
+            <Link className="focus:outline-none inline-block hover:underline py-2" to="/">
               Home
             </Link>
           </li>
@@ -90,7 +87,7 @@ function AdminLandingPage({ history }) {
             <div className="relative inline-block">
               <button
                 onClick={() => appDispatch({ type: 'toggleAdminLandingPageMenu' })}
-                className=" focus:outline-none"
+                className="focus:outline-none inline-block hover:underline py-2"
               >
                 {appState.user.firstName}
                 <svg
