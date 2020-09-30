@@ -166,7 +166,7 @@ function Main() {
   }
 
   const [state, dispatch] = useImmerReducer(appReducer, initialState);
-  console.log(state.user.scope);
+
   useEffect(() => {
     if (state.loggedIn) {
       localStorage.setItem('johnsido-id', state.user._id);
