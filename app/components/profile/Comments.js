@@ -243,7 +243,6 @@ function Comments({ history }) {
               value: response.data,
               process: 'server',
             });
-            console.log(response.data);
           }
         } catch (error) {
           // FAIL SILENTLY
