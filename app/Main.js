@@ -134,14 +134,31 @@ function Main() {
           };
         }
 
-        if (action.process == 'adminToUser_userToAdmin') {
+        if (action.process == 'adminToUser') {
           const scope = JSON.parse(localStorage.getItem('johnsido-scope'));
           const indexOfAdminLocalStorage = scope.indexOf('admin');
 
-          if (action.kind == 'downgrade' && indexOfAdminLocalStorage > -1) {
+          const indexOfAdminState = draft.user.scope.indexOf('admin');
+          draft.user.scope.splice(indexOfAdminState, 1);
+
+          if (indexOfAdminLocalStorage > -1) {
             scope.splice(indexOfAdminLocalStorage, 1);
             localStorage.setItem('johnsido-scope', JSON.stringify(scope));
           }
+        }
+
+        if (action.process == 'logout') {
+          // REMOVE STATE VALUES
+          draft.user.username = '';
+          draft.user.username = '';
+          draft.user.firstName = '';
+          draft.user.lastName = '';
+          draft.user.token = '';
+          draft.user.userCreationDate = '';
+          draft.user.verified = false;
+          draft.user._id = '';
+          draft.user.scope = [];
+          draft.user.about = {};
         }
 
         return;
@@ -173,6 +190,8 @@ function Main() {
       localStorage.removeItem('johnsido-about');
       localStorage.removeItem('johnsido-scope');
       localStorage.removeItem('johnsido-userCreationDate');
+
+      dispatch({ type: 'updateLocalStorage', process: 'logout' });
     }
   }, [state.loggedIn]);
 
