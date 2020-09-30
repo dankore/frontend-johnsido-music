@@ -206,13 +206,14 @@ function RoleAssignment({ history }) {
           appDispatch({
             type: 'updateLocalStorage',
             process: 'adminToUser',
-            kind: type,
           });
           // NAVIGATE TO LANDING PAGE AND THROW AN ERROR MESSAGE
           history.push('/');
           appDispatch({
             type: 'flashMsgError',
-            value: ['You must be an admin to view or edit this page.'],
+            value: [
+              'You are no longer an admin. If this was an error, contact other admins or the developer at adamu.dankore@gmail.com to regain admin status.',
+            ],
           });
         }
       } else {
