@@ -134,7 +134,7 @@ function Main() {
           };
         }
 
-        if (action.process == 'adminToUser') {
+        if (action.process == 'removeAdminProperties') {
           const scope = JSON.parse(localStorage.getItem('johnsido-scope'));
           const indexOfAdminLocalStorage = scope.indexOf('admin');
 

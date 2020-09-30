@@ -39,9 +39,9 @@ function AdminLandingPage({ history }) {
 
   // FETCH ADMIN STARTS
   useEffect(() => {
-    const request = Axios.CancelToken.source();
     (async function getAdminStats() {
       adminDispatch({ type: 'isFetchingStarts' });
+      const request = Axios.CancelToken.source();
 
       try {
         const response = await Axios.post(
@@ -56,6 +56,10 @@ function AdminLandingPage({ history }) {
           adminDispatch({ type: 'fetchAdminStatsComplete', value: response.data.adminStats });
         } else {
           // NOT AN ADMIN
+          appDispatch({
+            type: 'updateLocalStorage',
+            process: 'removeAdminProperties',
+          });
           history.push('/');
           appDispatch({ type: 'flashMsgError', value: response.data });
         }
@@ -63,9 +67,9 @@ function AdminLandingPage({ history }) {
         // FAIL SILENTLY
         console.log(error);
       }
-    })();
 
-    return () => request.cancel();
+      return () => request.cancel();
+    })();
   }, [username]);
 
   function handleLogout() {

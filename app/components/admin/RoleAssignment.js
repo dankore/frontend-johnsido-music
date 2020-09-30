@@ -205,7 +205,7 @@ function RoleAssignment({ history }) {
           // REMOVE ADMIN FROM LOCAL STORAGE
           appDispatch({
             type: 'updateLocalStorage',
-            process: 'adminToUser',
+            process: 'removeAdminProperties',
           });
           // NAVIGATE TO LANDING PAGE AND THROW AN ERROR MESSAGE
           history.push('/');
