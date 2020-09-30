@@ -134,7 +134,7 @@ function Main() {
           };
         }
 
-        if (action.process == 'adminToUser_userToAdmin') {
+        if (action.process == 'adminToUser') {
           const scope = JSON.parse(localStorage.getItem('johnsido-scope'));
           const indexOfAdminLocalStorage = scope.indexOf('admin');
 
