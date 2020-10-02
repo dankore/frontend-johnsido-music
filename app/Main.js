@@ -1,30 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Axios from 'axios';
 import { useImmerReducer } from 'use-immer';
 
 // AXIOS BASE URL
-console.log(process.env.BACKENDURL);
 Axios.defaults.baseURL = process.env.BACKENDURL;
 // STATE MANAGEMENT
 import StateContext from './contextsProviders/StateContext';
 import DispatchContext from './contextsProviders/DispatchContext';
 //COMPONENTS //recommended size limit (244 KiB)
-import ProfilePage from './pages/profile/ProfilePage';
-import Register from './pages/auth/Register';
-import Login from './pages/auth/Login';
+const ProfilePage = lazy(() => import('./pages/profile/ProfilePage'));
+const Register = lazy(() => import('./pages/auth/Register'));
+const Login = lazy(() => import('./pages/auth/Login'));
 import Header from './components/shared/Header';
-import SettingsPage from './pages/settings/SettingsPage';
+const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'));
 import LandingPage from './pages/LandingPage';
 import FlashMsgError from './components/shared/FlashMsgError';
 import FlashMsgSuccess from './components/shared/FlashMsgSuccess';
 import AboutPage from './pages/AboutPage';
-import Comments from './components/profile/Comments';
+const Comments = lazy(() => import('./components/profile/Comments'));
 import Footer from './components/shared/Footer';
-import Followers from './components/profile/Followers';
-import Following from './components/profile/Following';
-import AdminLandingPage from './pages/admin/AdminLandingPage';
+const Followers = lazy(() => import('./components/profile/Followers'));
+const Following = lazy(() => import('./components/profile/Following'));
+const AdminLandingPage = lazy(() => import('./pages/admin/AdminLandingPage'));
+import LoadingDotsAnimation from './components/shared/LoadingDotsAnimation';
 
 function Main() {
   const initialState = {
@@ -206,53 +206,54 @@ function Main() {
             )}
             {state.flashMsgSuccess.isDisplay && <FlashMsgSuccess />}
           </Route>
-
-          <Switch>
-            <Route exact path="/">
-              <LandingPage />
-            </Route>
-            <Route exact path="/profile/:username">
-              <ProfilePage />
-            </Route>
-            <Route exact path="/profile/:username/comments">
-              <Comments />
-            </Route>
-            <Route exact path="/profile/:username/followers">
-              <Followers />
-            </Route>
-            <Route exact path="/profile/:username/following">
-              <Following />
-            </Route>
-            <Route path="/admin/:username">
-              {state.loggedIn ? (
-                <AdminLandingPage />
-              ) : (
-                <div>Please login or register to view this page.</div>
-              )}
-            </Route>
-            <Route path="/register">
-              {!state.loggedIn ? <Register /> : <div>Please logout to view this page.</div>}
-            </Route>
-            <Route path="/login">
-              {!state.loggedIn ? <Login /> : <div>Please logout to view this page.</div>}
-            </Route>
-            <Route path="/about">
-              <AboutPage />
-            </Route>
-            <Route path="/settings">
-              {state.loggedIn ? (
-                <SettingsPage />
-              ) : (
-                <div>Please login or register to view this page.</div>
-              )}
-            </Route>
-            <Route to="/404">
-              <div>404!</div>
-            </Route>
-            <Route>
-              <div>Not found</div>
-            </Route>
-          </Switch>
+          <Suspense fallback={<LoadingDotsAnimation />}>
+            <Switch>
+              <Route exact path="/">
+                <LandingPage />
+              </Route>
+              <Route exact path="/profile/:username">
+                <ProfilePage />
+              </Route>
+              <Route exact path="/profile/:username/comments">
+                <Comments />
+              </Route>
+              <Route exact path="/profile/:username/followers">
+                <Followers />
+              </Route>
+              <Route exact path="/profile/:username/following">
+                <Following />
+              </Route>
+              <Route path="/admin/:username">
+                {state.loggedIn ? (
+                  <AdminLandingPage />
+                ) : (
+                  <div>Please login or register to view this page.</div>
+                )}
+              </Route>
+              <Route path="/register">
+                {!state.loggedIn ? <Register /> : <div>Please logout to view this page.</div>}
+              </Route>
+              <Route path="/login">
+                {!state.loggedIn ? <Login /> : <div>Please logout to view this page.</div>}
+              </Route>
+              <Route path="/about">
+                <AboutPage />
+              </Route>
+              <Route path="/settings">
+                {state.loggedIn ? (
+                  <SettingsPage />
+                ) : (
+                  <div>Please login or register to view this page.</div>
+                )}
+              </Route>
+              <Route to="/404">
+                <div>404!</div>
+              </Route>
+              <Route>
+                <div>Not found</div>
+              </Route>
+            </Switch>
+          </Suspense>
           <Route path={['/profile/:username', '/about']}>
             <Footer />
           </Route>
