@@ -6,7 +6,7 @@ function FlashMsgError({ errors }) {
   const appDispatch = useContext(DispatchContext);
 
   return (
-    <div className="absolute w-full z-1">
+    <div className="absolute w-full z-50">
       <div className=" flex max-w-sm w-full mx-auto bg-white overflow-hidden border-b border-r border-red-500">
         <div className="flex justify-center items-center w-12 bg-red-500">
           <svg
