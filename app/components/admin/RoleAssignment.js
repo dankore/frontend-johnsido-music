@@ -9,6 +9,7 @@ import ReuseableModal from './ReuseableModal';
 import Page from '../layouts/Page';
 import ReuseableButton from './ReuseableButton';
 import PropTypes from 'prop-types';
+import FlashMsgError from '../shared/FlashMsgError';
 
 function RoleAssignment({ history }) {
   const appState = useContext(StateContext);
@@ -30,6 +31,8 @@ function RoleAssignment({ history }) {
       username: '',
       toggleModal: false,
       loading: false,
+      hasErrors: false,
+      errorMsg: [],
     },
     admin: {
       username: '',
@@ -149,18 +152,21 @@ function RoleAssignment({ history }) {
   }, [username, state.search.fetchUsers]);
 
   //   BAN/UNBAN USERS
-  async function handleBanUser(e) {
+  async function activateDeactivateAccount(e) {
     try {
       roleAssignmentDispatch({ type: 'loading', process: 'active-starts' });
       const userId = e.target.getAttribute('data-userid');
       const username = e.target.getAttribute('data-username');
       const type = e.target.getAttribute('data-type');
 
-      const response = await Axios.post(`/admin/${appState.user.username}/handleBanUser`, {
-        userId,
-        type,
-        token: appState.user.token,
-      });
+      const response = await Axios.post(
+        `/admin/${appState.user.username}/activateDeactivateAccount`,
+        {
+          userId,
+          type,
+          token: appState.user.token,
+        }
+      );
 
       roleAssignmentDispatch({ type: 'loading', process: 'active-ends' });
 
@@ -170,7 +176,8 @@ function RoleAssignment({ history }) {
         roleAssignmentDispatch({ type: 'updateRole', value: username, process: type });
       } else {
         // FAILURE
-        console.log(response.data);
+        appDispatch({ type: 'flashMsgError', value: response.data });
+        roleAssignmentDispatch({ type: 'toggleActiveModal' });
       }
     } catch (error) {
       console.log(error);
@@ -185,11 +192,14 @@ function RoleAssignment({ history }) {
       const username = e.target.getAttribute('data-username');
       const type = e.target.getAttribute('data-type');
 
-      const response = await Axios.post(`/admin/${appState.user.username}/handleRoleAssignment`, {
-        userId,
-        type,
-        token: appState.user.token,
-      });
+      const response = await Axios.post(
+        `/admin/${appState.user.username}/userToAdmin_AdminToUser`,
+        {
+          userId,
+          type,
+          token: appState.user.token,
+        }
+      );
 
       roleAssignmentDispatch({ type: 'loading', process: 'admin-ends' });
 
@@ -218,7 +228,8 @@ function RoleAssignment({ history }) {
         }
       } else {
         // FAILURE
-        console.log(response.data);
+        appDispatch({ type: 'flashMsgError', value: response.data });
+        roleAssignmentDispatch({ type: 'toggleAdminModal' });
       }
     } catch (error) {
       console.log(error);
@@ -285,6 +296,10 @@ function RoleAssignment({ history }) {
     <Page title="Role Assignment">
       <div className="relative py-5">
         <div>
+          {/* DISPLAY ERROR MESSAGE */}
+          {appState.flashMsgErrors.isDisplay && (
+            <FlashMsgError errors={appState.flashMsgErrors.value} />
+          )}
           {/* MAIN CONTENT */}
           <div className="flex flex-wrap justify-center my-5">
             <div className="text-center w-full md:max-w-md mb-5 md:mx-3">
@@ -390,7 +405,7 @@ function RoleAssignment({ history }) {
                             headerTitle={`Deactivate ${user.firstName} ${user.lastName}'s account?`}
                             btnText="Deactivate account"
                             handleToggle={toggleActiveModal}
-                            handleSubmit={handleBanUser}
+                            handleSubmit={activateDeactivateAccount}
                             loading={state.active.loading}
                           />
                         ) : (
@@ -400,7 +415,7 @@ function RoleAssignment({ history }) {
                             headerTitle={`Activate ${user.firstName} ${user.lastName}'s account?`}
                             btnText="Activate account"
                             handleToggle={toggleActiveModal}
-                            handleSubmit={handleBanUser}
+                            handleSubmit={activateDeactivateAccount}
                             loading={state.active.loading}
                           />
                         )}
