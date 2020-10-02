@@ -294,12 +294,12 @@ function RoleAssignment({ history }) {
 
   return (
     <Page title="Role Assignment">
+      {/* DISPLAY ERROR MESSAGE */}
+      {appState.flashMsgErrors.isDisplay && (
+        <FlashMsgError errors={appState.flashMsgErrors.value} />
+      )}
       <div className="relative py-5">
         <div>
-          {/* DISPLAY ERROR MESSAGE */}
-          {appState.flashMsgErrors.isDisplay && (
-            <FlashMsgError errors={appState.flashMsgErrors.value} />
-          )}
           {/* MAIN CONTENT */}
           <div className="flex flex-wrap justify-center my-5">
             <div className="text-center w-full md:max-w-md mb-5 md:mx-3">
