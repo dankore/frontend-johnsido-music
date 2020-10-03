@@ -157,7 +157,6 @@ function Comments({ history }) {
   }
 
   const [state, commentsDispatch] = useImmerReducer(commentsReducer, initialState);
-  console.log(state.deleteComment.toggleDeleteModal);
 
   // FETCH PROFILE INFO
   useEffect(() => {
