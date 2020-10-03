@@ -294,10 +294,6 @@ function RoleAssignment({ history }) {
 
   return (
     <Page title="Role Assignment">
-      {/* DISPLAY ERROR MESSAGE */}
-      {appState.flashMsgErrors.isDisplay && (
-        <FlashMsgError errors={appState.flashMsgErrors.value} />
-      )}
       <div className="relative py-5">
         <div>
           {/* MAIN CONTENT */}
@@ -340,7 +336,10 @@ function RoleAssignment({ history }) {
               </div>
               {state.search.loading && <div className="absolute">Searching...</div>}
             </div>
-
+            {/* DISPLAY ERROR MESSAGE */}
+            {appState.flashMsgErrors.isDisplay && (
+              <FlashMsgError errors={appState.flashMsgErrors.value} />
+            )}
             {/* ROLES */}
             <div className="overflow-y-auto w-full md:max-w-md" style={{ maxHeight: 500 + 'px' }}>
               {state.adminStats.allUserDocs.map((user, index) => {

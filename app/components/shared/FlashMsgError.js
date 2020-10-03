@@ -7,7 +7,7 @@ function FlashMsgError({ errors }) {
 
   return (
     <div className="absolute w-full z-50">
-      <div className=" flex max-w-sm w-full mx-auto bg-white overflow-hidden border-b border-r border-red-500">
+      <div className="flex max-w-sm w-full mx-auto bg-white overflow-hidden border-b border-r border-red-500">
         <div className="flex justify-center items-center w-12 bg-red-500">
           <svg
             className="h-6 w-6 fill-current text-white"
