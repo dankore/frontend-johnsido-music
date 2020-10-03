@@ -16,7 +16,7 @@ import BackToProfileBtn from '../shared/BackToProfileBtn';
 function Comments({ history }) {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
-  const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: -1 + 'rem' };
+  const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: -2.5 + 'rem' };
   const initialState = {
     username: useParams().username,
     comments: [],
@@ -157,6 +157,7 @@ function Comments({ history }) {
   }
 
   const [state, commentsDispatch] = useImmerReducer(commentsReducer, initialState);
+  console.log(state.deleteComment.toggleDeleteModal);
 
   // FETCH PROFILE INFO
   useEffect(() => {
@@ -237,7 +238,7 @@ function Comments({ history }) {
           if (response.data._id) {
             commentsDispatch({ type: 'addNewComment', value: response.data, process: 'add' });
           } else {
-            // ERROR E.G COMMENT FIELD IS EMPTY/NOT LOGGED IN CATCHED BY THE SERVER;
+            // ERROR E.G COMMENT FIELD IS EMPTY/NOT LOGGED IN CAUGTH BY THE SERVER;
             commentsDispatch({
               type: 'checkCommentFieldForErrors',
               value: response.data,
@@ -294,8 +295,13 @@ function Comments({ history }) {
 
               appDispatch({ type: 'editComment' }); // CLOSE MODAL
             } else {
-              // ERROR E.G COMMENT FIELD IS EMPTY CATCHED BY THE SERVER;
-              console.log(response.data);
+              // ERROR E.G COMMENT FIELD IS EMPTY/NOT LOGGED IN CAUGTH BY THE SERVER;
+              commentsDispatch({
+                type: 'checkCommentFieldForErrors',
+                value: response.data,
+                process: 'server',
+              });
+              appDispatch({ type: 'editComment' }); // CLOSE MODAL
             }
           } catch (error) {
             // FAIL SILENTLY
@@ -322,13 +328,18 @@ function Comments({ history }) {
       );
 
       commentsDispatch({ type: 'deleteComment', process: 'ends' });
-      commentsDispatch({ type: 'deleteComment', process: 'toggle' });
 
       if (response.data == 'Success') {
         commentsDispatch({ type: 'deleteComment', value: commentId, process: 'delete' });
+        commentsDispatch({ type: 'deleteComment', process: 'toggle' });
       } else {
-        // DELETE FAILED
-        console.log(response.data);
+        // ERROR E.G COMMENT FIELD IS EMPTY/NOT LOGGED IN CAUGTH BY THE SERVER;
+        commentsDispatch({
+          type: 'checkCommentFieldForErrors',
+          value: response.data,
+          process: 'server',
+        });
+        commentsDispatch({ type: 'deleteComment', process: 'toggle' });
       }
     } catch (error) {
       // NETWORK ERROR
