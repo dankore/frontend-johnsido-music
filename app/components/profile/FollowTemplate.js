@@ -200,15 +200,19 @@ function FollowTemplate({ history, type }) {
 
       (async function stopFollowing() {
         try {
-          await Axios.post(
+          const response = await Axios.post(
             `/stopFollowing/${state.stopFollowing.username}`,
             { token: appState.user.token },
             { cancelToken: request.token }
           );
 
           followDispatch({ type: 'stopLoadingFollow', process: 'remove' });
-
-          followDispatch({ type: 'updateFollowState', value: state.stopFollowing.id });
+          if (response.data == true) {
+            followDispatch({ type: 'updateFollowState', value: state.stopFollowing.id });
+          } else {
+            // SHOW ERROR
+            followDispatch({ type: 'error', value: response.data[0] });
+          }
         } catch (error) {
           // FAIL SILENTLY
           console.log(error);
@@ -279,7 +283,7 @@ function FollowTemplate({ history, type }) {
           {state.follows.length > 0 &&
             state.follows.map((follow, index) => {
               return (
-                <div key={index} className="block relative border bg-white p-2">
+                <div key={index} className="block relative border-b bg-white p-2">
                   <div className="flex">
                     <Link
                       className={`flex mr-1 ${linkCSS}`}

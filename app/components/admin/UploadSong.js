@@ -240,7 +240,6 @@ function UploadSong() {
               });
             } else {
               // DATA WAS NOT SAVED IN DB DUE TO ERRORS E.G VALIDATION
-              console.log(response.data);
               appDispatch({ type: 'flashMsgError', value: response.data });
             }
           } else {

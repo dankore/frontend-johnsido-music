@@ -6,7 +6,7 @@ import { activeNavCSS, linkCSS, navLinkCSS } from '../../helpers/CSSHelpers';
 function FollowPage({ profileUser, error }) {
   return (
     <div
-      className="relative px-2 lg:px-0"
+      className="relative px-2 lg:px-0 border-b"
       style={{
         overflowWrap: 'break-word',
         minWidth: 0 + 'px',
