@@ -8,9 +8,12 @@ import Axios from 'axios';
 import StateContext from '../../contextsProviders/StateContext';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
+import DispatchContext from '../../contextsProviders/DispatchContext';
+import FlashMsgError from '../shared/FlashMsgError';
 
 function UploadSong() {
   const appState = useContext(StateContext);
+  const appDispatch = useContext(DispatchContext);
   const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: -0.2 + 'rem' };
   const initialState = {
     username: {
@@ -213,7 +216,7 @@ function UploadSong() {
       (async function uploadSongSubmit() {
         try {
           // GET AUDIO URL
-          const songUrl = await getAudioFileURL(state.audio.value); // RETURNS URL OR THE WORD 'Failure'
+          const songUrl = await getAudioFileURL(state.audio.value); // RETURNS URL OR THE WORD 'Failure
 
           if (songUrl != 'Failure') {
             const response = await Axios.post(
@@ -237,15 +240,21 @@ function UploadSong() {
               });
             } else {
               // DATA WAS NOT SAVED IN DB DUE TO ERRORS E.G VALIDATION
-              console.log(response.data);
+              appDispatch({ type: 'flashMsgError', value: response.data });
             }
           } else {
             // AUDIO UPLOAD FAILRE
-            console.log({ songUrl });
+            appDispatch({
+              type: 'flashMsgError',
+              value: ['Song was not uploaded. Please try again!.'],
+            });
           }
         } catch (error) {
           uploadSongDispatch({ type: 'isSaving' });
-          console.log(error);
+          appDispatch({
+            type: 'flashMsgError',
+            value: ['Song was not uploaded. Please try again.'],
+          });
         }
       })();
 
@@ -282,6 +291,10 @@ function UploadSong() {
           <p className="text-xl font-semibold text-center leading-tight mb-8 mt-3">
             Upload New Song
           </p>
+          {/* DISPLAY ERROR MESSAGE */}
+          {appState.flashMsgErrors.isDisplay && (
+            <FlashMsgError errors={appState.flashMsgErrors.value} />
+          )}
 
           {/* <video controls>
             <source
