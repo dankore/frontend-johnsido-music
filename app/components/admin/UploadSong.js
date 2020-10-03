@@ -217,7 +217,6 @@ function UploadSong() {
         try {
           // GET AUDIO URL
           const songUrl = await getAudioFileURL(state.audio.value); // RETURNS URL OR THE WORD 'Failure
-          //'https://res.cloudinary.com/my-nigerian-projects/video/upload/v1601025917/audio/xq4i80xg6xgaswlmdvxs.mov'; //await getAudioFileURL(state.audio.value); // RETURNS URL OR THE WORD 'Failure'
 
           if (songUrl != 'Failure') {
             const response = await Axios.post(
