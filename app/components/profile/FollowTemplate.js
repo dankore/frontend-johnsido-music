@@ -266,7 +266,7 @@ function FollowTemplate({ history, type }) {
 
   return (
     <Page title={title}>
-      <div className="w-full sm:max-w-lg lg:max-w-xl mx-auto">
+      <div className="w-full md:max-w-xl mx-auto">
         {/* BACK BUTTON */}
         <div className="my-5 pl-3 xl:pl-0">
           <div className="flex items-center">
