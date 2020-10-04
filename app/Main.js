@@ -195,6 +195,36 @@ function Main() {
     }
   }, [state.loggedIn]);
 
+  // CHECK TOKEN EXPIRY
+  useEffect(() => {
+    if (state.loggedIn) {
+      const request = Axios.CancelToken.source();
+      (async function checkTokenExpiry() {
+        try {
+          const response = await Axios.post(
+            '/checkTokenExpiry',
+            { token: state.user.token },
+            { cancelToken: request.token }
+          );
+
+          console.log(response.data);
+
+          if (!response.data) {
+            dispatch({ type: 'logout' });
+            dispatch({
+              type: 'flashMsgError',
+              value: ['Your session has expired. Please log in again.'],
+            });
+          }
+        } catch (error) {
+          console.log('Problem verifying token expiry.');
+        }
+      })();
+
+      return () => request.cancel();
+    }
+  }, []);
+
   return (
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
