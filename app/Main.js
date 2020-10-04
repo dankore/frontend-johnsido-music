@@ -203,11 +203,11 @@ function Main() {
         try {
           const response = await Axios.post(
             '/checkTokenExpiry',
-            { token: state.user.token },
+            {
+              token: 'state.user.token',
+            },
             { cancelToken: request.token }
           );
-
-          console.log(response.data);
 
           if (!response.data) {
             dispatch({ type: 'logout' });
