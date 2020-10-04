@@ -3,19 +3,23 @@ import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { activeNavCSS, linkCSS, navLinkCSS } from '../../helpers/CSSHelpers';
 
-function FollowPage({ profileUser, error }) {
+function FollowPageHeader({ profileUser, error }) {
   return (
-    <div
-      className="relative px-2 lg:px-0 border-b"
-      style={{
-        overflowWrap: 'break-word',
-        minWidth: 0 + 'px',
-      }}
-    >
+    <div className="relative  border-b">
       {/* ERROR DISPLAY */}
-      {error.hasErrors && <div className="liveValidateMessage w-full h-12">{error.message}</div>}
+      {error.hasErrors && (
+        <div
+          style={{
+            overflowWrap: 'break-word',
+            minWidth: 0 + 'px',
+          }}
+          className="liveValidateMessage w-full h-12"
+        >
+          {error.message}
+        </div>
+      )}
 
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         <NavLink
           className={linkCSS + navLinkCSS + ' js-brown-bg-hover'}
           activeStyle={activeNavCSS}
@@ -36,9 +40,9 @@ function FollowPage({ profileUser, error }) {
   );
 }
 
-FollowPage.propTypes = {
+FollowPageHeader.propTypes = {
   profileUser: PropTypes.object,
   error: PropTypes.object,
 };
 
-export default FollowPage;
+export default FollowPageHeader;
