@@ -268,22 +268,22 @@ function FollowTemplate({ history, type }) {
     <Page title={title}>
       <div className="w-full md:max-w-xl md:mx-auto">
         {/* BACK BUTTON */}
-        <div className="my-5 pl-3 xl:pl-0">
+        <div className="pl-3 my-5 xl:pl-0">
           <div className="flex items-center">
             <BackToProfileBtn username={state.profileUser.profileUsername} />
-            <p className="font-bold ml-4">
+            <p className="ml-4 font-bold">
               {state.profileUser.profileFirstName} {state.profileUser.profileLastName}{' '}
             </p>
           </div>
           <p className="ml-12 -mt-2 text-gray-700">@{state.profileUser.profileUsername}</p>
         </div>
 
-        <div className="c-shadow w-full">
+        <div className="w-full c-shadow">
           <FollowPageHeader error={state.error} profileUser={state.profileUser} loggedIn={state} />
           {state.follows.length > 0 &&
             state.follows.map((follow, index) => {
               return (
-                <div key={index} className="block relative border-b bg-white p-2">
+                <div key={index} className="relative block p-2 bg-white border-b">
                   <div className="flex">
                     <Link
                       className={`flex mr-1 ${linkCSS}`}
@@ -291,7 +291,7 @@ function FollowTemplate({ history, type }) {
                     >
                       <img
                         src={follow.author.avatar}
-                        className="w-8 h-8 rounded-full transition duration-500 ease-in-out transform hover:scale-105"
+                        className="w-8 h-8 transition duration-500 ease-in-out transform rounded-full hover:scale-105"
                         alt="profile pic"
                       />
                     </Link>
@@ -303,7 +303,7 @@ function FollowTemplate({ history, type }) {
                         backgroundColor: '#fff',
                       }}
                     >
-                      <div className="flex justify-between items-center">
+                      <div className="flex items-center justify-between">
                         <Link className={linkCSS} to={`/profile/${follow.author.username}`}>
                           <p className="font-medium hover:underline">
                             {follow.author.firstName} {follow.author.lastName}
@@ -311,7 +311,7 @@ function FollowTemplate({ history, type }) {
                           <div className="flex flex-wrap items-center text-sm">
                             <p className="mr-2">@{follow.author.username}</p>
                             {appState.loggedIn && follow.visitedUserFollowslogged && (
-                              <p className="text-green-600 bg-green-100 italic px-1">Follows you</p>
+                              <p className="px-1 italic text-green-600 bg-green-100">Follows you</p>
                             )}
                           </div>
                         </Link>
@@ -335,7 +335,7 @@ function FollowTemplate({ history, type }) {
                             >
                               {state.startFollowing.isLoading == follow.author.username ? (
                                 <div className="flex items-center justify-center">
-                                  <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
+                                  <i className="text-sm fa fa-spinner fa-spin"></i>{' '}
                                 </div>
                               ) : (
                                 <span>
@@ -362,7 +362,7 @@ function FollowTemplate({ history, type }) {
                           >
                             {state.stopFollowing.isLoading == follow.author.username ? (
                               <div className="flex items-center justify-center">
-                                <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
+                                <i className="text-sm fa fa-spinner fa-spin"></i>{' '}
                               </div>
                             ) : (
                               <span>

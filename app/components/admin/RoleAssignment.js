@@ -298,13 +298,13 @@ function RoleAssignment({ history }) {
         <div>
           {/* MAIN CONTENT */}
           <div className="flex flex-wrap justify-center my-5">
-            <div className="text-center w-full md:max-w-md mb-5 md:mx-3">
-              <p className="text-lg px-2 md:px-0">
+            <div className="w-full mb-5 text-center md:max-w-md md:mx-3">
+              <p className="px-2 text-lg md:px-0">
                 Click on the &apos;Active&apos; or &apos;Admin&apos; button to deactivate or manage
                 users roles respectively.
               </p>
               {/* SEARCH */}
-              <div className="flex flex-1 justify-center text-white mt-5">
+              <div className="flex justify-center flex-1 mt-5 text-white">
                 <span className="relative w-full">
                   <input
                     onChange={e =>
@@ -315,7 +315,7 @@ function RoleAssignment({ history }) {
                     autoFocus
                     type="search"
                     placeholder="Search"
-                    className="w-full text-lg bg-gray-900 text-white transition border border-transparent focus:outline-none focus:border-gray-700 py-1 px-2 pl-10 appearance-none leading-normal"
+                    className="w-full px-2 py-1 pl-10 text-lg leading-normal text-white transition bg-gray-900 border border-transparent appearance-none focus:outline-none focus:border-gray-700"
                   />
                   <div
                     className="absolute"
@@ -325,7 +325,7 @@ function RoleAssignment({ history }) {
                     }}
                   >
                     <svg
-                      className="fill-current pointer-events-none text-white w-4 h-4"
+                      className="w-4 h-4 text-white pointer-events-none fill-current"
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 20 20"
                     >
@@ -341,20 +341,20 @@ function RoleAssignment({ history }) {
               <FlashMsgError errors={appState.flashMsgErrors.value} />
             )}
             {/* ROLES */}
-            <div className="overflow-y-auto w-full md:max-w-md" style={{ maxHeight: 500 + 'px' }}>
+            <div className="w-full overflow-y-auto md:max-w-md" style={{ maxHeight: 500 + 'px' }}>
               {state.adminStats.allUserDocs.map((user, index) => {
                 return (
-                  <div key={index} className="bg-white mb-2 border c-shadow">
+                  <div key={index} className="mb-2 bg-white border c-shadow">
                     <Link
                       to={`/profile/${user.username}`}
-                      className="focus:outline-none active:outline-none px-6 py-4 whitespace-no-wrap block"
+                      className="block px-6 py-4 whitespace-no-wrap focus:outline-none active:outline-none"
                     >
                       <div className="flex items-center justify-center">
-                        <div className="flex-shrink-0 h-10 w-10">
-                          <img className="h-10 w-10 rounded-full" src={user.avatar} alt="" />
+                        <div className="flex-shrink-0 w-10 h-10">
+                          <img className="w-10 h-10 rounded-full" src={user.avatar} alt="" />
                         </div>
                         <div className="ml-4">
-                          <div className="text-sm leading-5 font-medium text-gray-900">
+                          <div className="text-sm font-medium leading-5 text-gray-900">
                             {user.firstName} {user.lastName}
                           </div>
                           <div className="text-sm leading-5 text-gray-500">@{user.username}</div>
@@ -378,7 +378,7 @@ function RoleAssignment({ history }) {
                         )}
                       </div>
 
-                      <div className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                      <div className="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap">
                         {user.scope.indexOf('admin') > -1 ? (
                           <ReuseableButton
                             handleToggle={toggleAdminModal}
@@ -454,7 +454,7 @@ function RoleAssignment({ history }) {
               {state.adminStats.allUserDocs.length == 0 && state.triggeredDuringSearch && (
                 <div
                   style={{ overflowWrap: 'anywhere', minWidth: 0 + 'px' }}
-                  className="h-full text-center flex items-center justify-center pb-5 px-3 text-2xl c-modal overflow-y-auto"
+                  className="flex items-center justify-center h-full px-3 pb-5 overflow-y-auto text-2xl text-center c-modal"
                 >
                   <p className="px-2">
                     <span>No results found for:</span> <em> {state.search.text}</em>
@@ -463,7 +463,7 @@ function RoleAssignment({ history }) {
               )}
               {/* EMPTY SEARCH RESULTS */}
               {state.adminStats.allUserDocs.length == 0 && !state.triggeredDuringSearch && (
-                <div className="h-full text-center flex items-center justify-center text-2xl">
+                <div className="flex items-center justify-center h-full text-2xl text-center">
                   <span className="px-2">No registered users.</span>
                 </div>
               )}

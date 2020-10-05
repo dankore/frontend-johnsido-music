@@ -41,7 +41,7 @@ function DeleteAccount({ history }) {
   return (
     <Page title="Delete Account">
       <div className="mt-24">
-        <div className="w-full sm:max-w-lg mx-auto bg-white border c-shadow">
+        <div className="w-full mx-auto bg-white border sm:max-w-lg c-shadow">
           <h3 className="p-3 text-2xl">Are you sure?</h3>
           <div className="flex items-start p-3">
             <div>
@@ -51,10 +51,10 @@ function DeleteAccount({ history }) {
               </p>
             </div>
           </div>
-          <div className="flex justify-end mt-5 bg-gray-200 px-3 py-2">
+          <div className="flex justify-end px-3 py-2 mt-5 bg-gray-200">
             <button
               onClick={toggleModal}
-              className="px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md bg-red-600 text-white hover:bg-red-800 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
+              className="px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-red-600 border border-transparent rounded-md hover:bg-red-800 focus:outline-none focus:shadow-outline"
               type="submit"
             >
               Delete my Account

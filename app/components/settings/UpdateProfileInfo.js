@@ -325,11 +325,11 @@ function ProfileInfoSettings({ history }) {
       <div className="mb-20">
         <form
           onSubmit={handleSubmit}
-          className="mt-6 c-shadow p-3 bg-white w-full max-w-2xl  mx-auto"
+          className="w-full max-w-2xl p-3 mx-auto mt-6 bg-white c-shadow"
         >
           <div className="flex flex-wrap items-center justify-between mt-4">
-            <div className="relative w-full md:w-1/2 px-3 mb-6">
-              <label className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700">
+            <div className="relative w-full px-3 mb-6 md:w-1/2">
+              <label className="inline-block w-full mb-1 text-xs font-bold tracking-wide text-gray-700 uppercase">
                 first name
               </label>
               <input
@@ -339,7 +339,7 @@ function ProfileInfoSettings({ history }) {
                 onChange={e =>
                   profileInfoDispatch({ type: 'firstNameImmediately', value: e.target.value })
                 }
-                className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+                className="w-full px-4 py-2 leading-tight transition duration-150 ease-in-out bg-gray-200 border rounded shadow-inner appearance-none focus:outline-none focus:border-gray-500 focus:bg-white"
                 type="text"
               />
               <CSSTransition
@@ -353,8 +353,8 @@ function ProfileInfoSettings({ history }) {
                 </div>
               </CSSTransition>
             </div>
-            <div className="relative w-full md:w-1/2 px-3 mb-6">
-              <label className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700">
+            <div className="relative w-full px-3 mb-6 md:w-1/2">
+              <label className="inline-block w-full mb-1 text-xs font-bold tracking-wide text-gray-700 uppercase">
                 last name
               </label>
               <input
@@ -364,7 +364,7 @@ function ProfileInfoSettings({ history }) {
                 onChange={e =>
                   profileInfoDispatch({ type: 'lastNameImmediately', value: e.target.value })
                 }
-                className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+                className="w-full px-4 py-2 leading-tight transition duration-150 ease-in-out bg-gray-200 border rounded shadow-inner appearance-none focus:outline-none focus:border-gray-500 focus:bg-white"
                 type="text"
               />
               <CSSTransition
@@ -381,8 +381,8 @@ function ProfileInfoSettings({ history }) {
           </div>
 
           <div className="flex flex-wrap items-center justify-between mb-6">
-            <div className="relative w-full md:w-1/2 px-3 mb-6">
-              <label className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700">
+            <div className="relative w-full px-3 mb-6 md:w-1/2">
+              <label className="inline-block w-full mb-1 text-xs font-bold tracking-wide text-gray-700 uppercase">
                 username
               </label>
               <input
@@ -392,7 +392,7 @@ function ProfileInfoSettings({ history }) {
                 onChange={e =>
                   profileInfoDispatch({ type: 'usernameImmediately', value: e.target.value })
                 }
-                className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+                className="w-full px-4 py-2 leading-tight transition duration-150 ease-in-out bg-gray-200 border rounded shadow-inner appearance-none focus:outline-none focus:border-gray-500 focus:bg-white"
                 type="text"
               />
               <CSSTransition
@@ -406,9 +406,9 @@ function ProfileInfoSettings({ history }) {
                 </div>
               </CSSTransition>
             </div>
-            <div className="relative w-full md:w-1/2 px-3 mb-6">
+            <div className="relative w-full px-3 mb-6 md:w-1/2">
               <label
-                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                className="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
                 htmlFor="grid-text-1"
               >
                 email address
@@ -420,7 +420,7 @@ function ProfileInfoSettings({ history }) {
                 onChange={e =>
                   profileInfoDispatch({ type: 'emailImmediately', value: e.target.value })
                 }
-                className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+                className="w-full px-4 py-2 leading-tight transition duration-150 ease-in-out bg-gray-200 border rounded shadow-inner appearance-none focus:outline-none focus:border-gray-500 focus:bg-white"
                 id="grid-text-1"
                 type="text"
               />
@@ -438,8 +438,8 @@ function ProfileInfoSettings({ history }) {
           </div>
 
           <div className="flex flex-wrap items-center justify-between mb-6">
-            <div className="relative w-full md:w-1/2 px-3 mb-6">
-              <label className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700">
+            <div className="relative w-full px-3 mb-6 md:w-1/2">
+              <label className="inline-block w-full mb-1 text-xs font-bold tracking-wide text-gray-700 uppercase">
                 City of Residence
               </label>
               <input
@@ -449,7 +449,7 @@ function ProfileInfoSettings({ history }) {
                 onChange={e =>
                   profileInfoDispatch({ type: 'cityImmediately', value: e.target.value })
                 }
-                className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+                className="w-full px-4 py-2 leading-tight transition duration-150 ease-in-out bg-gray-200 border rounded shadow-inner appearance-none focus:outline-none focus:border-gray-500 focus:bg-white"
                 type="text"
               />
               <CSSTransition
@@ -463,8 +463,8 @@ function ProfileInfoSettings({ history }) {
                 </div>
               </CSSTransition>
             </div>
-            <div className="relative w-full md:w-1/2 px-3 mb-6">
-              <label className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700">
+            <div className="relative w-full px-3 mb-6 md:w-1/2">
+              <label className="inline-block w-full mb-1 text-xs font-bold tracking-wide text-gray-700 uppercase">
                 Music Genre
               </label>
               <input
@@ -474,7 +474,7 @@ function ProfileInfoSettings({ history }) {
                 onChange={e =>
                   profileInfoDispatch({ type: 'musicImmediately', value: e.target.value })
                 }
-                className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+                className="w-full px-4 py-2 leading-tight transition duration-150 ease-in-out bg-gray-200 border rounded shadow-inner appearance-none focus:outline-none focus:border-gray-500 focus:bg-white"
                 type="text"
               />
               <CSSTransition
@@ -491,7 +491,7 @@ function ProfileInfoSettings({ history }) {
           </div>
 
           <div className="relative w-full px-3 mb-6">
-            <label className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700">
+            <label className="inline-block w-full mb-1 text-xs font-bold tracking-wide text-gray-700 uppercase">
               Bio
             </label>
             <textarea
@@ -499,7 +499,7 @@ function ProfileInfoSettings({ history }) {
               value={state.bio.value}
               rows="5"
               onChange={e => profileInfoDispatch({ type: 'bioImmediately', value: e.target.value })}
-              className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+              className="w-full px-4 py-2 leading-tight transition duration-150 ease-in-out bg-gray-200 border rounded shadow-inner appearance-none focus:outline-none focus:border-gray-500 focus:bg-white"
             ></textarea>
             <CSSTransition
               in={state.bio.hasError}
@@ -516,12 +516,12 @@ function ProfileInfoSettings({ history }) {
             <button
               disabled={state.isSaving}
               type="submit"
-              className="relative inline-flex items-center justify-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
+              className="relative inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-blue-600 border border-transparent rounded-md hover:bg-blue-800 focus:outline-none focus:shadow-outline"
             >
-              <i className="fas fa-exchange-alt mr-3"></i>
+              <i className="mr-3 fas fa-exchange-alt"></i>
               {state.isSaving ? (
                 <span>
-                  <i className="fa text-sm fa-spinner fa-spin"></i>
+                  <i className="text-sm fa fa-spinner fa-spin"></i>
                 </span>
               ) : (
                 <>Save Changes</>

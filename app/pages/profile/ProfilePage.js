@@ -172,10 +172,10 @@ function ProfilePage({ history }) {
                 "url('https://images.unsplash.com/photo-1499336315816-097655dcfbda?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2710&q=80')",
             }}
           >
-            <span className="w-full h-full absolute opacity-50 bg-black"></span>
+            <span className="absolute w-full h-full bg-black opacity-50"></span>
           </div>
           <div
-            className="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden"
+            className="absolute bottom-0 left-0 right-0 top-auto w-full overflow-hidden pointer-events-none"
             style={{ height: '70px', transform: 'translateZ(0)' }}
           >
             <svg
@@ -197,24 +197,24 @@ function ProfilePage({ history }) {
         <section className="relative py-16 bg-gray-300">
           {/* USER IS ACTIVE */}
           {state.user.profileActive && (
-            <div className="container mx-auto px-4">
-              <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
+            <div className="container px-4 mx-auto">
+              <div className="relative flex flex-col w-full min-w-0 mb-6 -mt-64 break-words bg-white rounded-lg shadow-xl">
                 <div className="px-6">
                   <div className="flex flex-wrap justify-center">
                     {/* IMAGE */}
-                    <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
+                    <div className="flex justify-center w-full px-4 lg:w-3/12 lg:order-2">
                       <div className="relative">
                         <img
                           alt="Profile avatar"
                           src={state.user.profileAvatar}
-                          className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16"
+                          className="absolute h-auto -m-16 -ml-20 align-middle border-none rounded-full shadow-xl lg:-ml-16"
                           style={{ maxWidth: '150px' }}
                         />
                       </div>
                     </div>
                     {/* FOLLOW BUTTON */}
-                    <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
-                      <div className="flex justify-center lg:justify-end py-6 px-3 mt-32 lg:mt-0">
+                    <div className="w-full px-4 lg:w-4/12 lg:order-3 lg:text-right lg:self-center">
+                      <div className="flex justify-center px-3 py-6 mt-32 lg:justify-end lg:mt-0">
                         {appState.loggedIn &&
                           appState.user.username != state.user.profileUsername &&
                           !state.user.isFollowing &&
@@ -227,7 +227,7 @@ function ProfilePage({ history }) {
                             >
                               {state.isLoadingFollow ? (
                                 <div className="flex items-center justify-center">
-                                  <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
+                                  <i className="text-sm fa fa-spinner fa-spin"></i>{' '}
                                 </div>
                               ) : (
                                 <span>
@@ -248,7 +248,7 @@ function ProfilePage({ history }) {
                             >
                               {state.isLoadingFollow ? (
                                 <div className="flex items-center justify-center">
-                                  <i className="fa text-sm fa-spinner fa-spin"></i>{' '}
+                                  <i className="text-sm fa fa-spinner fa-spin"></i>{' '}
                                 </div>
                               ) : (
                                 <span>
@@ -260,47 +260,47 @@ function ProfilePage({ history }) {
                       </div>
                     </div>
                     {/* LINKS */}
-                    <div className="w-full lg:w-4/12 px-4 lg:order-1">
-                      <div className="flex justify-center py-4 lg:pt-4 pt-8">
-                        <div className="mr-4 p-3 text-center">
+                    <div className="w-full px-4 lg:w-4/12 lg:order-1">
+                      <div className="flex justify-center py-4 pt-8 lg:pt-4">
+                        <div className="p-3 mr-4 text-center">
                           <Link
                             to={`/profile/${state.user.profileUsername}/followers`}
                             className={`text-sm text-gray-500 ${linkCSS}`}
                           >
-                            <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
+                            <span className="block text-xl font-bold tracking-wide text-gray-700 uppercase">
                               {state.user.counts.followerCount}
                             </span>
                             {state.user.counts.followerCount > 1 ? 'Followers' : 'Follower'}
                           </Link>
                         </div>
-                        <div className="mr-4 p-3 text-center">
+                        <div className="p-3 mr-4 text-center">
                           <Link
                             to={`/profile/${state.user.profileUsername}/following`}
                             className={`text-sm text-gray-500 ${linkCSS}`}
                           >
-                            <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
+                            <span className="block text-xl font-bold tracking-wide text-gray-700 uppercase">
                               {state.user.counts.followingCount}
                             </span>
                             Following
                           </Link>
                         </div>
-                        <div className="lg:mr-4 p-3 text-center">
+                        <div className="p-3 text-center lg:mr-4">
                           <Link
                             to={`/profile/${state.user.profileUsername}/songs`}
                             className={`text-sm text-gray-500 ${linkCSS}`}
                           >
-                            <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
+                            <span className="block text-xl font-bold tracking-wide text-gray-700 uppercase">
                               89
                             </span>
                             Songs
                           </Link>
                         </div>
-                        <div className="lg:mr-4 p-3 text-center">
+                        <div className="p-3 text-center lg:mr-4">
                           <Link
                             to={`/profile/${state.user.profileUsername}/comments`}
                             className={`text-sm text-gray-500 ${linkCSS}`}
                           >
-                            <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
+                            <span className="block text-xl font-bold tracking-wide text-gray-700 uppercase">
                               {state.user.counts.commentsCount}
                             </span>
                             {state.user.counts.commentsCount > 1 ? 'Comments' : 'Comment'}
@@ -309,30 +309,30 @@ function ProfilePage({ history }) {
                       </div>
                     </div>
                   </div>
-                  <div className="text-center mt-12">
+                  <div className="mt-12 text-center">
                     <h3 className="text-4xl font-semibold leading-normal text-gray-800">
                       {state.user.profileFirstName} {state.user.profileLastName}
                     </h3>
                     <p className="mb-2">@{state.user.profileUsername}</p>
-                    <div className="flex justify-center items-center text-sm leading-normal text-gray-500 font-bold uppercase">
+                    <div className="flex items-center justify-center text-sm font-bold leading-normal text-gray-500 uppercase">
                       {state.user.profileAbout.city && (
                         <div className="mr-5">
-                          <i className="fas fa-map-marker-alt mr-2 text-lg text-gray-500"></i>
+                          <i className="mr-2 text-lg text-gray-500 fas fa-map-marker-alt"></i>
                           {state.user.profileAbout.city}
                         </div>
                       )}
 
                       {state.user.profileAbout.musicCategory && (
                         <div className="">
-                          <i className="fas fa-music mr-2 text-lg text-gray-500"></i>
+                          <i className="mr-2 text-lg text-gray-500 fas fa-music"></i>
                           {state.user.profileAbout.musicCategory}
                         </div>
                       )}
                     </div>
                   </div>
-                  <div className="mt-10 py-10 border-t border-gray-300 text-center">
+                  <div className="py-10 mt-10 text-center border-t border-gray-300">
                     <div className="flex flex-wrap justify-center">
-                      <div className="w-full lg:w-9/12 px-4">
+                      <div className="w-full px-4 lg:w-9/12">
                         <p className="mb-4 text-lg leading-relaxed text-gray-800">
                           {state.user.profileAbout.bio}
                         </p>

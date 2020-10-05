@@ -114,11 +114,11 @@ function Login({ history }) {
 
   return (
     <Page title="Login">
-      <div className="w-full flex flex-wrap">
+      <div className="flex flex-wrap w-full">
         {/* <!-- Login Section --> */}
-        <div className="w-full lg:w-1/3 flex flex-col">
-          <div className="flex bg-gray-900 justify-center">
-            <Link to="/" className="text-white font-bold text-xl p-4 focus:outline-none">
+        <div className="flex flex-col w-full lg:w-1/3">
+          <div className="flex justify-center bg-gray-900">
+            <Link to="/" className="p-4 text-xl font-bold text-white focus:outline-none">
               <img className="w-32 h-32" src={appState.logo.url} alt={appState.logo.alt} />
             </Link>
           </div>
@@ -127,8 +127,8 @@ function Login({ history }) {
               <FlashMsgError errors={appState.flashMsgErrors.value} />
             )}
           </div>
-          <div className="flex flex-col justify-center lg:justify-start my-auto  px-3 md:px-32 lg:px-3">
-            <p className="text-center text-3xl">Login</p>
+          <div className="flex flex-col justify-center px-3 my-auto lg:justify-start md:px-32 lg:px-3">
+            <p className="text-3xl text-center">Login</p>
 
             <form onSubmit={handleSubmitForm} className="flex flex-col pt-3">
               <div className="relative flex flex-col pt-4">
@@ -143,7 +143,7 @@ function Login({ history }) {
                   type="username"
                   id="username"
                   placeholder="don"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+                  className="w-full px-3 py-2 mt-1 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                 />
                 <CSSTransition
                   in={state.username.hasError}
@@ -169,7 +169,7 @@ function Login({ history }) {
                   type="password"
                   id="password"
                   placeholder="Password"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+                  className="w-full px-3 py-2 mt-1 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                 />
                 <CSSTransition
                   in={state.password.hasError}
@@ -185,21 +185,21 @@ function Login({ history }) {
 
               <button
                 type="submit"
-                className="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8"
+                className="p-2 mt-8 text-lg font-bold text-white bg-black hover:bg-gray-700"
               >
                 {state.isLoggingIn ? (
                   <span>
-                    <i className="fa text-sm fa-spinner fa-spin"></i>
+                    <i className="text-sm fa fa-spinner fa-spin"></i>
                   </span>
                 ) : (
                   <>Login In</>
                 )}
               </button>
             </form>
-            <div className="text-center pt-12 pb-12">
+            <div className="pt-12 pb-12 text-center">
               <p>
                 Don&apos;t have an account?{' '}
-                <a href="/register" className="underline font-semibold">
+                <a href="/register" className="font-semibold underline">
                   Register here.
                 </a>
               </p>
@@ -208,8 +208,8 @@ function Login({ history }) {
         </div>
 
         {/* <!-- Image Section --> */}
-        <div className="w-2/3 custom-layout-bg shadow-2xl">
-          <div className="w-full h-screen hidden lg:block"></div>
+        <div className="w-2/3 shadow-2xl custom-layout-bg">
+          <div className="hidden w-full h-screen lg:block"></div>
         </div>
       </div>
     </Page>

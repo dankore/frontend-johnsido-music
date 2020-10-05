@@ -17,12 +17,12 @@ function HeaderLoggedIn({ history }) {
 
   return (
     <nav className="relative bg-gray-700 c-shadow2">
-      <div className="relative max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+      <div className="relative px-2 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="relative flex items-center justify-between h-16">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
             {/* <!-- Mobile menu button--> */}
             <button
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700 focus:text-white transition duration-150 ease-in-out"
+              className="inline-flex items-center justify-center p-2 text-gray-400 transition duration-150 ease-in-out rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700 focus:text-white"
               aria-label="Main menu"
               aria-expanded="false"
               onClick={() => appDispatch({ type: 'toggles', for: 'mobileHamburgerHeaderLoggedIn' })}
@@ -31,7 +31,7 @@ function HeaderLoggedIn({ history }) {
           <!-- Menu open: "hidden", Menu closed: "block" --> */}
               {!(appState && appState.toggles.mobileHamburgerHeaderLoggedIn) && (
                 <svg
-                  className="block h-6 w-6"
+                  className="block w-6 h-6"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -47,7 +47,7 @@ function HeaderLoggedIn({ history }) {
               {/* <!-- Icon when menu is open. -->
           <!-- Menu open: "block", Menu closed: "hidden" --> */}
               {appState && appState.toggles.mobileHamburgerHeaderLoggedIn && (
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -62,12 +62,12 @@ function HeaderLoggedIn({ history }) {
             <div className="flex-shrink-0 ml-10">
               <Link className="focus:outline-none" to="/">
                 <img
-                  className="block lg:hidden h-12 w-auto"
+                  className="block w-auto h-12 lg:hidden"
                   src={appState.logo.url}
                   alt={appState.logo.alt}
                 />
                 <img
-                  className="hidden lg:block h-12 w-auto"
+                  className="hidden w-auto h-12 lg:block"
                   src={appState.logo.url}
                   alt={appState.logo.alt}
                 />
@@ -77,13 +77,13 @@ function HeaderLoggedIn({ history }) {
               <div className="flex">
                 <Link
                   to="/my-songs"
-                  className="focus:outline-none ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
+                  className="px-3 py-2 ml-4 text-sm font-medium leading-5 text-gray-300 transition duration-150 ease-in-out rounded-md focus:outline-none hover:text-white hover:bg-gray-700 focus:text-white focus:bg-gray-700"
                 >
                   My Songs
                 </Link>
                 <Link
                   to="/explore"
-                  className="focus:outline-none ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
+                  className="px-3 py-2 ml-4 text-sm font-medium leading-5 text-gray-300 transition duration-150 ease-in-out rounded-md focus:outline-none hover:text-white hover:bg-gray-700 focus:text-white focus:bg-gray-700"
                 >
                   Explore Other Artistes Songs
                 </Link>
@@ -93,10 +93,10 @@ function HeaderLoggedIn({ history }) {
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             {/* NOTIFUCATION BUTTON */}
             <button
-              className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-white focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
+              className="p-1 text-gray-400 transition duration-150 ease-in-out border-2 border-transparent rounded-full hover:text-white focus:outline-none focus:text-white focus:bg-gray-700"
               aria-label="Notifications"
             >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -107,17 +107,17 @@ function HeaderLoggedIn({ history }) {
             </button>
 
             {/* <!-- Profile dropdown --> */}
-            <div className="ml-3 relative">
+            <div className="relative ml-3">
               <div>
                 <button
                   onClick={() => appDispatch({ type: 'isOpenProfileDropdown' })}
-                  className="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-white focus:shadow-outline transition duration-150 ease-in-out"
+                  className="flex text-sm transition duration-150 ease-in-out border-2 border-transparent rounded-full focus:outline-none focus:border-white focus:shadow-outline"
                   id="user-menu"
                   aria-label="User menu"
                   aria-haspopup="true"
                 >
                   <img
-                    className="h-8 w-8 rounded-full"
+                    className="w-8 h-8 rounded-full"
                     src={appState.user.avatar}
                     alt="Profile Pic"
                   />
@@ -125,16 +125,16 @@ function HeaderLoggedIn({ history }) {
               </div>
 
               {appState.isOpenProfileDropdown && (
-                <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg z-20">
+                <div className="absolute right-0 z-20 w-48 mt-2 origin-top-right rounded-md shadow-lg">
                   <div
-                    className="py-1 rounded-md bg-white shadow-xs"
+                    className="py-1 bg-white rounded-md shadow-xs"
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby="user-menu"
                   >
                     <Link
                       to={`/profile/${appState.user.username}`}
-                      className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                      className="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                       role="menuitem"
                     >
                       Your Profile
@@ -142,7 +142,7 @@ function HeaderLoggedIn({ history }) {
                     {appState.user.scope.indexOf('admin') > -1 && (
                       <Link
                         to={`/admin/${appState.user.username}`}
-                        className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                        className="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                         role="menuitem"
                       >
                         Admin Area
@@ -150,14 +150,14 @@ function HeaderLoggedIn({ history }) {
                     )}
                     <Link
                       to="/settings"
-                      className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                      className="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                       role="menuitem"
                     >
                       Settings
                     </Link>
                     <button
                       onClick={handleLogout}
-                      className="text-left w-full px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                      className="w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                       role="menuitem"
                     >
                       Sign out

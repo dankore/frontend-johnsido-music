@@ -7,11 +7,11 @@ function FlashMsgSuccess() {
   const appDispatch = useContext(DispatchContext);
 
   return (
-    <div className="absolute w-full z-50">
-      <div className="flex max-w-sm w-full mx-auto bg-white overflow-hidden border-b border-r border-green-500">
-        <div className="flex justify-center items-center w-12 bg-green-500">
+    <div className="absolute z-50 w-full">
+      <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white border-b border-r border-green-500">
+        <div className="flex items-center justify-center w-12 bg-green-500">
           <svg
-            className="h-6 w-6 fill-current text-white"
+            className="w-6 h-6 text-white fill-current"
             viewBox="0 0 40 40"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -19,13 +19,13 @@ function FlashMsgSuccess() {
           </svg>
         </div>
 
-        <div className="-mx-3 py-2 px-4 w-full">
+        <div className="w-full px-4 py-2 -mx-3">
           <div className="mx-3">
             <div className="flex justify-between">
-              <span className="text-green-500 font-semibold">Success</span>
+              <span className="font-semibold text-green-500">Success</span>
               <button
                 onClick={() => appDispatch({ type: 'turnOff' })}
-                className="text-green-500 font-semibold"
+                className="font-semibold text-green-500"
               >
                 X
               </button>

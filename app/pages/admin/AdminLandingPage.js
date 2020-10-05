@@ -80,10 +80,10 @@ function AdminLandingPage({ history }) {
   return (
     <Page title="Admin Landing Page">
       {/* TOP NAV */}
-      <nav className="bg-gray-900 c-shadow2 fixed w-full flex justify-end z-20 top-0">
-        <ul className="flex justify-between items-center text-white w-full md:max-w-xs px-3">
+      <nav className="fixed top-0 z-20 flex justify-end w-full bg-gray-900 c-shadow2">
+        <ul className="flex items-center justify-between w-full px-3 text-white md:max-w-xs">
           <li className="md:flex-none ">
-            <Link className="focus:outline-none inline-block hover:underline py-2" to="/">
+            <Link className="inline-block py-2 focus:outline-none hover:underline" to="/">
               Home
             </Link>
           </li>
@@ -91,11 +91,11 @@ function AdminLandingPage({ history }) {
             <div className="relative inline-block">
               <button
                 onClick={() => appDispatch({ type: 'toggleAdminLandingPageMenu' })}
-                className="focus:outline-none inline-block hover:underline py-2"
+                className="inline-block py-2 focus:outline-none hover:underline"
               >
                 {appState.user.firstName}
                 <svg
-                  className="h-3 fill-current inline"
+                  className="inline h-3 fill-current"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -103,17 +103,17 @@ function AdminLandingPage({ history }) {
                 </svg>
               </button>
               {appState.toggleAdminLandingPageMenu && (
-                <div className="absolute bg-gray-900 text-white right-0 overflow-auto z-30 w-32">
+                <div className="absolute right-0 z-30 w-32 overflow-auto text-white bg-gray-900">
                   <Link
                     to={`/profile/${appState.user.username}`}
-                    className="p-2 w-full flex items-center hover:bg-gray-800 text-white text-sm no-underline hover:no-underline"
+                    className="flex items-center w-full p-2 text-sm text-white no-underline hover:bg-gray-800 hover:no-underline"
                   >
                     <i className="mr-2 fa fa-user fa-fw"></i>
                     <span>Profile</span>
                   </Link>
                   <Link
                     to="/settings"
-                    className="p-2 w-full flex items-center hover:bg-gray-800 text-white text-sm no-underline hover:no-underline"
+                    className="flex items-center w-full p-2 text-sm text-white no-underline hover:bg-gray-800 hover:no-underline"
                   >
                     <i className="mr-2 fa fa-cog fa-fw"></i>
                     <span>Settings</span>
@@ -121,7 +121,7 @@ function AdminLandingPage({ history }) {
                   <div className="border border-gray-800"></div>
                   <button
                     onClick={handleLogout}
-                    className="p-2 w-full flex items-center hover:bg-gray-800 text-white text-sm no-underline hover:no-underline"
+                    className="flex items-center w-full p-2 text-sm text-white no-underline hover:bg-gray-800 hover:no-underline"
                   >
                     <i className="mr-2 fas fa-sign-out-alt fa-fw"></i>
                     <span>Log Out</span>
@@ -133,49 +133,49 @@ function AdminLandingPage({ history }) {
         </ul>
       </nav>
 
-      <div className="flex flex-col md:flex-row bg-gray-900">
+      <div className="flex flex-col bg-gray-900 md:flex-row">
         {/* <!--Sidebar--> */}
-        <div className="bg-gray-900 h-16 fixed bottom-0 md:relative md:h-screen z-10 w-full md:w-56">
-          <div className="md:mt-12 md:w-56 md:fixed md:left-0 md:top-0 content-center md:content-start text-left justify-between">
-            <ul className="flex flex-row md:flex-col py-0 md:py-3 px-1 md:px-2 text-center md:text-left">
+        <div className="fixed bottom-0 z-10 w-full h-16 bg-gray-900 md:relative md:h-screen md:w-56">
+          <div className="content-center justify-between text-left md:mt-12 md:w-56 md:fixed md:left-0 md:top-0 md:content-start">
+            <ul className="flex flex-row px-1 py-0 text-center md:flex-col md:py-3 md:px-2 md:text-left">
               <NavLink
                 activeStyle={{ borderColor: '#ed64a6' }}
                 to={`/admin/${appState.user.username}/analytics`}
-                className="mr-3 focus:outline-none flex-1 block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-pink-500"
+                className="flex-1 block py-1 pl-1 mr-3 text-white no-underline align-middle border-b-2 border-gray-800 focus:outline-none md:py-3 hover:text-white hover:border-pink-500"
               >
                 <i className="fas fa-tasks md:mr-3"></i>
-                <span className="pb-1 md:pb-0 text-xs md:text-base text-gray-600 md:text-gray-400 block md:inline-block">
+                <span className="block pb-1 text-xs text-gray-600 md:pb-0 md:text-base md:text-gray-400 md:inline-block">
                   Analytics
                 </span>
               </NavLink>
               <NavLink
                 activeStyle={{ borderColor: '#3182ce' }}
                 to={`/admin/${appState.user.username}/upload-song`}
-                className="mr-3 focus:outline-none flex-1 block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-blue-500"
+                className="flex-1 block py-1 pl-1 mr-3 text-white no-underline align-middle border-b-2 border-gray-800 focus:outline-none md:py-3 hover:text-white hover:border-blue-500"
               >
                 <i className="fa fa-envelope md:mr-3"></i>
-                <span className="pb-1 md:pb-0 text-xs md:text-base text-gray-600 md:text-gray-400 block md:inline-block">
+                <span className="block pb-1 text-xs text-gray-600 md:pb-0 md:text-base md:text-gray-400 md:inline-block">
                   Add song
                 </span>
               </NavLink>
               <NavLink
                 activeStyle={{ borderColor: '#9f7aea' }}
                 to={`/admin/${appState.user.username}/role-assignment`}
-                className="mr-3 focus:outline-none flex-1 block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-purple-500"
+                className="flex-1 block py-1 pl-1 mr-3 text-white no-underline align-middle border-b-2 border-gray-800 focus:outline-none md:py-3 hover:text-white hover:border-purple-500"
               >
                 <i className="fas fa-users-cog md:mr-3"></i>
-                <span className="pb-1 md:pb-0 text-xs md:text-base text-gray-600 md:text-gray-400 block md:inline-block">
+                <span className="block pb-1 text-xs text-gray-600 md:pb-0 md:text-base md:text-gray-400 md:inline-block">
                   Roles
                 </span>
               </NavLink>
             </ul>
           </div>
         </div>
-        <div className="flex-1 bg-gray-100 mt-10 pb-24 md:pb-5">
+        <div className="flex-1 pb-24 mt-10 bg-gray-100 md:pb-5">
           <Switch>
             <Route path="/admin/:username/analytics">
-              <div className="bg-blue-800 c-shadow px-2 pt-6 pb-4 shadow text-xl text-white">
-                <h3 className="font-bold pl-2">Analytics</h3>
+              <div className="px-2 pt-6 pb-4 text-xl text-white bg-blue-800 shadow c-shadow">
+                <h3 className="pl-2 font-bold">Analytics</h3>
               </div>
               <Analytics
                 isFetching={state.isFetching}
@@ -183,14 +183,14 @@ function AdminLandingPage({ history }) {
               />
             </Route>
             <Route path="/admin/:username/upload-song">
-              <div className="bg-blue-800 c-shadow px-2 pt-6 pb-4 shadow text-xl text-white">
-                <h3 className="font-bold pl-2">Upload a Song</h3>
+              <div className="px-2 pt-6 pb-4 text-xl text-white bg-blue-800 shadow c-shadow">
+                <h3 className="pl-2 font-bold">Upload a Song</h3>
               </div>
               <UploadSong />
             </Route>
             <Route path="/admin/:username/role-assignment">
-              <div className="bg-blue-800 c-shadow px-2 pt-6 pb-4 shadow text-xl text-white">
-                <h3 className="font-bold pl-2"> Role Assignment </h3>
+              <div className="px-2 pt-6 pb-4 text-xl text-white bg-blue-800 shadow c-shadow">
+                <h3 className="pl-2 font-bold"> Role Assignment </h3>
               </div>
               <RoleAssignment />
             </Route>

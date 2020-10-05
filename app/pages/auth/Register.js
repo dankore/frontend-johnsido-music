@@ -358,16 +358,16 @@ function Register({ history }) {
 
   return (
     <Page title="Register">
-      <div className="w-full flex flex-wrap">
+      <div className="flex flex-wrap w-full">
         {/* <!-- Register Section --> */}
-        <div className="w-full lg:w-1/3 flex flex-col">
-          <div className="flex bg-gray-900 justify-center">
-            <Link to="/" className="text-white font-bold text-xl p-4 focus:outline-none">
+        <div className="flex flex-col w-full lg:w-1/3">
+          <div className="flex justify-center bg-gray-900">
+            <Link to="/" className="p-4 text-xl font-bold text-white focus:outline-none">
               <img className="w-32 h-32" src={appState.logo.url} alt={appState.logo.alt} />
             </Link>
           </div>
-          <div className="flex flex-col justify-center lg:justify-start my-auto px-3 md:px-32 lg:px-3">
-            <p className="text-center text-3xl pt-4">Register</p>
+          <div className="flex flex-col justify-center px-3 my-auto lg:justify-start md:px-32 lg:px-3">
+            <p className="pt-4 text-3xl text-center">Register</p>
             {appState.flashMsgErrors.isDisplay && (
               <FlashMsgError errors={appState.flashMsgErrors.value} />
             )}
@@ -385,7 +385,7 @@ function Register({ history }) {
                   type="text"
                   id="username"
                   placeholder="don"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+                  className="w-full px-3 py-2 mt-1 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                 />
                 <CSSTransition
                   in={state.username.hasError}
@@ -411,7 +411,7 @@ function Register({ history }) {
                   type="text"
                   id="FirstName"
                   placeholder="John"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+                  className="w-full px-3 py-2 mt-1 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                 />
                 <CSSTransition
                   in={state.firstName.hasError}
@@ -437,7 +437,7 @@ function Register({ history }) {
                   type="text"
                   id="lastName"
                   placeholder="Sido"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+                  className="w-full px-3 py-2 mt-1 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                 />
                 <CSSTransition
                   in={state.lastName.hasError}
@@ -463,7 +463,7 @@ function Register({ history }) {
                   type="email"
                   id="email"
                   placeholder="your@email.com"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+                  className="w-full px-3 py-2 mt-1 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                 />
                 <CSSTransition
                   in={state.email.hasError}
@@ -489,7 +489,7 @@ function Register({ history }) {
                   type="password"
                   id="password"
                   placeholder="Password"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+                  className="w-full px-3 py-2 mt-1 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                 />
                 <CSSTransition
                   in={state.password.hasError}
@@ -515,7 +515,7 @@ function Register({ history }) {
                   type="password"
                   id="confirm-password"
                   placeholder="Password"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+                  className="w-full px-3 py-2 mt-1 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                 />
                 <CSSTransition
                   in={state.confirmPassword.hasError}
@@ -532,21 +532,21 @@ function Register({ history }) {
 
               <button
                 type="submit"
-                className="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8"
+                className="p-2 mt-8 text-lg font-bold text-white bg-black hover:bg-gray-700"
               >
                 {state.isRegistring ? (
                   <span>
-                    <i className="fa text-sm fa-spinner fa-spin"></i>
+                    <i className="text-sm fa fa-spinner fa-spin"></i>
                   </span>
                 ) : (
                   <>Register</>
                 )}
               </button>
             </form>
-            <div className="text-center pt-12 pb-12">
+            <div className="pt-12 pb-12 text-center">
               <p>
                 Already have an account?{' '}
-                <Link to="/login" className="underline font-semibold">
+                <Link to="/login" className="font-semibold underline">
                   Log in here.
                 </Link>
               </p>
@@ -555,8 +555,8 @@ function Register({ history }) {
         </div>
 
         {/* <!-- Image Section --> */}
-        <div className="w-2/3 custom-layout-bg shadow-2xl">
-          <div className="object-cover w-full h-screen hidden lg:block"></div>
+        <div className="w-2/3 shadow-2xl custom-layout-bg">
+          <div className="hidden object-cover w-full h-screen lg:block"></div>
         </div>
       </div>
     </Page>

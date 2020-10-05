@@ -270,7 +270,7 @@ function UploadSong() {
   return (
     <Page title="Upload Song">
       {!state.songSuccessfullyUploaded.display && (
-        <div className="relative max-w-lg mx-auto py-5">
+        <div className="relative max-w-lg py-5 mx-auto">
           <div className="flex justify-center text-blue-600">
             <svg
               className="w-12"
@@ -288,7 +288,7 @@ function UploadSong() {
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
           </div>
-          <p className="text-xl font-semibold text-center leading-tight mb-8 mt-3">
+          <p className="mt-3 mb-8 text-xl font-semibold leading-tight text-center">
             Upload New Song
           </p>
           {/* DISPLAY ERROR MESSAGE */}
@@ -310,24 +310,24 @@ function UploadSong() {
             classNames="liveValidateMessage"
             unmountOnExit
           >
-            <div className="w-full flex items-center justify-between absolute text-sm md:text-base -mt-24 text-white bg-gray-600 transition ease-out p-2">
+            <div className="absolute flex items-center justify-between w-full p-2 -mt-24 text-sm text-white transition ease-out bg-gray-600 md:text-base">
               {/* IMAGE */}
               <div className="flex items-center">
                 <img
-                  className="rounded-full w-16 h:16 md:w-24 md:h-24"
+                  className="w-16 rounded-full h:16 md:w-24 md:h-24"
                   src={state.username.userDetailsFromDB.value.avatar}
                 />
                 <div>
-                  <p className="normal-case ml-4">
+                  <p className="ml-4 normal-case">
                     {state.username.userDetailsFromDB.value.firstName}{' '}
                     {state.username.userDetailsFromDB.value.lastName}
                   </p>
                   {state.username.userDetailsFromDB.value.about && (
                     <>
-                      <span className="normal-case ml-4">
+                      <span className="ml-4 normal-case">
                         {state.username.userDetailsFromDB.value.about.musicCategory}
                       </span>
-                      <span className="normal-case ml-4">
+                      <span className="ml-4 normal-case">
                         {state.username.userDetailsFromDB.value.about.city}
                       </span>
                     </>
@@ -336,7 +336,7 @@ function UploadSong() {
               </div>
               {/* SVG */}
               <div className="ml-4">
-                <div className="flex justify-center items-center w-full">
+                <div className="flex items-center justify-center w-full">
                   <svg
                     className="w-12"
                     xmlns="http://www.w3.org/2000/svg"
@@ -353,23 +353,23 @@ function UploadSong() {
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                   </svg>
                 </div>
-                <p className="text-center leading-tight mb-8 mt-3">Upload New Song</p>
+                <p className="mt-3 mb-8 leading-tight text-center">Upload New Song</p>
               </div>
             </div>
           </CSSTransition>
 
-          <form onSubmit={initiateFormSubmission} className="relative c-shadow bg-white p-3">
+          <form onSubmit={initiateFormSubmission} className="relative p-3 bg-white c-shadow">
             {/* ERROR */}
             {state.username.userDetailsFromDB.error && (
-              <div className="normal-case absolute text-red-600 top-0">
+              <div className="absolute top-0 text-red-600 normal-case">
                 {state.username.userDetailsFromDB.errorMsg}
               </div>
             )}
             <div className="">
-              <div className="mb-4 relative">
+              <div className="relative mb-4">
                 <label
                   htmlFor="username"
-                  className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700"
+                  className="inline-block w-full mb-1 text-xs font-bold tracking-wide text-gray-700 uppercase"
                 >
                   Username <span className="text-red-600">*</span>
                 </label>
@@ -381,7 +381,7 @@ function UploadSong() {
                   id="username"
                   type="text"
                   autoComplete="off"
-                  className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+                  className="w-full px-4 py-2 leading-tight transition duration-150 ease-in-out bg-gray-200 border rounded shadow-inner appearance-none focus:outline-none focus:border-gray-500 focus:bg-white"
                   placeholder="Song owner's username"
                 />
                 <CSSTransition
@@ -396,11 +396,11 @@ function UploadSong() {
                 </CSSTransition>
               </div>
 
-              <fieldset className="border rounded p-2 mb-4">
+              <fieldset className="p-2 mb-4 border rounded">
                 <legend className=""></legend>
                 <div className="relative mb-5">
                   <label
-                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1"
+                    className="block mb-1 text-xs font-bold tracking-wide text-gray-700 uppercase"
                     htmlFor="nickname"
                   >
                     Upload Song <span className="text-red-600">*</span>
@@ -411,7 +411,7 @@ function UploadSong() {
                     }
                     name="file"
                     placeholder="Upload an image"
-                    className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="block w-full px-4 py-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
                     id="photo"
                     type="file"
                     accept="audio/*"
@@ -430,7 +430,7 @@ function UploadSong() {
                 <div className="relative">
                   <label
                     htmlFor="song-title"
-                    className="w-full text-xs font-bold block mb-1 uppercase tracking-wide text-gray-700 "
+                    className="block w-full mb-1 text-xs font-bold tracking-wide text-gray-700 uppercase "
                   >
                     Song Title <span className="text-red-600">*</span>
                   </label>
@@ -442,7 +442,7 @@ function UploadSong() {
                     type="text"
                     placeholder="Write song title here"
                     autoComplete="off"
-                    className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+                    className="w-full px-4 py-2 leading-tight transition duration-150 ease-in-out bg-gray-200 border rounded shadow-inner appearance-none focus:outline-none focus:border-gray-500 focus:bg-white"
                     value={state.songTitle.value}
                   />
                   <CSSTransition
@@ -462,10 +462,10 @@ function UploadSong() {
                 <button
                   disabled={state.isSaving}
                   type="submit"
-                  className="relative inline-flex items-center justify-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
+                  className="relative inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-blue-600 border border-transparent rounded-md hover:bg-blue-800 focus:outline-none focus:shadow-outline"
                 >
                   <svg
-                    className="h-5 w-5 text-blue-300 mr-1 transition ease-in-out duration-150"
+                    className="w-5 h-5 mr-1 text-blue-300 transition duration-150 ease-in-out"
                     fill="none"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -477,7 +477,7 @@ function UploadSong() {
                   </svg>
                   {state.isSaving ? (
                     <span>
-                      <i className="fa text-sm fa-spinner fa-spin"></i>
+                      <i className="text-sm fa fa-spinner fa-spin"></i>
                     </span>
                   ) : (
                     <>Add Song</>
@@ -489,25 +489,25 @@ function UploadSong() {
         </div>
       )}
       {state.songSuccessfullyUploaded.display && (
-        <div className="c-shadow max-w-lg bg-white my-12 mx-auto">
+        <div className="max-w-lg mx-auto my-12 bg-white c-shadow">
           <div className="p-3">
-            <h3 className="text-xl pt-3 mb-5">Congratulations!</h3>
+            <h3 className="pt-3 mb-5 text-xl">Congratulations!</h3>
             <p>
               {state.username.userDetailsFromDB.value.firstName}{' '}
               {state.username.userDetailsFromDB.value.lastName}&apos;s song,{' '}
-              <em className="underline text-blue-600">
+              <em className="text-blue-600 underline">
                 {state.songSuccessfullyUploaded.song.songTitle}
               </em>
               , was uploaded successfully.
             </p>
           </div>
 
-          <div className="flex items-center justify-between bg-gray-200 w-full mt-12 p-3">
-            <button onClick={handleUploadAnotherSong} className="px-2 py-1 bg-blue-600 text-white">
+          <div className="flex items-center justify-between w-full p-3 mt-12 bg-gray-200">
+            <button onClick={handleUploadAnotherSong} className="px-2 py-1 text-white bg-blue-600">
               Upload another song
             </button>
             <div className="flex items-center hover:text-blue-600">
-              <i className="fas fa-headphones-alt mr-2"></i>
+              <i className="mr-2 fas fa-headphones-alt"></i>
               <Link className="block" to={`/songs/${state.songSuccessfullyUploaded.song._id}`}>
                 Listen here...
               </Link>

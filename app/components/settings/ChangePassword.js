@@ -188,10 +188,10 @@ function ChangePassword() {
     <Page title="Settings - Profile Info">
       <form
         onSubmit={handleSubmit}
-        className="mt-12 c-shadow bg-white w-full md:max-w-md md:mx-auto p-3"
+        className="w-full p-3 mt-12 bg-white c-shadow md:max-w-md md:mx-auto"
       >
-        <div className="mb-4 relative">
-          <label className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700">
+        <div className="relative mb-4">
+          <label className="inline-block w-full mb-1 text-xs font-bold tracking-wide text-gray-700 uppercase">
             Current Password
           </label>
           <input
@@ -203,7 +203,7 @@ function ChangePassword() {
                 value: e.target.value,
               })
             }
-            className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+            className="w-full px-4 py-2 leading-tight transition duration-150 ease-in-out bg-gray-200 border rounded shadow-inner appearance-none focus:outline-none focus:border-gray-500 focus:bg-white"
             type="password"
           />
           <CSSTransition
@@ -217,8 +217,8 @@ function ChangePassword() {
             </div>
           </CSSTransition>
         </div>
-        <div className="mb-4 relative">
-          <label className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700">
+        <div className="relative mb-4">
+          <label className="inline-block w-full mb-1 text-xs font-bold tracking-wide text-gray-700 uppercase">
             New Password
           </label>
           <input
@@ -227,7 +227,7 @@ function ChangePassword() {
             onChange={e =>
               changePasswordDispatch({ type: 'newPasswordImmediately', value: e.target.value })
             }
-            className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+            className="w-full px-4 py-2 leading-tight transition duration-150 ease-in-out bg-gray-200 border rounded shadow-inner appearance-none focus:outline-none focus:border-gray-500 focus:bg-white"
             type="password"
           />
           <CSSTransition
@@ -241,8 +241,8 @@ function ChangePassword() {
             </div>
           </CSSTransition>
         </div>
-        <div className="mb-4 relative">
-          <label className="w-full text-xs font-bold inline-block mb-1 uppercase tracking-wide text-gray-700">
+        <div className="relative mb-4">
+          <label className="inline-block w-full mb-1 text-xs font-bold tracking-wide text-gray-700 uppercase">
             Re-enter new password
           </label>
           <input
@@ -254,7 +254,7 @@ function ChangePassword() {
                 value: e.target.value,
               })
             }
-            className="transition ease-in-out duration-150 shadow-inner py-2 px-4  bg-gray-200 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white border rounded leading-tight w-full"
+            className="w-full px-4 py-2 leading-tight transition duration-150 ease-in-out bg-gray-200 border rounded shadow-inner appearance-none focus:outline-none focus:border-gray-500 focus:bg-white"
             type="password"
           />
           <CSSTransition
@@ -274,12 +274,12 @@ function ChangePassword() {
           <button
             disabled={state.isSaving}
             type="submit"
-            className="relative inline-flex items-center justify-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
+            className="relative inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-blue-600 border border-transparent rounded-md hover:bg-blue-800 focus:outline-none focus:shadow-outline"
           >
-            <i className="fas fa-exchange-alt mr-3"></i>
+            <i className="mr-3 fas fa-exchange-alt"></i>
             {state.isSaving ? (
               <span>
-                <i className="fa text-sm fa-spinner fa-spin"></i>
+                <i className="text-sm fa fa-spinner fa-spin"></i>
               </span>
             ) : (
               <>Change Password</>

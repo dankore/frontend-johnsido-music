@@ -4,11 +4,11 @@ import Page from '../components/layouts/Page';
 function AboutPage() {
   return (
     <Page title="About Me">
-      <div className="max-w-5xl mx-auto justify-center flex flex-wrap-reverse mt-5">
-        <div className="max-w-md flex items-center">
+      <div className="flex flex-wrap-reverse justify-center max-w-5xl mx-auto mt-5">
+        <div className="flex items-center max-w-md">
           <div>
             <h1>Hi, I&apos;m John.</h1>
-            <p className="mb-4 -mt-3 text-gray-700 font-semibold">
+            <p className="mb-4 -mt-3 font-semibold text-gray-700">
               Gospel Singer based in Abuja, FCT, Nigeria
             </p>
             <p>

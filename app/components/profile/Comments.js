@@ -434,7 +434,7 @@ function Comments({ history }) {
       title={`Comments on ${state.user.profileFirstName} ${state.user.profileLastName}'s profile`}
     >
       {/* BACK TO PROFILE BTN */}
-      <div className="w-full sm:max-w-xl lg:max-w-6xl mx-auto pl-3 xl:pl-0 my-5">
+      <div className="w-full pl-3 mx-auto my-5 sm:max-w-xl lg:max-w-6xl xl:pl-0">
         <div className="inline-block h-8">
           <BackToProfileBtn
             username={state.user.profileUsername}
@@ -445,40 +445,40 @@ function Comments({ history }) {
         </div>
       </div>
 
-      <div className="w-full sm:max-w-xl lg:max-w-6xl mx-auto grid lg:grid-cols-2 gap-2">
+      <div className="grid w-full gap-2 mx-auto sm:max-w-xl lg:max-w-6xl lg:grid-cols-2">
         <div className="w-full">
-          <div className=" c-shadow py-3">
+          <div className="py-3  c-shadow">
             <img
-              className="mx-auto max-w-sm"
+              className="max-w-sm mx-auto"
               style={{
                 height: 300 + 'px',
                 borderRadius: 50 + '%',
               }}
               src={state.user.profileAvatar}
             />
-            <div className="mx-auto max-w-sm">
-              <p className="text-center text-2xl text-blue-600">
+            <div className="max-w-sm mx-auto">
+              <p className="text-2xl text-center text-blue-600">
                 {state.user.profileFirstName} {state.user.profileLastName}
               </p>
               <div className="flex justify-center mt-3">
                 {state.user.profileAbout.musicCategory && (
-                  <div className="text-gray-700 mr-5">
-                    <i className="fas fa-music mr-2 text-lg"></i>
+                  <div className="mr-5 text-gray-700">
+                    <i className="mr-2 text-lg fas fa-music"></i>
                     {state.user.profileAbout.musicCategory}
                   </div>
                 )}
                 {state.user.profileAbout.city && (
                   <div className="text-gray-700">
-                    <i className="fas fa-map-marker-alt mr-2 text-lg"></i>
+                    <i className="mr-2 text-lg fas fa-map-marker-alt"></i>
                     {state.user.profileAbout.city}
                   </div>
                 )}
               </div>
             </div>
           </div>
-          <div className=" c-shadow mt-5">
+          <div className="mt-5  c-shadow">
             <form onSubmit={e => handleSubmit(e, 'add')}>
-              <h2 className="border-b bg-gray-200 p-3 text-gray-700 text-xl">Add a Comment</h2>
+              <h2 className="p-3 text-xl text-gray-700 bg-gray-200 border-b">Add a Comment</h2>
               <div className="relative flex p-2">
                 <div className="mr-1">
                   <Link
@@ -487,7 +487,7 @@ function Comments({ history }) {
                   >
                     <img
                       src={state.user.profileAvatar}
-                      className="w-8 h-8 rounded-full transition duration-500 ease-in-out transform hover:scale-105"
+                      className="w-8 h-8 transition duration-500 ease-in-out transform rounded-full hover:scale-105"
                       alt="profile pic"
                     />
                   </Link>
@@ -497,7 +497,7 @@ function Comments({ history }) {
                     value={state.comment.value}
                     onChange={e => handleCommentInput(e, 'add')}
                     id="input-comment"
-                    className="bg-white transition ease-in-out duration-150  py-2 px-4 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white leading-tight w-full"
+                    className="w-full px-4 py-2 leading-tight transition duration-150 ease-in-out bg-white appearance-none focus:outline-none focus:border-gray-500 focus:bg-white"
                     placeholder="What's on your mind?"
                   />
                   <CSSTransition
@@ -510,10 +510,10 @@ function Comments({ history }) {
                       {state.comment.message}
                     </div>
                   </CSSTransition>
-                  <button className="inline-flex items-center justify-center w-full rounded-md border border-transparent px-4 py-2 bg-blue-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                  <button className="inline-flex items-center justify-center w-full px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue sm:text-sm sm:leading-5">
                     {state.comment.isSaving ? (
                       <span>
-                        <i className="fa text-sm fa-spinner fa-spin"></i>
+                        <i className="text-sm fa fa-spinner fa-spin"></i>
                       </span>
                     ) : (
                       <>Submit</>
@@ -544,7 +544,7 @@ function Comments({ history }) {
                 return (
                   <li
                     key={index}
-                    className="relative c-shadow border-l border-r bg-white mb-1 p-2"
+                    className="relative p-2 mb-1 bg-white border-l border-r c-shadow"
                     data-comments={JSON.stringify(comment.comment)}
                   >
                     <div className="flex">
@@ -555,7 +555,7 @@ function Comments({ history }) {
                         >
                           <img
                             src={comment.author.avatar}
-                            className="w-8 h-8 rounded-full transition duration-500 ease-in-out transform hover:scale-105"
+                            className="w-8 h-8 transition duration-500 ease-in-out transform rounded-full hover:scale-105"
                             alt="profile pic"
                           />
                         </Link>
@@ -580,7 +580,7 @@ function Comments({ history }) {
                       </div>
                     </div>
                     {/* TIMESTAMP, EDIT, DELETE */}
-                    <div className="flex justify-between items-center mt-2 text-xs">
+                    <div className="flex items-center justify-between mt-2 text-xs">
                       {time(lastComment)}
                       {appState.loggedIn && appState.user.username == comment.author.username && (
                         <div className="flex">
@@ -590,7 +590,7 @@ function Comments({ history }) {
                             data-id={comment._id}
                             data-comment={lastComment.text}
                             onClick={handleEditClick}
-                            className="flex bg-white hover:underline items-center cursor-pointer focus:outline-none"
+                            className="flex items-center bg-white cursor-pointer hover:underline focus:outline-none"
                           />
 
                           <input
@@ -598,7 +598,7 @@ function Comments({ history }) {
                             type="button"
                             value="Delete"
                             data-commentid={comment._id}
-                            className="flex items-center text-red-600 bg-white hover:underline cursor-pointer ml-3 focus:outline-none"
+                            className="flex items-center ml-3 text-red-600 bg-white cursor-pointer hover:underline focus:outline-none"
                           />
                         </div>
                       )}
@@ -619,7 +619,7 @@ function Comments({ history }) {
                     className="bg-gray-200 c-shadow2"
                     style={{ flexShrink: 10, height: 100 + '%', overflow: 'auto' }}
                   >
-                    <div className="flex text-xl w-full justify-between p-3 bg-gray-200 text-gray-700 c-shadow2">
+                    <div className="flex justify-between w-full p-3 text-xl text-gray-700 bg-gray-200 c-shadow2">
                       <h2 className="font-semibold">Comment Edit History</h2>
                       <button
                         className="hover:underline focus:outline-none"
@@ -630,7 +630,7 @@ function Comments({ history }) {
                     </div>
                     {state.commentHistory.map((item, index) => {
                       return (
-                        <div className="border-b p-3 bg-white mb-2 c-shadow" key={index}>
+                        <div className="p-3 mb-2 bg-white border-b c-shadow" key={index}>
                           <p className="text-gray-700">{timeAgo(item.createdDate)}</p>
                           <p style={{ wordBreak: 'break-word' }}>{item.text}</p>
                         </div>
@@ -643,8 +643,8 @@ function Comments({ history }) {
               {appState.editComment && (
                 <form onSubmit={e => handleSubmit(e, 'edit')}>
                   <div className="w-full modal">
-                    <div className="c-shadow bg-white">
-                      <div className="flex text-xl w-full justify-between p-2 bg-gray-600 text-white c-shadow2">
+                    <div className="bg-white c-shadow">
+                      <div className="flex justify-between w-full p-2 text-xl text-white bg-gray-600 c-shadow2">
                         <h2 className="">Edit Comment</h2>
                         <button
                           className="hover:underline focus:outline-none"
@@ -656,7 +656,7 @@ function Comments({ history }) {
                       <textarea
                         value={state.editComment.value}
                         onChange={e => handleCommentInput(e, 'edit')}
-                        className="transition ease-in-out duration-150  py-2 px-4 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white leading-tight w-full"
+                        className="w-full px-4 py-2 leading-tight transition duration-150 ease-in-out appearance-none focus:outline-none focus:border-gray-500 focus:bg-white"
                         placeholder="What's on your mind?"
                       />
 
@@ -670,23 +670,23 @@ function Comments({ history }) {
                           {state.editComment.message}
                         </div>
                       </CSSTransition>
-                      <div className="bg-gray-200 p-2 sm:flex sm:flex-row-reverse">
+                      <div className="p-2 bg-gray-200 sm:flex sm:flex-row-reverse">
                         <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-                          <button className="inline-flex items-center justify-center w-full rounded-md border border-transparent px-4 py-2 bg-blue-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                          <button className="inline-flex items-center justify-center w-full px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue sm:text-sm sm:leading-5">
                             {state.editComment.isSaving ? (
                               <span>
-                                <i className="fa text-sm fa-spinner fa-spin"></i>
+                                <i className="text-sm fa fa-spinner fa-spin"></i>
                               </span>
                             ) : (
                               <>Update Comment</>
                             )}
                           </button>
                         </span>
-                        <span className="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
+                        <span className="flex w-full mt-3 rounded-md shadow-sm sm:mt-0 sm:w-auto">
                           <button
                             onClick={() => appDispatch({ type: 'editComment' })}
                             type="button"
-                            className="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                            className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue sm:text-sm sm:leading-5"
                           >
                             Cancel
                           </button>
@@ -712,13 +712,13 @@ function Comments({ history }) {
               )}
             </ul>
             {state.comments.length > 4 && (
-              <div className="bg-gray-200 py-4 px-2 c-shadow">Scroll to view comments</div>
+              <div className="px-2 py-4 bg-gray-200 c-shadow">Scroll to view comments</div>
             )}
           </div>
         )}
         {/* NO COMMENT */}
         {state.comments.length < 1 && (
-          <div className="text-xl text-gray-700 flex items-center justify-center w-full h-full">
+          <div className="flex items-center justify-center w-full h-full text-xl text-gray-700">
             No comment yet. Be the first to comment!
           </div>
         )}

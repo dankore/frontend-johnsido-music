@@ -28,19 +28,19 @@ function Footer() {
   }, []);
 
   return (
-    <div className="text-center mt-10 relative">
+    <div className="relative mt-10 text-center">
       {welcome && state && <Welcome />}
       {/* MODAL OVERLAYS */}
       {appState && appState.editComment && (
         <div
           onClick={() => appDispatch({ type: 'editComment' })}
-          className="modal-overlay bg-gray-300 bg-opacity-50 absolute cursor-pointer"
+          className="absolute bg-gray-300 bg-opacity-50 cursor-pointer modal-overlay"
         ></div>
       )}
       {appState && appState.commentHistory && (
         <div
           onClick={() => appDispatch({ type: 'commentHistory' })}
-          className="modal-overlay bg-gray-300 bg-opacity-50 absolute cursor-pointer"
+          className="absolute bg-gray-300 bg-opacity-50 cursor-pointer modal-overlay"
         ></div>
       )}
       <div>

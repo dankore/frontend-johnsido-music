@@ -5,7 +5,7 @@ import { activeNavCSS, linkCSS, navLinkCSS } from '../../helpers/CSSHelpers';
 
 function FollowPageHeader({ profileUser, error }) {
   return (
-    <div className="relative  border-b">
+    <div className="relative border-b">
       {/* ERROR DISPLAY */}
       {error.hasErrors && (
         <div
@@ -13,13 +13,13 @@ function FollowPageHeader({ profileUser, error }) {
             overflowWrap: 'break-word',
             minWidth: 0 + 'px',
           }}
-          className="liveValidateMessage w-full h-12"
+          className="w-full h-12 liveValidateMessage"
         >
           {error.message}
         </div>
       )}
 
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <NavLink
           className={linkCSS + navLinkCSS + ' js-brown-bg-hover'}
           activeStyle={activeNavCSS}
