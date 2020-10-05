@@ -204,7 +204,7 @@ function Main() {
           const response = await Axios.post(
             '/checkTokenExpiry',
             {
-              token: 'state.user.token',
+              token: state.user.token,
             },
             { cancelToken: request.token }
           );
