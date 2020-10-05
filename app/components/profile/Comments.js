@@ -257,7 +257,7 @@ function Comments({ history }) {
   // SAVE EDITED COMMENT TO DB
   useEffect(() => {
     if (state.sendCountEdit) {
-      if (state.editComment.value != state.editComment.commentBeforeEdit) {
+      if (state.editComment.value.trim() != state.editComment.commentBeforeEdit.trim()) {
         commentsDispatch({ type: 'editComment', process: 'starts' });
         const request = Axios.CancelToken.source();
         (async function sendForm() {
