@@ -16,7 +16,7 @@ import BackToProfileBtn from '../shared/BackToProfileBtn';
 function Comments({ history }) {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
-  const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: -2.5 + 'rem' };
+  const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: -1.5 + 'rem' };
   const initialState = {
     username: useParams().username,
     comments: [],
@@ -497,15 +497,8 @@ function Comments({ history }) {
                     value={state.comment.value}
                     onChange={e => handleCommentInput(e, 'add')}
                     id="input-comment"
-                    className="focus:bg-gray-100 w-full p-2 resize-none"
+                    className="bg-white transition ease-in-out duration-150  py-2 px-4 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white leading-tight w-full"
                     placeholder="What's on your mind?"
-                    style={{
-                      backgroundColor: '#F2F3F5',
-                      whiteSpace: 'pre-wrap',
-                      overflowWrap: 'break-word',
-                      wordBreak: 'break-word',
-                      overflow: 'hidden',
-                    }}
                   />
                   <CSSTransition
                     in={state.comment.hasError}
@@ -517,7 +510,7 @@ function Comments({ history }) {
                       {state.comment.message}
                     </div>
                   </CSSTransition>
-                  <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
+                  <button className="inline-flex items-center justify-center w-full rounded-md border border-transparent px-4 py-2 bg-blue-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                     {state.comment.isSaving ? (
                       <span>
                         <i className="fa text-sm fa-spinner fa-spin"></i>
@@ -650,9 +643,9 @@ function Comments({ history }) {
               {appState.editComment && (
                 <form onSubmit={e => handleSubmit(e, 'edit')}>
                   <div className="w-full modal">
-                    <div className="c-shadow bg-gray-200">
-                      <div className="flex text-xl w-full justify-between p-3 bg-gray-200 text-gray-700 c-shadow2">
-                        <h2 className="font-semibold">Edit Comment</h2>
+                    <div className="c-shadow bg-white">
+                      <div className="flex text-xl w-full justify-between p-2 bg-gray-600 text-white c-shadow2">
+                        <h2 className="">Edit Comment</h2>
                         <button
                           className="hover:underline focus:outline-none"
                           onClick={() => appDispatch({ type: 'editComment' })}
@@ -663,13 +656,8 @@ function Comments({ history }) {
                       <textarea
                         value={state.editComment.value}
                         onChange={e => handleCommentInput(e, 'edit')}
-                        className="resize-none appearance-none border w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="transition ease-in-out duration-150  py-2 px-4 focus:outline-none appearance-none focus:border-gray-500 focus:bg-white leading-tight w-full"
                         placeholder="What's on your mind?"
-                        style={{
-                          backgroundColor: '#F2F3F5',
-                          whiteSpace: 'pre-wrap',
-                          overflow: 'hidden',
-                        }}
                       />
 
                       <CSSTransition
@@ -682,15 +670,28 @@ function Comments({ history }) {
                           {state.editComment.message}
                         </div>
                       </CSSTransition>
-                      <button className="h-12 bg-blue-600 hover:bg-blue-800 text-white w-full">
-                        {state.editComment.isSaving ? (
-                          <span>
-                            <i className="fa text-sm fa-spinner fa-spin"></i>
-                          </span>
-                        ) : (
-                          <>Update Comment</>
-                        )}
-                      </button>
+                      <div className="bg-gray-200 p-2 sm:flex sm:flex-row-reverse">
+                        <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+                          <button className="inline-flex items-center justify-center w-full rounded-md border border-transparent px-4 py-2 bg-blue-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                            {state.editComment.isSaving ? (
+                              <span>
+                                <i className="fa text-sm fa-spinner fa-spin"></i>
+                              </span>
+                            ) : (
+                              <>Update Comment</>
+                            )}
+                          </button>
+                        </span>
+                        <span className="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
+                          <button
+                            onClick={() => appDispatch({ type: 'editComment' })}
+                            type="button"
+                            className="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                          >
+                            Cancel
+                          </button>
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </form>
@@ -710,6 +711,7 @@ function Comments({ history }) {
                 />
               )}
             </ul>
+            <div className="bg-gray-200 py-4 px-2 c-shadow">Scroll to view comments</div>
           </div>
         )}
         {/* NO COMMENT */}
