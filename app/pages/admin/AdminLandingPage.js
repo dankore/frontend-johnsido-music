@@ -103,17 +103,17 @@ function AdminLandingPage({ history }) {
                 </svg>
               </button>
               {appState.toggleAdminLandingPageMenu && (
-                <div className="absolute bg-gray-900 text-white right-0 overflow-auto z-30">
+                <div className="absolute bg-gray-900 text-white right-0 overflow-auto z-30 w-32">
                   <Link
                     to={`/profile/${appState.user.username}`}
-                    className="p-2 flex items-center hover:bg-gray-800 text-white text-sm no-underline hover:no-underline"
+                    className="p-2 w-full flex items-center hover:bg-gray-800 text-white text-sm no-underline hover:no-underline"
                   >
                     <i className="mr-2 fa fa-user fa-fw"></i>
                     <span>Profile</span>
                   </Link>
                   <Link
                     to="/settings"
-                    className="p-2 flex items-center hover:bg-gray-800 text-white text-sm no-underline hover:no-underline"
+                    className="p-2 w-full flex items-center hover:bg-gray-800 text-white text-sm no-underline hover:no-underline"
                   >
                     <i className="mr-2 fa fa-cog fa-fw"></i>
                     <span>Settings</span>
@@ -121,7 +121,7 @@ function AdminLandingPage({ history }) {
                   <div className="border border-gray-800"></div>
                   <button
                     onClick={handleLogout}
-                    className="p-2 flex items-center hover:bg-gray-800 text-white text-sm no-underline hover:no-underline"
+                    className="p-2 w-full flex items-center hover:bg-gray-800 text-white text-sm no-underline hover:no-underline"
                   >
                     <i className="mr-2 fas fa-sign-out-alt fa-fw"></i>
                     <span>Log Out</span>
@@ -133,9 +133,9 @@ function AdminLandingPage({ history }) {
         </ul>
       </nav>
 
-      <div className="flex flex-col c-shadow2 md:flex-row bg-gray-900">
+      <div className="flex flex-col md:flex-row bg-gray-900">
         {/* <!--Sidebar--> */}
-        <div className="bg-gray-900 shadow-lg h-16 fixed bottom-0 md:relative md:h-screen z-10 w-full md:w-56">
+        <div className="bg-gray-900 h-16 fixed bottom-0 md:relative md:h-screen z-10 w-full md:w-56">
           <div className="md:mt-12 md:w-56 md:fixed md:left-0 md:top-0 content-center md:content-start text-left justify-between">
             <ul className="flex flex-row md:flex-col py-0 md:py-3 px-1 md:px-2 text-center md:text-left">
               <NavLink
