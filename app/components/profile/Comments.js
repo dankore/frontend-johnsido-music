@@ -711,6 +711,7 @@ function Comments({ history }) {
                 />
               )}
             </ul>
+            <div className="bg-gray-200 py-4 px-2 c-shadow">Scroll to view comments</div>
           </div>
         )}
         {/* NO COMMENT */}
