@@ -527,7 +527,7 @@ function Comments({ history }) {
         {/* IF THERE'S COMMENT */}
         {state.comments.length > 0 && (
           <div
-            className="c-shadow bg-gray-200"
+            className="bg-transparent border-t"
             style={{
               maxHeight: 500 + 'px',
               flexDirection: 'column-reverse',
@@ -544,7 +544,7 @@ function Comments({ history }) {
                 return (
                   <li
                     key={index}
-                    className="relative shadow-md bg-white mb-1 p-2"
+                    className="relative c-shadow border-l border-r bg-white mb-1 p-2"
                     data-comments={JSON.stringify(comment.comment)}
                   >
                     <div className="flex">
