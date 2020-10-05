@@ -3,6 +3,7 @@ module.exports = {
   activeNavCSS: {
     backgroundColor: '#d8d6d3',
     boxShadow: 'inset 0 -2px 0 0 #987631',
+    color: '#956503',
   },
   linkCSS: ' leading-5 hover:text-gray-800 focus:outline-none ',
   stopFollowBtnCSS:

@@ -16,7 +16,7 @@ import BackToProfileBtn from '../shared/BackToProfileBtn';
 function Comments({ history }) {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
-  const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: -1.5 + 'rem' };
+  const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: -1 + 'rem' };
   const initialState = {
     username: useParams().username,
     comments: [],
@@ -711,7 +711,9 @@ function Comments({ history }) {
                 />
               )}
             </ul>
-            <div className="bg-gray-200 py-4 px-2 c-shadow">Scroll to view comments</div>
+            {state.comments.length > 4 && (
+              <div className="bg-gray-200 py-4 px-2 c-shadow">Scroll to view comments</div>
+            )}
           </div>
         )}
         {/* NO COMMENT */}

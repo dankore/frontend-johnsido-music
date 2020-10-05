@@ -266,7 +266,7 @@ function FollowTemplate({ history, type }) {
 
   return (
     <Page title={title}>
-      <div className="w-full md:max-w-xl mx-auto">
+      <div className="w-full md:max-w-xl md:mx-auto">
         {/* BACK BUTTON */}
         <div className="my-5 pl-3 xl:pl-0">
           <div className="flex items-center">
@@ -275,10 +275,10 @@ function FollowTemplate({ history, type }) {
               {state.profileUser.profileFirstName} {state.profileUser.profileLastName}{' '}
             </p>
           </div>
-          <p className="ml-12 -m-2 text-gray-700">@{state.profileUser.profileUsername}</p>
+          <p className="ml-12 -mt-2 text-gray-700">@{state.profileUser.profileUsername}</p>
         </div>
 
-        <div className="c-shadow">
+        <div className="c-shadow w-full">
           <FollowPageHeader error={state.error} profileUser={state.profileUser} loggedIn={state} />
           {state.follows.length > 0 &&
             state.follows.map((follow, index) => {
