@@ -6,9 +6,6 @@
 
 /* NON-TAILWIND CSS
    ========================================================================== */
-.role-top::before {
-  content: "Scroll to view users";
-}
 
 #wrapper .text {
   position: relative;
