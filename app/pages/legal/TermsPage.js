@@ -499,7 +499,7 @@ function TermsPage() {
           <h3 className="mt-8 mb-4">SECTION 20 - CONTACT INFORMATION</h3>
           <p>
             If you have any questions about the Terms of Use, please contact me at{' '}
-            <Mailto email="adamu.dankore@gmail.com">adamu.dankore@gmail.com</Mailto>.
+            <Mailto email="johnsidoidoko@gmail.com">adamu.dankore@gmail.com</Mailto>.
           </p>
         </div>
       </div>
