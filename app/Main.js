@@ -25,6 +25,7 @@ const Followers = lazy(() => import('./components/profile/Followers'));
 const Following = lazy(() => import('./components/profile/Following'));
 const AdminLandingPage = lazy(() => import('./pages/admin/AdminLandingPage'));
 import LoadingDotsAnimation from './components/shared/LoadingDotsAnimation';
+import TermsPage from './pages/legal/TermsPage';
 
 function Main() {
   const initialState = {
@@ -229,7 +230,7 @@ function Main() {
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
         <BrowserRouter>
-          <Route path={['/profile/:username', '/about']}>
+          <Route path={['/profile/:username', '/about', '/terms']}>
             <Header />
             {state.flashMsgErrors.isDisplay && (
               <FlashMsgError errors={state.flashMsgErrors.value} />
@@ -276,6 +277,9 @@ function Main() {
                   <div>Please login or register to view this page.</div>
                 )}
               </Route>
+              <Route path="/terms">
+                <TermsPage />
+              </Route>
               <Route to="/404">
                 <div>404!</div>
               </Route>
@@ -284,7 +288,7 @@ function Main() {
               </Route>
             </Switch>
           </Suspense>
-          <Route path={['/profile/:username', '/about']}>
+          <Route path={['/profile/:username', '/about', '/terms']}>
             <Footer />
           </Route>
         </BrowserRouter>

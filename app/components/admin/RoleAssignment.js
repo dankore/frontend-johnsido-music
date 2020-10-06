@@ -343,7 +343,7 @@ function RoleAssignment({ history }) {
             {/* ROLES */}
             <section className="w-full md:max-w-md">
               {state.adminStats.allUserDocs.length > 3 && (
-                <header className="flex justify-between p-3 bg-gray-200">
+                <header className="flex justify-between p-3 bg-gray-200 c-shadow">
                   <div className="text-gray-800">
                     <i className="fas fa-arrow-down"></i> Scroll to view users
                   </div>
