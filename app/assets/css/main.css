@@ -21478,12 +21478,8 @@ video {
 /* NON-TAILWIND CSS
    ========================================================================== */
 
-.under_tab {
-  color: '#956503';
-  bottom: 0;
-  content: "";
-  left: -1px;
-  width: calc(100% + 2px);
+.role-top::before {
+  content: "Scroll to view users";
 }
 
 #wrapper .text {
