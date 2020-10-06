@@ -342,6 +342,15 @@ function RoleAssignment({ history }) {
             )}
             {/* ROLES */}
             <div className="w-full overflow-y-auto md:max-w-md" style={{ maxHeight: 500 + 'px' }}>
+              {state.adminStats.allUserDocs.length > 3 && (
+                <>
+                  <div className="fixed w-full px-2 py-4 overflow-y-auto bg-gray-200 md:max-w-md c-shadow">
+                    Scroll to view users
+                  </div>
+                  <div className={` ${state.adminStats.allUserDocs.length > 3 && ' mt-16'}`}></div>
+                </>
+              )}
+
               {state.adminStats.allUserDocs.map((user, index) => {
                 return (
                   <div key={index} className="mb-2 bg-white border c-shadow">
