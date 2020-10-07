@@ -38,6 +38,9 @@ function ProfileInfoSettings({ history }) {
       value: '',
       hasError: false,
       message: '',
+      isUnique: false,
+      checkCount: 0,
+      beforeEdit: '',
     },
     city: {
       value: '',
@@ -61,17 +64,19 @@ function ProfileInfoSettings({ history }) {
   function profileInfoReducer(draft, action) {
     switch (action.type) {
       case 'updateUserInfo':
-        if (action.process != 'updateOnlyUsernameBeforeEdit') {
+        if (action.process != 'updateAllBeforeEditValues') {
           draft.username.value = action.value.profileUsername;
           draft.username.beforeEdit = action.value.profileUsername;
           draft.firstName.value = action.value.profileFirstName;
           draft.lastName.value = action.value.profileLastName;
           draft.email.value = action.value.profileEmail;
+          draft.email.beforeEdit = action.value.profileEmail;
           draft.city.value = action.value.profileAbout.city;
           draft.bio.value = action.value.profileAbout.bio;
           draft.musicCategory.value = action.value.profileAbout.musicCategory;
         } else {
-          draft.username.beforeEdit = action.value;
+          draft.username.beforeEdit = action.value.username;
+          draft.email.beforeEdit = action.value.email;
         }
 
         return;
@@ -105,7 +110,7 @@ function ProfileInfoSettings({ history }) {
         }
         return;
       case 'usernameImmediately':
-        draft.username.hasError = false;
+        !action.dontClearError && (draft.username.hasError = false);
         draft.username.value = action.value;
 
         if (draft.username.value == '') {
@@ -126,7 +131,6 @@ function ProfileInfoSettings({ history }) {
 
         if (!draft.username.hasError && !action.dontCheckDB) {
           draft.username.checkCount++;
-          console.log('k');
         }
 
         return;
@@ -140,7 +144,7 @@ function ProfileInfoSettings({ history }) {
         }
         return;
       case 'emailImmediately':
-        draft.email.hasError = false;
+        !action.dontClearError && (draft.email.hasError = false);
         draft.email.value = action.value;
 
         if (draft.email.value == '') {
@@ -157,6 +161,19 @@ function ProfileInfoSettings({ history }) {
         ) {
           draft.email.hasError = true;
           draft.email.message = 'Please enter a valid email.';
+        }
+
+        if (!draft.email.hasError && !action.dontCheckDB) {
+          draft.email.checkCount++;
+        }
+        return;
+      case 'emailIsUnique':
+        if (action.value && draft.email.beforeEdit != action.value.email) {
+          draft.email.hasError = true;
+          draft.email.isUnique = false;
+          draft.email.message = 'Email is already being used.';
+        } else {
+          draft.email.isUnique = true;
         }
         return;
       case 'cityImmediately':
@@ -206,6 +223,7 @@ function ProfileInfoSettings({ history }) {
           !draft.firstName.hasError &&
           !draft.lastName.hasError &&
           !draft.email.hasError &&
+          draft.email.isUnique &&
           !draft.city.hasError &&
           !draft.bio.hasError &&
           !draft.musicCategory.hasError
@@ -238,6 +256,29 @@ function ProfileInfoSettings({ history }) {
       return () => clearTimeout(delay);
     }
   }, [state.email.value]);
+
+  // EMAIL AFTER DELAY: CHECK DB
+  useEffect(() => {
+    if (state.email.checkCount) {
+      const request = Axios.CancelToken.source();
+
+      (async function isEmailUnique() {
+        try {
+          const response = await Axios.post(
+            '/doesEmailExists',
+            { email: state.email.value },
+            { cancelToken: request.token }
+          );
+
+          profileInfoDispatch({ type: 'emailIsUnique', value: response.data });
+        } catch (error) {
+          console.log(error.message);
+        }
+      })();
+
+      return () => request.cancel();
+    }
+  }, [state.email.checkCount]);
 
   // USERNAME AFTER DELAY: CHECK DB
   useEffect(() => {
@@ -293,14 +334,22 @@ function ProfileInfoSettings({ history }) {
 
     profileInfoDispatch({ type: 'firstNameImmediately', value: state.firstName.value });
     profileInfoDispatch({ type: 'lastNameImmediately', value: state.lastName.value });
-    profileInfoDispatch({ type: 'usernameImmediately', value: state.username.value });
+    profileInfoDispatch({
+      type: 'usernameImmediately',
+      value: state.username.value,
+      dontClearError: true,
+    });
     profileInfoDispatch({
       type: 'usernameAfterDelay',
       value: state.username.value,
       dontCheckDB: true,
     });
-    profileInfoDispatch({ type: 'emailImmediately', value: state.email.value });
-    profileInfoDispatch({ type: 'emailAfterDelay', value: state.email.value });
+    profileInfoDispatch({
+      type: 'emailImmediately',
+      value: state.email.value,
+      dontClearError: true,
+    });
+    profileInfoDispatch({ type: 'emailAfterDelay', value: state.email.value, dontCheckDB: true });
 
     profileInfoDispatch({ type: 'submitForm' });
   }
@@ -341,8 +390,8 @@ function ProfileInfoSettings({ history }) {
               // UPDATE USERNAME BEFORE EDIT
               profileInfoDispatch({
                 type: 'updateUserInfo',
-                value: userData.username,
-                process: 'updateOnlyUsernameBeforeEdit',
+                value: userData,
+                process: 'updateAllBeforeEditValues',
               });
 
               userData.token = response.data.token; // UPDATE NEW TOKEN
