@@ -15,7 +15,7 @@ function ReuseableButton({ handleToggle, username, btnText }) {
     <button
       onClick={handleToggle}
       data-username={username}
-      className={`underline px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${bgTextColor()}`}
+      className={`underline px-2 focus:outline-none focus:shadow-outline inline-flex text-xs leading-5 font-semibold rounded-full ${bgTextColor()}`}
     >
       {btnText}
     </button>
