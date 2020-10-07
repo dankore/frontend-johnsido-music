@@ -262,6 +262,7 @@ function Main() {
                 {state.loggedIn ? (
                   <AdminLandingPage />
                 ) : (
+                  //TODO - COMPONENT
                   <div>Please login or register to view this page.</div>
                 )}
               </Route>

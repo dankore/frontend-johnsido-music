@@ -68,34 +68,34 @@ function ProfileInfoSettings({ history }) {
     switch (action.type) {
       case 'updateUserInfo':
         if (action.process != 'updateAllBeforeEditValues') {
-          draft.username.value = action.value.profileUsername;
-          draft.username.beforeEdit = action.value.profileUsername;
+          draft.username.value = action.value.profileUsername.trim();
+          draft.username.beforeEdit = action.value.profileUsername.trim();
 
-          draft.firstName.value = action.value.profileFirstName;
-          draft.firstName.beforeEdit = action.value.profileFirstName;
+          draft.firstName.value = action.value.profileFirstName.trim();
+          draft.firstName.beforeEdit = action.value.profileFirstName.trim();
 
-          draft.lastName.value = action.value.profileLastName;
-          draft.lastName.beforeEdit = action.value.profileLastName;
+          draft.lastName.value = action.value.profileLastName.trim();
+          draft.lastName.beforeEdit = action.value.profileLastName.trim();
 
-          draft.email.value = action.value.profileEmail;
-          draft.email.beforeEdit = action.value.profileEmail;
+          draft.email.value = action.value.profileEmail.trim();
+          draft.email.beforeEdit = action.value.profileEmail.trim();
 
-          draft.city.value = action.value.profileAbout.city;
-          draft.city.beforeEdit = action.value.profileAbout.city;
+          draft.city.value = action.value.profileAbout.city.trim();
+          draft.city.beforeEdit = action.value.profileAbout.city.trim();
 
-          draft.bio.value = action.value.profileAbout.bio;
-          draft.bio.beforeEdit = action.value.profileAbout.bio;
+          draft.bio.value = action.value.profileAbout.bio.trim();
+          draft.bio.beforeEdit = action.value.profileAbout.bio.trim();
 
-          draft.musicCategory.value = action.value.profileAbout.musicCategory;
-          draft.musicCategory.beforeEdit = action.value.profileAbout.musicCategory;
+          draft.musicCategory.value = action.value.profileAbout.musicCategory.trim();
+          draft.musicCategory.beforeEdit = action.value.profileAbout.musicCategory.trim();
         } else {
-          draft.firstName.beforeEdit = action.value.firstName;
-          draft.lastName.beforeEdit = action.value.lastName;
-          draft.username.beforeEdit = action.value.username;
-          draft.email.beforeEdit = action.value.email;
-          draft.city.beforeEdit = action.value.about.city;
-          draft.bio.beforeEdit = action.value.about.bio;
-          draft.musicCategory.beforeEdit = action.value.about.musicCategory;
+          draft.firstName.beforeEdit = action.value.firstName.trim();
+          draft.lastName.beforeEdit = action.value.lastName.trim();
+          draft.username.beforeEdit = action.value.username.trim();
+          draft.email.beforeEdit = action.value.email.trim();
+          draft.city.beforeEdit = action.value.about.city.trim();
+          draft.bio.beforeEdit = action.value.about.bio.trim();
+          draft.musicCategory.beforeEdit = action.value.about.musicCategory.trim();
         }
 
         return;
@@ -375,14 +375,14 @@ function ProfileInfoSettings({ history }) {
 
   function beforeAndAfterEditIsTheSame() {
     if (
-      state.firstName.value == state.firstName.beforeEdit &&
-      state.lastName.value == state.lastName.beforeEdit &&
-      state.username.value == state.username.beforeEdit &&
-      state.email.value == state.email.beforeEdit &&
-      state.lastName.value == state.lastName.beforeEdit &&
-      state.bio.value == state.bio.beforeEdit &&
-      state.city.value == state.city.beforeEdit &&
-      state.musicCategory.value == state.musicCategory.beforeEdit
+      state.firstName.value.trim() == state.firstName.beforeEdit.trim() &&
+      state.lastName.value.trim() == state.lastName.beforeEdit.trim() &&
+      state.username.value.trim() == state.username.beforeEdit.trim() &&
+      state.email.value.trim() == state.email.beforeEdit.trim() &&
+      state.lastName.value.trim() == state.lastName.beforeEdit.trim() &&
+      state.bio.value.trim() == state.bio.beforeEdit.trim() &&
+      state.city.value.trim() == state.city.beforeEdit.trim() &&
+      state.musicCategory.value.trim() == state.musicCategory.beforeEdit.trim()
     ) {
       return true;
     }
@@ -666,7 +666,7 @@ function ProfileInfoSettings({ history }) {
             <button
               disabled={state.isSaving}
               type="submit"
-              className="relative inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-blue-600 border border-transparent rounded-md hover:bg-blue-800 focus:outline-none focus:shadow-outline"
+              className={`relative inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out border border-transparent rounded-md bg-blue-600 hover:bg-blue-800 focus:outline-none focus:shadow-outline`}
             >
               <i className="mr-3 fas fa-exchange-alt"></i>
               {state.isSaving ? (
