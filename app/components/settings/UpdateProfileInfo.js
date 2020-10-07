@@ -20,6 +20,9 @@ function ProfileInfoSettings({ history }) {
       value: '',
       hasError: false,
       message: '',
+      isUnique: false,
+      checkCount: 0,
+      beforeEdit: '',
     },
     firstName: {
       value: '',
@@ -58,13 +61,19 @@ function ProfileInfoSettings({ history }) {
   function profileInfoReducer(draft, action) {
     switch (action.type) {
       case 'updateUserInfo':
-        draft.username.value = action.value.profileUsername;
-        draft.firstName.value = action.value.profileFirstName;
-        draft.lastName.value = action.value.profileLastName;
-        draft.email.value = action.value.profileEmail;
-        draft.city.value = action.value.profileAbout.city;
-        draft.bio.value = action.value.profileAbout.bio;
-        draft.musicCategory.value = action.value.profileAbout.musicCategory;
+        if (action.process != 'updateOnlyUsernameBeforeEdit') {
+          draft.username.value = action.value.profileUsername;
+          draft.username.beforeEdit = action.value.profileUsername;
+          draft.firstName.value = action.value.profileFirstName;
+          draft.lastName.value = action.value.profileLastName;
+          draft.email.value = action.value.profileEmail;
+          draft.city.value = action.value.profileAbout.city;
+          draft.bio.value = action.value.profileAbout.bio;
+          draft.musicCategory.value = action.value.profileAbout.musicCategory;
+        } else {
+          draft.username.beforeEdit = action.value;
+        }
+
         return;
       case 'firstNameImmediately':
         draft.firstName.hasError = false;
@@ -77,8 +86,7 @@ function ProfileInfoSettings({ history }) {
         // CHECK FOR INVALID CHARACTERS
         if (/[^\d\w\s-]/.test(draft.firstName.value)) {
           draft.firstName.hasError = true;
-          draft.firstName.message =
-            'First name can only contain letters, numbers, spaces, and dashes.';
+          draft.firstName.message = 'Only letters, numbers, spaces, and dashes allowed.';
         }
         return;
       case 'lastNameImmediately':
@@ -93,8 +101,7 @@ function ProfileInfoSettings({ history }) {
         // CHECK FOR INVALID CHARACTERS
         if (/[^\d\w\s-]/.test(draft.lastName.value)) {
           draft.lastName.hasError = true;
-          draft.lastName.message =
-            'Last name can only contain letters, numbers, spaces, and dashes.';
+          draft.lastName.message = 'Only contain letters, numbers, spaces, and dashes allowed.';
         }
         return;
       case 'usernameImmediately':
@@ -115,6 +122,21 @@ function ProfileInfoSettings({ history }) {
         if (draft.username.value.length < 3) {
           draft.username.hasError = true;
           draft.username.message = 'Username must be at least 3 letters.';
+        }
+
+        if (!draft.username.hasError && !action.dontCheckDB) {
+          draft.username.checkCount++;
+          console.log('k');
+        }
+
+        return;
+      case 'usernameIsUnique':
+        if (action.value && draft.username.beforeEdit != action.value.username) {
+          draft.username.hasError = true;
+          draft.username.isUnique = false;
+          draft.username.message = 'Username is already being used.';
+        } else {
+          draft.username.isUnique = true;
         }
         return;
       case 'emailImmediately':
@@ -180,6 +202,7 @@ function ProfileInfoSettings({ history }) {
       case 'submitForm':
         if (
           !draft.username.hasError &&
+          draft.username.isUnique &&
           !draft.firstName.hasError &&
           !draft.lastName.hasError &&
           !draft.email.hasError &&
@@ -216,6 +239,27 @@ function ProfileInfoSettings({ history }) {
     }
   }, [state.email.value]);
 
+  // USERNAME AFTER DELAY: CHECK DB
+  useEffect(() => {
+    if (state.username.checkCount) {
+      const request = Axios.CancelToken.source();
+
+      (async function isUsernameTaken() {
+        try {
+          const response = await Axios.post('/doesUsernameExists', {
+            username: state.username.value,
+          });
+
+          profileInfoDispatch({ type: 'usernameIsUnique', value: response.data });
+        } catch (error) {
+          console.log(error.message);
+        }
+      })();
+
+      return () => request.cancel();
+    }
+  }, [state.username.checkCount]);
+
   // LOAD USER INFO
   useEffect(() => {
     const request = Axios.CancelToken.source();
@@ -250,8 +294,13 @@ function ProfileInfoSettings({ history }) {
     profileInfoDispatch({ type: 'firstNameImmediately', value: state.firstName.value });
     profileInfoDispatch({ type: 'lastNameImmediately', value: state.lastName.value });
     profileInfoDispatch({ type: 'usernameImmediately', value: state.username.value });
+    profileInfoDispatch({
+      type: 'usernameAfterDelay',
+      value: state.username.value,
+      dontCheckDB: true,
+    });
     profileInfoDispatch({ type: 'emailImmediately', value: state.email.value });
-    profileInfoDispatch({ type: 'emailImmediately', value: state.email.value });
+    profileInfoDispatch({ type: 'emailAfterDelay', value: state.email.value });
 
     profileInfoDispatch({ type: 'submitForm' });
   }
@@ -288,20 +337,29 @@ function ProfileInfoSettings({ history }) {
 
             if (response.data.token) {
               // SUCCESS
-              userData.token = response.data.token;
+
+              // UPDATE USERNAME BEFORE EDIT
+              profileInfoDispatch({
+                type: 'updateUserInfo',
+                value: userData.username,
+                process: 'updateOnlyUsernameBeforeEdit',
+              });
+
+              userData.token = response.data.token; // UPDATE NEW TOKEN
               appDispatch({
                 type: 'updateLocalStorage',
                 value: userData,
                 process: 'profileUpdate',
               });
-              // TURN OFF ANY FLASH ERROR MESSAGE
+
+              // TURN OFF ANY FLASH ERROR MESSAGE AND DISPLAY NEW SUCCESS MSG
               appDispatch({ type: 'turnOff' });
               appDispatch({
                 type: 'flashMsgSuccess',
                 value: ['Updated successfully!'],
               });
             } else {
-              // TURN OFF ANY FLASH SUCCESS MESSAGE
+              // TURN OFF ANY FLASH SUCCESS MESSAGE AND DISPLAY NEW ERROR MSG
               appDispatch({ type: 'turnOff' });
               // DISPLAY VALADATION ERRORS
               appDispatch({ type: 'flashMsgError', value: response.data });

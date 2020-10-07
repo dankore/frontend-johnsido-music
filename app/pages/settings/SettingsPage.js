@@ -88,7 +88,7 @@ function SettingsPage({ history }) {
               >
                 <i className="md:mr-3 fas fa-user-edit"></i>
                 <span className="block pb-1 text-xs text-gray-600 md:pb-0 md:text-base md:text-gray-400 md:inline-block">
-                  Profile Information
+                  Profile Info
                 </span>
               </NavLink>
               <NavLink
