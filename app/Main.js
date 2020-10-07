@@ -25,8 +25,9 @@ const Followers = lazy(() => import('./components/profile/Followers'));
 const Following = lazy(() => import('./components/profile/Following'));
 const AdminLandingPage = lazy(() => import('./pages/admin/AdminLandingPage'));
 import LoadingDotsAnimation from './components/shared/LoadingDotsAnimation';
-import TermsPage from './pages/policies/TermsPage';
-import PrivacyPage from './pages/policies/PrivacyPage';
+import CookiesPage from './pages/policies/CookiesPage';
+const TermsPage = lazy(() => import('./pages/policies/TermsPage'));
+const PrivacyPolicyPage = lazy(() => import('./pages/policies/PrivacyPolicyPage'));
 
 function Main() {
   const initialState = {
@@ -227,7 +228,7 @@ function Main() {
     }
   }, []);
 
-  const routePath = ['/profile/:username', '/about', '/terms', '/policy'];
+  const routePath = ['/profile/:username', '/about', '/terms', '/privacy', '/cookies'];
 
   return (
     <StateContext.Provider value={state}>
@@ -284,7 +285,10 @@ function Main() {
                 <TermsPage />
               </Route>
               <Route path="/privacy">
-                <PrivacyPage />
+                <PrivacyPolicyPage />
+              </Route>
+              <Route path="/cookies">
+                <CookiesPage />
               </Route>
               <Route to="/404">
                 <div>404!</div>
