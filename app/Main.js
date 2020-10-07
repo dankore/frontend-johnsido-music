@@ -25,7 +25,8 @@ const Followers = lazy(() => import('./components/profile/Followers'));
 const Following = lazy(() => import('./components/profile/Following'));
 const AdminLandingPage = lazy(() => import('./pages/admin/AdminLandingPage'));
 import LoadingDotsAnimation from './components/shared/LoadingDotsAnimation';
-import TermsPage from './pages/legal/TermsPage';
+import TermsPage from './pages/policies/TermsPage';
+import PrivacyPage from './pages/policies/PrivacyPage';
 
 function Main() {
   const initialState = {
@@ -226,11 +227,13 @@ function Main() {
     }
   }, []);
 
+  const routePath = ['/profile/:username', '/about', '/terms', '/policy'];
+
   return (
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
         <BrowserRouter>
-          <Route path={['/profile/:username', '/about', '/terms']}>
+          <Route path={routePath}>
             <Header />
             {state.flashMsgErrors.isDisplay && (
               <FlashMsgError errors={state.flashMsgErrors.value} />
@@ -280,6 +283,9 @@ function Main() {
               <Route path="/terms">
                 <TermsPage />
               </Route>
+              <Route path="/privacy">
+                <PrivacyPage />
+              </Route>
               <Route to="/404">
                 <div>404!</div>
               </Route>
@@ -288,7 +294,7 @@ function Main() {
               </Route>
             </Switch>
           </Suspense>
-          <Route path={['/profile/:username', '/about', '/terms']}>
+          <Route path={routePath}>
             <Footer />
           </Route>
         </BrowserRouter>
