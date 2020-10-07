@@ -28,7 +28,7 @@ function Footer() {
   }, []);
 
   return (
-    <div className="relative mt-10 text-center">
+    <div className="relative mt-10 mb-5 text-center">
       {welcome && state && <Welcome />}
       {/* MODAL OVERLAYS */}
       {appState && appState.editComment && (
@@ -49,7 +49,10 @@ function Footer() {
       </div>
       <p>&copy; {new Date().getFullYear()} Johnsido</p>
       <p className="text-xs">
-        Developed by <a href="https://www.dankore.com/">Adamu M. Dankore.</a>
+        Developed by{' '}
+        <a className="hover:text-jsBrown1" href="https://www.dankore.com/">
+          Adamu M. Dankore.
+        </a>
       </p>
     </div>
   );
