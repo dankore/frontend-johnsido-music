@@ -20,6 +20,9 @@ function ProfileInfoSettings({ history }) {
       value: '',
       hasError: false,
       message: '',
+      isUnique: false,
+      checkCount: 0,
+      beforeEdit: '',
     },
     firstName: {
       value: '',
@@ -35,21 +38,27 @@ function ProfileInfoSettings({ history }) {
       value: '',
       hasError: false,
       message: '',
+      isUnique: false,
+      checkCount: 0,
+      beforeEdit: '',
     },
     city: {
       value: '',
       hasError: false,
       message: '',
+      beforeEdit: '',
     },
     musicCategory: {
       value: '',
       hasError: false,
       message: '',
+      beforeEdit: '',
     },
     bio: {
       value: '',
       hasError: false,
       message: '',
+      beforeEdit: '',
     },
     isFetching: false,
     submitCount: 0,
@@ -58,13 +67,37 @@ function ProfileInfoSettings({ history }) {
   function profileInfoReducer(draft, action) {
     switch (action.type) {
       case 'updateUserInfo':
-        draft.username.value = action.value.profileUsername;
-        draft.firstName.value = action.value.profileFirstName;
-        draft.lastName.value = action.value.profileLastName;
-        draft.email.value = action.value.profileEmail;
-        draft.city.value = action.value.profileAbout.city;
-        draft.bio.value = action.value.profileAbout.bio;
-        draft.musicCategory.value = action.value.profileAbout.musicCategory;
+        if (action.process != 'updateAllBeforeEditValues') {
+          draft.username.value = action.value.profileUsername;
+          draft.username.beforeEdit = action.value.profileUsername;
+
+          draft.firstName.value = action.value.profileFirstName;
+          draft.firstName.beforeEdit = action.value.profileFirstName;
+
+          draft.lastName.value = action.value.profileLastName;
+          draft.lastName.beforeEdit = action.value.profileLastName;
+
+          draft.email.value = action.value.profileEmail;
+          draft.email.beforeEdit = action.value.profileEmail;
+
+          draft.city.value = action.value.profileAbout.city;
+          draft.city.beforeEdit = action.value.profileAbout.city;
+
+          draft.bio.value = action.value.profileAbout.bio;
+          draft.bio.beforeEdit = action.value.profileAbout.bio;
+
+          draft.musicCategory.value = action.value.profileAbout.musicCategory;
+          draft.musicCategory.beforeEdit = action.value.profileAbout.musicCategory;
+        } else {
+          draft.firstName.beforeEdit = action.value.firstName;
+          draft.lastName.beforeEdit = action.value.lastName;
+          draft.username.beforeEdit = action.value.username;
+          draft.email.beforeEdit = action.value.email;
+          draft.city.beforeEdit = action.value.about.city;
+          draft.bio.beforeEdit = action.value.about.bio;
+          draft.musicCategory.beforeEdit = action.value.about.musicCategory;
+        }
+
         return;
       case 'firstNameImmediately':
         draft.firstName.hasError = false;
@@ -77,8 +110,7 @@ function ProfileInfoSettings({ history }) {
         // CHECK FOR INVALID CHARACTERS
         if (/[^\d\w\s-]/.test(draft.firstName.value)) {
           draft.firstName.hasError = true;
-          draft.firstName.message =
-            'First name can only contain letters, numbers, spaces, and dashes.';
+          draft.firstName.message = 'Only letters, numbers, spaces, and dashes allowed.';
         }
         return;
       case 'lastNameImmediately':
@@ -93,12 +125,11 @@ function ProfileInfoSettings({ history }) {
         // CHECK FOR INVALID CHARACTERS
         if (/[^\d\w\s-]/.test(draft.lastName.value)) {
           draft.lastName.hasError = true;
-          draft.lastName.message =
-            'Last name can only contain letters, numbers, spaces, and dashes.';
+          draft.lastName.message = 'Only contain letters, numbers, spaces, and dashes allowed.';
         }
         return;
       case 'usernameImmediately':
-        draft.username.hasError = false;
+        !action.dontClearError && (draft.username.hasError = false);
         draft.username.value = action.value;
 
         if (draft.username.value == '') {
@@ -116,9 +147,23 @@ function ProfileInfoSettings({ history }) {
           draft.username.hasError = true;
           draft.username.message = 'Username must be at least 3 letters.';
         }
+
+        if (!draft.username.hasError && !action.dontCheckDB) {
+          draft.username.checkCount++;
+        }
+
+        return;
+      case 'usernameIsUnique':
+        if (action.value && draft.username.beforeEdit != action.value.username) {
+          draft.username.hasError = true;
+          draft.username.isUnique = false;
+          draft.username.message = 'Username is already being used.';
+        } else {
+          draft.username.isUnique = true;
+        }
         return;
       case 'emailImmediately':
-        draft.email.hasError = false;
+        !action.dontClearError && (draft.email.hasError = false);
         draft.email.value = action.value;
 
         if (draft.email.value == '') {
@@ -135,6 +180,19 @@ function ProfileInfoSettings({ history }) {
         ) {
           draft.email.hasError = true;
           draft.email.message = 'Please enter a valid email.';
+        }
+
+        if (!draft.email.hasError && !action.dontCheckDB) {
+          draft.email.checkCount++;
+        }
+        return;
+      case 'emailIsUnique':
+        if (action.value && draft.email.beforeEdit != action.value.email) {
+          draft.email.hasError = true;
+          draft.email.isUnique = false;
+          draft.email.message = 'Email is already being used.';
+        } else {
+          draft.email.isUnique = true;
         }
         return;
       case 'cityImmediately':
@@ -180,9 +238,11 @@ function ProfileInfoSettings({ history }) {
       case 'submitForm':
         if (
           !draft.username.hasError &&
+          draft.username.isUnique &&
           !draft.firstName.hasError &&
           !draft.lastName.hasError &&
           !draft.email.hasError &&
+          draft.email.isUnique &&
           !draft.city.hasError &&
           !draft.bio.hasError &&
           !draft.musicCategory.hasError
@@ -215,6 +275,50 @@ function ProfileInfoSettings({ history }) {
       return () => clearTimeout(delay);
     }
   }, [state.email.value]);
+
+  // EMAIL AFTER DELAY: CHECK DB
+  useEffect(() => {
+    if (state.email.checkCount) {
+      const request = Axios.CancelToken.source();
+
+      (async function isEmailUnique() {
+        try {
+          const response = await Axios.post(
+            '/doesEmailExists',
+            { email: state.email.value },
+            { cancelToken: request.token }
+          );
+
+          profileInfoDispatch({ type: 'emailIsUnique', value: response.data });
+        } catch (error) {
+          console.log(error.message);
+        }
+      })();
+
+      return () => request.cancel();
+    }
+  }, [state.email.checkCount]);
+
+  // USERNAME AFTER DELAY: CHECK DB
+  useEffect(() => {
+    if (state.username.checkCount) {
+      const request = Axios.CancelToken.source();
+
+      (async function isUsernameTaken() {
+        try {
+          const response = await Axios.post('/doesUsernameExists', {
+            username: state.username.value,
+          });
+
+          profileInfoDispatch({ type: 'usernameIsUnique', value: response.data });
+        } catch (error) {
+          console.log(error.message);
+        }
+      })();
+
+      return () => request.cancel();
+    }
+  }, [state.username.checkCount]);
 
   // LOAD USER INFO
   useEffect(() => {
@@ -249,70 +353,116 @@ function ProfileInfoSettings({ history }) {
 
     profileInfoDispatch({ type: 'firstNameImmediately', value: state.firstName.value });
     profileInfoDispatch({ type: 'lastNameImmediately', value: state.lastName.value });
-    profileInfoDispatch({ type: 'usernameImmediately', value: state.username.value });
-    profileInfoDispatch({ type: 'emailImmediately', value: state.email.value });
-    profileInfoDispatch({ type: 'emailImmediately', value: state.email.value });
+    profileInfoDispatch({
+      type: 'usernameImmediately',
+      value: state.username.value,
+      dontClearError: true,
+    });
+    profileInfoDispatch({
+      type: 'usernameAfterDelay',
+      value: state.username.value,
+      dontCheckDB: true,
+    });
+    profileInfoDispatch({
+      type: 'emailImmediately',
+      value: state.email.value,
+      dontClearError: true,
+    });
+    profileInfoDispatch({ type: 'emailAfterDelay', value: state.email.value, dontCheckDB: true });
 
     profileInfoDispatch({ type: 'submitForm' });
+  }
+
+  function beforeAndAfterEditIsTheSame() {
+    if (
+      state.firstName.value == state.firstName.beforeEdit &&
+      state.lastName.value == state.lastName.beforeEdit &&
+      state.username.value == state.username.beforeEdit &&
+      state.email.value == state.email.beforeEdit &&
+      state.lastName.value == state.lastName.beforeEdit &&
+      state.bio.value == state.bio.beforeEdit &&
+      state.city.value == state.city.beforeEdit &&
+      state.musicCategory.value == state.musicCategory.beforeEdit
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   // FINALLY SUBMIT
   useEffect(() => {
     if (state.submitCount) {
-      const request = Axios.CancelToken.source();
-      profileInfoDispatch({ type: 'isSaving', process: 'starts' });
-      appDispatch({ type: 'turnOff' }); // CLOSE FLASH MESSAGING MODAL IF OPENED
+      if (!beforeAndAfterEditIsTheSame()) {
+        const request = Axios.CancelToken.source();
+        profileInfoDispatch({ type: 'isSaving', process: 'starts' });
+        appDispatch({ type: 'turnOff' }); // CLOSE FLASH MESSAGING MODAL IF OPENED
 
-      (async function saveUpdateProfileInfo() {
-        try {
-          if (state.submitCount) {
-            const userData = {
-              username: state.username.value,
-              firstName: state.firstName.value,
-              lastName: state.lastName.value,
-              email: state.email.value,
-              about: {
-                bio: state.bio.value,
-                city: state.city.value,
-                musicCategory: state.musicCategory.value,
-              },
-              userCreationDate: appState.user.userCreationDate,
-            };
+        (async function saveUpdateProfileInfo() {
+          try {
+            if (state.submitCount) {
+              const userData = {
+                username: state.username.value,
+                firstName: state.firstName.value,
+                lastName: state.lastName.value,
+                email: state.email.value,
+                about: {
+                  bio: state.bio.value,
+                  city: state.city.value,
+                  musicCategory: state.musicCategory.value,
+                },
+                userCreationDate: appState.user.userCreationDate,
+              };
 
-            const response = await Axios.post('/saveUpdatedProfileInfo', {
-              userData,
-              token: appState.user.token,
-            });
-
-            profileInfoDispatch({ type: 'isSaving' });
-
-            if (response.data.token) {
-              // SUCCESS
-              userData.token = response.data.token;
-              appDispatch({
-                type: 'updateLocalStorage',
-                value: userData,
-                process: 'profileUpdate',
+              const response = await Axios.post('/saveUpdatedProfileInfo', {
+                userData,
+                token: appState.user.token,
               });
-              // TURN OFF ANY FLASH ERROR MESSAGE
-              appDispatch({ type: 'turnOff' });
-              appDispatch({
-                type: 'flashMsgSuccess',
-                value: ['Updated successfully!'],
-              });
-            } else {
-              // TURN OFF ANY FLASH SUCCESS MESSAGE
-              appDispatch({ type: 'turnOff' });
-              // DISPLAY VALADATION ERRORS
-              appDispatch({ type: 'flashMsgError', value: response.data });
+
+              profileInfoDispatch({ type: 'isSaving' });
+
+              if (response.data.token) {
+                // SUCCESS
+
+                // UPDATE USERNAME BEFORE EDIT
+                profileInfoDispatch({
+                  type: 'updateUserInfo',
+                  value: userData,
+                  process: 'updateAllBeforeEditValues',
+                });
+
+                userData.token = response.data.token; // UPDATE NEW TOKEN
+                appDispatch({
+                  type: 'updateLocalStorage',
+                  value: userData,
+                  process: 'profileUpdate',
+                });
+
+                // TURN OFF ANY FLASH ERROR MESSAGE AND DISPLAY NEW SUCCESS MSG
+                appDispatch({ type: 'turnOff' });
+                appDispatch({
+                  type: 'flashMsgSuccess',
+                  value: ['Updated successfully!'],
+                });
+              } else {
+                // TURN OFF ANY FLASH SUCCESS MESSAGE AND DISPLAY NEW ERROR MSG
+                appDispatch({ type: 'turnOff' });
+                // DISPLAY VALADATION ERRORS
+                appDispatch({ type: 'flashMsgError', value: response.data });
+              }
             }
+          } catch (error) {
+            // NETWORK ERROR MOST LIKELY
+            console.log(error.message);
           }
-        } catch (error) {
-          // NETWORK ERROR MOST LIKELY
-          console.log(error.message);
-        }
-      })();
-      return () => request.cancel();
+        })();
+
+        return () => request.cancel();
+      } else {
+        // TURN OFF ANY FLASH MESSAGE
+        // TODO - DISPLAY INFO MESSAGE
+        appDispatch({ type: 'turnOff' });
+      }
     }
   }, [state.submitCount]);
 
