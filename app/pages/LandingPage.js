@@ -49,11 +49,13 @@ function LandingPage() {
               <div className="relative">
                 <button
                   onClick={() => appDispatch({ type: 'toggleLandingPageMenu' })}
-                  className="flex text-center text-white focus:outline-none"
+                  className={`flex text-center text-white focus:outline-none ${
+                    appState.toggleLandingPageMenu ? 'focus:text-gray-500' : 'focus:text-white'
+                  } `}
                 >
                   <svg
                     className="w-6 h-6"
-                    stroke="white"
+                    stroke="currentColor"
                     fill="none"
                     focusable="false"
                     viewBox="0 0 24 24"
@@ -74,14 +76,14 @@ function LandingPage() {
                         <>
                           <div className="absolute right-0 z-10 w-48 mt-1 origin-top-right rounded-md shadow-lg">
                             <div
-                              className="py-1 bg-white rounded-md shadow-xs"
+                              className="bg-white rounded-md shadow-xs"
                               role="menu"
                               aria-orientation="vertical"
                               aria-labelledby="user-menu"
                             >
                               <Link
                                 to={`/profile/${appState.user.username}`}
-                                className="flex items-center px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                                className="flex items-center px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-300 rounded-t-lg focus:outline-none focus:bg-gray-100"
                                 role="menuitem"
                               >
                                 <img
@@ -94,7 +96,7 @@ function LandingPage() {
                               {appState.user.scope && appState.user.scope.indexOf('admin') > -1 && (
                                 <Link
                                   to={`/admin/${appState.user.username}`}
-                                  className="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                                  className="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-300  focus:outline-none focus:bg-gray-100"
                                   role="menuitem"
                                 >
                                   Admin Area
@@ -102,14 +104,14 @@ function LandingPage() {
                               )}
                               <Link
                                 to="/about"
-                                className="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                                className="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-300  focus:outline-none focus:bg-gray-100"
                                 role="menuitem"
                               >
                                 About
                               </Link>
                               <button
                                 onClick={handleLogout}
-                                className="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                                className="w-full rounded-b-lg text-left px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-300 focus:outline-none focus:bg-gray-100"
                                 role="menuitem"
                               >
                                 Sign out
@@ -122,28 +124,28 @@ function LandingPage() {
                           {' '}
                           <div className="absolute right-0 z-10 w-48 mt-1 origin-top-right rounded-md shadow-lg">
                             <div
-                              className="py-1 bg-white rounded-md shadow-xs"
+                              className="bg-white rounded-md shadow-xs"
                               role="menu"
                               aria-orientation="vertical"
                               aria-labelledby="user-menu"
                             >
                               <Link
                                 to="/login"
-                                className="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                                className="block rounded-t-lg px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-300 focus:outline-none focus:bg-gray-100"
                                 role="menuitem"
                               >
                                 Login
                               </Link>
                               <Link
                                 to="/register"
-                                className="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                                className="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-300 focus:outline-none focus:bg-gray-100"
                                 role="menuitem"
                               >
                                 Register
                               </Link>
                               <Link
                                 to="/about"
-                                className="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                                className="block rounded-b-lg px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-300 focus:outline-none focus:bg-gray-100"
                                 role="menuitem"
                               >
                                 About

@@ -67,7 +67,7 @@ function SettingsPage({ history }) {
                     className="flex items-center w-full p-2 text-sm text-white no-underline hover:bg-gray-800 hover:no-underline"
                   >
                     <i className="mr-2 fas fa-sign-out-alt fa-fw"></i>
-                    <span>Log Out</span>
+                    <span>Sign out</span>
                   </button>
                 </div>
               )}
