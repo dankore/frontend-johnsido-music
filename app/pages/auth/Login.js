@@ -86,7 +86,7 @@ function Login({ history }) {
           const response = await Axios.post(
             '/login',
             {
-              usernameOrEmail: state.usernameOrEmail.value,
+              usernameOrEmail: state.usernameOrEmail.value.toLowerCase(),
               password: state.password.value,
             },
             { cancelToken: request.token }
