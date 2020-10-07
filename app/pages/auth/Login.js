@@ -15,7 +15,7 @@ function Login({ history }) {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
   const initialState = {
-    username: {
+    usernameOrEmail: {
       value: '',
       hasError: false,
       message: '',
@@ -31,13 +31,13 @@ function Login({ history }) {
 
   function reducer(draft, action) {
     switch (action.type) {
-      case 'usernameImmediately':
-        draft.username.hasError = false;
-        draft.username.value = action.value;
+      case 'usernameOrEmailImmediately':
+        draft.usernameOrEmail.hasError = false;
+        draft.usernameOrEmail.value = action.value;
 
-        if (draft.username.value == '') {
-          draft.username.hasError = true;
-          draft.username.message = 'Username is empty.';
+        if (draft.usernameOrEmail.value == '') {
+          draft.usernameOrEmail.hasError = true;
+          draft.usernameOrEmail.message = 'Username / email field is empty.';
         }
         return;
       case 'passwordImmediately':
@@ -57,7 +57,7 @@ function Login({ history }) {
         }
         return;
       case 'submitForm':
-        if (!draft.username.hasError && !draft.password.hasError) {
+        if (!draft.usernameOrEmail.hasError && !draft.password.hasError) {
           draft.submitCount++;
         }
         return;
@@ -69,7 +69,7 @@ function Login({ history }) {
   // SUBMIT FORM: CHECK FOR ERRORS AND INITIATE SUBMISSION
   function handleSubmitForm(e) {
     e.preventDefault();
-    loggingDispatch({ type: 'usernameImmediately', value: state.username.value });
+    loggingDispatch({ type: 'usernameOrEmailImmediately', value: state.usernameOrEmail.value });
     loggingDispatch({ type: 'passwordImmediately', value: state.password.value });
 
     loggingDispatch({ type: 'submitForm' });
@@ -80,12 +80,13 @@ function Login({ history }) {
     if (state.submitCount) {
       const request = Axios.CancelToken.source();
       loggingDispatch({ type: 'isLoggingIn', process: 'starts' });
+
       (async function sendLoginForm() {
         try {
           const response = await Axios.post(
             '/login',
             {
-              username: state.username.value,
+              usernameOrEmail: state.usernameOrEmail.value,
               password: state.password.value,
             },
             { cancelToken: request.token }
@@ -132,27 +133,27 @@ function Login({ history }) {
 
             <form onSubmit={handleSubmitForm} className="flex flex-col pt-3">
               <div className="relative flex flex-col pt-4">
-                <label htmlFor="username" className="text-lg">
-                  Username
+                <label htmlFor="usernameOrEmail" className="text-lg">
+                  Username or Email
                 </label>
                 <input
-                  value={state.username.value}
+                  value={state.usernameOrEmail.value}
                   onChange={e =>
-                    loggingDispatch({ type: 'usernameImmediately', value: e.target.value })
+                    loggingDispatch({ type: 'usernameOrEmailImmediately', value: e.target.value })
                   }
-                  type="username"
-                  id="username"
-                  placeholder="don"
+                  type="usernameOrEmail"
+                  id="usernameOrEmail"
+                  placeholder="Username or email"
                   className="w-full px-3 py-2 mt-1 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                 />
                 <CSSTransition
-                  in={state.username.hasError}
+                  in={state.usernameOrEmail.hasError}
                   timeout={330}
                   classNames="liveValidateMessage"
                   unmountOnExit
                 >
                   <div style={CSSTransitionStyleModified} className="liveValidateMessage">
-                    {state.username.message}
+                    {state.usernameOrEmail.message}
                   </div>
                 </CSSTransition>
               </div>

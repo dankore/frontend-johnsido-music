@@ -43,7 +43,7 @@ function SettingsPage({ history }) {
                 </svg>
               </button>
               {appState.toggleAdminLandingPageMenu && (
-                <div className="absolute right-0 z-30 overflow-auto text-white bg-gray-900">
+                <div className="absolute right-0 z-30 w-32 overflow-auto text-white bg-gray-900">
                   <Link
                     to={`/profile/${appState.user.username}`}
                     className="flex items-center p-2 text-sm text-white no-underline hover:bg-gray-800 hover:no-underline"
@@ -64,7 +64,7 @@ function SettingsPage({ history }) {
                   <div className="border border-gray-800"></div>
                   <button
                     onClick={handleLogout}
-                    className="flex items-center p-2 text-sm text-white no-underline hover:bg-gray-800 hover:no-underline"
+                    className="flex items-center w-full p-2 text-sm text-white no-underline hover:bg-gray-800 hover:no-underline"
                   >
                     <i className="mr-2 fas fa-sign-out-alt fa-fw"></i>
                     <span>Log Out</span>
