@@ -205,7 +205,7 @@ function LandingPage() {
               }}
             ></div>
           </div>
-          <div className="px-6 pt-6 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-full">
+          <div className="px-6 pt-5 pb-3 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-full">
             <p className="text-sm font-semibold tracking-wider text-gray-300 uppercase">Artiste</p>
             <div className="mt-4 sm:flex">
               <Link to="/about" className="flex items-center no-underline">
@@ -220,6 +220,23 @@ function LandingPage() {
                   <p className="font-semibold leading-tight text-white">John Sido</p>
                   <p className="text-sm leading-tight text-gray-500">Abuja, Nigeria</p>
                 </div>
+              </Link>
+            </div>
+            <div className="text-gray-600 mt-3">
+              <Link className="hover:text-gray-400" to="/about">
+                About
+              </Link>{' '}
+              |{' '}
+              <Link className="hover:text-gray-400" to="/terms">
+                Terms
+              </Link>{' '}
+              |{' '}
+              <Link className="hover:text-gray-400" to="/privacy">
+                Privacy
+              </Link>{' '}
+              |{' '}
+              <Link className="hover:text-gray-400" to="/cookies">
+                Cookies
               </Link>
             </div>
           </div>
