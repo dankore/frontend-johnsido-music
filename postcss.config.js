@@ -6,7 +6,10 @@ const PurgeOptions = {
   // Include any special characters you're using in this regular expression
   defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
 };
-const DEV = process.env.npm_lifecycle_event !== 'build';
+
+const DEV = process.env.NODE_ENV !== 'production';
+
+console.log({ DEV });
 
 module.exports = {
   plugins: [
