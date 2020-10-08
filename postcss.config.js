@@ -1,3 +1,5 @@
+const DEV = process.env.NODE_ENV !== 'production';
+
 const PurgeCss = require('@fullhuman/postcss-purgecss');
 const PurgeOptions = {
   // SPECIFY PATH THAT CONTAINS CSS
@@ -7,16 +9,10 @@ const PurgeOptions = {
   defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
 };
 
-const DEV = process.env.NODE_ENV !== 'production';
-
-console.log({ DEV });
-
 module.exports = {
   plugins: [
-    //
     require('tailwindcss'),
     require('autoprefixer'),
     DEV ? false : PurgeCss(PurgeOptions),
-    //
   ].filter(Boolean),
 };
