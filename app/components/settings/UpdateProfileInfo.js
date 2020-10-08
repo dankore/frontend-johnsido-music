@@ -377,8 +377,8 @@ function ProfileInfoSettings({ history }) {
     if (
       state.firstName.value.trim() == state.firstName.beforeEdit.trim() &&
       state.lastName.value.trim() == state.lastName.beforeEdit.trim() &&
-      state.username.value.trim() == state.username.beforeEdit.trim() &&
-      state.email.value.trim() == state.email.beforeEdit.trim() &&
+      state.username.value.trim().toLowerCase() == state.username.beforeEdit.trim().toLowerCase() &&
+      state.email.value.trim().toLowerCase() == state.email.beforeEdit.trim().toLowerCase() &&
       state.lastName.value.trim() == state.lastName.beforeEdit.trim() &&
       state.bio.value.trim() == state.bio.beforeEdit.trim() &&
       state.city.value.trim() == state.city.beforeEdit.trim() &&

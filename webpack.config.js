@@ -30,7 +30,7 @@ config = {
     new DefinePlugin({
       'process.env.AUDIO_UPLOAD_URL': JSON.stringify(process.env.AUDIO_UPLOAD_URL),
       'process.env.BACKENDURL': JSON.stringify(process.env.BACKENDURL),
-    }), // LAMBDA FUNCTION https://macarthur.me/posts/building-a-lambda-function-with-netlify
+    }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'app/index-template.html',
