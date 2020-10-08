@@ -354,7 +354,7 @@ function RoleAssignment({ history }) {
                 <div className="">
                   {state.adminStats.allUserDocs.map((user, index) => {
                     return (
-                      <div key={index} className="mb-2 bg-white border c-shadow">
+                      <div key={index} className="mb-2 bg-white c-shadow">
                         <Link
                           to={`/profile/${user.username}`}
                           className="block px-6 py-4 whitespace-no-wrap focus:outline-none active:outline-none"
