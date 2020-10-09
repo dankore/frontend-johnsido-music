@@ -239,22 +239,23 @@ function LandingPage() {
                 </div>
               </Link>
             </div>
-            <div className="text-gray-600 mt-3">
-              <Link className="hover:text-gray-400" to="/about">
+            <div className="text-gray-500 mt-3 flex text-sm">
+              <Link className="hover:text-gray-400 mr-1 block" to="/about">
                 About
               </Link>{' '}
               |{' '}
-              <Link className="hover:text-gray-400" to="/terms">
+              <Link className="hover:text-gray-400 mx-1 block" to="/terms">
                 Terms
               </Link>{' '}
               |{' '}
-              <Link className="hover:text-gray-400" to="/privacy">
+              <Link className="hover:text-gray-400 mx-1 block" to="/privacy">
                 Privacy
               </Link>{' '}
               |{' '}
-              <Link className="hover:text-gray-400" to="/cookies">
+              <Link className="hover:text-gray-400 mx-1 block" to="/cookies">
                 Cookies
               </Link>
+              <p className="text-gray-600 ml-3">&copy; 2020-{new Date().getFullYear()} Johnsido</p>
             </div>
           </div>
         </div>

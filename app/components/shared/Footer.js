@@ -47,7 +47,7 @@ function Footer() {
         <Link to="/">Home</Link> | <Link to="/about">About</Link> | <Link to="/terms">Terms</Link> |{' '}
         <Link to="/privacy">Privacy</Link> | <Link to="/cookies">Cookies</Link>
       </div>
-      <p>&copy; {new Date().getFullYear()} Johnsido</p>
+      <p>&copy; 2020-{new Date().getFullYear()} Johnsido</p>
       <p className="text-xs">
         Developed by{' '}
         <a className="hover:text-jsBrown1" href="https://www.dankore.com/">
