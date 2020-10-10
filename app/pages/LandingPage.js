@@ -111,24 +111,35 @@ function LandingPage() {
                               {appState.user.scope && appState.user.scope.indexOf('admin') > -1 && (
                                 <Link
                                   to={`/admin/${appState.user.username}`}
-                                  className="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-300  focus:outline-none focus:bg-gray-100"
+                                  className="flex items-center px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-300  focus:outline-none focus:bg-gray-100"
                                   role="menuitem"
                                 >
+                                  <i className="mr-2 fas fa-users-cog"></i>
                                   Admin Area
                                 </Link>
                               )}
                               <Link
-                                to="/about"
-                                className="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-300  focus:outline-none focus:bg-gray-100"
+                                to="/settings"
+                                className="flex items-center px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-300  focus:outline-none focus:bg-gray-100"
                                 role="menuitem"
                               >
+                                <i className="mr-2 fa fa-cog fa-fw"></i>
+                                Settings
+                              </Link>
+                              <Link
+                                to="/about"
+                                className="flex items-center px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-300  focus:outline-none focus:bg-gray-100"
+                                role="menuitem"
+                              >
+                                <i className="mr-2 far fa-address-card"></i>
                                 About
                               </Link>
                               <button
                                 onClick={handleLogout}
-                                className="w-full rounded-b-lg text-left px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-300 focus:outline-none focus:bg-gray-100"
+                                className="flex items-center w-full rounded-b-lg text-left px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-300 focus:outline-none focus:bg-gray-100"
                                 role="menuitem"
                               >
+                                <i className="mr-2 fas fa-sign-out-alt fa-fw"></i>
                                 Sign out
                               </button>
                             </div>
@@ -146,23 +157,26 @@ function LandingPage() {
                             >
                               <Link
                                 to="/login"
-                                className="block rounded-t-lg px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-300 focus:outline-none focus:bg-gray-100"
+                                className="flex items-center rounded-t-lg px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-300 focus:outline-none focus:bg-gray-100"
                                 role="menuitem"
                               >
+                                <i className="mr-2 fas fa-sign-in-alt"></i>
                                 Login
                               </Link>
                               <Link
                                 to="/register"
-                                className="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-300 focus:outline-none focus:bg-gray-100"
+                                className="flex items-center px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-300 focus:outline-none focus:bg-gray-100"
                                 role="menuitem"
                               >
+                                <i className="mr-2 fas fa-user-plus"></i>
                                 Register
                               </Link>
                               <Link
                                 to="/about"
-                                className="block rounded-b-lg px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-300 focus:outline-none focus:bg-gray-100"
+                                className="flex items-center rounded-b-lg px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-300 focus:outline-none focus:bg-gray-100"
                                 role="menuitem"
                               >
+                                <i className="mr-2 far fa-address-card"></i>
                                 About
                               </Link>
                             </div>
@@ -225,7 +239,7 @@ function LandingPage() {
           <div className="px-6 pt-5 pb-3 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-full">
             <p className="text-sm font-semibold tracking-wider text-gray-300 uppercase">Artiste</p>
             <div className="mt-4 sm:flex">
-              <Link to="/about" className="flex items-center no-underline">
+              <Link to="/profile/johnsido" className="flex items-center no-underline">
                 <div className="flex-shrink-0">
                   <img
                     className="w-12 h-12 border-2 border-white rounded-full"

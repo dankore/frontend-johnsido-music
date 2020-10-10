@@ -57,7 +57,7 @@ function SettingsPage({ history }) {
                       className="flex items-center p-2 text-sm text-white no-underline hover:bg-gray-800 hover:no-underline"
                       role="menuitem"
                     >
-                      <i className="mr-2 fa fa-cog fa-fw"></i>
+                      <i className="mr-2 fas fa-users-cog"></i>
                       <span>Admin Area</span>
                     </Link>
                   )}
