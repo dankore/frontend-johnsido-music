@@ -137,29 +137,33 @@ function HeaderLoggedIn({ history }) {
                       className="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                       role="menuitem"
                     >
+                      <i className="mr-2 fa fa-user fa-fw"></i>
                       Your Profile
                     </Link>
                     {appState.user.scope.indexOf('admin') > -1 && (
                       <Link
                         to={`/admin/${appState.user.username}`}
-                        className="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                        className="flex items-center px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                         role="menuitem"
                       >
+                        <i className="mr-2 fas fa-users-cog"></i>
                         Admin Area
                       </Link>
                     )}
                     <Link
                       to="/settings"
-                      className="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                      className="flex items-center px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                       role="menuitem"
                     >
+                      <i className="mr-2 fa fa-cog fa-fw"></i>
                       Settings
                     </Link>
                     <button
                       onClick={handleLogout}
-                      className="w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                      className="w-full flex items-center px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                       role="menuitem"
                     >
+                      <i className="mr-2 fas fa-sign-out-alt fa-fw"></i>
                       Sign out
                     </button>
                   </div>
