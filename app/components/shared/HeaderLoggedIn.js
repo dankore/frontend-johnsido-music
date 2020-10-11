@@ -135,11 +135,15 @@ function HeaderLoggedIn({ history }) {
                     {history.location.pathname != `/profile/${appState.user.username}` && (
                       <Link
                         to={`/profile/${appState.user.username}`}
-                        className="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                        className="flex items-center px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                         role="menuitem"
                       >
-                        <i className="mr-2 fa fa-user fa-fw"></i>
-                        Your Profileg
+                        <img
+                          className="w-8 h-8 mr-2 rounded-full"
+                          src={appState.user.avatar}
+                          alt="Profile Pic"
+                        />
+                        <p>Your Profile</p>
                       </Link>
                     )}
 
