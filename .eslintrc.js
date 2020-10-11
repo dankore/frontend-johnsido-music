@@ -16,13 +16,14 @@ module.exports = {
   },
 
   extends: [
-    'eslint:recommended',
-    'plugin:prettier/recommended',
     'prettier',
     'prettier/babel',
     'prettier/react',
     'prettier/standard',
+    'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:prettier/recommended',
+    'plugin:react-hooks/recommended',
   ],
   globals: {
     shallow: true,

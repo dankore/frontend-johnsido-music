@@ -253,7 +253,7 @@ function LandingPage() {
                 </div>
               </Link>
             </div>
-            <div className="text-gray-500 mt-3 flex flex-wrap text-sm">
+            <div className="text-gray-500 mt-3 flex items-center flex-wrap text-sm">
               <Link className="hover:text-gray-400 mr-1 block" to="/about">
                 About
               </Link>{' '}
@@ -269,8 +269,14 @@ function LandingPage() {
               <Link className="hover:text-gray-400 mx-1 block" to="/cookies">
                 Cookies
               </Link>
-              <p className="text-gray-600 sm:ml-3">
+              <p className="text-gray-600 mr-1 sm:ml-3 text-xs">
                 &copy; 2020-{new Date().getFullYear()} Johnsido
+              </p>
+              <p className="text-gray-600 sm:ml-3 text-xs">
+                Developed by{' '}
+                <a className="hover:text-jsBrown1" href="https://www.dankore.com">
+                  Adamu M. Dankore.
+                </a>
               </p>
             </div>
           </div>
