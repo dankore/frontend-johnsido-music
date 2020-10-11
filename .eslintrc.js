@@ -5,7 +5,7 @@ module.exports = {
     node: true,
   },
   parser: 'babel-eslint',
-  plugins: ['import', 'react'],
+  plugins: ['import', 'react', 'react-hooks'],
   parserOptions: {
     ecmaVersion: 2018,
     ecmaFeatures: {
@@ -16,13 +16,13 @@ module.exports = {
   },
 
   extends: [
-    'eslint:recommended',
-    'plugin:prettier/recommended',
     'prettier',
     'prettier/babel',
     'prettier/react',
     'prettier/standard',
+    'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:prettier/recommended',
   ],
   globals: {
     shallow: true,
@@ -45,6 +45,8 @@ module.exports = {
       },
     ],
     'no-warning-comments': 0,
+    'react-hooks/rules-of-hooks': 'error',
+    // 'react-hooks/exhaustive-deps': 'warn',
   },
   settings: {
     react: {
