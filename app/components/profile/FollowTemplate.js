@@ -93,11 +93,7 @@ function FollowTemplate({ history, type }) {
         }
         return;
       case 'pleaseLogingRegister':
-        if (action.process == 'open') {
-          draft.pleaseLogingRegister = true;
-        } else {
-          draft.pleaseLogingRegister = false;
-        }
+        draft.pleaseLogingRegister = !draft.pleaseLogingRegister;
         return;
       case 'error':
         draft.error.hasErrors = true;
@@ -202,7 +198,7 @@ function FollowTemplate({ history, type }) {
         return () => request.cancel();
       } else {
         console.log('Please login');
-        followDispatch({ type: 'pleaseLogingRegister', process: 'open' });
+        followDispatch({ type: 'pleaseLogingRegister' });
       }
     }
   }, [state.startFollowing.count]);
@@ -399,7 +395,9 @@ function FollowTemplate({ history, type }) {
           {noFollows()}
         </div>
       </div>
-      {state.pleaseLogingRegister && <PleaseLoginRegister />}
+      {state.pleaseLogingRegister && (
+        <PleaseLoginRegister toggle={() => followDispatch({ type: 'pleaseLogingRegister' })} />
+      )}
     </Page>
   );
 }
