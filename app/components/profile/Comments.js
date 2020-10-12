@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import DispatchContext from '../../contextsProviders/DispatchContext';
 import ReuseableModal from '../admin/ReuseableModal';
 import BackToProfileBtn from '../shared/BackToProfileBtn';
+import PleaseLoginRegister from '../shared/PleaseLoginRegister';
 
 function Comments({ history }) {
   const appState = useContext(StateContext);
@@ -55,6 +56,7 @@ function Comments({ history }) {
       isDeleting: false,
     },
     commentHistory: [],
+    pleaseLogingRegister: false,
     sendCountAdd: 0,
     sendCountEdit: 0,
   };
@@ -73,7 +75,7 @@ function Comments({ history }) {
         return;
       case 'checkCommentFieldForErrors':
         if (action.process == 'add') {
-          if (draft.comment.value.trim() == '') {
+          if (draft.comment.value.trim() == '' && appState.loggedIn) {
             draft.comment.hasError = true;
             draft.comment.message = 'Comment field is empty.';
             draft.comment.value = '';
@@ -150,6 +152,9 @@ function Comments({ history }) {
           draft.sendCountEdit++;
         }
         return;
+      case 'pleaseLogingRegister':
+        draft.pleaseLogingRegister = !draft.pleaseLogingRegister;
+        return;
       case 'commentHistory':
         draft.commentHistory = action.value;
         return;
@@ -216,41 +221,45 @@ function Comments({ history }) {
   // SAVE COMMENT TO DB
   useEffect(() => {
     if (state.sendCountAdd) {
-      commentsDispatch({ type: 'addNewComment', process: 'starts' });
-      const request = Axios.CancelToken.source();
-      (async function sendForm() {
-        try {
-          const response = await Axios.post(
-            '/add-comment',
-            {
-              author: appState.user._id,
-              comment: state.comment.value,
-              profileOwner: state.username, // USE THIS TO GET THE ID ON THE SERVER
-              createdDate: Date.now(),
-              token: appState.user.token,
-            },
-            { cancelToken: request.token }
-          );
+      if (appState.loggedIn) {
+        commentsDispatch({ type: 'addNewComment', process: 'starts' });
+        const request = Axios.CancelToken.source();
+        (async function sendForm() {
+          try {
+            const response = await Axios.post(
+              '/add-comment',
+              {
+                author: appState.user._id,
+                comment: state.comment.value,
+                profileOwner: state.username, // USE THIS TO GET THE ID ON THE SERVER
+                createdDate: Date.now(),
+                token: appState.user.token,
+              },
+              { cancelToken: request.token }
+            );
 
-          commentsDispatch({ type: 'addNewComment', process: 'ends' });
+            commentsDispatch({ type: 'addNewComment', process: 'ends' });
 
-          if (response.data._id) {
-            commentsDispatch({ type: 'addNewComment', value: response.data, process: 'add' });
-          } else {
-            // ERROR E.G COMMENT FIELD IS EMPTY/NOT LOGGED IN CAUGTH BY THE SERVER;
-            commentsDispatch({
-              type: 'checkCommentFieldForErrors',
-              value: response.data,
-              process: 'server',
-            });
+            if (response.data._id) {
+              commentsDispatch({ type: 'addNewComment', value: response.data, process: 'add' });
+            } else {
+              // ERROR E.G COMMENT FIELD IS EMPTY/NOT LOGGED IN CAUGTH BY THE SERVER;
+              commentsDispatch({
+                type: 'checkCommentFieldForErrors',
+                value: response.data,
+                process: 'server',
+              });
+            }
+          } catch (error) {
+            // FAIL SILENTLY
+            console.log(error);
           }
-        } catch (error) {
-          // FAIL SILENTLY
-          console.log(error);
-        }
-      })();
+        })();
 
-      return () => request.cancel();
+        return () => request.cancel();
+      } else {
+        commentsDispatch({ type: 'pleaseLogingRegister' });
+      }
     }
   }, [state.sendCountAdd]);
 
@@ -723,6 +732,9 @@ function Comments({ history }) {
           </div>
         )}
       </div>
+      {state.pleaseLogingRegister && (
+        <PleaseLoginRegister toggle={() => commentsDispatch({ type: 'pleaseLogingRegister' })} />
+      )}
     </Page>
   );
 }

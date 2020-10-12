@@ -9,6 +9,7 @@ import StateContext from '../../contextsProviders/StateContext';
 import PropTypes from 'prop-types';
 import { followBtnCSS, stopFollowBtnCSS, linkCSS } from '../../helpers/CSSHelpers';
 import BackToProfileBtn from '../shared/BackToProfileBtn';
+import PleaseLoginRegister from '../shared/PleaseLoginRegister';
 
 function FollowTemplate({ history, type }) {
   const appState = useContext(StateContext);
@@ -18,6 +19,7 @@ function FollowTemplate({ history, type }) {
     follows: [], // FOLLOWERS OR FOLLWOING
     isFetchingProfileData: false,
     isFetchingFollows: false,
+    pleaseLogingRegister: false,
     startFollowing: {
       id: '',
       username: '',
@@ -90,6 +92,9 @@ function FollowTemplate({ history, type }) {
           draft.stopFollowing.isLoading = '';
         }
         return;
+      case 'pleaseLogingRegister':
+        draft.pleaseLogingRegister = !draft.pleaseLogingRegister;
+        return;
       case 'error':
         draft.error.hasErrors = true;
         draft.error.message = action.value;
@@ -159,37 +164,41 @@ function FollowTemplate({ history, type }) {
   // ADD FOLLOW
   useEffect(() => {
     if (state.startFollowing.count) {
-      const request = Axios.CancelToken.source();
+      if (appState.loggedIn) {
+        const request = Axios.CancelToken.source();
 
-      try {
-        (async function addFollow() {
-          const response = await Axios.post(
-            `/addFollow/${state.startFollowing.username}`,
-            { token: appState.user.token },
-            {
-              CancelToken: request.token,
+        try {
+          (async function addFollow() {
+            const response = await Axios.post(
+              `/addFollow/${state.startFollowing.username}`,
+              { token: appState.user.token },
+              {
+                CancelToken: request.token,
+              }
+            );
+
+            followDispatch({ type: 'stopLoadingFollow', process: 'add' });
+
+            if (response.data == true) {
+              followDispatch({
+                type: 'updateFollowState',
+                value: state.startFollowing.id,
+                process: 'add',
+              });
+            } else {
+              // SHOW ERROR
+              followDispatch({ type: 'error', value: response.data[0] });
             }
-          );
+          })();
+        } catch (error) {
+          // FAIL SILENTLY
+          console.log(error);
+        }
 
-          followDispatch({ type: 'stopLoadingFollow', process: 'add' });
-
-          if (response.data == true) {
-            followDispatch({
-              type: 'updateFollowState',
-              value: state.startFollowing.id,
-              process: 'add',
-            });
-          } else {
-            // SHOW ERROR
-            followDispatch({ type: 'error', value: response.data[0] });
-          }
-        })();
-      } catch (error) {
-        // FAIL SILENTLY
-        console.log(error);
+        return () => request.cancel();
+      } else {
+        followDispatch({ type: 'pleaseLogingRegister' });
       }
-
-      return () => request.cancel();
     }
   }, [state.startFollowing.count]);
 
@@ -333,7 +342,8 @@ function FollowTemplate({ history, type }) {
                                 })
                               }
                             >
-                              {state.startFollowing.isLoading == follow.author.username ? (
+                              {state.startFollowing.isLoading == follow.author.username &&
+                              appState.loggedIn ? (
                                 <div className="flex items-center justify-center">
                                   <i className="text-sm fa fa-spinner fa-spin"></i>{' '}
                                 </div>
@@ -384,6 +394,9 @@ function FollowTemplate({ history, type }) {
           {noFollows()}
         </div>
       </div>
+      {state.pleaseLogingRegister && (
+        <PleaseLoginRegister toggle={() => followDispatch({ type: 'pleaseLogingRegister' })} />
+      )}
     </Page>
   );
 }

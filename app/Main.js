@@ -5,6 +5,7 @@ import Axios from 'axios';
 import { useImmerReducer } from 'use-immer';
 
 // AXIOS BASE URL
+console.log(process.env.BACKENDURL);
 Axios.defaults.baseURL = process.env.BACKENDURL;
 // STATE MANAGEMENT
 import StateContext from './contextsProviders/StateContext';

@@ -86,28 +86,20 @@ function HeaderLoggedIn() {
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 text-white sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             <Link
               to="/register"
-              className="flex px-1 text-sm transition duration-150 ease-in-out border-2 border-transparent rounded-full focus:outline-none focus:border-white"
+              className="flex items-center px-1 text-sm transition duration-150 ease-in-out border-2 border-transparent rounded-full focus:outline-none focus:border-white"
               aria-label="register"
             >
+              <i className="mr-1 fas fa-user-plus"></i>
               Register
             </Link>
-
-            {/* <!-- Profile dropdown --> */}
-            <div className="relative ml-3">
-              <div>
-                <Link
-                  to="/login"
-                  className="flex px-1 text-sm transition duration-150 ease-in-out border-2 border-transparent rounded-full focus:outline-none focus:border-white"
-                  id="user-menu"
-                  aria-label="User menu"
-                >
-                  <div className="rounded-full">
-                    <i className="mr-2 far fa-user"></i>
-                    Login
-                  </div>
-                </Link>
-              </div>
-            </div>
+            <Link
+              to="/login"
+              className="flex items-center px-1 text-sm transition duration-150 ease-in-out border-2 border-transparent rounded-full focus:outline-none focus:border-white"
+              aria-label="login"
+            >
+              <i className="mr-1 fas fa-sign-in-alt"></i>
+              Login
+            </Link>
           </div>
         </div>
       </div>
@@ -123,11 +115,11 @@ function HeaderLoggedIn() {
         Register
       </Link>
       <Link
-        to="/register"
+        to="/login"
         className="flex px-1 text-sm transition duration-150 ease-in-out border-2 border-transparent rounded-full sr-only focus:outline-none focus:border-white"
         aria-label="register"
       >
-        Register
+        Login
       </Link>
     </nav>
   );
