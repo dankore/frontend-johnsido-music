@@ -197,7 +197,6 @@ function FollowTemplate({ history, type }) {
 
         return () => request.cancel();
       } else {
-        console.log('Please login');
         followDispatch({ type: 'pleaseLogingRegister' });
       }
     }
