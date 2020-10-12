@@ -210,7 +210,7 @@ function LandingPage() {
                 to="/my-songs"
                 className="inline-flex items-center justify-center w-full px-6 py-3 text-base font-semibold leading-6 text-gray-900 transition duration-150 ease-in-out bg-white border border-transparent rounded-md shadow-sm sm:w-auto hover:text-gray-600 focus:outline-none focus:text-gray-600 xl:text-lg xl:py-4"
               >
-                Listen to my music
+                Listen to my music →
               </Link>
               <Link
                 to="/explore"
