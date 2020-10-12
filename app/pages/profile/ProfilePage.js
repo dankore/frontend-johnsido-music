@@ -8,6 +8,7 @@ import LoadingDotsAnimation from '../../components/shared/LoadingDotsAnimation';
 import StateContext from '../../contextsProviders/StateContext';
 import { followBtnCSS, stopFollowBtnCSS, linkCSS } from '../../helpers/CSSHelpers';
 import UserNotActive from '../../components/shared/UserNotActive';
+import PleaseLoginRegister from '../../components/shared/PleaseLoginRegister';
 
 function ProfilePage({ history }) {
   const appState = useContext(StateContext);
@@ -35,6 +36,7 @@ function ProfilePage({ history }) {
     startFollowingCount: 0,
     stopFollowingCount: 0,
     isLoadingFollow: false,
+    pleaseLogingRegister: false,
   };
 
   function profileReducer(draft, action) {
@@ -68,6 +70,9 @@ function ProfilePage({ history }) {
       case 'networkError':
         draft.networkError.hasError = true;
         draft.networkError.message = 'Network error';
+        return;
+      case 'pleaseLogingRegister':
+        draft.pleaseLogingRegister = !draft.pleaseLogingRegister;
         return;
     }
   }
@@ -106,27 +111,31 @@ function ProfilePage({ history }) {
   // ADD FOLLOW
   useEffect(() => {
     if (state.startFollowingCount) {
-      profileDispatch({ type: 'isLoadingFollow', value: true });
-      const request = Axios.CancelToken.source();
+      if (appState.loggedIn) {
+        profileDispatch({ type: 'isLoadingFollow', value: true });
+        const request = Axios.CancelToken.source();
 
-      (async function addFollow() {
-        try {
-          await Axios.post(
-            `/addFollow/${state.user.profileUsername}`,
-            { token: appState.user.token },
-            {
-              CancelToken: request.token,
-            }
-          );
-          profileDispatch({ type: 'isLoadingFollow', value: false });
-          profileDispatch({ type: 'addFollow' });
-        } catch (error) {
-          // FAIL SILENTLY
-          console.log(error);
-        }
-      })();
+        (async function addFollow() {
+          try {
+            await Axios.post(
+              `/addFollow/${state.user.profileUsername}`,
+              { token: appState.user.token },
+              {
+                CancelToken: request.token,
+              }
+            );
+            profileDispatch({ type: 'isLoadingFollow', value: false });
+            profileDispatch({ type: 'addFollow' });
+          } catch (error) {
+            // FAIL SILENTLY
+            console.log(error);
+          }
+        })();
 
-      return () => request.cancel();
+        return () => request.cancel();
+      } else {
+        profileDispatch({ type: 'pleaseLogingRegister' });
+      }
     }
   }, [state.startFollowingCount]);
 
@@ -215,8 +224,7 @@ function ProfilePage({ history }) {
                     {/* FOLLOW BUTTON */}
                     <div className="w-full px-4 lg:w-4/12 lg:order-3 lg:text-right lg:self-center">
                       <div className="flex justify-center px-3 py-6 mt-32 lg:justify-end lg:mt-0">
-                        {appState.loggedIn &&
-                          appState.user.username != state.user.profileUsername &&
+                        {appState.user.username != state.user.profileUsername &&
                           !state.user.isFollowing &&
                           state.user.profileUsername != '' && (
                             <button
@@ -236,8 +244,7 @@ function ProfilePage({ history }) {
                               )}
                             </button>
                           )}
-                        {appState.loggedIn &&
-                          appState.user.username != state.user.profileusername &&
+                        {appState.user.username != state.user.profileusername &&
                           state.user.isFollowing &&
                           state.user.profileusername != '' && (
                             <button
@@ -347,6 +354,9 @@ function ProfilePage({ history }) {
           {!state.user.profileActive && <UserNotActive user={state.user} />}
         </section>
       </main>
+      {state.pleaseLogingRegister && (
+        <PleaseLoginRegister toggle={() => profileDispatch({ type: 'pleaseLogingRegister' })} />
+      )}
     </Page>
   );
 }
