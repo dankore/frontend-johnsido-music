@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-function PleaseLoginRegister({ toggle }) {
+function PleaseLoginRegister({ toggle, fromUrl }) {
   return (
     <div className="fixed z-10 inset-0 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -55,7 +55,7 @@ function PleaseLoginRegister({ toggle }) {
           <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
             <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
               <Link
-                to="/login"
+                to={{ pathname: '/login', fromUrl }}
                 className="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5"
               >
                 Login
@@ -63,7 +63,7 @@ function PleaseLoginRegister({ toggle }) {
             </span>
             <span className="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
               <Link
-                to="/register"
+                to={{ pathname: '/register', fromUrl }}
                 className="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5"
               >
                 Register
@@ -78,6 +78,7 @@ function PleaseLoginRegister({ toggle }) {
 
 PleaseLoginRegister.propTypes = {
   toggle: PropTypes.func,
+  fromUrl: PropTypes.string,
 };
 
 export default PleaseLoginRegister;

@@ -11,6 +11,8 @@ import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
 import DispatchContext from '../../contextsProviders/DispatchContext';
 
 function Login({ history }) {
+  console.log(history.location.fromUrl);
+
   const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: '1.3rem' };
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
@@ -95,11 +97,17 @@ function Login({ history }) {
           loggingDispatch({ type: 'isLoggingIn' });
 
           if (response.data.token) {
+            let gotoThisUrl;
+            if (history.location.fromUrl) gotoThisUrl = history.location.fromUrl;
+            else gotoThisUrl = '/';
+
+            console.log({ gotoThisUrl });
+
             // TURN OFF ERROR, IF ANY
             appDispatch({ type: 'turnOff' });
             // LOGIN
             appDispatch({ type: 'login', value: response.data });
-            history.push('/');
+            history.push(gotoThisUrl);
           } else {
             // DISPLAY ERROR
             appDispatch({ type: 'flashMsgError', value: response.data });
