@@ -83,21 +83,19 @@ function HeaderLoggedIn() {
               </div>
             </div>
           </div>
-          <div className="absolute inset-y-0 right-0 flex items-center pr-2 text-white sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+          <div className="absolute inset-y-0 right-0 flex items-center text-white sm:static sm:inset-auto">
             <Link
               to="/register"
-              className="flex items-center px-1 text-sm transition duration-150 ease-in-out border-2 border-transparent rounded-full focus:outline-none focus:border-white"
+              className="block text-sm transition duration-150 ease-in-out border-transparent hover:underline focus:outline-none mr-3 sm:mr-5"
               aria-label="register"
             >
-              <i className="mr-1 fas fa-user-plus"></i>
               Register
             </Link>
             <Link
               to="/login"
-              className="flex items-center px-1 text-sm transition duration-150 ease-in-out border-2 border-transparent rounded-full focus:outline-none focus:border-white"
+              className="block text-sm transition duration-150 ease-in-out border-transparent hover:underline focus:outline-none"
               aria-label="login"
             >
-              <i className="mr-1 fas fa-sign-in-alt"></i>
               Login
             </Link>
           </div>
@@ -109,14 +107,14 @@ function HeaderLoggedIn() {
       {/* SCREEN READERS ONLY */}
       <Link
         to="/register"
-        className="flex px-1 text-sm transition duration-150 ease-in-out border-2 border-transparent rounded-full sr-only focus:outline-none focus:border-white"
+        className="flex px-1 text-sm transition duration-150 ease-in-out border-2 border-transparent hover:underline sr-only focus:outline-none"
         aria-label="register"
       >
         Register
       </Link>
       <Link
         to="/login"
-        className="flex px-1 text-sm transition duration-150 ease-in-out border-2 border-transparent rounded-full sr-only focus:outline-none focus:border-white"
+        className="flex px-1 text-sm transition duration-150 ease-in-out border-2 border-transparent hover:underline sr-only focus:outline-none"
         aria-label="register"
       >
         Login

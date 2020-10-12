@@ -95,6 +95,8 @@ function Login({ history }) {
           loggingDispatch({ type: 'isLoggingIn' });
 
           if (response.data.token) {
+            // TURN OFF ERROR, IF ANY
+            appDispatch({ type: 'turnOff' });
             // LOGIN
             appDispatch({ type: 'login', value: response.data });
             history.push('/');
