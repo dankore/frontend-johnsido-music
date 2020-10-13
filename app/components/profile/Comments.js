@@ -733,7 +733,10 @@ function Comments({ history }) {
         )}
       </div>
       {state.pleaseLogingRegister && (
-        <PleaseLoginRegister toggle={() => commentsDispatch({ type: 'pleaseLogingRegister' })} />
+        <PleaseLoginRegister
+          fromUrl={history.location.pathname}
+          toggle={() => commentsDispatch({ type: 'pleaseLogingRegister' })}
+        />
       )}
     </Page>
   );

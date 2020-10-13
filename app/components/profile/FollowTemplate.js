@@ -395,7 +395,10 @@ function FollowTemplate({ history, type }) {
         </div>
       </div>
       {state.pleaseLogingRegister && (
-        <PleaseLoginRegister toggle={() => followDispatch({ type: 'pleaseLogingRegister' })} />
+        <PleaseLoginRegister
+          fromUrl={history.location.pathname}
+          toggle={() => followDispatch({ type: 'pleaseLogingRegister' })}
+        />
       )}
     </Page>
   );
