@@ -313,6 +313,7 @@ function Register({ history }) {
     registerDispatch({ type: 'submitForm' });
   }
 
+  // FINALLY SUBMIT
   useEffect(() => {
     if (state.submitCount) {
       registerDispatch({ type: 'isRegistring', process: 'starts' });
@@ -341,9 +342,14 @@ function Register({ history }) {
           registerDispatch({ type: 'isRegistring' });
 
           if (response.data.token) {
+            // REDIRECT NEW USER TO THIS URL
+            let gotoThisUrl;
+            if (history.location.fromUrl) gotoThisUrl = history.location.fromUrl;
+            else gotoThisUrl = `/profile/${response.data.username}`;
+
             // LOGIN
             appDispatch({ type: 'login', value: response.data });
-            history.push(`/profile/${response.data.username}`);
+            history.push(gotoThisUrl);
           } else {
             // DISPLAY ERROR
             appDispatch({ type: 'flashMsgError', value: response.data });

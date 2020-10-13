@@ -355,7 +355,10 @@ function ProfilePage({ history }) {
         </section>
       </main>
       {state.pleaseLogingRegister && (
-        <PleaseLoginRegister toggle={() => profileDispatch({ type: 'pleaseLogingRegister' })} />
+        <PleaseLoginRegister
+          fromUrl={history.location.pathname}
+          toggle={() => profileDispatch({ type: 'pleaseLogingRegister' })}
+        />
       )}
     </Page>
   );
