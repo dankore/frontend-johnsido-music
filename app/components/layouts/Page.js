@@ -9,7 +9,11 @@ function Page(props) {
   const appDispatch = useContext(DispatchContext);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
     appDispatch({ type: 'turnOff' });
   }, [props.title]);
 
@@ -41,7 +45,7 @@ function Page(props) {
 Page.propTypes = {
   children: PropTypes.node.isRequired,
   title: PropTypes.string,
-  description: PropTypes.any,
+  description: PropTypes.string,
   image: PropTypes.string,
   url: PropTypes.object,
 };
