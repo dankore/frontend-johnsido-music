@@ -27,6 +27,7 @@ const Following = lazy(() => import('./components/profile/Following'));
 const AdminLandingPage = lazy(() => import('./pages/admin/AdminLandingPage'));
 import LoadingDotsAnimation from './components/shared/LoadingDotsAnimation';
 import CookiesPage from './pages/policies/CookiesPage';
+import SeoDefault from './components/SEO/SEODefault';
 const TermsPage = lazy(() => import('./pages/policies/TermsPage'));
 const PrivacyPolicyPage = lazy(() => import('./pages/policies/PrivacyPolicyPage'));
 
@@ -242,6 +243,7 @@ function Main() {
             )}
             {state.flashMsgSuccess.isDisplay && <FlashMsgSuccess />}
           </Route>
+          <SeoDefault />
           <Suspense fallback={<LoadingDotsAnimation />}>
             <Switch>
               <Route exact path="/">

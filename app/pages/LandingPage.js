@@ -202,8 +202,7 @@ function LandingPage() {
               <span className="js-brown">John Sido.</span>
             </h1>
             <p className="mt-2 text-lg leading-7 text-gray-300 sm:mt-3 sm:text-xl sm:max-w-xl xl:mt-4 xl:text-2xl xl:max-w-2xl">
-              I&apos;m on a gospel musician on a journey to help myself and other upcoming
-              musicians.
+              I&apos;m a gospel musician on a journey to help myself and other upcoming musicians.
             </p>
             <div className="mt-6 sm:flex sm:mt-8 xl:mt-12">
               <Link
