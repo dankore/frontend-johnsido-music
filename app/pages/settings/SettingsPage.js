@@ -78,7 +78,7 @@ function SettingsPage({ history }) {
 
       <div className="flex flex-col bg-gray-900 md:flex-row">
         {/* <!--Sidebar--> */}
-        <div className="fixed bottom-0 z-10 w-full h-16 pl-12 bg-gray-900 c-shadow2 md:relative md:h-screen md:w-64">
+        <div className="fixed bottom-0 z-10 w-full h-16 pl-12 bg-gray-900 md:relative md:h-screen md:w-64">
           <div className="content-center justify-between text-left md:mt-12 md:w-56 md:fixed md:left-0 md:top-0 md:content-start">
             <ul className="flex flex-row px-1 py-0 text-center md:flex-col md:py-3 md:px-2 md:text-left">
               <NavLink
