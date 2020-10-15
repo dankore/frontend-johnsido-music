@@ -231,7 +231,7 @@ function Main() {
     }
   }, []);
 
-  const routePath = ['/profile/:username', '/about', '/terms', '/privacy', '/cookies'];
+  const routePath = ['/profile/:username', '/about', '/terms', '/privacy', '/cookies', '/my-songs'];
 
   return (
     <StateContext.Provider value={state}>

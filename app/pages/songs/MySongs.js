@@ -44,15 +44,15 @@ function MySongs() {
 
   return (
     <Page title="My Songs">
-      <ul className="max-w-lg mx-auto mt-12">
+      <ul className="max-w-2xl mx-auto mt-12">
         {state.mySongs.map((song, index) => {
           return (
-            <li className="flex justify-center mb-5" key={index}>
-              <figure className="flex items-end h-24">
+            <li className="flex w-full justify-center mb-5 border border-gray-400" key={index}>
+              <figure className="w-full flex items-end h-24">
                 <img className="h-24 w-24" src={song.songCoverImage} />
-                <div className="pl-3">
+                <div className="pl-3 w-full">
                   <figcaption>Listen to {song.songTitle}:</figcaption>
-                  <audio src={song.songUrl} controls>
+                  <audio className="block w-full" src={song.songUrl} controls>
                     <p>
                       Your browser doesn&apos;t support HTML5 audio. Here is a{' '}
                       <a href={song.songUrl}>link to the audio</a> instead.
