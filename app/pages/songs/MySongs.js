@@ -40,12 +40,14 @@ function MySongs() {
     return () => request.cancel();
   }, []);
 
+  //https://soundcloud.com/octobersveryown
+
   return (
     <Page title="My Songs">
       <ul className="max-w-lg mx-auto mt-12">
         {state.mySongs.map((song, index) => {
           return (
-            <li className="flex justify-center bg-red-500 mb-5" key={index}>
+            <li className="flex justify-center mb-5" key={index}>
               <figure className="flex items-end h-24">
                 <img className="h-24 w-24" src={song.songCoverImage} />
                 <div className="pl-3">
