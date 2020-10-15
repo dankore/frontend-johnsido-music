@@ -51,7 +51,10 @@ function MySongs() {
               <figure className="w-full flex items-end h-24">
                 <img className="h-24 w-24" src={song.songCoverImage} />
                 <div className="pl-3 w-full">
-                  <figcaption>Listen to {song.songTitle}:</figcaption>
+                  <div className="flex justify-between py-2">
+                    <figcaption>Listen to {song.songTitle}</figcaption>
+                    <div>{song.songPostedDate}</div>
+                  </div>
                   <audio className="block w-full" src={song.songUrl} controls>
                     <p>
                       Your browser doesn&apos;t support HTML5 audio. Here is a{' '}
