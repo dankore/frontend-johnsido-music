@@ -28,6 +28,7 @@ const AdminLandingPage = lazy(() => import('./pages/admin/AdminLandingPage'));
 import LoadingDotsAnimation from './components/shared/LoadingDotsAnimation';
 import CookiesPage from './pages/policies/CookiesPage';
 import SeoDefault from './components/SEO/SEODefault';
+import MySongs from './pages/songs/MySongs';
 const TermsPage = lazy(() => import('./pages/policies/TermsPage'));
 const PrivacyPolicyPage = lazy(() => import('./pages/policies/PrivacyPolicyPage'));
 
@@ -230,7 +231,7 @@ function Main() {
     }
   }, []);
 
-  const routePath = ['/profile/:username', '/about', '/terms', '/privacy', '/cookies'];
+  const routePath = ['/profile/:username', '/about', '/terms', '/privacy', '/cookies', '/my-songs'];
 
   return (
     <StateContext.Provider value={state}>
@@ -284,6 +285,9 @@ function Main() {
                 ) : (
                   <div>Please login or register to view this page.</div>
                 )}
+              </Route>
+              <Route path="/my-songs">
+                <MySongs />
               </Route>
               <Route path="/terms">
                 <TermsPage />
