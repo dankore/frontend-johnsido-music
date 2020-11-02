@@ -1,35 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import StateContext from '../../contextsProviders/StateContext';
 import DispatchContext from '../../contextsProviders/DispatchContext';
-import Welcome from './Welcome';
 
 function Footer() {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
-  const [state, setState] = useState(true);
-  const [welcome, setWelcome] = useState();
-
-  useEffect(() => {
-    if (localStorage.getItem('welcome')) {
-      setWelcome(false);
-      return;
-    }
-    localStorage.setItem('welcome', true);
-    setWelcome(true);
-  }, []);
-
-  useEffect(() => {
-    const delay = setTimeout(() => {
-      setState(false);
-    }, 7000);
-
-    return () => clearTimeout(delay);
-  }, []);
 
   return (
     <div className="relative mt-10 mb-5 text-center">
-      {welcome && state && <Welcome />}
       {/* MODAL OVERLAYS */}
       {appState && appState.editComment && (
         <div
