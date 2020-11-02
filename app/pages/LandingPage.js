@@ -4,6 +4,7 @@ import StateContext from '../contextsProviders/StateContext';
 import DispatchContext from '../contextsProviders/DispatchContext';
 import FlashMsgSuccess from '../components/shared/FlashMsgSuccess';
 import FlashMsgError from '../components/shared/FlashMsgError';
+import Welcome from '../components/shared/Welcome';
 
 function LandingPage() {
   const appState = useContext(StateContext);
@@ -278,6 +279,7 @@ function LandingPage() {
                 </a>
               </p>
             </div>
+            {appState.showWelcome && <Welcome />}
           </div>
         </div>
       </div>

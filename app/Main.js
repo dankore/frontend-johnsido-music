@@ -68,6 +68,7 @@ function Main() {
     toggleAdminLandingPageMenu: false,
     editComment: false,
     commentHistory: false,
+    showWelcome: true,
   };
 
   function appReducer(draft, action) {
@@ -118,6 +119,13 @@ function Main() {
         draft.toggleLandingPageMenu = false;
         draft.toggleAdminLandingPageMenu = false;
         draft.toggles.mobileHamburgerHeaderLoggedIn = false;
+        return;
+      case 'showWelcome':
+        if (action.hide) {
+          draft.showWelcome = false;
+        } else {
+          draft.showWelcome = true;
+        }
         return;
       case 'updateLocalStorage':
         if (action.process == 'profileUpdate') {
