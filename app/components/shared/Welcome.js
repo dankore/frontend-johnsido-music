@@ -2,10 +2,9 @@ import React from 'react';
 
 function Welcome() {
   return (
-    <div className="flex justify-center w-full bg-red-500">
-      <div className="absolute max-w-lg p-2 text-lg text-white bg-green-600 lg:rounded-lg">
-        &#129306; Thank you for visiting my site.
-      </div>
+    <div className="flex justify-center w-full bg-green-600 pr-3 text-lg text-white">
+      <div className="w-full text-center">Thank you for visiting Johnsido Music.</div>
+      <button>X</button>
     </div>
   );
 }
