@@ -8,7 +8,7 @@ function Header() {
   const appState = useContext(StateContext);
   return (
     <div>
-      {appState.showWelcome && <Welcome />}
+      {appState && appState.showWelcome && <Welcome />}
       {appState && appState.loggedIn ? <HeaderLoggedIn /> : <HeaderLoggedOut />}
     </div>
   );
