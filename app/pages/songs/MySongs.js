@@ -4,6 +4,7 @@ import { useImmerReducer } from 'use-immer';
 import Axios from 'axios';
 import { NavLink, Switch, Route } from 'react-router-dom';
 import { activeNavCSS, linkCSS, navLinkCSS } from '../../helpers/CSSHelpers';
+import Songs from '../../components/songs/Songs';
 
 function MySongs() {
   const initialState = {
@@ -75,38 +76,14 @@ function MySongs() {
           <div>
             <Switch>
               <Route path="/songs/johnsido/all">All</Route>
-              <Route path="/songs/johnsido/songs">Songs</Route>
+              <Route path="/songs/johnsido/songs">
+                <Songs songs={state.mySongs} />
+              </Route>
               <Route path="/songs/johnsido/albums">Albums</Route>
             </Switch>
           </div>
         </div>
       </div>
-      <ul className="max-w-2xl mx-auto mt-12">
-        {state.mySongs.map((song, index) => {
-          return (
-            <li className="flex w-full justify-center mb-5 border border-gray-400" key={index}>
-              <figure className="w-full flex items-end h-24">
-                <img className="h-24 w-24" src={song.songCoverImage} />
-                <div className="pl-3 w-full">
-                  <div className="flex justify-between py-2">
-                    <figcaption>Listen to {song.songTitle}</figcaption>
-                    <div>{song.songPostedDate}</div>
-                  </div>
-                  <audio className="block w-full" src={song.songUrl} controls>
-                    <p>
-                      Your browser doesn&apos;t support HTML5 audio. Here is a{' '}
-                      <a href={song.songUrl}>link to the audio</a> instead.
-                    </p>
-                  </audio>
-                  <div className="flex flex-wrap">
-                    <p>From the album {song.songAlbumTitle}</p>
-                  </div>
-                </div>
-              </figure>
-            </li>
-          );
-        })}
-      </ul>
     </Page>
   );
 }
