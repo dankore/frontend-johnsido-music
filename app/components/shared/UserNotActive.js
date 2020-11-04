@@ -23,7 +23,7 @@ function UserNotActive({ user }) {
       <h2 className="px-3 mx-auto mt-2 text-lg leading-8 text-center text-gray-900 font-display sm:leading-9 lg:leading-10">
         {user.profileFirstName} {user.profileLastName}&apos;s account is suspended due to violations
         of our
-        <Link className="ml-2 js-brown focus:outline-none hover:underline" to="#">
+        <Link className="ml-2 js-brown focus:outline-none hover:underline" to="/terms">
           Policies
         </Link>
         .

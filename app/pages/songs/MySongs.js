@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import Page from '../../components/layouts/Page';
 import { useImmerReducer } from 'use-immer';
 import Axios from 'axios';
+import { NavLink, Switch, Route } from 'react-router-dom';
+import { activeNavCSS, linkCSS, navLinkCSS } from '../../helpers/CSSHelpers';
 
 function MySongs() {
   const initialState = {
@@ -44,6 +46,41 @@ function MySongs() {
 
   return (
     <Page title="My Songs">
+      <div className="max-w-3xl mx-auto">
+        <div className="h-32 bg-yellow-700"></div>
+        <div>
+          <div className="flex items-center justify-between">
+            <NavLink
+              className={linkCSS + navLinkCSS + ' js-brown-bg-hover'}
+              activeStyle={activeNavCSS}
+              to="/songs/johnsido/all"
+            >
+              All
+            </NavLink>
+            <NavLink
+              className={linkCSS + navLinkCSS + ' js-brown-bg-hover'}
+              activeStyle={activeNavCSS}
+              to="/songs/johnsido/songs"
+            >
+              Songs
+            </NavLink>
+            <NavLink
+              className={linkCSS + navLinkCSS + ' js-brown-bg-hover'}
+              activeStyle={activeNavCSS}
+              to="/songs/johnsido/albums"
+            >
+              Albums
+            </NavLink>
+          </div>
+          <div>
+            <Switch>
+              <Route path="/songs/johnsido/all">All</Route>
+              <Route path="/songs/johnsido/songs">Songs</Route>
+              <Route path="/songs/johnsido/albums">Albums</Route>
+            </Switch>
+          </div>
+        </div>
+      </div>
       <ul className="max-w-2xl mx-auto mt-12">
         {state.mySongs.map((song, index) => {
           return (

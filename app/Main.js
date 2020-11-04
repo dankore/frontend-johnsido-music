@@ -244,15 +244,15 @@ function Main() {
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={appDispatch}>
         <BrowserRouter>
-          <Route path={routePath}>
-            <Header />
-            {state.flashMsgErrors.isDisplay && (
-              <FlashMsgError errors={state.flashMsgErrors.value} />
-            )}
-            {state.flashMsgSuccess.isDisplay && <FlashMsgSuccess />}
-          </Route>
-          <SeoDefault />
           <Suspense fallback={<LoadingDotsAnimation />}>
+            <Route path={routePath}>
+              <Header />
+              {state.flashMsgErrors.isDisplay && (
+                <FlashMsgError errors={state.flashMsgErrors.value} />
+              )}
+              {state.flashMsgSuccess.isDisplay && <FlashMsgSuccess />}
+            </Route>
+            <SeoDefault />
             <Switch>
               <Route exact path="/">
                 <LandingPage />
@@ -293,7 +293,7 @@ function Main() {
                   <div>Please login or register to view this page.</div>
                 )}
               </Route>
-              <Route path="/my-songs">
+              <Route path="/songs/:username">
                 <MySongs />
               </Route>
               <Route path="/terms">
