@@ -552,7 +552,10 @@ function Register({ history }) {
             <div className="pt-12 pb-12 text-center">
               <p>
                 Already have an account?{' '}
-                <Link to="/login" className="font-semibold underline px-2 focus:outline-none hover:text-gray-800 focus:text-gray-700">
+                <Link
+                  to="/login"
+                  className="font-semibold underline px-2 focus:outline-none hover:text-gray-800 focus:text-gray-700"
+                >
                   Log in here.
                 </Link>
               </p>

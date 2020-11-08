@@ -189,10 +189,7 @@ function ResetPassword() {
                   </span>
                 </div>
               )}
-              <label
-                className="text-lg"
-                htmlFor="email"
-              >
+              <label className="text-lg" htmlFor="email">
                 Enter Your Email <span className="text-red-600">*</span>
               </label>
               <input
@@ -215,26 +212,29 @@ function ResetPassword() {
             </div>
             {/* SUBMIT BTN */}
             <button
-                type="submit"
-                className="p-2 mt-8 text-lg font-bold text-white bg-black hover:bg-gray-700"
-              >
-                {state.isLoggingIn ? (
-                  <span>
-                    <i className="text-sm fa fa-spinner fa-spin"></i>
-                  </span>
-                ) : (
-                  <>Login In</>
-                )}
-              </button>
+              type="submit"
+              className="p-2 mt-8 text-lg font-bold text-white bg-black hover:bg-gray-700"
+            >
+              {state.isLoggingIn ? (
+                <span>
+                  <i className="text-sm fa fa-spinner fa-spin"></i>
+                </span>
+              ) : (
+                <>Login In</>
+              )}
+            </button>
           </form>
           <div className="pt-12 pb-12 text-center">
-              <p>
-                Remember your password?
-                <Link to="/login" className="font-semibold underline px-2 focus:outline-none hover:text-gray-800 focus:text-gray-700">
-                  Login in here.
-                 </Link>
-              </p>
-            </div>
+            <p>
+              Remember your password?
+              <Link
+                to="/login"
+                className="font-semibold underline px-2 focus:outline-none hover:text-gray-800 focus:text-gray-700"
+              >
+                Login in here.
+              </Link>
+            </p>
+          </div>
         </div>
 
         {/* <!-- Image Section --> */}

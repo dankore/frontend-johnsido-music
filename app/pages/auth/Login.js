@@ -215,7 +215,10 @@ function Login({ history }) {
             <div className="pt-12 pb-12 text-center">
               <p>
                 Don&apos;t have an account?{' '}
-                <a href="/register" className="font-semibold underline px-2 focus:outline-none hover:text-gray-800 focus:text-gray-700">
+                <a
+                  href="/register"
+                  className="font-semibold underline px-2 focus:outline-none hover:text-gray-800 focus:text-gray-700"
+                >
                   Register here.
                 </a>
               </p>
