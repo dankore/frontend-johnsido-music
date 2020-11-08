@@ -187,7 +187,7 @@ function ResetPassword() {
           {/* FORM */}
           <p className="text-3xl text-center pt-5">Password Recovery</p>
           <p className="text-center text-lg mb-4 px-3">Step 1 of 2:</p>
-          <form onSubmit={handleSubmit} className="flex flex-col p-3">
+          <form onSubmit={handleSubmit} className="flex flex-col p-3 w-full sm:max-w-md mx-auto">
             {/* EMAIL */}
             <div className="relative flex flex-col">
               {state.showNextStep && (

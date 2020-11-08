@@ -135,10 +135,13 @@ function Login({ history }) {
               <FlashMsgError errors={appState.flashMsgErrors.value} />
             )}
           </div>
-          <div className="flex flex-col justify-center px-3 my-auto lg:justify-start md:px-32 lg:px-3">
-            <p className="text-3xl text-center">Login</p>
+          <div className="flex flex-col justify-center px-3 lg:justify-start md:px-32 lg:px-3">
+            <p className="text-3xl text-center pt-5">Login</p>
 
-            <form onSubmit={handleSubmitForm} className="flex flex-col pt-3">
+            <form
+              onSubmit={handleSubmitForm}
+              className="flex flex-col pt-3 w-full sm:max-w-md mx-auto"
+            >
               <div className="relative flex flex-col pt-4">
                 <label htmlFor="usernameOrEmail" className="text-lg">
                   Username or Email <span className="text-red-600">*</span>

@@ -377,7 +377,10 @@ function Register({ history }) {
             {appState.flashMsgErrors.isDisplay && (
               <FlashMsgError errors={appState.flashMsgErrors.value} />
             )}
-            <form onSubmit={handleFormSubmission} className="flex flex-col">
+            <form
+              onSubmit={handleFormSubmission}
+              className="flex flex-col pt-3 w-full sm:max-w-md mx-auto"
+            >
               {/* USERNAME */}
               <div className="relative flex flex-col pt-4">
                 <label htmlFor="username" className="text-lg">
