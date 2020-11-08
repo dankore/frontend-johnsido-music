@@ -207,7 +207,7 @@ function LandingPage() {
             </p>
             <div className="mt-6 sm:flex sm:mt-8 xl:mt-12">
               <Link
-                to="/my-songs"
+                to="/songs/johnsido"
                 className="inline-flex items-center justify-center w-full px-6 py-3 text-base font-semibold leading-6 text-gray-900 transition duration-150 ease-in-out bg-white border border-transparent rounded-md shadow-sm sm:w-auto hover:text-gray-600 focus:outline-none focus:text-gray-600 xl:text-lg xl:py-4"
               >
                 Listen to my music →

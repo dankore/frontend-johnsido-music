@@ -5,7 +5,6 @@ import Axios from 'axios';
 import { useImmerReducer } from 'use-immer';
 
 // AXIOS BASE URL
-console.log(process.env.BACKENDURL);
 Axios.defaults.baseURL = process.env.BACKENDURL;
 // STATE MANAGEMENT
 import StateContext from './contextsProviders/StateContext';
@@ -14,7 +13,7 @@ import DispatchContext from './contextsProviders/DispatchContext';
 const ProfilePage = lazy(() => import('./pages/profile/ProfilePage'));
 const Register = lazy(() => import('./pages/auth/Register'));
 const Login = lazy(() => import('./pages/auth/Login'));
-import Header from './components/shared/Header';
+const Header = lazy(() => import('./components/shared/Header'));
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'));
 import LandingPage from './pages/LandingPage';
 import FlashMsgError from './components/shared/FlashMsgError';
@@ -33,7 +32,7 @@ const TermsPage = lazy(() => import('./pages/policies/TermsPage'));
 const PrivacyPolicyPage = lazy(() => import('./pages/policies/PrivacyPolicyPage'));
 
 function Main() {
-  const initialState = {
+  const appInitialState = {
     loggedIn: Boolean(localStorage.getItem('johnsido-token')),
     user: {
       _id: localStorage.getItem('johnsido-id'),
@@ -179,7 +178,7 @@ function Main() {
     }
   }
 
-  const [state, dispatch] = useImmerReducer(appReducer, initialState);
+  const [state, appDispatch] = useImmerReducer(appReducer, appInitialState);
 
   useEffect(() => {
     if (state.loggedIn) {
@@ -205,7 +204,7 @@ function Main() {
       localStorage.removeItem('johnsido-scope');
       localStorage.removeItem('johnsido-userCreationDate');
 
-      dispatch({ type: 'updateLocalStorage', process: 'logout' });
+      appDispatch({ type: 'updateLocalStorage', process: 'logout' });
     }
   }, [state.loggedIn]);
 
@@ -224,8 +223,8 @@ function Main() {
           );
 
           if (!response.data) {
-            dispatch({ type: 'logout' });
-            dispatch({
+            appDispatch({ type: 'logout' });
+            appDispatch({
               type: 'flashMsgError',
               value: ['Your session has expired. Please log in again.'],
             });
@@ -243,17 +242,17 @@ function Main() {
 
   return (
     <StateContext.Provider value={state}>
-      <DispatchContext.Provider value={dispatch}>
+      <DispatchContext.Provider value={appDispatch}>
         <BrowserRouter>
-          <Route path={routePath}>
-            <Header />
-            {state.flashMsgErrors.isDisplay && (
-              <FlashMsgError errors={state.flashMsgErrors.value} />
-            )}
-            {state.flashMsgSuccess.isDisplay && <FlashMsgSuccess />}
-          </Route>
-          <SeoDefault />
           <Suspense fallback={<LoadingDotsAnimation />}>
+            <Route path={routePath}>
+              <Header />
+              {state.flashMsgErrors.isDisplay && (
+                <FlashMsgError errors={state.flashMsgErrors.value} />
+              )}
+              {state.flashMsgSuccess.isDisplay && <FlashMsgSuccess />}
+            </Route>
+            <SeoDefault />
             <Switch>
               <Route exact path="/">
                 <LandingPage />
@@ -294,7 +293,7 @@ function Main() {
                   <div>Please login or register to view this page.</div>
                 )}
               </Route>
-              <Route path="/my-songs">
+              <Route path="/songs/:username">
                 <MySongs />
               </Route>
               <Route path="/terms">
