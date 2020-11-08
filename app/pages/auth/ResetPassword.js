@@ -12,11 +12,11 @@ function ResetPassword() {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
   const initialState = {
-    emailOrUsername: {
+    usernameOrEmail: {
       value: '',
       hasErrors: false,
       message: '',
-      isRegisteredEmailOrUsername: false,
+      isRegisteredUsernameOrEmail: false,
       checkCount: 0,
       type: '',
     },
@@ -28,40 +28,40 @@ function ResetPassword() {
   function reducer(draft, action) {
     switch (action.type) {
       case 'emailImmediately':
-        draft.emailOrUsername.hasErrors = false;
-        draft.emailOrUsername.value = action.value.trim();
-        if (!draft.emailOrUsername.value) {
-          draft.emailOrUsername.hasErrors = true;
-          draft.emailOrUsername.message = 'Email / Username field is empty.';
+        draft.usernameOrEmail.hasErrors = false;
+        draft.usernameOrEmail.value = action.value.trim();
+        if (!draft.usernameOrEmail.value) {
+          draft.usernameOrEmail.hasErrors = true;
+          draft.usernameOrEmail.message = 'Email / Username field is empty.';
         }
         return;
-      case 'emailOrUsernameAfterDelay':
-        // IF USER ENTERS AN EMAIL OR USERNAME
-        if (/@/.test(draft.emailOrUsername.value)) {
-          if (!/^\S+@\S+$/.test(draft.emailOrUsername.value)) {
-            draft.emailOrUsername.hasErrors = true;
-            draft.emailOrUsername.message = 'Please provide a valid email.';
+      case 'usernameOrEmailAfterDelay':
+        if (/@/.test(draft.usernameOrEmail.value)) {
+          // IF USER ENTERS AN EMAIL
+          if (!/^\S+@\S+$/.test(draft.usernameOrEmail.value)) {
+            draft.usernameOrEmail.hasErrors = true;
+            draft.usernameOrEmail.message = 'Please provide a valid email.';
           }
 
-          if (!draft.emailOrUsername.hasErrors) {
-            draft.emailOrUsername.checkCount++;
-            draft.emailOrUsername.type = 'email';
+          if (!draft.usernameOrEmail.hasErrors) {
+            draft.usernameOrEmail.checkCount++;
+            draft.usernameOrEmail.type = 'email';
           }
         } else {
-          if (!draft.emailOrUsername.hasErrors) {
-            draft.emailOrUsername.checkCount++;
-            draft.emailOrUsername.type = 'username';
+          // IF USER ENTERS A USERNAME
+          if (!draft.usernameOrEmail.hasErrors) {
+            draft.usernameOrEmail.checkCount++;
+            draft.usernameOrEmail.type = 'username';
           }
         }
-
         return;
-      case 'isRegisteredEmailOrUsername':
+      case 'isRegisteredUsernameOrEmail':
         if (!action.value) {
-          draft.emailOrUsername.hasErrors = true;
-          draft.emailOrUsername.isRegisteredEmailOrUsername = false;
-          draft.emailOrUsername.message = `No account with that ${action.process} exists.`;
+          draft.usernameOrEmail.hasErrors = true;
+          draft.usernameOrEmail.isRegisteredUsernameOrEmail = false;
+          draft.usernameOrEmail.message = `No account with that ${action.process} exists.`;
         } else {
-          draft.emailOrUsername.isRegisteredEmailOrUsername = true;
+          draft.usernameOrEmail.isRegisteredUsernameOrEmail = true;
         }
         return;
       case 'isSendingTokenStart':
@@ -78,9 +78,9 @@ function ResetPassword() {
         return;
       case 'submitForm':
         if (
-          draft.email.value != '' &&
-          !draft.email.hasErrors &&
-          draft.email.isRegisteredEmailOrUsername
+          draft.usernameOrEmail.value != '' &&
+          !draft.usernameOrEmail.hasErrors &&
+          draft.usernameOrEmail.isRegisteredUsernameOrEmail
         ) {
           draft.submitCount++;
         }
@@ -92,30 +92,28 @@ function ResetPassword() {
 
   // EMAIL IS UNIQUE
   useEffect(() => {
-    if (state.emailOrUsername.checkCount) {
+    if (state.usernameOrEmail.checkCount) {
       const request = Axios.CancelToken.source();
       const path =
-        state.emailOrUsername.type == 'email' ? '/doesEmailExists' : '/doesUsernameExists';
+        state.usernameOrEmail.type == 'email' ? '/doesEmailExists' : '/doesUsernameExists';
 
-      (async function checkForEmail() {
+      (async function checkusernameOrEmail() {
         try {
           const response = await Axios.post(
             path,
             {
-              ...(state.emailOrUsername.type == 'email' && { email: state.emailOrUsername.value }),
-              ...(state.emailOrUsername.type == 'username' && {
-                username: state.emailOrUsername.value,
+              ...(state.usernameOrEmail.type == 'email' && { email: state.usernameOrEmail.value }),
+              ...(state.usernameOrEmail.type == 'username' && {
+                username: state.usernameOrEmail.value,
               }),
             },
             { cancelToken: request.token }
           );
 
-          console.log(response.data);
-
           dispatch({
-            type: 'isRegisteredEmailOrUsername',
+            type: 'isRegisteredUsernameOrEmail',
             value: response.data,
-            process: state.emailOrUsername.type,
+            process: state.usernameOrEmail.type,
           });
         } catch (error) {
           console.log('Having difficulty looking up your email. Please try again.');
@@ -124,25 +122,34 @@ function ResetPassword() {
 
       return () => request.cancel();
     }
-  }, [state.emailOrUsername.checkCount]);
+  }, [state.usernameOrEmail.checkCount]);
 
   useEffect(() => {
-    if (state.emailOrUsername.value) {
-      const delay = setTimeout(() => dispatch({ type: 'emailOrUsernameAfterDelay' }), 800);
+    if (state.usernameOrEmail.value) {
+      const delay = setTimeout(() => dispatch({ type: 'usernameOrEmailAfterDelay' }), 800);
       return () => clearTimeout(delay);
     }
-  }, [state.emailOrUsername.value]);
+  }, [state.usernameOrEmail.value]);
 
+  // INITIATE FORM SUBMISSION
+  function handleSubmit(e) {
+    e.preventDefault();
+    dispatch({ type: 'emailImmediately', value: state.usernameOrEmail.value });
+    dispatch({ type: 'usernameOrEmailAfterDelay', value: state.usernameOrEmail.value });
+    dispatch({ type: 'submitForm' });
+  }
+
+  // ACTUALLY SUBMIT
   useEffect(() => {
     if (state.submitCount && state.submitCount < 5) {
       const request = Axios.CancelToken.source();
       dispatch({ type: 'isSendingTokenStart' });
 
-      (async function submitEmail() {
+      (async function submitForm() {
         try {
           const response = await Axios.post(
             '/reset-password',
-            { email: state.email.value },
+            { usernameOrEmail: state.usernameOrEmail.value },
             { cancelToken: request.token }
           );
 
@@ -165,13 +172,6 @@ function ResetPassword() {
       return () => request.cancel();
     }
   }, [state.submitCount]);
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    dispatch({ type: 'emailImmediately', value: state.email.value });
-    dispatch({ type: 'emailOrUsernameAfterDelay', value: state.email.value });
-    dispatch({ type: 'submitForm' });
-  }
 
   return (
     <Page title="Step 1 of 2: Enter Email">
@@ -232,13 +232,13 @@ function ResetPassword() {
                 type="text"
               />
               <CSSTransition
-                in={state.emailOrUsername.hasErrors}
+                in={state.usernameOrEmail.hasErrors}
                 timeout={330}
                 className="liveValidateMessage"
                 unmountOnExit
               >
                 <div style={CSSTransitionStyle} className="liveValidateMessage">
-                  {state.emailOrUsername.message}
+                  {state.usernameOrEmail.message}
                 </div>
               </CSSTransition>
             </div>
