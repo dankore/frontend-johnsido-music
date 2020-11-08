@@ -12,12 +12,13 @@ function ResetPassword() {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
   const initialState = {
-    email: {
+    emailOrUsername: {
       value: '',
       hasErrors: false,
       message: '',
-      isRegisteredEmail: false,
+      isRegisteredEmailOrUsername: false,
       checkCount: 0,
+      type: '',
     },
     isLoggingIn: false,
     showNextStep: false,
@@ -27,29 +28,40 @@ function ResetPassword() {
   function reducer(draft, action) {
     switch (action.type) {
       case 'emailImmediately':
-        draft.email.hasErrors = false;
-        draft.email.value = action.value.trim();
-        if (!draft.email.value) {
-          draft.email.hasErrors = true;
-          draft.email.message = 'Email field is required, please.';
+        draft.emailOrUsername.hasErrors = false;
+        draft.emailOrUsername.value = action.value.trim();
+        if (!draft.emailOrUsername.value) {
+          draft.emailOrUsername.hasErrors = true;
+          draft.emailOrUsername.message = 'Email / Username field is empty.';
         }
         return;
-      case 'emailAfterDelay':
-        if (!/^\S+@\S+$/.test(draft.email.value)) {
-          draft.email.hasErrors = true;
-          draft.email.message = 'Please provide a valid email.';
-        }
-        if (!draft.email.hasErrors) {
-          draft.email.checkCount++;
-        }
-        return;
-      case 'isRegisteredEmail':
-        if (!action.value) {
-          draft.email.hasErrors = true;
-          draft.email.isRegisteredEmail = false;
-          draft.email.message = 'No account with that email address exists.';
+      case 'emailOrUsernameAfterDelay':
+        // IF USER ENTERS AN EMAIL OR USERNAME
+        if (/@/.test(draft.emailOrUsername.value)) {
+          if (!/^\S+@\S+$/.test(draft.emailOrUsername.value)) {
+            draft.emailOrUsername.hasErrors = true;
+            draft.emailOrUsername.message = 'Please provide a valid email.';
+          }
+
+          if (!draft.emailOrUsername.hasErrors) {
+            draft.emailOrUsername.checkCount++;
+            draft.emailOrUsername.type = 'email';
+          }
         } else {
-          draft.email.isRegisteredEmail = true;
+          if (!draft.emailOrUsername.hasErrors) {
+            draft.emailOrUsername.checkCount++;
+            draft.emailOrUsername.type = 'username';
+          }
+        }
+
+        return;
+      case 'isRegisteredEmailOrUsername':
+        if (!action.value) {
+          draft.emailOrUsername.hasErrors = true;
+          draft.emailOrUsername.isRegisteredEmailOrUsername = false;
+          draft.emailOrUsername.message = `No account with that ${action.process} exists.`;
+        } else {
+          draft.emailOrUsername.isRegisteredEmailOrUsername = true;
         }
         return;
       case 'isSendingTokenStart':
@@ -65,7 +77,11 @@ function ResetPassword() {
         draft.showNextStep = false;
         return;
       case 'submitForm':
-        if (draft.email.value != '' && !draft.email.hasErrors && draft.email.isRegisteredEmail) {
+        if (
+          draft.email.value != '' &&
+          !draft.email.hasErrors &&
+          draft.email.isRegisteredEmailOrUsername
+        ) {
           draft.submitCount++;
         }
         return;
@@ -76,30 +92,46 @@ function ResetPassword() {
 
   // EMAIL IS UNIQUE
   useEffect(() => {
-    if (state.email.checkCount) {
+    if (state.emailOrUsername.checkCount) {
       const request = Axios.CancelToken.source();
+      const path =
+        state.emailOrUsername.type == 'email' ? '/doesEmailExists' : '/doesUsernameExists';
+
       (async function checkForEmail() {
         try {
           const response = await Axios.post(
-            '/doesEmailExist',
-            { email: state.email.value },
+            path,
+            {
+              ...(state.emailOrUsername.type == 'email' && { email: state.emailOrUsername.value }),
+              ...(state.emailOrUsername.type == 'username' && {
+                username: state.emailOrUsername.value,
+              }),
+            },
             { cancelToken: request.token }
           );
-          dispatch({ type: 'isRegisteredEmail', value: response.data });
+
+          console.log(response.data);
+
+          dispatch({
+            type: 'isRegisteredEmailOrUsername',
+            value: response.data,
+            process: state.emailOrUsername.type,
+          });
         } catch (error) {
           console.log('Having difficulty looking up your email. Please try again.');
         }
       })();
+
       return () => request.cancel();
     }
-  }, [state.email.checkCount]);
+  }, [state.emailOrUsername.checkCount]);
 
   useEffect(() => {
-    if (state.email.value) {
-      const delay = setTimeout(() => dispatch({ type: 'emailAfterDelay' }), 800);
+    if (state.emailOrUsername.value) {
+      const delay = setTimeout(() => dispatch({ type: 'emailOrUsernameAfterDelay' }), 800);
       return () => clearTimeout(delay);
     }
-  }, [state.email.value]);
+  }, [state.emailOrUsername.value]);
 
   useEffect(() => {
     if (state.submitCount && state.submitCount < 5) {
@@ -137,7 +169,7 @@ function ResetPassword() {
   function handleSubmit(e) {
     e.preventDefault();
     dispatch({ type: 'emailImmediately', value: state.email.value });
-    dispatch({ type: 'emailAfterDelay', value: state.email.value });
+    dispatch({ type: 'emailOrUsernameAfterDelay', value: state.email.value });
     dispatch({ type: 'submitForm' });
   }
 
@@ -200,13 +232,13 @@ function ResetPassword() {
                 type="text"
               />
               <CSSTransition
-                in={state.email.hasErrors}
+                in={state.emailOrUsername.hasErrors}
                 timeout={330}
                 className="liveValidateMessage"
                 unmountOnExit
               >
                 <div style={CSSTransitionStyle} className="liveValidateMessage">
-                  {state.email.message}
+                  {state.emailOrUsername.message}
                 </div>
               </CSSTransition>
             </div>
