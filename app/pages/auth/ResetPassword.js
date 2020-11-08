@@ -149,7 +149,7 @@ function ResetPassword() {
         try {
           const response = await Axios.post(
             '/reset-password',
-            { usernameOrEmail: state.usernameOrEmail.value },
+            { usernameOrEmail: state.usernameOrEmail.value, type: state.usernameOrEmail.type },
             { cancelToken: request.token }
           );
 
@@ -201,9 +201,9 @@ function ResetPassword() {
                   </svg>
                   <p>
                     Check your email inbox at{' '}
-                    <span className="font-bold text-red-300">{state.email.value}</span> for further
-                    instruction. Check your SPAM folder if you cannot locate the email in your
-                    regular inbox.
+                    <span className="font-bold text-red-300">{state.usernameOrEmail.value}</span>{' '}
+                    for further instruction. Check your SPAM folder if you cannot locate the email
+                    in your regular inbox.
                   </p>
                   <span
                     onClick={() => dispatch({ type: 'closeAlert' })}
@@ -222,7 +222,7 @@ function ResetPassword() {
                 </div>
               )}
               <label className="text-lg" htmlFor="email">
-                Enter Your Email <span className="text-red-600">*</span>
+                Enter Your Username or Email <span className="text-red-600">*</span>
               </label>
               <input
                 onChange={e => dispatch({ type: 'emailImmediately', value: e.target.value })}
