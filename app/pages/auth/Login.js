@@ -123,7 +123,7 @@ function Login({ history }) {
   return (
     <Page title="Login">
       <div className="flex flex-wrap w-full">
-        {/* <!-- Login Section --> */}
+        {/* <!-- Form Section --> */}
         <div className="flex flex-col w-full lg:w-1/3">
           <div className="flex justify-center bg-gray-900">
             <Link to="/" className="p-4 text-xl font-bold text-white focus:outline-none">
@@ -141,7 +141,7 @@ function Login({ history }) {
             <form onSubmit={handleSubmitForm} className="flex flex-col pt-3">
               <div className="relative flex flex-col pt-4">
                 <label htmlFor="usernameOrEmail" className="text-lg">
-                  Username or Email
+                  Username or Email <span className="text-red-600">*</span>
                 </label>
                 <input
                   value={state.usernameOrEmail.value}
@@ -166,9 +166,17 @@ function Login({ history }) {
               </div>
 
               <div className="relative flex flex-col pt-4">
-                <label htmlFor="password" className="text-lg">
-                  Password
-                </label>
+                <div className="flex justify-between items-center">
+                  <label htmlFor="password" className="text-lg">
+                    Password <span className="text-red-600">*</span>
+                  </label>
+                  <Link
+                    to="/reset-password"
+                    className="block text-blue-600 hover:text-blue-700 focus:text-blue-800 focus:outline-none"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
                 <input
                   value={state.password.value}
                   onChange={e =>
@@ -207,7 +215,7 @@ function Login({ history }) {
             <div className="pt-12 pb-12 text-center">
               <p>
                 Don&apos;t have an account?{' '}
-                <a href="/register" className="font-semibold underline">
+                <a href="/register" className="font-semibold underline px-2 focus:outline-none hover:text-gray-800 focus:text-gray-700">
                   Register here.
                 </a>
               </p>
