@@ -131,14 +131,12 @@ function ResetPasswordStep2({ history }) {
     (async function fetchDataRelatedToPasswordResetToken() {
       try {
         const response = await Axios.post(
-          '/choose-new-password',
+          '/verify-password-reset-token',
           { passwordResetToken: state.passwordResetToken },
           { cancelToken: request.token }
         );
-        if (response.data == 'Success') {
-          // TOKEN IS VALID STAY ON THIS PAGE
-          console.log('valid token');
-        } else {
+
+        if (response.data != 'Success') {
           history.push('/reset-password');
           appDispatch({
             type: 'flashMessageError',
@@ -263,7 +261,7 @@ function ResetPasswordStep2({ history }) {
               type="submit"
               className="w-full p-2 mt-8 text-lg font-bold text-white bg-black hover:bg-gray-700"
             >
-              {state.isLoggingIn ? (
+              {state.isLoading ? (
                 <span>
                   <i className="text-sm fa fa-spinner fa-spin"></i>
                 </span>
