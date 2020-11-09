@@ -184,9 +184,9 @@ function ResetPasswordStep1() {
               <img className="w-32 h-32" src={appState.logo.url} alt={appState.logo.alt} />
             </Link>
           </div>
-          {/* FORM */}
           <p className="text-3xl text-center pt-5">Password Recovery</p>
           <p className="text-center text-lg mb-4 px-3">Step 1 of 2:</p>
+          {/* FORM */}
           <form onSubmit={handleSubmit} className="flex flex-col p-3 w-full sm:max-w-md mx-auto">
             {/* EMAIL */}
             <div className="relative flex flex-col">
@@ -222,12 +222,12 @@ function ResetPasswordStep1() {
                   </span>
                 </div>
               )}
-              <label className="text-lg" htmlFor="email">
+              <label className="text-lg" htmlFor="email-or-username">
                 Enter Your Username or Email <span className="text-red-600">*</span>
               </label>
               <input
                 onChange={e => dispatch({ type: 'emailImmediately', value: e.target.value })}
-                id="email"
+                id="email-or-username"
                 autoComplete="off"
                 className="rounded w-full px-3 py-2 leading-tight text-gray-700 border shadow appearance-none focus:outline-none focus:shadow-outline"
                 type="text"
