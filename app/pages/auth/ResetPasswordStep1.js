@@ -25,7 +25,7 @@ function ResetPasswordStep1() {
     submitCount: 0,
   };
 
-  function reducer(draft, action) {
+  function resetPasswordStep1Reducer(draft, action) {
     switch (action.type) {
       case 'emailImmediately':
         draft.usernameOrEmail.hasErrors = false;
@@ -88,7 +88,10 @@ function ResetPasswordStep1() {
     }
   }
 
-  const [state, dispatch] = useImmerReducer(reducer, initialState);
+  const [state, resetPasswordStep1Dispatch] = useImmerReducer(
+    resetPasswordStep1Reducer,
+    initialState
+  );
 
   // EMAIL IS UNIQUE
   useEffect(() => {
@@ -110,7 +113,7 @@ function ResetPasswordStep1() {
             { cancelToken: request.token }
           );
 
-          dispatch({
+          resetPasswordStep1Dispatch({
             type: 'isRegisteredUsernameOrEmail',
             value: response.data,
             process: state.usernameOrEmail.type,
@@ -126,7 +129,10 @@ function ResetPasswordStep1() {
 
   useEffect(() => {
     if (state.usernameOrEmail.value) {
-      const delay = setTimeout(() => dispatch({ type: 'usernameOrEmailAfterDelay' }), 800);
+      const delay = setTimeout(
+        () => resetPasswordStep1Dispatch({ type: 'usernameOrEmailAfterDelay' }),
+        800
+      );
       return () => clearTimeout(delay);
     }
   }, [state.usernameOrEmail.value]);
@@ -134,16 +140,19 @@ function ResetPasswordStep1() {
   // INITIATE FORM SUBMISSION
   function handleSubmit(e) {
     e.preventDefault();
-    dispatch({ type: 'emailImmediately', value: state.usernameOrEmail.value });
-    dispatch({ type: 'usernameOrEmailAfterDelay', value: state.usernameOrEmail.value });
-    dispatch({ type: 'submitForm' });
+    resetPasswordStep1Dispatch({ type: 'emailImmediately', value: state.usernameOrEmail.value });
+    resetPasswordStep1Dispatch({
+      type: 'usernameOrEmailAfterDelay',
+      value: state.usernameOrEmail.value,
+    });
+    resetPasswordStep1Dispatch({ type: 'submitForm' });
   }
 
   // ACTUALLY SUBMIT
   useEffect(() => {
     if (state.submitCount && state.submitCount < 5) {
       const request = Axios.CancelToken.source();
-      dispatch({ type: 'isSendingTokenStart' });
+      resetPasswordStep1Dispatch({ type: 'isSendingTokenStart' });
 
       (async function submitForm() {
         try {
@@ -153,15 +162,15 @@ function ResetPasswordStep1() {
             { cancelToken: request.token }
           );
 
-          dispatch({ type: 'isSendingTokenFinished' });
+          resetPasswordStep1Dispatch({ type: 'isSendingTokenFinished' });
 
           if (response.data == 'Success') {
-            dispatch({ type: 'showNextStep' });
+            resetPasswordStep1Dispatch({ type: 'showNextStep' });
           } else {
             appDispatch({ type: 'flashMessageError', value: response.data });
           }
         } catch (error) {
-          dispatch({ type: 'isSendingTokenFinished' });
+          resetPasswordStep1Dispatch({ type: 'isSendingTokenFinished' });
           appDispatch({
             type: 'flashMessageError',
             value: "Sorry, there's a problem requesting a token. Please try again.",
@@ -207,7 +216,7 @@ function ResetPasswordStep1() {
                     cannot locate the email in your regular inbox.
                   </p>
                   <span
-                    onClick={() => dispatch({ type: 'closeAlert' })}
+                    onClick={() => resetPasswordStep1Dispatch({ type: 'closeAlert' })}
                     className="absolute top-0 bottom-0 right-0 px-4 py-3"
                   >
                     <svg
@@ -226,7 +235,9 @@ function ResetPasswordStep1() {
                 Enter Your Username or Email <span className="text-red-600">*</span>
               </label>
               <input
-                onChange={e => dispatch({ type: 'emailImmediately', value: e.target.value })}
+                onChange={e =>
+                  resetPasswordStep1Dispatch({ type: 'emailImmediately', value: e.target.value })
+                }
                 id="email-or-username"
                 autoComplete="off"
                 className="rounded w-full px-3 py-2 leading-tight text-gray-700 border shadow appearance-none focus:outline-none focus:shadow-outline"

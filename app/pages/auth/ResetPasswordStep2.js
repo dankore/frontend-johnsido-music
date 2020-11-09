@@ -28,7 +28,7 @@ function ResetPasswordStep2({ history }) {
     sendCount: 0,
   };
 
-  function reducer(draft, action) {
+  function resetPasswordStep2Reducer(draft, action) {
     switch (action.type) {
       case 'passwordImmediately':
         draft.password.hasErrors = false;
@@ -65,6 +65,10 @@ function ResetPasswordStep2({ history }) {
           draft.reEnteredPassword.message = 'Passwords do not match.';
         }
         return;
+      case 'isLoading':
+        action.process == 'starts' && (draft.isLoading = true);
+        action.process == 'ends' && (draft.isLoading = false);
+        return;
       case 'sendForm':
         if (
           draft.password.value != '' &&
@@ -78,22 +82,34 @@ function ResetPasswordStep2({ history }) {
     }
   }
 
-  const [state, dispatch] = useImmerReducer(reducer, initialState);
+  const [state, resetPasswordStep2Dispatch] = useImmerReducer(
+    resetPasswordStep2Reducer,
+    initialState
+  );
 
   function handleSubmit(e) {
     e.preventDefault();
-    dispatch({ type: 'passwordImmediately', value: state.password.value });
-    dispatch({ type: 'passwordAfterDelay', value: state.password.value });
+    resetPasswordStep2Dispatch({ type: 'passwordImmediately', value: state.password.value });
+    resetPasswordStep2Dispatch({ type: 'passwordAfterDelay', value: state.password.value });
 
-    dispatch({ type: 'reEnteredPasswordImmediately', value: state.reEnteredPassword.value });
-    dispatch({ type: 'reEnteredPasswordAfterDelay', value: state.reEnteredPassword.value });
-    dispatch({ type: 'sendForm' });
+    resetPasswordStep2Dispatch({
+      type: 'reEnteredPasswordImmediately',
+      value: state.reEnteredPassword.value,
+    });
+    resetPasswordStep2Dispatch({
+      type: 'reEnteredPasswordAfterDelay',
+      value: state.reEnteredPassword.value,
+    });
+    resetPasswordStep2Dispatch({ type: 'sendForm' });
   }
 
   // PASSWORD AFTER DELAY
   useEffect(() => {
     if (state.password.value) {
-      const delay = setTimeout(() => dispatch({ type: 'passwordAfterDelay' }), 800);
+      const delay = setTimeout(
+        () => resetPasswordStep2Dispatch({ type: 'passwordAfterDelay' }),
+        800
+      );
       return () => clearTimeout(delay);
     }
   }, [state.password.value]);
@@ -101,7 +117,10 @@ function ResetPasswordStep2({ history }) {
   // RE ENTER PASSWORD AFTER DELAY
   useEffect(() => {
     if (state.reEnteredPassword.value) {
-      const delay = setTimeout(() => dispatch({ type: 'reEnteredPasswordAfterDelay' }), 800);
+      const delay = setTimeout(
+        () => resetPasswordStep2Dispatch({ type: 'reEnteredPasswordAfterDelay' }),
+        800
+      );
       return () => clearTimeout(delay);
     }
   }, [state.reEnteredPassword.value]);
@@ -138,6 +157,8 @@ function ResetPasswordStep2({ history }) {
   useEffect(() => {
     if (state.sendCount) {
       const request = Axios.CancelToken.source();
+      resetPasswordStep2Dispatch({ type: 'isLoading', process: 'starts' });
+
       (async function sendFormResetPassword() {
         try {
           const response = await Axios.post(
@@ -149,6 +170,9 @@ function ResetPasswordStep2({ history }) {
             },
             { cancelToken: request.token }
           );
+
+          resetPasswordStep2Dispatch({ type: 'isLoading', process: 'ends' });
+
           if (response.data == 'Success') {
             history.push('/login');
             appDispatch({
@@ -186,7 +210,9 @@ function ResetPasswordStep2({ history }) {
                 New Password <span className="text-red-600">*</span>
               </label>
               <input
-                onChange={e => dispatch({ type: 'passwordImmediately', value: e.target.value })}
+                onChange={e =>
+                  resetPasswordStep2Dispatch({ type: 'passwordImmediately', value: e.target.value })
+                }
                 id="password"
                 type="password"
                 className="rounded w-full px-3 py-2 leading-tight text-gray-700 border shadow appearance-none focus:outline-none focus:shadow-outline"
@@ -208,7 +234,10 @@ function ResetPasswordStep2({ history }) {
               </label>
               <input
                 onChange={e =>
-                  dispatch({ type: 'reEnteredPasswordImmediately', value: e.target.value })
+                  resetPasswordStep2Dispatch({
+                    type: 'reEnteredPasswordImmediately',
+                    value: e.target.value,
+                  })
                 }
                 id="re-enter-password"
                 type="password"
