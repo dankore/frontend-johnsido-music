@@ -228,7 +228,7 @@ function ResetPassword() {
                 onChange={e => dispatch({ type: 'emailImmediately', value: e.target.value })}
                 id="email"
                 autoComplete="off"
-                className="w-full px-3 py-2 leading-tight text-gray-700 border shadow appearance-none focus:outline-none focus:shadow-outline"
+                className="rounded w-full px-3 py-2 leading-tight text-gray-700 border shadow appearance-none focus:outline-none focus:shadow-outline"
                 type="text"
               />
               <CSSTransition
