@@ -174,7 +174,7 @@ function Login({ history }) {
                     Password <span className="text-red-600">*</span>
                   </label>
                   <Link
-                    to="/reset-password"
+                    to="/reset-password-step-1"
                     className="block text-blue-600 hover:text-blue-700 focus:text-blue-800 focus:outline-none"
                   >
                     Forgot password?

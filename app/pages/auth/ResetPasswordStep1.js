@@ -8,7 +8,7 @@ import { CSSTransition } from 'react-transition-group';
 import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
 import StateContext from '../../contextsProviders/StateContext';
 
-function ResetPassword() {
+function ResetPasswordStep1() {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
   const initialState = {
@@ -279,4 +279,4 @@ function ResetPassword() {
   );
 }
 
-export default withRouter(ResetPassword);
+export default withRouter(ResetPasswordStep1);

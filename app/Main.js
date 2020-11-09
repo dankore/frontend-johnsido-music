@@ -28,7 +28,8 @@ import LoadingDotsAnimation from './components/shared/LoadingDotsAnimation';
 import CookiesPage from './pages/policies/CookiesPage';
 import SeoDefault from './components/SEO/SEODefault';
 import MySongs from './pages/songs/MySongs';
-import ResetPassword from './pages/auth/ResetPassword';
+import ResetPasswordStep1 from './pages/auth/ResetPasswordStep1';
+import ResetPasswordStep2 from './pages/auth/ResetPasswordStep2';
 const TermsPage = lazy(() => import('./pages/policies/TermsPage'));
 const PrivacyPolicyPage = lazy(() => import('./pages/policies/PrivacyPolicyPage'));
 
@@ -284,8 +285,19 @@ function Main() {
               <Route path="/login">
                 {!state.loggedIn ? <Login /> : <div>Please logout to view this page.</div>}
               </Route>
-              <Route path="/reset-password">
-                {!state.loggedIn ? <ResetPassword /> : <div>Please logout to view this page.</div>}
+              <Route exact path="/reset-password-step-1">
+                {!state.loggedIn ? (
+                  <ResetPasswordStep1 />
+                ) : (
+                  <div>Please logout to view this page.</div>
+                )}
+              </Route>
+              <Route path="/reset-password-step-2/:token">
+                {!state.loggedIn ? (
+                  <ResetPasswordStep2 />
+                ) : (
+                  <div>Please logout to view this page.</div>
+                )}
               </Route>
               <Route path="/about">
                 <AboutPage />
