@@ -9,6 +9,7 @@ import FlashMsgError from '../../components/shared/FlashMsgError';
 import { CSSTransition } from 'react-transition-group';
 import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
 import DispatchContext from '../../contextsProviders/DispatchContext';
+import FlashMsgSuccess from '../../components/shared/FlashMsgSuccess';
 
 function Login({ history }) {
   const CSSTransitionStyleModified = { ...CSSTransitionStyle, marginTop: '1.3rem' };
@@ -134,6 +135,7 @@ function Login({ history }) {
             {appState.flashMsgErrors.isDisplay && (
               <FlashMsgError errors={appState.flashMsgErrors.value} />
             )}
+            {appState.flashMsgSuccess.isDisplay && <FlashMsgSuccess />}
           </div>
           <div className="flex flex-col justify-center px-3 lg:justify-start md:px-32 lg:px-3">
             <p className="text-3xl text-center pt-5">Login</p>

@@ -164,15 +164,13 @@ function ResetPasswordStep1() {
 
           resetPasswordStep1Dispatch({ type: 'isSendingTokenFinished' });
 
-          if (response.data == 'Success') {
-            resetPasswordStep1Dispatch({ type: 'showNextStep' });
-          } else {
-            appDispatch({ type: 'flashMessageError', value: response.data });
-          }
+          response.data == 'Success'
+            ? resetPasswordStep1Dispatch({ type: 'showNextStep' })
+            : appDispatch({ type: 'flashMsgError', value: response.data });
         } catch (error) {
           resetPasswordStep1Dispatch({ type: 'isSendingTokenFinished' });
           appDispatch({
-            type: 'flashMessageError',
+            type: 'flashMsgError',
             value: "Sorry, there's a problem requesting a token. Please try again.",
           });
         }

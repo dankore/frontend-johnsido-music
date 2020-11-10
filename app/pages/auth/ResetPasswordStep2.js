@@ -136,14 +136,23 @@ function ResetPasswordStep2({ history }) {
           { cancelToken: request.token }
         );
 
-        if (response.data != 'Success') {
-          history.push('/reset-password-step-1');
+        response.data != 'Success' &&
+          history.push('/reset-password-step-1') &&
           appDispatch({
-            type: 'flashMessageError',
-            value:
+            type: 'flashMsgError',
+            value: [
               'Password reset token is invalid or has expired. Please generate another token below.',
+            ],
           });
-        }
+
+        // if (response.data != 'Success') {
+        //   history.push('/reset-password-step-1');
+        //   appDispatch({
+        //     type: 'flashMsgError',
+        //     value:
+        //       'Password reset token is invalid or has expired. Please generate another token below.',
+        //   });
+        // }
       } catch (error) {
         console.log({ fetchDataRelatedToPasswordResetToken: error.message });
       }
@@ -170,15 +179,22 @@ function ResetPasswordStep2({ history }) {
           );
 
           resetPasswordStep2Dispatch({ type: 'isLoading', process: 'ends' });
-
+          // response.data == 'Success'
+          //   ? history.push('/login') &&
+          //     appDispatch({
+          //       type: 'flashMsgSuccess',
+          //       value: ['Password successfully changed. You may now login to your account.'],
+          //     })
+          //   : appDispatch({ type: 'flashMsgError', value: response.data });
+          console.log(response.data);
           if (response.data == 'Success') {
             history.push('/login');
             appDispatch({
-              type: 'flashMessage',
-              value: 'Password successfully changed. You can now login to your account.',
+              type: 'flashMsgSuccess',
+              value: ['Password successfully changed. You can now login to your account.'],
             });
           } else {
-            appDispatch({ type: 'flashMessageError', value: response.data });
+            appDispatch({ type: 'flashMsgError', value: response.data });
           }
         } catch (error) {
           console.log({ sendFormResetPassword: error.message });

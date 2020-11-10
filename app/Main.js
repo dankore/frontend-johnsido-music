@@ -12,7 +12,8 @@ import DispatchContext from './contextsProviders/DispatchContext';
 //COMPONENTS //recommended size limit (244 KiB)
 const ProfilePage = lazy(() => import('./pages/profile/ProfilePage'));
 const Register = lazy(() => import('./pages/auth/Register'));
-const Login = lazy(() => import('./pages/auth/Login'));
+// const Login = lazy(() => import('./pages/auth/Login'));
+import Login from './pages/auth/Login';
 const Header = lazy(() => import('./components/shared/Header'));
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'));
 import LandingPage from './pages/LandingPage';
@@ -100,12 +101,12 @@ function Main() {
         }
         return;
       case 'flashMsgError':
-        draft.flashMsgErrors.value = action.value;
         draft.flashMsgErrors.isDisplay = true;
+        draft.flashMsgErrors.value = action.value;
         return;
       case 'flashMsgSuccess':
-        draft.flashMsgSuccess.value = action.value;
         draft.flashMsgSuccess.isDisplay = true;
+        draft.flashMsgSuccess.value = action.value;
         return;
       case 'editComment':
         draft.editComment = !draft.editComment;
@@ -181,7 +182,7 @@ function Main() {
   }
 
   const [state, appDispatch] = useImmerReducer(appReducer, appInitialState);
-
+  console.log(state.flashMsgSuccess);
   useEffect(() => {
     if (state.loggedIn) {
       localStorage.setItem('johnsido-id', state.user._id);
