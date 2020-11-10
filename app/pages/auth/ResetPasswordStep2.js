@@ -179,20 +179,22 @@ function ResetPasswordStep2({ history }) {
           );
 
           resetPasswordStep2Dispatch({ type: 'isLoading', process: 'ends' });
-          // response.data == 'Success'
-          //   ? history.push('/login') &&
-          //     appDispatch({
-          //       type: 'flashMsgSuccess',
-          //       value: ['Password successfully changed. You may now login to your account.'],
-          //     })
-          //   : appDispatch({ type: 'flashMsgError', value: response.data });
+
           console.log(response.data);
           if (response.data == 'Success') {
             history.push('/login');
-            appDispatch({
-              type: 'flashMsgSuccess',
-              value: ['Password successfully changed. You can now login to your account.'],
-            });
+
+            (function buyTime() {
+              const delay = setTimeout(
+                () =>
+                  appDispatch({
+                    type: 'flashMsgSuccess',
+                    value: ['Password successfully changed. You can now login to your account.'],
+                  }),
+                800
+              );
+              return () => clearTimeout(delay);
+            })();
           } else {
             appDispatch({ type: 'flashMsgError', value: response.data });
           }

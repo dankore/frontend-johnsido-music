@@ -12,8 +12,7 @@ import DispatchContext from './contextsProviders/DispatchContext';
 //COMPONENTS //recommended size limit (244 KiB)
 const ProfilePage = lazy(() => import('./pages/profile/ProfilePage'));
 const Register = lazy(() => import('./pages/auth/Register'));
-// const Login = lazy(() => import('./pages/auth/Login'));
-import Login from './pages/auth/Login';
+const Login = lazy(() => import('./pages/auth/Login'));
 const Header = lazy(() => import('./components/shared/Header'));
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'));
 import LandingPage from './pages/LandingPage';
