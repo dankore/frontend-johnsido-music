@@ -138,7 +138,6 @@ function ResetPasswordStep2({ history }) {
 
         if (response.data != 'Success') {
           history.push('/reset-password-step-1');
-
           (function buyTime() {
             const delay = setTimeout(
               () =>
@@ -189,7 +188,7 @@ function ResetPasswordStep2({ history }) {
                 () =>
                   appDispatch({
                     type: 'flashMsgSuccess',
-                    value: ['Password successfully changed. You can now login to your account.'],
+                    value: ['Password successfully changed. You may now login to your account.'],
                   }),
                 800
               );

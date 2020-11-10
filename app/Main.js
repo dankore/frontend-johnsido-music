@@ -27,9 +27,9 @@ const AdminLandingPage = lazy(() => import('./pages/admin/AdminLandingPage'));
 import LoadingDotsAnimation from './components/shared/LoadingDotsAnimation';
 import CookiesPage from './pages/policies/CookiesPage';
 import SeoDefault from './components/SEO/SEODefault';
-import MySongs from './pages/songs/MySongs';
-import ResetPasswordStep1 from './pages/auth/ResetPasswordStep1';
-import ResetPasswordStep2 from './pages/auth/ResetPasswordStep2';
+const MySongs = lazy(() => import('./pages/songs/MySongs'));
+const ResetPasswordStep1 = lazy(() => import('./pages/auth/ResetPasswordStep1'));
+const ResetPasswordStep2 = lazy(() => import('./pages/auth/ResetPasswordStep2'));
 const TermsPage = lazy(() => import('./pages/policies/TermsPage'));
 const PrivacyPolicyPage = lazy(() => import('./pages/policies/PrivacyPolicyPage'));
 
