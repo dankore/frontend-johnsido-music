@@ -18,7 +18,7 @@ function ResetPasswordStep2({ history }) {
       hasErrors: false,
       message: '',
     },
-    reEnteredPassword: {
+    confirmPassword: {
       value: '',
       hasErrors: false,
       message: '',
@@ -50,19 +50,19 @@ function ResetPasswordStep2({ history }) {
           draft.password.message = 'Password must be at least 6 characters.';
         }
         return;
-      case 'reEnteredPasswordImmediately':
-        draft.reEnteredPassword.hasErrors = false;
-        draft.reEnteredPassword.value = action.value;
+      case 'confirmPasswordImmediately':
+        draft.confirmPassword.hasErrors = false;
+        draft.confirmPassword.value = action.value;
 
-        if (draft.reEnteredPassword.value.trim() == '') {
-          draft.reEnteredPassword.hasErrors = true;
-          draft.reEnteredPassword.message = 'Password field is empty.';
+        if (draft.confirmPassword.value.trim() == '') {
+          draft.confirmPassword.hasErrors = true;
+          draft.confirmPassword.message = 'Password field is empty.';
         }
         return;
-      case 'reEnteredPasswordAfterDelay':
-        if (draft.password.value != draft.reEnteredPassword.value) {
-          draft.reEnteredPassword.hasErrors = true;
-          draft.reEnteredPassword.message = 'Passwords do not match.';
+      case 'confirmPasswordAfterDelay':
+        if (draft.password.value != draft.confirmPassword.value) {
+          draft.confirmPassword.hasErrors = true;
+          draft.confirmPassword.message = 'Passwords do not match.';
         }
         return;
       case 'isLoading':
@@ -73,8 +73,8 @@ function ResetPasswordStep2({ history }) {
         if (
           draft.password.value != '' &&
           !draft.password.hasErrors &&
-          draft.reEnteredPassword.value != '' &&
-          !draft.reEnteredPassword.hasErrors
+          draft.confirmPassword.value != '' &&
+          !draft.confirmPassword.hasErrors
         ) {
           draft.sendCount++;
         }
@@ -93,12 +93,12 @@ function ResetPasswordStep2({ history }) {
     resetPasswordStep2Dispatch({ type: 'passwordAfterDelay', value: state.password.value });
 
     resetPasswordStep2Dispatch({
-      type: 'reEnteredPasswordImmediately',
-      value: state.reEnteredPassword.value,
+      type: 'confirmPasswordImmediately',
+      value: state.confirmPassword.value,
     });
     resetPasswordStep2Dispatch({
-      type: 'reEnteredPasswordAfterDelay',
-      value: state.reEnteredPassword.value,
+      type: 'confirmPasswordAfterDelay',
+      value: state.confirmPassword.value,
     });
     resetPasswordStep2Dispatch({ type: 'sendForm' });
   }
@@ -116,14 +116,14 @@ function ResetPasswordStep2({ history }) {
 
   // RE ENTER PASSWORD AFTER DELAY
   useEffect(() => {
-    if (state.reEnteredPassword.value) {
+    if (state.confirmPassword.value) {
       const delay = setTimeout(
-        () => resetPasswordStep2Dispatch({ type: 'reEnteredPasswordAfterDelay' }),
+        () => resetPasswordStep2Dispatch({ type: 'confirmPasswordAfterDelay' }),
         800
       );
       return () => clearTimeout(delay);
     }
-  }, [state.reEnteredPassword.value]);
+  }, [state.confirmPassword.value]);
 
   // CHECK TOKEN
   useEffect(() => {
@@ -137,7 +137,7 @@ function ResetPasswordStep2({ history }) {
         );
 
         if (response.data != 'Success') {
-          history.push('/reset-password');
+          history.push('/reset-password-step-1');
           appDispatch({
             type: 'flashMessageError',
             value:
@@ -160,10 +160,10 @@ function ResetPasswordStep2({ history }) {
       (async function sendFormResetPassword() {
         try {
           const response = await Axios.post(
-            '/save-new-password',
+            '/reset-password-step-2',
             {
               password: state.password.value,
-              reEnteredPassword: state.reEnteredPassword.value,
+              confirmPassword: state.confirmPassword.value,
               token: state.passwordResetToken,
             },
             { cancelToken: request.token }
@@ -233,7 +233,7 @@ function ResetPasswordStep2({ history }) {
               <input
                 onChange={e =>
                   resetPasswordStep2Dispatch({
-                    type: 'reEnteredPasswordImmediately',
+                    type: 'confirmPasswordImmediately',
                     value: e.target.value,
                   })
                 }
@@ -245,13 +245,13 @@ function ResetPasswordStep2({ history }) {
                 Password should be a minimum of 6 characters
               </p>
               <CSSTransition
-                in={state.reEnteredPassword.hasErrors}
+                in={state.confirmPassword.hasErrors}
                 timeout={330}
                 classNames="liveValidateMessage"
                 unmountOnExit
               >
                 <div style={CSSTransitionStyle} className="liveValidateMessage">
-                  {state.reEnteredPassword.message}
+                  {state.confirmPassword.message}
                 </div>
               </CSSTransition>
             </div>

@@ -157,7 +157,7 @@ function ResetPasswordStep1() {
       (async function submitForm() {
         try {
           const response = await Axios.post(
-            '/reset-password',
+            '/reset-password-step-1',
             { usernameOrEmail: state.usernameOrEmail.value, type: state.usernameOrEmail.type },
             { cancelToken: request.token }
           );
