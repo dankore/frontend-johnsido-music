@@ -377,11 +377,14 @@ function Register({ history }) {
             {appState.flashMsgErrors.isDisplay && (
               <FlashMsgError errors={appState.flashMsgErrors.value} />
             )}
-            <form onSubmit={handleFormSubmission} className="flex flex-col">
+            <form
+              onSubmit={handleFormSubmission}
+              className="flex flex-col pt-3 w-full sm:max-w-md mx-auto"
+            >
               {/* USERNAME */}
               <div className="relative flex flex-col pt-4">
                 <label htmlFor="username" className="text-lg">
-                  Username
+                  Username <span className="text-red-600">*</span>
                 </label>
                 <input
                   value={state.username.value}
@@ -407,7 +410,7 @@ function Register({ history }) {
               {/* FIRST NAME */}
               <div className="relative flex flex-col pt-4">
                 <label htmlFor="firstName" className="text-lg">
-                  First Name
+                  First Name <span className="text-red-600">*</span>
                 </label>
                 <input
                   value={state.firstName.value}
@@ -433,7 +436,7 @@ function Register({ history }) {
               {/* LAST NAME*/}
               <div className="relative flex flex-col pt-4">
                 <label htmlFor="lastName" className="text-lg">
-                  Last Name
+                  Last Name <span className="text-red-600">*</span>
                 </label>
                 <input
                   value={state.lastName.value}
@@ -459,7 +462,7 @@ function Register({ history }) {
               {/* EMAIL */}
               <div className="relative flex flex-col pt-4">
                 <label htmlFor="email" className="text-lg">
-                  Email
+                  Email <span className="text-red-600">*</span>
                 </label>
                 <input
                   value={state.email.value}
@@ -485,7 +488,7 @@ function Register({ history }) {
               {/* PASSWORD */}
               <div className="relative flex flex-col pt-4">
                 <label htmlFor="password" className="text-lg">
-                  Password
+                  Password <span className="text-red-600">*</span>
                 </label>
                 <input
                   value={state.password.value}
@@ -511,7 +514,7 @@ function Register({ history }) {
               {/* CONFIRM PASSWORD */}
               <div className="relative flex flex-col pt-4">
                 <label htmlFor="confirm-password" className="text-lg">
-                  Confirm Password
+                  Confirm Password <span className="text-red-600">*</span>
                 </label>
                 <input
                   value={state.confirmPassword.value}
@@ -552,7 +555,10 @@ function Register({ history }) {
             <div className="pt-12 pb-12 text-center">
               <p>
                 Already have an account?{' '}
-                <Link to="/login" className="font-semibold underline">
+                <Link
+                  to="/login"
+                  className="font-semibold underline px-2 focus:outline-none hover:text-gray-800 focus:text-gray-700"
+                >
                   Log in here.
                 </Link>
               </p>

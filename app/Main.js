@@ -27,7 +27,9 @@ const AdminLandingPage = lazy(() => import('./pages/admin/AdminLandingPage'));
 import LoadingDotsAnimation from './components/shared/LoadingDotsAnimation';
 import CookiesPage from './pages/policies/CookiesPage';
 import SeoDefault from './components/SEO/SEODefault';
-import MySongs from './pages/songs/MySongs';
+const MySongs = lazy(() => import('./pages/songs/MySongs'));
+const ResetPasswordStep1 = lazy(() => import('./pages/auth/ResetPasswordStep1'));
+const ResetPasswordStep2 = lazy(() => import('./pages/auth/ResetPasswordStep2'));
 const TermsPage = lazy(() => import('./pages/policies/TermsPage'));
 const PrivacyPolicyPage = lazy(() => import('./pages/policies/PrivacyPolicyPage'));
 
@@ -98,12 +100,12 @@ function Main() {
         }
         return;
       case 'flashMsgError':
-        draft.flashMsgErrors.value = action.value;
         draft.flashMsgErrors.isDisplay = true;
+        draft.flashMsgErrors.value = action.value;
         return;
       case 'flashMsgSuccess':
-        draft.flashMsgSuccess.value = action.value;
         draft.flashMsgSuccess.isDisplay = true;
+        draft.flashMsgSuccess.value = action.value;
         return;
       case 'editComment':
         draft.editComment = !draft.editComment;
@@ -282,6 +284,20 @@ function Main() {
               </Route>
               <Route path="/login">
                 {!state.loggedIn ? <Login /> : <div>Please logout to view this page.</div>}
+              </Route>
+              <Route exact path="/reset-password-step-1">
+                {!state.loggedIn ? (
+                  <ResetPasswordStep1 />
+                ) : (
+                  <div>Please logout to view this page.</div>
+                )}
+              </Route>
+              <Route path="/reset-password-step-2/:token">
+                {!state.loggedIn ? (
+                  <ResetPasswordStep2 />
+                ) : (
+                  <div>Please logout to view this page.</div>
+                )}
               </Route>
               <Route path="/about">
                 <AboutPage />
