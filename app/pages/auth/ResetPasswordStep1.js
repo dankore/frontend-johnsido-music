@@ -7,6 +7,7 @@ import { useImmerReducer } from 'use-immer';
 import { CSSTransition } from 'react-transition-group';
 import { CSSTransitionStyle } from '../../helpers/CSSHelpers';
 import StateContext from '../../contextsProviders/StateContext';
+import FlashMsgError from '../../components/shared/FlashMsgError';
 
 function ResetPasswordStep1() {
   const appState = useContext(StateContext);
@@ -190,6 +191,11 @@ function ResetPasswordStep1() {
             <Link to="/" className="p-4 text-xl font-bold text-white focus:outline-none">
               <img className="w-32 h-32" src={appState.logo.url} alt={appState.logo.alt} />
             </Link>
+          </div>
+          <div className="relative">
+            {appState.flashMsgErrors.isDisplay && (
+              <FlashMsgError errors={appState.flashMsgErrors.value} />
+            )}
           </div>
           <p className="text-3xl text-center pt-5">Password Recovery</p>
           <p className="text-center text-lg mb-4 px-3">Step 1 of 2:</p>

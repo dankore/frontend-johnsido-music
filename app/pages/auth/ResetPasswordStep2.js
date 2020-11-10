@@ -136,23 +136,23 @@ function ResetPasswordStep2({ history }) {
           { cancelToken: request.token }
         );
 
-        response.data != 'Success' &&
-          history.push('/reset-password-step-1') &&
-          appDispatch({
-            type: 'flashMsgError',
-            value: [
-              'Password reset token is invalid or has expired. Please generate another token below.',
-            ],
-          });
+        if (response.data != 'Success') {
+          history.push('/reset-password-step-1');
 
-        // if (response.data != 'Success') {
-        //   history.push('/reset-password-step-1');
-        //   appDispatch({
-        //     type: 'flashMsgError',
-        //     value:
-        //       'Password reset token is invalid or has expired. Please generate another token below.',
-        //   });
-        // }
+          (function buyTime() {
+            const delay = setTimeout(
+              () =>
+                appDispatch({
+                  type: 'flashMsgError',
+                  value: [
+                    'Password reset token is invalid or has expired. Please generate another token below.',
+                  ],
+                }),
+              800
+            );
+            return () => clearTimeout(delay);
+          })();
+        }
       } catch (error) {
         console.log({ fetchDataRelatedToPasswordResetToken: error.message });
       }

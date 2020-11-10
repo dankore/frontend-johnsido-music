@@ -181,7 +181,7 @@ function Main() {
   }
 
   const [state, appDispatch] = useImmerReducer(appReducer, appInitialState);
-  console.log(state.flashMsgSuccess);
+
   useEffect(() => {
     if (state.loggedIn) {
       localStorage.setItem('johnsido-id', state.user._id);
