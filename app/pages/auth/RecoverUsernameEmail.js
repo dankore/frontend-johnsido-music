@@ -262,7 +262,7 @@ function ResetPasswordStep1() {
             </p>
 
             <p>
-              Remember your password?
+              Remember your username or email?
               <Link
                 to="/login"
                 className="font-semibold underline px-2 focus:outline-none hover:text-gray-800 focus:text-gray-700"
