@@ -21,7 +21,7 @@ function ResetPasswordStep1() {
       checkCount: 0,
       type: '',
     },
-    isLoggingIn: false,
+    isSendingToken: false,
     showNextStep: false,
     submitCount: 0,
   };
@@ -65,11 +65,9 @@ function ResetPasswordStep1() {
           draft.usernameOrEmail.isRegisteredUsernameOrEmail = true;
         }
         return;
-      case 'isSendingTokenStart':
-        draft.isLoggingIn = true;
-        return;
-      case 'isSendingTokenFinished':
-        draft.isLoggingIn = false;
+      case 'sendingToken':
+        action.process == 'starts' && (draft.isSendingToken = true);
+        action.process == 'ends' && (draft.isSendingToken = false);
         return;
       case 'showNextStep':
         draft.showNextStep = true;
@@ -153,7 +151,7 @@ function ResetPasswordStep1() {
   useEffect(() => {
     if (state.submitCount && state.submitCount < 5) {
       const request = Axios.CancelToken.source();
-      resetPasswordStep1Dispatch({ type: 'isSendingTokenStart' });
+      resetPasswordStep1Dispatch({ type: 'sendingToken', process: 'starts' });
 
       (async function submitForm() {
         try {
@@ -163,13 +161,13 @@ function ResetPasswordStep1() {
             { cancelToken: request.token }
           );
 
-          resetPasswordStep1Dispatch({ type: 'isSendingTokenFinished' });
+          resetPasswordStep1Dispatch({ type: 'sendingToken', process: 'ends' });
 
           response.data == 'Success'
             ? resetPasswordStep1Dispatch({ type: 'showNextStep' })
             : appDispatch({ type: 'flashMsgError', value: response.data });
         } catch (error) {
-          resetPasswordStep1Dispatch({ type: 'isSendingTokenFinished' });
+          resetPasswordStep1Dispatch({ type: 'sendingToken', process: 'ends' });
           appDispatch({
             type: 'flashMsgError',
             value: "Sorry, there's a problem requesting a token. Please try again.",
@@ -236,12 +234,12 @@ function ResetPasswordStep1() {
                   type="submit"
                   className="w-full p-2 mt-8 text-lg font-bold text-white bg-black hover:bg-gray-700"
                 >
-                  {state.isLoggingIn ? (
+                  {state.isSendingToken ? (
                     <span>
                       <i className="text-sm fa fa-spinner fa-spin"></i>
                     </span>
                   ) : (
-                    <>Login In</>
+                    <>Send Token</>
                   )}
                 </button>
               </div>
