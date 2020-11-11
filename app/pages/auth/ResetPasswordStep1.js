@@ -201,8 +201,8 @@ function ResetPasswordStep1() {
           <form onSubmit={handleSubmit} className="flex flex-col p-3 w-full sm:max-w-md mx-auto">
             {/* LABEL AND INPUT */}
             {!state.showNextStep && (
-              <div>
-                <div className="flex flex-col">
+              <>
+                <div className="relative flex flex-col">
                   <label className="text-lg" htmlFor="email-or-username">
                     Enter Your Username or Email <span className="text-red-600">*</span>
                   </label>
@@ -242,7 +242,7 @@ function ResetPasswordStep1() {
                     <>Send Token</>
                   )}
                 </button>
-              </div>
+              </>
             )}
             {/* SUCCESS MESSAGE */}
             {state.showNextStep && (
