@@ -145,6 +145,10 @@ function Register({ history }) {
           draft.email.hasError = true;
           draft.email.message = 'Please provide a valid email.';
         }
+        if (draft.email.value.split('@')[0].length > 100) {
+          draft.email.hasError = true;
+          draft.email.message = 'Email cannot exceed 100 characters.';
+        }
         if (!draft.email.hasError && !action.dontSendReqToServer) {
           draft.email.checkCount++;
         }
