@@ -13,11 +13,11 @@ function ResetPasswordStep1() {
   const appState = useContext(StateContext);
   const appDispatch = useContext(DispatchContext);
   const initialState = {
-    usernameOrEmail: {
+    email: {
       value: '',
       hasErrors: false,
       message: '',
-      isRegisteredUsernameOrEmail: false,
+      isRegisteredEmail: false,
       checkCount: 0,
       type: '',
     },
@@ -26,43 +26,29 @@ function ResetPasswordStep1() {
     submitCount: 0,
   };
 
-  function resetPasswordStep1Reducer(draft, action) {
+  function recoverUsernameEmailReducer(draft, action) {
     switch (action.type) {
       case 'emailImmediately':
-        draft.usernameOrEmail.hasErrors = false;
-        draft.usernameOrEmail.value = action.value.trim();
-        if (!draft.usernameOrEmail.value) {
-          draft.usernameOrEmail.hasErrors = true;
-          draft.usernameOrEmail.message = 'Email / Username field is empty.';
+        draft.email.hasErrors = false;
+        draft.email.value = action.value.trim();
+        if (!draft.email.value) {
+          draft.email.hasErrors = true;
+          draft.email.message = 'Email / Username field is empty.';
         }
         return;
-      case 'usernameOrEmailAfterDelay':
-        if (/@/.test(draft.usernameOrEmail.value)) {
-          // IF USER ENTERS AN EMAIL
-          if (!/^\S+@\S+$/.test(draft.usernameOrEmail.value)) {
-            draft.usernameOrEmail.hasErrors = true;
-            draft.usernameOrEmail.message = 'Please provide a valid email.';
-          }
-
-          if (!draft.usernameOrEmail.hasErrors) {
-            draft.usernameOrEmail.checkCount++;
-            draft.usernameOrEmail.type = 'email';
-          }
-        } else {
-          // IF USER ENTERS A USERNAME
-          if (!draft.usernameOrEmail.hasErrors) {
-            draft.usernameOrEmail.checkCount++;
-            draft.usernameOrEmail.type = 'username';
-          }
+      case 'emailAfterDelay':
+        if (!/^\S+@\S+$/.test(draft.email.value)) {
+          draft.email.hasErrors = true;
+          draft.email.message = 'Please provide a valid email.';
         }
         return;
-      case 'isRegisteredUsernameOrEmail':
+      case 'isRegisteredEmail':
         if (!action.value) {
-          draft.usernameOrEmail.hasErrors = true;
-          draft.usernameOrEmail.isRegisteredUsernameOrEmail = false;
-          draft.usernameOrEmail.message = `No account with that ${action.process} exists.`;
+          draft.email.hasErrors = true;
+          draft.email.isRegisteredEmail = false;
+          draft.email.message = `This email is not associated with any account.`;
         } else {
-          draft.usernameOrEmail.isRegisteredUsernameOrEmail = true;
+          draft.email.isRegisteredEmail = true;
         }
         return;
       case 'sendingToken':
@@ -76,46 +62,38 @@ function ResetPasswordStep1() {
         draft.showNextStep = false;
         return;
       case 'submitForm':
-        if (
-          draft.usernameOrEmail.value != '' &&
-          !draft.usernameOrEmail.hasErrors &&
-          draft.usernameOrEmail.isRegisteredUsernameOrEmail
-        ) {
+        if (draft.email.value != '' && !draft.email.hasErrors && draft.email.isRegisteredEmail) {
           draft.submitCount++;
         }
         return;
     }
   }
 
-  const [state, resetPasswordStep1Dispatch] = useImmerReducer(
-    resetPasswordStep1Reducer,
+  const [state, recoverUsernameEmailDispatch] = useImmerReducer(
+    recoverUsernameEmailReducer,
     initialState
   );
 
   // EMAIL IS UNIQUE
   useEffect(() => {
-    if (state.usernameOrEmail.checkCount) {
+    if (state.email.checkCount) {
       const request = Axios.CancelToken.source();
-      const path =
-        state.usernameOrEmail.type == 'email' ? '/doesEmailExists' : '/doesUsernameExists';
+      const path = state.email.type == 'email' ? '/doesEmailExists' : '/doesUsernameExists';
 
-      (async function checkusernameOrEmail() {
+      (async function checkemail() {
         try {
           const response = await Axios.post(
             path,
             {
-              ...(state.usernameOrEmail.type == 'email' && { email: state.usernameOrEmail.value }),
-              ...(state.usernameOrEmail.type == 'username' && {
-                username: state.usernameOrEmail.value,
-              }),
+              email: state.email.value,
             },
             { cancelToken: request.token }
           );
 
-          resetPasswordStep1Dispatch({
-            type: 'isRegisteredUsernameOrEmail',
+          recoverUsernameEmailDispatch({
+            type: 'isRegisteredEmail',
             value: response.data,
-            process: state.usernameOrEmail.type,
+            process: state.email.type,
           });
         } catch (error) {
           console.log('Having difficulty looking up your account. Please try again.');
@@ -124,50 +102,50 @@ function ResetPasswordStep1() {
 
       return () => request.cancel();
     }
-  }, [state.usernameOrEmail.checkCount]);
+  }, [state.email.checkCount]);
 
   useEffect(() => {
-    if (state.usernameOrEmail.value) {
+    if (state.email.value) {
       const delay = setTimeout(
-        () => resetPasswordStep1Dispatch({ type: 'usernameOrEmailAfterDelay' }),
+        () => recoverUsernameEmailDispatch({ type: 'emailAfterDelay' }),
         800
       );
       return () => clearTimeout(delay);
     }
-  }, [state.usernameOrEmail.value]);
+  }, [state.email.value]);
 
   // INITIATE FORM SUBMISSION
   function handleSubmit(e) {
     e.preventDefault();
-    resetPasswordStep1Dispatch({ type: 'emailImmediately', value: state.usernameOrEmail.value });
-    resetPasswordStep1Dispatch({
-      type: 'usernameOrEmailAfterDelay',
-      value: state.usernameOrEmail.value,
+    recoverUsernameEmailDispatch({ type: 'emailImmediately', value: state.email.value });
+    recoverUsernameEmailDispatch({
+      type: 'emailAfterDelay',
+      value: state.email.value,
     });
-    resetPasswordStep1Dispatch({ type: 'submitForm' });
+    recoverUsernameEmailDispatch({ type: 'submitForm' });
   }
 
   // ACTUALLY SUBMIT
   useEffect(() => {
     if (state.submitCount && state.submitCount < 5) {
       const request = Axios.CancelToken.source();
-      resetPasswordStep1Dispatch({ type: 'sendingToken', process: 'starts' });
+      recoverUsernameEmailDispatch({ type: 'sendingToken', process: 'starts' });
 
       (async function submitForm() {
         try {
           const response = await Axios.post(
             '/reset-password-step-1',
-            { usernameOrEmail: state.usernameOrEmail.value, type: state.usernameOrEmail.type },
+            { email: state.email.value, type: state.email.type },
             { cancelToken: request.token }
           );
 
-          resetPasswordStep1Dispatch({ type: 'sendingToken', process: 'ends' });
+          recoverUsernameEmailDispatch({ type: 'sendingToken', process: 'ends' });
 
           response.data == 'Success'
-            ? resetPasswordStep1Dispatch({ type: 'showNextStep' })
+            ? recoverUsernameEmailDispatch({ type: 'showNextStep' })
             : appDispatch({ type: 'flashMsgError', value: response.data });
         } catch (error) {
-          resetPasswordStep1Dispatch({ type: 'sendingToken', process: 'ends' });
+          recoverUsernameEmailDispatch({ type: 'sendingToken', process: 'ends' });
           appDispatch({
             type: 'flashMsgError',
             value: "Sorry, there's a problem requesting a token. Please try again.",
@@ -195,7 +173,7 @@ function ResetPasswordStep1() {
               <FlashMsgError errors={appState.flashMsgErrors.value} />
             )}
           </div>
-          <p className="text-3xl text-center pt-5 px-2">Recover Your Email Or Username</p>
+          <p className="text-3xl text-center py-5 px-2">Recover Your Email Or Username</p>
           {/* FORM */}
           <form onSubmit={handleSubmit} className="flex flex-col p-3 w-full sm:max-w-md mx-auto">
             {/* LABEL AND INPUT */}
@@ -207,7 +185,7 @@ function ResetPasswordStep1() {
                   </label>
                   <input
                     onChange={e =>
-                      resetPasswordStep1Dispatch({
+                      recoverUsernameEmailDispatch({
                         type: 'emailImmediately',
                         value: e.target.value,
                       })
@@ -218,13 +196,13 @@ function ResetPasswordStep1() {
                     type="text"
                   />
                   <CSSTransition
-                    in={state.usernameOrEmail.hasErrors}
+                    in={state.email.hasErrors}
                     timeout={330}
                     className="liveValidateMessage"
                     unmountOnExit
                   >
                     <div style={CSSTransitionStyle} className="liveValidateMessage">
-                      {state.usernameOrEmail.message}
+                      {state.email.message}
                     </div>
                   </CSSTransition>
                 </div>
@@ -261,7 +239,7 @@ function ResetPasswordStep1() {
                   cannot locate the email in your regular inbox.
                 </p>
                 <span
-                  onClick={() => resetPasswordStep1Dispatch({ type: 'closeAlert' })}
+                  onClick={() => recoverUsernameEmailDispatch({ type: 'closeAlert' })}
                   className="absolute top-0 right-0 px-4 py-3"
                 >
                   <svg
@@ -280,7 +258,7 @@ function ResetPasswordStep1() {
           <div className="pt-12 pb-12 text-center">
             <p className="text-center text-xs mb-4 px-3">
               If you cannot remember any of your recovery emails, please email me at
-              johnsido@yahoo.com
+              johnsidomusic@yahoo.com
             </p>
 
             <p>
