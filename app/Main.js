@@ -27,6 +27,7 @@ const AdminLandingPage = lazy(() => import('./pages/admin/AdminLandingPage'));
 import LoadingDotsAnimation from './components/shared/LoadingDotsAnimation';
 import CookiesPage from './pages/policies/CookiesPage';
 import SeoDefault from './components/SEO/SEODefault';
+import RecoverUsernameEmail from './pages/auth/RecoverUsernameEmail';
 const MySongs = lazy(() => import('./pages/songs/MySongs'));
 const ResetPasswordStep1 = lazy(() => import('./pages/auth/ResetPasswordStep1'));
 const ResetPasswordStep2 = lazy(() => import('./pages/auth/ResetPasswordStep2'));
@@ -295,6 +296,13 @@ function Main() {
               <Route path="/reset-password-step-2/:token">
                 {!state.loggedIn ? (
                   <ResetPasswordStep2 />
+                ) : (
+                  <div>Please logout to view this page.</div>
+                )}
+              </Route>
+              <Route exact path="/recover-email-or-username">
+                {!state.loggedIn ? (
+                  <RecoverUsernameEmail />
                 ) : (
                   <div>Please logout to view this page.</div>
                 )}

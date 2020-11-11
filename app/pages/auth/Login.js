@@ -145,9 +145,17 @@ function Login({ history }) {
               className="flex flex-col pt-3 w-full sm:max-w-md mx-auto"
             >
               <div className="relative flex flex-col pt-4">
-                <label htmlFor="usernameOrEmail" className="text-lg">
-                  Username or Email <span className="text-red-600">*</span>
-                </label>
+                <div className="flex justify-between items-center">
+                  <label htmlFor="usernameOrEmail" className="text-lg">
+                    Username or Email <span className="text-red-600">*</span>
+                  </label>
+                  <Link
+                    to="/recover-email-or-username"
+                    className="block text-blue-600 hover:text-blue-700 focus:text-blue-800 focus:outline-none"
+                  >
+                    Forgot username and email?
+                  </Link>
+                </div>
                 <input
                   value={state.usernameOrEmail.value}
                   onChange={e =>
