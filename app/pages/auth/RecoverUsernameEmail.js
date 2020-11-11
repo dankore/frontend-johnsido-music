@@ -17,7 +17,7 @@ function ResetPasswordStep1() {
       value: '',
       hasErrors: false,
       message: '',
-      isRegisteredEmail: false,
+      isRecoveryEmail: false,
       checkCount: 0,
       type: '',
     },
@@ -42,13 +42,13 @@ function ResetPasswordStep1() {
           draft.email.message = 'Please provide a valid email.';
         }
         return;
-      case 'isRegisteredEmail':
+      case 'isRecoveryEmail':
         if (!action.value) {
           draft.email.hasErrors = true;
-          draft.email.isRegisteredEmail = false;
+          draft.email.isRecoveryEmail = false;
           draft.email.message = `This email is not associated with any account.`;
         } else {
-          draft.email.isRegisteredEmail = true;
+          draft.email.isRecoveryEmail = true;
         }
         return;
       case 'sendingToken':
@@ -62,7 +62,7 @@ function ResetPasswordStep1() {
         draft.showNextStep = false;
         return;
       case 'submitForm':
-        if (draft.email.value != '' && !draft.email.hasErrors && draft.email.isRegisteredEmail) {
+        if (draft.email.value != '' && !draft.email.hasErrors && draft.email.isRecoveryEmail) {
           draft.submitCount++;
         }
         return;
@@ -78,12 +78,11 @@ function ResetPasswordStep1() {
   useEffect(() => {
     if (state.email.checkCount) {
       const request = Axios.CancelToken.source();
-      const path = state.email.type == 'email' ? '/doesEmailExists' : '/doesUsernameExists';
 
       (async function checkemail() {
         try {
           const response = await Axios.post(
-            path,
+            '/doesRecoveryEmailExists',
             {
               email: state.email.value,
             },
@@ -91,12 +90,12 @@ function ResetPasswordStep1() {
           );
 
           recoverUsernameEmailDispatch({
-            type: 'isRegisteredEmail',
+            type: 'isRecoveryEmail',
             value: response.data,
-            process: state.email.type,
           });
         } catch (error) {
-          console.log('Having difficulty looking up your account. Please try again.');
+          // FAIL SILENTLY
+          console.log('Having difficulty looking up your recovery email. Please try again.');
         }
       })();
 
@@ -104,6 +103,7 @@ function ResetPasswordStep1() {
     }
   }, [state.email.checkCount]);
 
+  // EMAIL AFTER DELAY
   useEffect(() => {
     if (state.email.value) {
       const delay = setTimeout(
@@ -134,8 +134,8 @@ function ResetPasswordStep1() {
       (async function submitForm() {
         try {
           const response = await Axios.post(
-            '/reset-password-step-1',
-            { email: state.email.value, type: state.email.type },
+            '/recover-username-email',
+            { email: state.email.value },
             { cancelToken: request.token }
           );
 
@@ -216,7 +216,7 @@ function ResetPasswordStep1() {
                       <i className="text-sm fa fa-spinner fa-spin"></i>
                     </span>
                   ) : (
-                    <>Email Me My Username and Email</>
+                    <>Send My Username and Email</>
                   )}
                 </button>
               </>
